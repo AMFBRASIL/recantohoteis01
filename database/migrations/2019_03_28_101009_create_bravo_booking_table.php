@@ -15,8 +15,9 @@ class CreateBravoBookingTable extends Migration
     {
         Schema::create('bravo_bookings', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('object_id')->nullable();
+            $table->string('object_model',255)->nullable();
             $table->string('code',64)->nullable();
-
             $table->integer('vendor_id')->nullable();
             $table->integer('customer_id')->nullable();
             $table->integer('payment_id')->nullable();
