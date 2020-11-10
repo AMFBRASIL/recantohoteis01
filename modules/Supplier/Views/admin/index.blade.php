@@ -70,7 +70,9 @@
                             <th width="60px"><input type="checkbox" class="check-all"></th>
                             <th width="100px"> {{ __('Nome')}}</th>
                             <th width="130px"> {{ __('Contato')}}</th>
+                            <th width="130px"> {{ __('Email')}}</th>
                             <th width="130px"> {{ __('Tipo')}}</th>
+                            <th width="130px"> {{ __('Função')}}</th>
                             <th width="130px"> {{ __('CPF/CNPJ')}}</th>
                             <th width="100px"> {{ __('Status')}}</th>
                             <th width="100px"> {{ __('Date')}}</th>
@@ -84,7 +86,9 @@
                                     <td><input type="checkbox" name="ids[]" class="check-item" value="{{$row->id}}"></td>
                                     <td class="title"> <a href="{{route('supplier.admin.edit',['id'=>$row->id])}}">{{$row->title}}</a></td>
                                     <td>{{$row->contact ?? ''}}</td>
+                                    <td>{{$row->email ?? ''}}</td>
                                     <td>{{$row->person_type_formatted}}</td>
+                                    <td>{{$row->supplier_type}}</td>
                                     <td>{{$row->document}}</td>
                                     <td><span class="badge badge-{{ $row->status }}">{{ $row->status }}</span></td>
                                     <td>{{ display_date($row->updated_at)}}</td>
