@@ -130,7 +130,6 @@ class Supplier extends Bookable
     {
         $old = parent::find($clone_id);
         if (empty($old)) return false;
-        $selected_terms = $old->terms->pluck('term_id');
         $old->title = $old->title . " - Copy";
         $new = $old->replicate();
         $new->save();
@@ -188,5 +187,14 @@ class Supplier extends Bookable
             }
         }
         return "book";
+    }
+
+    public function getSupplierTypeAttribute()
+    {
+        if ($this->is_shipping) {
+            return __('TRANSPORTADORA');
+        }
+
+        return __('FORNECEDOR');
     }
 }
