@@ -452,5 +452,7 @@
     </div>
 </div>
 
+@include('Space::admin.settings.additional-options')
+
 @endif
 
