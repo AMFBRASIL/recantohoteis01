@@ -4,12 +4,12 @@ namespace Custom\Hotel;
 class CustomSettingsPage {
     public function customSettings($array) {
         $custom = [
-            'space_contract',
-            'space_contract_title',
-            'space_inspection_term',
-            'space_inspection_term_title',
-            'space_internal_regime',
-            'space_internal_regime_title'
+            'hotel_contract',
+            'hotel_contract_title',
+            'hotel_inspection_term',
+            'hotel_inspection_term_title',
+            'hotel_internal_regime',
+            'hotel_internal_regime_title'
         ];
 
         $array = array_merge($array, $custom);
