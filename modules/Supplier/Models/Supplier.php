@@ -197,4 +197,13 @@ class Supplier extends Bookable
 
         return __('FORNECEDOR');
     }
+
+    public function getTaxpayerFormattedAttribute()
+    {
+        if (!$this->taxpayer) {
+            return '';
+        }
+
+        return $this->taxpayer == 1 ? __('Sim') : __('Não');
+    }
 }
