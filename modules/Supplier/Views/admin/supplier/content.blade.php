@@ -47,7 +47,11 @@
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label class="control-label">{{__("Contribuinte:")}}</label>
-                            <input type="text" name="taxpayer" class="form-control" value="{{$row->taxpayer}}">
+                            <select name="taxpayer" data-placeholder=" " class="form-control" required>
+                                <option value="" selected="selected"></option>
+                                <option label="Sim" @if($row->taxpayer==1) selected @endif value="1">{{__('Sim')}}</option>
+                                <option label="Não" @if($row->taxpayer==2) selected @endif value="2">{{__('Não')}}</option>
+                            </select>
                         </div>
                     </div>
                     <div class="col-lg-3">
