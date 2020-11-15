@@ -5,35 +5,33 @@
  * Date: 7/30/2019
  * Time: 1:56 PM
  */
-namespace Modules\Supplier\Admin;
+namespace Modules\Product\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\AdminController;
-use Modules\Supplier\Models\Supplier;
-use Modules\Supplier\Models\SupplierTranslation;
+use Modules\Product\Models\Product;
+use Modules\Product\Models\ProductTranslation;
 use Modules\Core\Models\Attributes;
-use Modules\Location\Models\Location;
 
-class SupplierController extends AdminController
+class ProductController extends AdminController
 {
-    protected $supplier;
-    protected $supplier_translation;
+    protected $model;
+    protected $model_translation;
     protected $attributes;
-    protected $location;
+
     public function __construct()
     {
         parent::__construct();
-        $this->setActiveMenu(route('supplier.admin.index'));
-        $this->supplier = Supplier::class;
-        $this->supplier_translation = SupplierTranslation::class;
+        $this->setActiveMenu(route('product.admin.index'));
+        $this->model = Product::class;
+        $this->model_translation = ProductTranslation::class;
         $this->attributes = Attributes::class;
-        $this->location = Location::class;
     }
 
     public function callAction($method, $parameters)
     {
-        if(!Supplier::isEnable())
+        if(!Product::isEnable())
         {
             return redirect('/');
         }
@@ -42,7 +40,7 @@ class SupplierController extends AdminController
     public function index(Request $request)
     {
         $this->checkPermission('event_view');
-        $query = $this->supplier::query() ;
+        $query = $this->model::query() ;
         $query->orderBy('id', 'desc');
         if (!empty($s = $request->input('s'))) {
             $query->where('title', 'LIKE', '%' . $s . '%');
@@ -61,7 +59,7 @@ class SupplierController extends AdminController
             'event_manage_others' => $this->hasPermission('event_manage_others'),
             'breadcrumbs'        => [
                 [
-                    'name' => __('Fornecedores'),
+                    'name' => __('Produtos'),
                     'url'  => 'admin/module/supplier'
                 ],
                 [
@@ -69,15 +67,15 @@ class SupplierController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'=>__("Gerenciar Fornecedor")
+            'page_title'=>__("Gerenciar Produto")
         ];
-        return view('Supplier::admin.index', $data);
+        return view('Product::admin.index', $data);
     }
 
     public function recovery(Request $request)
     {
         $this->checkPermission('event_view');
-        $query = $this->supplier::onlyTrashed() ;
+        $query = $this->model::onlyTrashed() ;
         $query->orderBy('id', 'desc');
         if (!empty($s = $request->input('s'))) {
             $query->where('title', 'LIKE', '%' . $s . '%');
@@ -97,7 +95,7 @@ class SupplierController extends AdminController
             'recovery'           => 1,
             'breadcrumbs'        => [
                 [
-                    'name' => __('Fornecedores'),
+                    'name' => __('Produtos'),
                     'url'  => 'admin/module/supplier'
                 ],
                 [
@@ -107,47 +105,46 @@ class SupplierController extends AdminController
             ],
             'page_title'=>__("Recuperar Fornecedor")
         ];
-        return view('Event::admin.index', $data);
+        return view('Product::admin.index', $data);
     }
 
     public function create(Request $request)
     {
         $this->checkPermission('event_create');
-        $row = new $this->supplier();
+        $row = new $this->model();
         $row->fill([
             'status' => 'publish'
         ]);
         $data = [
             'row'            => $row,
             'attributes'     => $this->attributes::where('service', 'event')->get(),
-            'event_location' => $this->location::where('status', 'publish')->get()->toTree(),
-            'translation'    => new $this->supplier_translation(),
+            'translation'    => new $this->model_translation(),
             'breadcrumbs'    => [
                 [
-                    'name' => __('Fornecedores'),
-                    'url'  => route('supplier.admin.index')
+                    'name' => __('Produtos'),
+                    'url'  => route('product.admin.index')
                 ],
                 [
-                    'name'  => __('Adicionar Fornecedor'),
+                    'name'  => __('Adicionar Produto'),
                     'class' => 'active'
                 ],
             ],
-            'page_title'     => __("Adicionar novo Fornecedor")
+            'page_title'     => __("Adicionar novo Produto")
         ];
-        return view('Supplier::admin.detail', $data);
+        return view('Product::admin.detail', $data);
     }
 
     public function edit(Request $request, $id)
     {
         $this->checkPermission('event_update');
-        $row = $this->supplier::find($id);
+        $row = $this->model::find($id);
         if (empty($row)) {
-            return redirect(route('supplier.admin.index'));
+            return redirect(route('product.admin.index'));
         }
         $translation = $row->translateOrOrigin($request->query('lang'));
         if (!$this->hasPermission('event_manage_others')) {
             if ($row->create_user != Auth::id()) {
-                return redirect(route('supplier.admin.index'));
+                return redirect(route('product.admin.index'));
             }
         }
         $data = [
@@ -156,77 +153,94 @@ class SupplierController extends AdminController
             'enable_multi_lang'=>true,
             'breadcrumbs'    => [
                 [
-                    'name' => __('Fornecedores'),
-                    'url'  => route('supplier.admin.index')
+                    'name' => __('Produtos'),
+                    'url'  => route('product.admin.index')
                 ],
                 [
-                    'name'  => __('Editar Fornecedor'),
+                    'name'  => __('Editar Produto'),
                     'class' => 'active'
                 ],
             ],
             'page_title'=>__("Edit: :name",['name'=>$row->title])
         ];
-        return view('Supplier::admin.detail', $data);
+        return view('Product::admin.detail', $data);
     }
 
     public function store( Request $request, $id )
     {
         if($id>0){
             $this->checkPermission('event_update');
-            $row = $this->supplier::find($id);
+            $row = $this->model::find($id);
             if (empty($row)) {
-                return redirect(route('supplier.admin.index'));
+                return redirect(route('product.admin.index'));
             }
 
             if($row->create_user != Auth::id() and !$this->hasPermission('event_manage_others'))
             {
-                return redirect(route('supplier.admin.index'));
+                return redirect(route('product.admin.index'));
             }
         }else{
             $this->checkPermission('event_create');
-            $row = new $this->supplier();
+            $row = new $this->model();
             $row->status = "publish";
         }
 
         $dataKeys = [
+            //Info
             'title',
             'slug',
-            'contact',
-            'person_type',
-            'document',
-            'state_registration',
-            'city_registration',
-            'taxpayer',
-            'birthdate',
-
-            // Address
-            'zipcode',
-            'street_name',
-            'street_number',
-            'neighborhood',
-            'complement',
-            'city',
-            'state',
-
-            // Contact
-            'home_number',
-            'phone_number',
-            'whatsapp',
-            'website',
-            'email',
-            'contact_name',
-            'contact_complement',
-            'comments',
-
-            // Config
-            'is_simples',
-            'is_rural',
-            'is_shipping',
-
-            // Images
+            'product_code',
+            'product_barcode',
+            'content',
+            //Price
+            'price',
+            'sale_price',
+            'unit_price',
+            // Weight
+            'net_weight',
+            'gross_weight',
+            // Media
             'image_id',
+            'gallery',
             'banner_image_id',
-
+            // Composition
+            'product_composition',
+            // Stock
+            'available_stock',
+            'min_stock',
+            'max_stock',
+            'stock_id',
+            // Unit/Category
+            'product_unity_id',
+            'product_category_id',
+            'product_subcategory_id',
+            // Supplier
+            'supplier_id',
+            // NCM / CEST
+            'ncm_id',
+            'cest_id',
+            // CFOP
+            'cfop_internal_id',
+            'cfop_external_id',
+            'origin_code',
+            // CST
+            'csosn_code',
+            'csosn_value',
+            'cst_pis_id',
+            'cst_pis_value',
+            'cst_cofins_id',
+            'cst_cofins_value',
+            'cst_ipi_id',
+            'cst_ipi_value',
+            // Config
+            'control_stock',
+            'enable_pos',
+            'enable_nf',
+            'show_in_menu',
+            'use_balance',
+            'loan_object',
+            'input_product',
+            'is_service',
             // Role configs
             'status',
         ];
@@ -243,9 +257,9 @@ class SupplierController extends AdminController
         $res = $row->saveOriginOrTranslation($request->input('lang'),true);
         if ($res) {
             if($id > 0 ){
-                return back()->with('success',  __('Supplier updated') );
+                return back()->with('success',  __('Product updated') );
             }else{
-                return redirect(route('supplier.admin.edit',$row->id))->with('success', __('Supplier created') );
+                return redirect(route('product.admin.edit',$row->id))->with('success', __('Product created') );
             }
         }
     }
@@ -265,7 +279,7 @@ class SupplierController extends AdminController
         switch ($action){
             case "delete":
                 foreach ($ids as $id) {
-                    $query = $this->supplier::where("id", $id);
+                    $query = $this->model::where("id", $id);
                     if (!$this->hasPermission('event_manage_others')) {
                         $query->where("create_user", Auth::id());
                         $this->checkPermission('event_delete');
@@ -279,7 +293,7 @@ class SupplierController extends AdminController
                 break;
             case "recovery":
                 foreach ($ids as $id) {
-                    $query = $this->supplier::where("id", $id);
+                    $query = $this->model::where("id", $id);
                     if (!$this->hasPermission('event_manage_others')) {
                         $query->where("create_user", Auth::id());
                         $this->checkPermission('event_delete');
@@ -294,14 +308,14 @@ class SupplierController extends AdminController
             case "clone":
                 $this->checkPermission('event_create');
                 foreach ($ids as $id) {
-                    (new $this->supplier())->saveCloneByID($id);
+                    (new $this->model())->saveCloneByID($id);
                 }
                 return redirect()->back()->with('success', __('Clone success!'));
                 break;
             default:
                 // Change status
                 foreach ($ids as $id) {
-                    $query = $this->supplier::where("id", $id);
+                    $query = $this->model::where("id", $id);
                     if (!$this->hasPermission('event_manage_others')) {
                         $query->where("create_user", Auth::id());
                         $this->checkPermission('event_update');
@@ -316,13 +330,11 @@ class SupplierController extends AdminController
     public function getForSelect2(Request $request)
     {
         $q = $request->query('q');
-        $query = $this->supplier::getForSelect2Query($q);
+        $query = $this->model::getForSelect2Query($q);
         $res = $query->orderBy('id', 'desc')->limit(20)->get();
 
         return response()->json([
             'results' => $res
         ]);
     }
-
-
 }

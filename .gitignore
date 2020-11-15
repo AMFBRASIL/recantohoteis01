@@ -12,6 +12,7 @@ storage/app/public/*
 /.idea
 /resources/ckeditor/node_modules/
 .env
+composer.phar
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml

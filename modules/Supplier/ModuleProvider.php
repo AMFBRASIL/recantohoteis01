@@ -27,7 +27,7 @@ class ModuleProvider extends ModuleServiceProvider
     {
         if(!Supplier::isEnable()) return [];
         return [
-            'event'=>[
+            'supplier'=>[
                 "position"=>50,
                 'url'        => route('supplier.admin.index'),
                 'title'      => __('Fornecedor'),
@@ -62,8 +62,8 @@ class ModuleProvider extends ModuleServiceProvider
         if(!Supplier::isEnable()) return [];
         return [
             'event'=>[
-                'class' => Event::class,
-                'name'  => __("Event"),
+                'class' => Supplier::class,
+                'name'  => __("Fornecedor"),
                 'items' => Supplier::searchForMenu(),
                 'position'=>51
             ]
