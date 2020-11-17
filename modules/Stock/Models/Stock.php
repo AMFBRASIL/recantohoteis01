@@ -1,23 +1,22 @@
 <?php
 
-namespace Modules\Product\Models;
+namespace Modules\Stock\Models;
 
 use Illuminate\Support\Facades\DB;
 use Modules\Booking\Models\Bookable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Core\Models\SEO;
 
-class ProductCategory extends Bookable
+class Stock extends Bookable
 {
     use SoftDeletes;
 
-    protected $table = 'bravo_product_category';
-    public $type = 'product_category';
+    protected $table = 'bravo_stock';
+    public $type = 'stock';
     protected $slugField     = false;
 
     protected $fillable = [
         'description',
-        'enable_hide'
     ];
 
     protected $productCategoryTranslationClass;
@@ -30,17 +29,12 @@ class ProductCategory extends Bookable
 
     public static function getModelName()
     {
-        return __("ProductCategory");
+        return __("Stock");
     }
 
     public static function getTableName()
     {
         return with(new static)->table;
-    }
-
-    public function subCategory()
-    {
-        $this->hasMany(ProductSubCategory::class, 'id', 'category_id');
     }
 
     public function saveCloneByID($clone_id)

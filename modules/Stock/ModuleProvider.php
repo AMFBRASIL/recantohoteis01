@@ -1,5 +1,5 @@
 <?php
-namespace Modules\Product;
+namespace Modules\Stock;
 
 use Modules\Product\Models\Product;
 use Modules\ModuleServiceProvider;
@@ -26,28 +26,18 @@ class ModuleProvider extends ModuleServiceProvider
     {
         if(!Product::isEnable()) return [];
         return [
-            'product'=>[
-                "position"=>33,
+            'stock'=>[
+                "position"=>34,
                 'url'        => "#",
-                'title'      => __('Produtos'),
+                'title'      => __('Estoque'),
                 'icon'       => 'icon ion-ios-pricetag',
                 'permission' => 'event_view',
                 'children'   => [
                     'add'=>[
-                        'url'        => route('product.admin.index'),
-                        'title'      => __('Gerenciar Produtos'),
+                        'url'        => route('stock.admin.create'),
+                        'title'      => __('Centro de Estoque'),
                         'permission' => 'event_view',
                     ],
-                    'product_category'=>[
-                        'url'        => route('product_category.admin.create'),
-                        'title'      => __('Categorias'),
-                        'permission' => 'event_view',
-                    ],
-                    'product_unity'=>[
-                        'url'        => route('product_unity.admin.create'),
-                        'title'      => __('Unidade de Produto'),
-                        'permission' => 'event_view',
-                    ]
                 ]
             ]
         ];

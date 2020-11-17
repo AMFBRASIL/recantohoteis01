@@ -5,27 +5,26 @@
  * Date: 7/30/2019
  * Time: 1:56 PM
  */
-namespace Modules\Product\Admin;
+namespace Modules\Stock\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\AdminController;
-use Modules\News\Admin\CategoryController;
-use Modules\Product\Models\ProductSubCategory;
-use Modules\Product\Models\ProductSubCategoryTranslation;
+use Modules\Stock\Models\Stock;
+use Modules\Stock\Models\StockTranslation;
 
-class ProductSubCategoryController extends AdminController
+class StockController extends AdminController
 {
     public function __construct()
     {
         parent::__construct();
-        $this->model = ProductSubCategory::class;
-        $this->model_translation = ProductSubCategoryTranslation::class;
+        $this->setActiveMenu(route('stock.admin.create'));
+        $this->model = Stock::class;
+        $this->model_translation = StockTranslation::class;
     }
 
-    public function create(Request $request, $id)
+    public function create(Request $request)
     {
-        $parent = ProductSubCategory::find($id);
         $this->checkPermission('event_create');
         $query = $this->model::query() ;
         $query->orderBy('id', 'desc');
@@ -42,72 +41,69 @@ class ProductSubCategoryController extends AdminController
             $query->where('create_user', Auth::id());
         }
         $data = [
-            'parent'                => $parent,
-            'rows'                  => $query->with(['author'])->paginate(20),
-            'event_manage_others'   => $this->hasPermission('event_manage_others'),
-            'breadcrumbs'           => [
+            'rows'               => $query->with(['author'])->paginate(20),
+            'event_manage_others' => $this->hasPermission('event_manage_others'),
+            'breadcrumbs'        => [
                 [
-                    'name' => __('Sub Categoria Produto'),
-                    'url'  => route('product_subcategory.admin.create', $id)
+                    'name' => __('Centro de Estoque'),
+                    'url'  => route('stock.admin.create')
                 ],
                 [
-                    'name'  => __('Sub Categorias'),
+                    'name'  => __('Estoque'),
                     'class' => 'active'
                 ],
             ],
-            'page_title'=>__("Sub Categoria Produto")
+            'page_title'=>__("Centro de Estoque")
         ];
 
-        return view('Product::admin.product_subcategory.index', $data);
+        return view('Stock::admin.stock.index', $data);
     }
 
-    public function edit(Request $request, $id, $cat)
+    public function edit(Request $request, $id)
     {
         $this->checkPermission('event_update');
-        $parent = ProductSubCategory::find($id);
-        $row = $this->model::find($cat);
+        $row = $this->model::find($id);
         if (empty($row)) {
-            return redirect(route('product_subcategory.admin.create', $id));
+            return redirect(route('stock.admin.index'));
         }
         $translation = $row->translateOrOrigin($request->query('lang'));
         if (!$this->hasPermission('event_manage_others')) {
             if ($row->create_user != Auth::id()) {
-                return redirect(route('product_subcategory.admin.create'));
+                return redirect(route('stock.admin.index'));
             }
         }
 
         $data = [
-            'parent'         => $parent,
             'row'            => $row,
             'translation'    => $translation,
             'enable_multi_lang'=>true,
             'breadcrumbs'        => [
                 [
-                    'name' => __('Sub Categoria Produto'),
-                    'url'  => route('product_subcategory.admin.create', $id)
+                    'name' => __('Centro de Estoque'),
+                    'url'  => route('stock.admin.create')
                 ],
                 [
-                    'name'  => __('Sub Categorias'),
+                    'name'  => __('Estoque'),
                     'class' => 'active'
                 ],
             ],
-            'page_title'=>__("Sub Categoria Produto")
+            'page_title'=>__('Centro de Estoque')
         ];
-        return view('Product::admin.product_subcategory.edit', $data);
+        return view('Stock::admin.stock.edit', $data);
     }
 
-    public function store( Request $request, $id, $cat )
+    public function store( Request $request, $id )
     {
-        if($cat>0){
+        if($id>0){
             $this->checkPermission('event_update');
-            $row = $this->model::find($cat);
+            $row = $this->model::find($id);
             if (empty($row)) {
-                return redirect(route('product_subcategory.admin.create'));
+                return redirect(route('stock.admin.create'));
             }
 
             if($row->create_user != Auth::id() and !$this->hasPermission('event_manage_others'))
             {
-                return redirect(route('product_subcategory.admin.create', $id));
+                return redirect(route('stock.admin.index'));
             }
         }else{
             $this->checkPermission('event_create');
@@ -116,9 +112,7 @@ class ProductSubCategoryController extends AdminController
 
         $dataKeys = [
             //Info
-            'description',
-            'class_icon',
-            'image_id',
+            'description'
         ];
 
         if($this->hasPermission('event_manage_others')){
@@ -126,13 +120,12 @@ class ProductSubCategoryController extends AdminController
         }
 
         $row->fillByAttr($dataKeys,$request->input());
-        $row->category_id = $id;
         $res = $row->saveOriginOrTranslation($request->input('lang'),true);
         if ($res) {
-            if($cat > 0 ){
-                return back()->with('success',  __('Sub Categoria Atualizada') );
+            if($id > 0 ){
+                return back()->with('success',  __('Centro de Estoque Atualizado') );
             }else{
-                return redirect(route('product_subcategory.admin.edit',['id' => $id, 'sub'=>$row->id]))->with('success', __('Sub Categoria Criada') );
+                return redirect(route('stock.admin.edit',$row->id))->with('success', __('Centro de Estoque Criada') );
             }
         }
     }
@@ -217,13 +210,13 @@ class ProductSubCategoryController extends AdminController
         if ($row->save()) {
             return response()->json([
                     'status' => 'success',
-                    'message' => _('Sub Categoria Criada com sucesso!')
+                    'message' => _('Centro de Estoque Criado com sucesso!')
             ], 201);
         }
 
         return response()->json([
             'status' => 'error',
-            'message' => _('Não foi possível criar sub categoria')
+            'message' => _('Não foi possível criar centro de estoque')
         ]);
     }
 }
