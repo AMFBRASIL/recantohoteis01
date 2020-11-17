@@ -8,7 +8,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">{{__("Nome:")}}</label>
-                    <input type="text" name="name" class="form-control" required>
+                    <input type="text" name="description" class="form-control" required>
                 </div>
             </div>
         </div>

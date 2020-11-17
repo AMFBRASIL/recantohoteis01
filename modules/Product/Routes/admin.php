@@ -7,6 +7,7 @@ Route::get('/load-view',function() {
 });
 
 Route::get('/','ProductController@index')->name('product.admin.index');
+Route::get('/get-product-composition/{id}','ProductController@getComposition')->name('product.admin.get_composition');
 Route::get('/create','ProductController@create')->name('product.admin.create');
 Route::get('/edit/{id}','ProductController@edit')->name('product.admin.edit');
 Route::post('/store/{id}','ProductController@store')->name('product.admin.store');

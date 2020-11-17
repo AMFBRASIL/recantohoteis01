@@ -337,4 +337,23 @@ class ProductController extends AdminController
             'results' => $res
         ]);
     }
+
+    public function getComposition($id)
+    {
+        $product = Product::find($id);
+        if (! $product->product_composition) {
+            return response()->json([]);
+        }
+
+        $data = [];
+        foreach ($product->product_composition as $values) {
+            $product = Product::find($values['product_id']);
+            $data[] = [
+                'name'  => $product->title,
+                'quantity' => $values['quantity']
+            ];
+        }
+
+        return response()->json($data);
+    }
 }

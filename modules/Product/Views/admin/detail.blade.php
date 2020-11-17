@@ -172,6 +172,8 @@
                     }
                 });
             });
+
+            $('.moeda-real').mask('#.##0,00', {reverse: true});
         });
     </script>
 @endsection
