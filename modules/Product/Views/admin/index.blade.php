@@ -69,8 +69,14 @@
                         <tr>
                             <th width="60px"><input type="checkbox" class="check-all"></th>
                             <th width="100px"> {{ __('Nome')}}</th>
-                            <th width="130px"> {{ __('Vlr. Varejo')}}</th>
-                            <th width="130px"> {{ __('Estoque')}}</th>
+                            <th width="130px"> {{ __('Fornecedor')}}</th>
+                            <th width="130px"> {{ __('Vlr. Venda')}}</th>
+                            <th width="130px"> {{ __('Estoque Atual')}}</th>
+                            <th width="130px"> {{ __('Estoque Min')}}</th>
+                            <th width="130px"> {{ __('Serviço')}}</th>
+                            <th width="130px"> {{ __('Cardápio')}}</th>
+                            <th width="130px"> {{ __('POS')}}</th>
+                            <th width="130px"> {{ __('Controle Estoque')}}</th>
                             <th width="100px"> {{ __('Status')}}</th>
                             <th width="100px"> {{ __('Composição')}}</th>
                             <th width="100px"> {{ __('Date')}}</th>
@@ -83,10 +89,16 @@
                                 <tr class="{{$row->status}}">
                                     <td><input type="checkbox" name="ids[]" class="check-item" value="{{$row->id}}"></td>
                                     <td class="title"> <a href="{{route('product.admin.edit',['id'=>$row->id])}}">{{$row->title}}</a></td>
-                                    <td>{{$row->price ?? ''}}</td>
-                                    <td>{{$row->available_stock}}</td>
+                                    <td>{{$row->supplier ? $row->supplier->title : ''}}</td>
+                                    <td>{{$row->sale_price_formatted}}</td>
+                                    <td><span class="badge badge-publish">{{$row->available_stock}}</span></td>
+                                    <td><span class="badge badge-publish">{{$row->min_stock}}</span></td>
+                                    <td><span class="badge badge-{{ $row->is_service ? 'publish' : 'draft'}}">{{\Modules\Product\Models\Product::getConditionalFormattedAttribute($row->is_service)}}</span></td>
+                                    <td><span class="badge badge-{{ $row->show_in_menu ? 'publish' : 'draft'}}">{{\Modules\Product\Models\Product::getConditionalFormattedAttribute($row->show_in_menu)}}</span></td>
+                                    <td><span class="badge badge-{{ $row->enable_pos ? 'publish' : 'draft'}}">{{\Modules\Product\Models\Product::getConditionalFormattedAttribute($row->enable_pos)}}</span></td>
+                                    <td><span class="badge badge-{{ $row->control_stock ? 'publish' : 'draft'}}">{{\Modules\Product\Models\Product::getConditionalFormattedAttribute($row->control_stock)}}</span></td>
                                     <td><span class="badge badge-{{ $row->status }}">{{ $row->status }}</span></td>
-                                    <td>{{$row->product_composition ? _('Sim') : 'Não'}}</td>
+                                    <td><a href="#" class="review-count-approved" data-toggle="modal" class="modal" data-target="#compositionModal" data-value="{{$row->id}}">{{$row->product_composition ? _('Sim') : 'Não'}}</a></td>
                                     <td>{{ display_date($row->updated_at)}}</td>
                                     <td>
                                         <a href="{{route('product.admin.edit',['id'=>$row->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> {{__('Editar')}}
@@ -107,4 +119,59 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="compositionModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+            <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Composição do Produto</h4>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="tab-content">
+                        <div id="booking-detail-93" class="tab-pane active">
+                            <span class="response-message"></span>
+                            <br />
+                            <div class="booking-review">
+                                <div class="booking-review-content">
+                                    <div class="review-section return-composition">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+@section ('script.body')
+    <script>
+        jQuery(function ($) {
+            $(".modal").on("show.bs.modal", function(e) {
+                var product_id = e.relatedTarget.getAttribute('data-value');
+                var url = "/admin/module/product/get-product-composition/" + product_id;
+                var modalBody = $('.return-composition');
+                modalBody.html('<span>Carregando.</span>')
+                $.get(url, function(data) {
+                    if (data.length == 0) {
+                        modalBody.html('<span>Nenhum produto encontrado.</span>')
+                        return;
+                    }
+
+                    var html = "<table class='table table-hover'><thead><tr><td>Produto</td><td>Quantidade</td></tr></thead>";
+
+                    for (row in data) {
+                        html += "<tr><td>"+data[row].name+"</td><td>"+data[row].quantity+"</td></tr>";
+                    }
+
+
+                    html += "</table>";
+                    modalBody.html(html);
+                })
+            });
+
+            $('.moeda-real').mask('#.##0,00', {reverse: true});
+        });
+    </script>
 @endsection

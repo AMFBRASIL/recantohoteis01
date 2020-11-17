@@ -213,7 +213,7 @@ class ProductSubCategoryController extends AdminController
     public function ajaxStore()
     {
         $row = new $this->model();
-        $row->fillByAttr(['description'],request()->input());
+        $row->fillByAttr(['category_id', 'description'],request()->input());
         if ($row->save()) {
             return response()->json([
                     'status' => 'success',

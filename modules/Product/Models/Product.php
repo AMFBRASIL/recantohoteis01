@@ -14,6 +14,7 @@ use Modules\Booking\Models\Booking;
 use Modules\Core\Models\SEO;
 use Modules\Media\Helpers\FileHelper;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Supplier\Models\Supplier;
 
 class Product extends Bookable
 {
@@ -106,9 +107,48 @@ class Product extends Bookable
         return with(new static)->table;
     }
 
+    public function supplier()
+    {
+        return $this->hasOne(Supplier::class, 'id', 'supplier_id');
+    }
+
     public function getEditUrl()
     {
         return url(route('product.admin.edit', ['id' => $this->id]));
+    }
+
+    public function setPriceAttribute($value)
+    {
+        $this->attributes['price'] = str_replace(',', '.', str_replace('.', '', $value));
+    }
+
+    public function setSalePriceAttribute($value)
+    {
+        $this->attributes['sale_price'] = str_replace(',', '.', str_replace('.','', $value));
+    }
+
+    public function setUnitPriceAttribute($value)
+    {
+        $this->attributes['unit_price'] = str_replace(',', '.', str_replace('.','', $value));
+    }
+
+    public function getSalePriceFormattedAttribute()
+    {
+        $value = '0,00';
+        if ($this->sale_price) {
+            $value = number_format($this->price, 2, ',', '.');
+        }
+
+        return 'R$ ' . $value;
+    }
+
+    public static function getConditionalFormattedAttribute($value)
+    {
+        if (! $value) {
+            return __('Não');
+        }
+
+        return __('Sim');
     }
 
     public function fill(array $attributes)

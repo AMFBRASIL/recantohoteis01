@@ -70,8 +70,8 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <?php
-                                            $product = isset($composition['name']) ? Modules\Product\Models\Product::find($composition['name']) : false ;
-                                            \App\Helpers\AdminForm::select2("product_composition[".$key."][name]", [
+                                            $product = isset($composition['product_id']) ? Modules\Product\Models\Product::find($composition['product_id']) : false ;
+                                            \App\Helpers\AdminForm::select2("product_composition[".$key."][product_id]", [
                                                 'configs' => [
                                                     'ajax' => [
                                                         'url' => '/admin/module/product/get-select',
@@ -84,7 +84,7 @@
                                             ?>
                                         </div>
                                         <div class="col-md-5">
-                                            <input type="number" min="0" name="product_composition[{{$key}}][price]" class="form-control" value="{{isset($composition['price']) ? : ''}}">
+                                            <input type="number" min="0" name="product_composition[{{$key}}][quantity]" class="form-control" value="{{isset($composition['quantity']) ? : ''}}">
                                         </div>
                                         <div class="col-md-1">
                                             <span class="btn btn-danger btn-sm btn-remove-item"><i class="fa fa-trash"></i></span>
@@ -105,12 +105,12 @@
                                     <select
                                         class="form-control dungdt-select2-field-lazy"
                                         data-options='{"ajax":{"url":"/admin/module/product/get-select","dataType":"json"},"allowClear":true,"placeholder":"-- Selecione o Estoque --"}'
-                                        name="product_composition[__number__][name]"
+                                        name="product_composition[__number__][product_id]"
                                     >
                                     </select>
                                 </div>
                                 <div class="col-md-5">
-                                    <input type="number" min="0" __name__="product_composition[__number__][price]" class="form-control" value="">
+                                    <input type="number" min="0" __name__="product_composition[__number__][quantity]" class="form-control" value="">
                                 </div>
                                 <div class="col-md-1">
                                     <span class="btn btn-danger btn-sm btn-remove-item"><i class="fa fa-trash"></i></span>
@@ -129,19 +129,34 @@
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label class="control-label">{{__("Custo Produto:")}}</label>
-                            <input type="text" name="price" placeholder="R$" class="form-control" value="{{$row->price}}">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">R$</span>
+                                </div>
+                                <input type="text" name="price" placeholder="99,99" class="form-control moeda-real" value="{{$row->price}}">
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label class="control-label">{{__("Valor de Venda:")}}</label>
-                            <input type="text" name="sale_price" placeholder="R$" class="form-control" value="{{$row->sale_price}}">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">R$</span>
+                                </div>
+                                <input type="text" name="sale_price" placeholder="99,99" class="form-control moeda-real" value="{{$row->sale_price}}">
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label class="control-label">{{__("Preço Varejista:")}}</label>
-                            <input type="text" name="unit_price" placeholder="R$" class="form-control" value="{{$row->unit_price}}">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">R$</span>
+                                </div>
+                                <input type="text" name="unit_price" placeholder="99,99" class="form-control moeda-real" value="{{$row->unit_price}}">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -186,7 +201,7 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <label class="control-label">{{__("Estoque Minimo:")}}</label>
+                            <label class="control-label">{{__("Estoque Máximo:")}}</label>
                             <input type="text" name="max_stock" class="form-control" value="{{$row->max_stock}}">
                         </div>
                     </div>
@@ -469,7 +484,7 @@
                                 <hr>
                                 <div class="form-group">
                                     <label class="control-label">{{__("%COFINS * :")}}</label>
-                                    <input type="cst_cofins_value" name="city_registration" placeholder="18.00" class="form-control" value="{{$row->cst_cofins_value}}">
+                                    <input type="text" name="cst_cofins_value" placeholder="18.00" class="form-control" value="{{$row->cst_cofins_value}}">
                                 </div>
                             </div>
                         </div>

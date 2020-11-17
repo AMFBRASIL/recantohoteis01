@@ -14,6 +14,7 @@ use Modules\Booking\Models\Booking;
 use Modules\Core\Models\SEO;
 use Modules\Media\Helpers\FileHelper;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Product\Models\Product;
 use Modules\Supplier\Models\SupplierTranslation;
 
 class Supplier extends Bookable
@@ -73,6 +74,11 @@ class Supplier extends Bookable
     {
         parent::__construct($attributes);
         $this->supplierTranslationClass = SupplierTranslation::class;
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'supplier_id', 'id');
     }
 
     public static function getModelName()

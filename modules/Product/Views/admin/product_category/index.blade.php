@@ -16,10 +16,6 @@
                                 <label>{{__("Nome")}}</label>
                                 <input type="text" value="{{isset($row) ? $row->description : ''}}" placeholder="{{__("Nome")}}" name="description" class="form-control">
                             </div>
-                            <div class="form-group">
-                                <label>{{__("Hide in detail service")}}</label><br/>
-                                <input type="checkbox" name="enable_hide" @if(isset($row) ? $row->enable_hide : false) checked @endif value="1"> {{__("Enable hide")}}
-                            </div>
                             <div class="">
                                 <button class="btn btn-primary" type="submit">{{__("Adicionar")}}</button>
                             </div>
