@@ -197,12 +197,19 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="input-group">
-                                    <select
-                                        class="form-control dungdt-select2-field"
-                                        data-options='{"ajax":{"url":"/admin/module/user/getForSelect2","dataType":"json"},"allowClear":true,"placeholder":"-- Selecione o Estoque --"}'
-                                        name="stock_id"
-                                    >
-                                    </select>
+                                    <?php
+                                    $stock = !empty($row->stock_id) ? Modules\Stock\Models\Stock::find($row->stock_id) : false;
+                                    \App\Helpers\AdminForm::select2('stock_id', [
+                                        'configs' => [
+                                            'ajax' => [
+                                                'url' => route('stock.admin.ajax_get'),
+                                                'dataType' => 'json'
+                                            ],
+                                            'allowClear'  => true,
+                                            'placeholder' => __('-- Selecione o estoque --')
+                                        ]
+                                    ], !empty($stock->id) ? [$stock->id, $stock->getDisplayName()] : false)
+                                    ?>
                                     <div class="input-group-append">
                                         <button type="button" class="btn btn-info btn-sm btn-add-item" data-toggle="modal" data-target="#stockAdd"><i class="ion-md-add-circle"></i></button>
                                     </div>

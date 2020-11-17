@@ -110,7 +110,7 @@
     </form>
     @include('Product::admin.product.modals.layout', [
         'modal' => 'stockAdd',
-        'url' => route('stock.admin.ajax_store'),
+        'url' => '#',
         'title' => 'Cadastro de Estoque',
         'view' => 'Product::admin.product.modals.stock_add'
     ])

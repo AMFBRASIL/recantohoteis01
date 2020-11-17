@@ -17,7 +17,16 @@ class ProductSubCategory extends Bookable
     protected $fillable = [
         'category_id',
         'description',
+        'class_icon'
     ];
+
+    protected $productSubCategoryTranslationClass;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->productSubCategoryTranslationClass = ProductSubCategoryTranslation::class;
+    }
 
     public static function getModelName()
     {
@@ -26,12 +35,37 @@ class ProductSubCategory extends Bookable
 
     public function category()
     {
-        $this->belongsTo(ProductCategory::class, 'category_id', 'id');
+        $this->belongsTo(ProductSubCategory::class, 'category_id', 'id');
     }
 
     public static function getTableName()
     {
         return with(new static)->table;
+    }
+
+    public function saveCloneByID($clone_id)
+    {
+        $old = parent::find($clone_id);
+        if (empty($old)) return false;
+        $old->title = $old->title . " - Copy";
+        $new = $old->replicate();
+        $new->save();
+
+        //Language
+        $langs = $this->productSubCategoryTranslationClass::where("origin_id", $old->id)->get();
+        if (!empty($langs)) {
+            foreach ($langs as $lang) {
+                $langNew = $lang->replicate();
+                $langNew->origin_id = $new->id;
+                $langNew->save();
+                $langSeo = SEO::where('object_id', $lang->id)->where('object_model', $lang->getSeoType() . "_" . $lang->locale)->first();
+                if (!empty($langSeo)) {
+                    $langSeoNew = $langSeo->replicate();
+                    $langSeoNew->object_id = $langNew->id;
+                    $langSeoNew->save();
+                }
+            }
+        }
     }
 
     public function fill(array $attributes)

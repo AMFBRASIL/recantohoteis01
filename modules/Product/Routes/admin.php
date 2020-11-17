@@ -13,12 +13,23 @@ Route::post('/store/{id}','ProductController@store')->name('product.admin.store'
 Route::post('/bulkEdit','ProductController@bulkEdit')->name('product.admin.bulkEdit');
 Route::get('/recovery','ProductController@recovery')->name('product.admin.recovery');
 
-Route::get('/product-category','ProductCategoryController@index')->name('product_category.admin.index');
 Route::get('/product-category/create','ProductCategoryController@create')->name('product_category.admin.create');
 Route::get('/product-category/edit/{id}','ProductCategoryController@edit')->name('product_category.admin.edit');
 Route::post('/product-category/store/{id}','ProductCategoryController@store')->name('product_category.admin.store');
 Route::post('/product-category/bulkEdit','ProductCategoryController@bulkEdit')->name('product_category.admin.bulkEdit');
 Route::get('/product-category/recovery','ProductCategoryController@recovery')->name('product_category.admin.recovery');
+
+Route::get('/product-category/{id}/subcategory/create','ProductSubCategoryController@create')->name('product_subcategory.admin.create');
+Route::get('/product-category/{id}/subcategory/edit/{sub}','ProductSubCategoryController@edit')->name('product_subcategory.admin.edit');
+Route::post('/product-category/{id}/subcategory/store/{sub}','ProductSubCategoryController@store')->name('product_subcategory.admin.store');
+Route::post('/product-category/{id}/subcategory/bulkEdit','ProductSubCategoryController@bulkEdit')->name('product_subcategory.admin.bulkEdit');
+
+Route::get('/product-unity','ProductUnityController@index')->name('product_unity.admin.index');
+Route::get('/product-unity/create','ProductUnityController@create')->name('product_unity.admin.create');
+Route::get('/product-unity/edit/{id}','ProductUnityController@edit')->name('product_unity.admin.edit');
+Route::post('/product-unity/store/{id}','ProductUnityController@store')->name('product_unity.admin.store');
+Route::post('/product-unity/bulkEdit','ProductUnityController@bulkEdit')->name('product_unity.admin.bulkEdit');
+Route::get('/product-unity/recovery','ProductUnityController@recovery')->name('product_unity.admin.recovery');
 
 // Ajax
 Route::get('/get-select','ProductController@getForSelect2')->name('product.admin.ajax_get');
