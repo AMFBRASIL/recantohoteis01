@@ -38,6 +38,11 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('Centro de Estoque'),
                         'permission' => 'event_view',
                     ],
+                    'adjustment'=>[
+                        'url'        => route('stock_adjustment.admin.index'),
+                        'title'      => __('Ajustes'),
+                        'permission' => 'event_view',
+                    ],
                 ]
             ]
         ];
