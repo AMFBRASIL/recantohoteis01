@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\AdminController;
 use Modules\News\Admin\CategoryController;
+use Modules\Product\Models\ProductCategory;
 use Modules\Product\Models\ProductSubCategory;
 use Modules\Product\Models\ProductSubCategoryTranslation;
 
@@ -25,9 +26,10 @@ class ProductSubCategoryController extends AdminController
 
     public function create(Request $request, $id)
     {
-        $parent = ProductSubCategory::find($id);
+        $parent = ProductCategory::find($id);
         $this->checkPermission('event_create');
         $query = $this->model::query() ;
+        $query->where('category_id', $id);
         $query->orderBy('id', 'desc');
         if (!empty($s = $request->input('s'))) {
             $query->where('description', 'LIKE', '%' . $s . '%');
@@ -64,7 +66,7 @@ class ProductSubCategoryController extends AdminController
     public function edit(Request $request, $id, $cat)
     {
         $this->checkPermission('event_update');
-        $parent = ProductSubCategory::find($id);
+        $parent = ProductCategory::find($id);
         $row = $this->model::find($cat);
         if (empty($row)) {
             return redirect(route('product_subcategory.admin.create', $id));

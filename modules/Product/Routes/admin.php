@@ -55,6 +55,6 @@ Route::post('/product_ipi/ajax','ProductIPIController@ajaxStore')->name('product
 // NCM
 Route::get('/ncm/get-select','NCMController@getForSelect2')->name('ncm.admin.ajax_get');
 // CEST
-Route::get('/cest/get-select','CESTController@getForSelect2')->name('cest.admin.ajax_get');
+Route::get('/cest/get-select','CestController@getForSelect2')->name('cest.admin.ajax_get');
 // CFOP
 Route::get('/cfop/get-select','CFOPController@getForSelect2')->name('cfop.admin.ajax_get');
