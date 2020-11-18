@@ -129,7 +129,7 @@ class ProductUnityController extends AdminController
             if($id > 0 ){
                 return back()->with('success',  __('Unidade Atualizada') );
             }else{
-                return redirect(route('product_unity.admin.edit',$row->id))->with('success', __('Unidade Criada') );
+                return redirect(route('product_unity.admin.create'))->with('success', __('Unidade Criada') );
             }
         }
     }

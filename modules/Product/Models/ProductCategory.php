@@ -9,7 +9,6 @@ use Modules\Core\Models\SEO;
 
 class ProductCategory extends Bookable
 {
-    use SoftDeletes;
 
     protected $table = 'bravo_product_category';
     public $type = 'product_category';
@@ -25,7 +24,7 @@ class ProductCategory extends Bookable
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->productCategoryTranslationClass = StockTranslation::class;
+        $this->productCategoryTranslationClass = ProductCategoryTranslation::class;
     }
 
     public static function getModelName()
@@ -40,7 +39,7 @@ class ProductCategory extends Bookable
 
     public function subCategory()
     {
-        $this->hasMany(ProductSubCategory::class, 'id', 'category_id');
+        return $this->hasMany(ProductSubCategory::class, 'category_id', 'id');
     }
 
     public function saveCloneByID($clone_id)

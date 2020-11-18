@@ -134,7 +134,7 @@ class ProductSubCategoryController extends AdminController
             if($cat > 0 ){
                 return back()->with('success',  __('Sub Categoria Atualizada') );
             }else{
-                return redirect(route('product_subcategory.admin.edit',['id' => $id, 'sub'=>$row->id]))->with('success', __('Sub Categoria Criada') );
+                return redirect(route('product_subcategory.admin.create', $id))->with('success', __('Sub Categoria Criada') );
             }
         }
     }

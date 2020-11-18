@@ -9,7 +9,6 @@ use Modules\Core\Models\SEO;
 
 class ProductUnity extends Bookable
 {
-    use SoftDeletes;
 
     protected $table = 'bravo_product_unity';
     public $type = 'product_unity';
