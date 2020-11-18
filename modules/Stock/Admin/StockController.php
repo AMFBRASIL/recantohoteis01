@@ -125,7 +125,7 @@ class StockController extends AdminController
             if($id > 0 ){
                 return back()->with('success',  __('Centro de Estoque Atualizado') );
             }else{
-                return redirect(route('stock.admin.edit',$row->id))->with('success', __('Centro de Estoque Criada') );
+                return redirect(route('stock.admin.create'))->with('success', __('Centro de Estoque Criada') );
             }
         }
     }

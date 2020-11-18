@@ -9,7 +9,6 @@ use Modules\Core\Models\SEO;
 
 class Stock extends Bookable
 {
-    use SoftDeletes;
 
     protected $table = 'bravo_stock';
     public $type = 'stock';

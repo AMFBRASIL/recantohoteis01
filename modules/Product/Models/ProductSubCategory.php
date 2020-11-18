@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductSubCategory extends Bookable
 {
-    use SoftDeletes;
-
     protected $table = 'bravo_product_subcategory';
     public $type = 'product_subcategory';
     protected $slugField     = false;
@@ -35,7 +33,7 @@ class ProductSubCategory extends Bookable
 
     public function category()
     {
-        $this->belongsTo(ProductSubCategory::class, 'category_id', 'id');
+        return $this->belongsTo(ProductCategory::class, 'category_id', 'id');
     }
 
     public static function getTableName()

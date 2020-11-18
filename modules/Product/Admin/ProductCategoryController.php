@@ -126,7 +126,7 @@ class ProductCategoryController extends AdminController
             if($id > 0 ){
                 return back()->with('success',  __('Categoria Atualizada') );
             }else{
-                return redirect(route('product_category.admin.edit',$row->id))->with('success', __('Categoria Criada') );
+                return redirect(route('product_category.admin.create'))->with('success', __('Categoria Criada') );
             }
         }
     }
@@ -152,6 +152,11 @@ class ProductCategoryController extends AdminController
                     }
                     $query->first();
                     if(!empty($query)){
+                        if ($query->get()->first()->subCategory) {
+                            foreach ($query->get()->first()->subCategory as $sub) {
+                                $sub->delete();
+                            }
+                        }
                         $query->delete();
                     }
                 }
