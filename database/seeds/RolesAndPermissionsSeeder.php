@@ -46,13 +46,36 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('template_update');
         Permission::findOrCreate('template_delete');
 
-
         // News
         Permission::findOrCreate('news_view');
         Permission::findOrCreate('news_create');
         Permission::findOrCreate('news_update');
         Permission::findOrCreate('news_delete');
         Permission::findOrCreate('news_manage_others');
+
+        // Billing
+        Permission::findOrCreate('billing_view');
+        Permission::findOrCreate('billing_create');
+        Permission::findOrCreate('billing_update');
+        Permission::findOrCreate('billing_delete');
+
+        //Payment Methods
+        Permission::findOrCreate('payment_methods_view');
+        Permission::findOrCreate('payment_methods_create');
+        Permission::findOrCreate('payment_methods_update');
+        Permission::findOrCreate('payment_methods_delete');
+
+        //Bank Accounts
+        Permission::findOrCreate('bank_account_view');
+        Permission::findOrCreate('bank_account_create');
+        Permission::findOrCreate('bank_account_update');
+        Permission::findOrCreate('bank_account_delete');
+
+        //Card Machine Account
+        Permission::findOrCreate('card_machine_account_view');
+        Permission::findOrCreate('card_machine_account_create');
+        Permission::findOrCreate('card_machine_account_update');
+        Permission::findOrCreate('card_machine_account_delete');        
 
         // Roles
         Permission::findOrCreate('role_view');
