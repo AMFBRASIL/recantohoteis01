@@ -226,4 +226,9 @@ class Supplier extends Bookable
 
         return $query;
     }
+
+    public function getDisplayName()
+    {
+        return sprintf('%s', $this->title);
+    }
 }
