@@ -20,19 +20,6 @@ class ModuleProvider extends ModuleServiceProvider
         $this->app->register(RouterServiceProvider::class);
     }
 
-
-    public static function getAdminMenu()
-    {
-        return [
-            'location'=>[
-                "position"=>30,
-                'url'        => 'admin/module/location',
-                'title'      => __("Location"),
-                'icon'       => 'icon ion-md-compass',
-                'permission' => 'location_view',
-            ]
-        ];
-    }
     public static function getTemplateBlocks(){
         return [
             'list_locations'=>"\\Modules\\Location\\Blocks\\ListLocations",

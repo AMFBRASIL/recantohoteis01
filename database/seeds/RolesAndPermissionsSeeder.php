@@ -53,6 +53,14 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('news_delete');
         Permission::findOrCreate('news_manage_others');
 
+        // Reservation
+        // Pension Type
+        Permission::findOrCreate('pension_type_view');
+        Permission::findOrCreate('pension_type_create');
+        Permission::findOrCreate('pension_type_update');
+        Permission::findOrCreate('pension_type_delete');
+        Permission::findOrCreate('pension_type_manage_others');
+
         // Billing
         Permission::findOrCreate('billing_view');
         Permission::findOrCreate('billing_create');
@@ -75,7 +83,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('card_machine_account_view');
         Permission::findOrCreate('card_machine_account_create');
         Permission::findOrCreate('card_machine_account_update');
-        Permission::findOrCreate('card_machine_account_delete');        
+        Permission::findOrCreate('card_machine_account_delete');
 
         // Roles
         Permission::findOrCreate('role_view');
@@ -160,6 +168,20 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('hotel_delete');
         Permission::findOrCreate('hotel_manage_others');
         Permission::findOrCreate('hotel_manage_attributes');
+
+        // Building
+        Permission::findOrCreate('building_view');
+        Permission::findOrCreate('building_create');
+        Permission::findOrCreate('building_update');
+        Permission::findOrCreate('building_delete');
+        Permission::findOrCreate('building_manage_others');
+
+        // Building Floor
+        Permission::findOrCreate('building_floor_view');
+        Permission::findOrCreate('building_floor_create');
+        Permission::findOrCreate('building_floor_update');
+        Permission::findOrCreate('building_floor_delete');
+        Permission::findOrCreate('building_floor_manage_others');
 
         // Car
         Permission::findOrCreate('car_view');
