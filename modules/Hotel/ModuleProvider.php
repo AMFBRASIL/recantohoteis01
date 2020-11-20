@@ -57,6 +57,11 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('Recovery'),
                         'permission' => 'hotel_view',
                     ],
+                    'building'=>[
+                        'url'        => 'admin/module/hotel/building',
+                        'title'      => __('Empreendimentos'),
+                        'permission' => 'building_view',
+                    ],
                 ]
             ]
         ];

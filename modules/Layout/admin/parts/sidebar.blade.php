@@ -1,31 +1,11 @@
 <?php
+$count = Modules\Vendor\Models\VendorPayout::countInitial();
 $menus = [
     'admin'=>[
         'url'   => 'admin',
         'title' => __("Dashboard"),
         'icon'  => 'icon ion-ios-desktop',
         "position"=>0
-    ],
-    'review'=>[
-        "position"=>50,
-        'url'   => 'admin/module/review',
-        'title' => __("Reviews"),
-        'icon'  => 'icon ion-ios-text',
-        'permission' => 'review_manage_others',
-    ],
-    'menu'=>[
-        "position"=>60,
-        'url'        => 'admin/module/core/menu',
-        'title'      => __("Menu"),
-        'icon'       => 'icon ion-ios-apps',
-        'permission' => 'menu_view',
-    ],
-    'template'=>[
-        "position"=>70,
-        'url'        => 'admin/module/template',
-        'title'      => __('Templates'),
-        'icon'       => 'icon ion-logo-html5',
-        'permission' => 'template_create',
     ],
     'general'=>[
         "position"=>80,
@@ -41,6 +21,42 @@ $menus = [
         'title'    => __("Tools"),
         'icon'     => 'icon ion-ios-hammer',
         'children' => [
+            'page'=>[
+                'url'   => 'admin/module/page',
+                'title' => __("Page"),
+                'icon'  => 'icon ion-ios-bookmarks',
+                'permission'=>'page_view'
+            ],
+            'location'=>[
+                'url'        => 'admin/module/location',
+                'title'      => __("Location"),
+                'icon'       => 'icon ion-md-compass',
+                'permission' => 'location_view',
+            ],
+            'review'=>[
+                'url'   => 'admin/module/review',
+                'title' => __("Reviews"),
+                'icon'  => 'icon ion-ios-text',
+                'permission' => 'review_manage_others',
+            ],
+            'menu'=>[
+                'url'        => 'admin/module/core/menu',
+                'title'      => __("Menu"),
+                'icon'       => 'icon ion-ios-apps',
+                'permission' => 'menu_view',
+            ],
+            'payout'=>[
+                'url'        => 'admin/module/vendor/payout',
+                'title'      => __("Payouts :count",['count'=>$count ? sprintf('<span class="badge badge-warning">%d</span>',$count) : '']),
+                'icon'       => 'icon ion-md-card',
+                'permission' => 'user_create',
+            ],
+            'template'=>[
+                'url'        => 'admin/module/template',
+                'title'      => __('Templates'),
+                'icon'       => 'icon ion-logo-html5',
+                'permission' => 'template_create',
+            ],
             'language'=>[
                 'url'        => 'admin/module/language',
                 'title'      => __('Languages'),
