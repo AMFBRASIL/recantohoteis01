@@ -30,7 +30,7 @@ class ModuleProvider extends ModuleServiceProvider
                 "position"=>34,
                 'url'        => "#",
                 'title'      => __('Reservas'),
-                'icon'       => 'icon ion-ios-pricetag',
+                'icon'       => 'icon ion-ios-bed',
                 'permission' => 'event_view',
                 'children'   => [
                     'add'=>[

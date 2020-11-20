@@ -316,7 +316,7 @@ class SupplierController extends AdminController
     public function getForSelect2(Request $request)
     {
         $q = $request->query('q');
-        $query = $this->supplier::getForSelect2Query($q);
+        $query = $this->supplier::getForSelect2Query($q, true);
         $res = $query->orderBy('id', 'desc')->limit(20)->get();
 
         return response()->json([
