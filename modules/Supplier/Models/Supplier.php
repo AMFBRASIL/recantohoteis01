@@ -214,11 +214,15 @@ class Supplier extends Bookable
         return $this->taxpayer == 1 ? __('Sim') : __('Não');
     }
 
-    public static function getForSelect2Query($q)
+    public static function getForSelect2Query($q, $ignoreShipping = false)
     {
         $query =  static::query()->select(
             'id', DB::raw('title as text'))
             ->Where("title", 'like', '%' . $q . '%');
+
+        if ($ignoreShipping) {
+            $query->whereNull('is_shipping');
+        }
 
         return $query;
     }

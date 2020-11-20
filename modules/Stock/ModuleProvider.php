@@ -30,7 +30,7 @@ class ModuleProvider extends ModuleServiceProvider
                 "position"=>34,
                 'url'        => "#",
                 'title'      => __('Estoque'),
-                'icon'       => 'icon ion-ios-pricetag',
+                'icon'       => 'icon ion-ios-business',
                 'permission' => 'event_view',
                 'children'   => [
                     'add'=>[

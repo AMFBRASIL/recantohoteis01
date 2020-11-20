@@ -28,22 +28,17 @@ class ModuleProvider extends ModuleServiceProvider
         if(!Supplier::isEnable()) return [];
         return [
             'supplier'=>[
-                "position"=>50,
-                'url'        => route('supplier.admin.index'),
-                'title'      => __('Fornecedor'),
-                'icon'       => 'ion-ios-calendar',
+                "position"=>33,
+                'url'        => '#',
+                'title'      => __('Cadastros'),
+                'icon'       => 'ion-ios-folder-open',
                 'permission' => 'event_view',
                 'children'   => [
                     'add'=>[
                         'url'        => route('supplier.admin.index'),
-                        'title'      => __('Listar Fornecedores'),
+                        'title'      => __('Fornecedores'),
                         'permission' => 'event_view',
                     ],
-                    'create'=>[
-                        'url'        => route('supplier.admin.create'),
-                        'title'      => __('Adicionar Fornecedor'),
-                        'permission' => 'event_create',
-                    ]
                 ]
             ]
         ];
