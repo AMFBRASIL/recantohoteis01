@@ -41,4 +41,9 @@ class PensionTypeController extends CrudController
     protected $fieldSearchList = [
         'name'
     ];
+
+    protected function redirectUrlAfterStore($model)
+    {
+        return route($this->routeList['index'], $model->id);
+    }
 }

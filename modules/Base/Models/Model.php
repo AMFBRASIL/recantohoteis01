@@ -65,6 +65,11 @@ class Model extends Bookable
 
     public function __toString()
     {
+        if (! empty($this->fieldClone)) {
+            $field = $this->fieldClone;
+            return sprintf('%s', $this->$field ?: '#');
+        }
+
         return '#';
     }
 }
