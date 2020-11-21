@@ -3,11 +3,11 @@
 <thead>
 <tr>
     <th width="60px"><input type="checkbox" class="check-all"></th>
-    <th width="100px"> {{ __('Tipo Movimento')}}</th>
-    <th width="130px"> {{ __('Vlr. Frete')}}</th>
-    <th width="100px"> {{ __('Composição')}}</th>
-    <th width="130px"> {{ __('Enviar Email Setores')}}</th>
-    <th width="100px"> {{ __('Enviar Email Estoque')}}</th>
+    <th> {{ __('Tipo Movimento')}}</th>
+    <th> {{ __('Vlr. Frete')}}</th>
+    <th> {{ __('Composição')}}</th>
+    <th> {{ __('Enviar Email Setores')}}</th>
+    <th> {{ __('Enviar Email Estoque')}}</th>
     <th width="100px"> {{ __('Status')}}</th>
     <th width="100px"> {{ __('Date')}}</th>
     <th width="100px"></th>

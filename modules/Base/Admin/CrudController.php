@@ -166,17 +166,30 @@ class CrudController extends AdminController
             $model->create_user = $request->input('create_user');
         }
 
+        $this->beforeSaveModel($model);
         $res = $model->saveOriginOrTranslation($request->input('lang'),true);
         if ($res) {
             if($id > 0 ){
+                $this->afterSaveModel($model);
                 return back()->with('success',  __('Registro Atualizado.') );
             } else {
+                $this->afterSaveModel($model);
                 return redirect($this->redirectUrlAfterStore($model))
                     ->with('success', __('Registro Criado.') );
             }
         }
 
         return back()->with('error',  __('Erro ao salvar') );
+    }
+
+    protected function beforeSaveModel($model)
+    {
+        // @todo
+    }
+
+    protected function afterSaveModel($model)
+    {
+        // @todo
     }
 
     protected function redirectUrlAfterStore($model)

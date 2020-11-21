@@ -193,7 +193,11 @@
 @section ('script.body')
     <script>
         jQuery(function ($) {
-            $(document).on('select2:select', '.dungdt-select2-field-lazy', function (e) {
+            $('.dungdt-select2-field').each(function() {
+                $(this).trigger('select.select2');
+            })
+
+            $(document).on('select2:select', '.dungdt-select2-field-lazy, .dungdt-select2-field', function (e) {
                 $(this).parents('.row').find('.stock_quantity').val(e.params.data.available_stock);
                 $(this).parents('.row').find('.price').val(e.params.data.price);
             })

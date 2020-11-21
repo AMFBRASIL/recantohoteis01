@@ -2,6 +2,9 @@
 
 namespace Modules\Stock\Admin;
 
+use DemeterChain\A;
+use Modules\Stock\Jobs\AdjustmentStock;
+use Illuminate\Http\Request;
 use Modules\Base\Admin\CrudController;
 use Modules\Product\Models\Product;
 use Modules\Stock\Models\StockAdjustment;
@@ -61,5 +64,10 @@ class StockAdjustmentController extends CrudController
         }
 
         return response()->json($data);
+    }
+
+    protected function afterSaveModel($model)
+    {
+        AdjustmentStock::dispatch($model);
     }
 }

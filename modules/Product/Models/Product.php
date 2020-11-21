@@ -132,6 +132,16 @@ class Product extends Bookable
         $this->attributes['unit_price'] = str_replace(',', '.', str_replace('.','', $value));
     }
 
+    public function getPriceFormattedAttribute()
+    {
+        $value = '0,00';
+        if ($this->price) {
+            $value = number_format($this->price, 2, ',', '.');
+        }
+
+        return $value;
+    }
+
     public function getSalePriceFormattedAttribute()
     {
         $value = '0,00';

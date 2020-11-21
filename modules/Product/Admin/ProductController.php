@@ -333,8 +333,18 @@ class ProductController extends AdminController
         $query = $this->model::getForSelect2Query($q);
         $res = $query->orderBy('id', 'desc')->limit(20)->get();
 
+        $data = [];
+        foreach ($res as $product) {
+            $data[] = [
+                'id' => $product->id,
+                'text' => $product->text,
+                'available_stock' => $product->available_stock,
+                'price' => $product->price_formatted
+            ];
+        }
+
         return response()->json([
-            'results' => $res
+            'results' => $data
         ]);
     }
 

@@ -119,4 +119,18 @@ class StockAdjustment extends Bookable
     {
         return sprintf('%s: Tipo %s - Frete: %s', $this->id, $this->movement_type_formatted, $this->shipping_price);
     }
+
+    public function getStockUpdatedFromValue($newValue, $oldValue)
+    {
+        if ($this->movement_type == 1) {
+            return $newValue;
+        }
+
+        if ($this->movement_type == 2) {
+            return $newValue + $oldValue;
+        }
+
+        $result = $newValue - $oldValue;
+        return $result >= 0 ? $result : 0;
+    }
 }
