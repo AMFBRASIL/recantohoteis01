@@ -136,7 +136,7 @@ class Product extends Bookable
     {
         $value = '0,00';
         if ($this->sale_price) {
-            $value = number_format($this->price, 2, ',', '.');
+            $value = number_format($this->sale_price, 2, ',', '.');
         }
 
         return 'R$ ' . $value;
@@ -217,7 +217,7 @@ class Product extends Bookable
     public static function getForSelect2Query($q, $toJson = false)
     {
         $query =  static::query()->select(
-            'id', DB::raw('title as text'))
+            'id', DB::raw('title as text'), 'available_stock', 'price')
             ->Where("title", 'like', '%' . $q . '%');
 
         if (! $toJson) {
@@ -234,6 +234,4 @@ class Product extends Bookable
     {
         return sprintf('%s', $this->title);
     }
-
-
 }
