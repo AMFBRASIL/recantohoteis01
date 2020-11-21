@@ -324,7 +324,7 @@
             <div class="panel-body">
                 <div class="form-group">
                     <?php
-                    $supplier = !empty($row->supplier_id) ? Modules\Product\Models\ProductSubCategory::find($row->supplier_id) : false;
+                    $supplier = !empty($row->supplier_id) ? Modules\Supplier\Models\Supplier::find($row->supplier_id) : false;
                     \App\Helpers\AdminForm::select2('supplier_id', [
                         'configs' => [
                             'ajax' => [
@@ -334,7 +334,7 @@
                             'allowClear'  => true,
                             'placeholder' => __('-- Selecione o fornecedor --')
                         ]
-                    ], !empty($supplier->id) ? [$supplier->id, $supplier->getDisplayName()] : false)
+                    ], !empty($supplier) ? [$supplier->id, $supplier->getDisplayName()] : false)
                     ?>
                 </div>
             </div>

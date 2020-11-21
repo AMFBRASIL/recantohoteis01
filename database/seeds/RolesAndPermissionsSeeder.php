@@ -54,12 +54,21 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('news_manage_others');
 
         // Reservation
+        Permission::findOrCreate('reservation_view');
+
         // Pension Type
         Permission::findOrCreate('pension_type_view');
         Permission::findOrCreate('pension_type_create');
         Permission::findOrCreate('pension_type_update');
         Permission::findOrCreate('pension_type_delete');
         Permission::findOrCreate('pension_type_manage_others');
+
+        // Reservation Type
+        Permission::findOrCreate('reservation_type_view');
+        Permission::findOrCreate('reservation_type_create');
+        Permission::findOrCreate('reservation_type_update');
+        Permission::findOrCreate('reservation_type_delete');
+        Permission::findOrCreate('reservation_type_manage_others');
 
         // Billing
         Permission::findOrCreate('billing_view');
