@@ -2,6 +2,7 @@
 
 namespace Modules\Stock\Jobs;
 
+use Modules\Base\Jobs\Middleware\InitConfigsFromDatabase;
 use Modules\Product\Models\Product;
 use Modules\Stock\Emails\AdjustmentNotification;
 use Modules\Stock\Models\StockAdjustment;
@@ -26,6 +27,11 @@ class AdjustmentStock implements ShouldQueue
     public function __construct(StockAdjustment $adjustment)
     {
         $this->adjustment = $adjustment;
+    }
+
+    public function middleware()
+    {
+        return [new InitConfigsFromDatabase];
     }
 
     /**
