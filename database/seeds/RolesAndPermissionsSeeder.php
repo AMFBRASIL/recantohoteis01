@@ -53,6 +53,14 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('news_delete');
         Permission::findOrCreate('news_manage_others');
 
+        // Stock Adjustment
+        // Pension Type
+        Permission::findOrCreate('stock_adjustment_view');
+        Permission::findOrCreate('stock_adjustment_create');
+        Permission::findOrCreate('stock_adjustment_update');
+        Permission::findOrCreate('stock_adjustment_delete');
+        Permission::findOrCreate('stock_adjustment_manage_others');
+
         // Reservation
         Permission::findOrCreate('reservation_view');
 
