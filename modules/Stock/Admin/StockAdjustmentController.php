@@ -13,6 +13,11 @@ class StockAdjustmentController extends CrudController
 {
     protected $modelName = StockAdjustment::class;
 
+    public function __construct()
+    {
+        $this->setActiveMenu(route('stock.admin.create'));
+    }
+
     protected $titleList = [
         'index'     => 'Ajustes',
         'page'      => 'Ajustes',

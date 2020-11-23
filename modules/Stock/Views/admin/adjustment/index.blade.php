@@ -77,12 +77,11 @@
                         return;
                     }
 
-                    var html = "<table class='table table-hover'><thead><tr><td>Produto</td><td>Qtde</td><td>Unidade</td><td>Categoria</td><td>Sub Categoria</td><td>Valor</td></tr></thead>";
+                    var html = "<table class='table table-hover'><thead><tr><td>Produto</td><td>Qtde</td><td>Valor</td></tr></thead>";
 
                     for (row in data) {
-                        html += "<tr><td>"+data[row].product+"</td><td>"+data[row].quantity+"</td><td>"+data[row].unity+"</td><td>"+data[row].category+"</td><td>"+data[row].subcategory+"</td><td>"+data[row].price+"</td></tr>";
+                        html += "<tr><td>"+data[row].product+"</td><td>"+data[row].quantity+"</td><td>"+data[row].price+"</td></tr>";
                     }
-
 
                     html += "</table>";
                     modalBody.html(html);

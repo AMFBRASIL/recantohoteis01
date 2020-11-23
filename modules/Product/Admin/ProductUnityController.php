@@ -21,7 +21,7 @@ class ProductUnityController extends AdminController
     public function __construct()
     {
         parent::__construct();
-        $this->setActiveMenu(route('product_unity.admin.index'));
+        $this->setActiveMenu(route('product.admin.index'));
         $this->model = ProductUnity::class;
         $this->model_translation = ProductUnityTranslation::class;
     }

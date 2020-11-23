@@ -28,7 +28,7 @@ class ModuleProvider extends ModuleServiceProvider
         return [
             'stock'=>[
                 "position"=>34,
-                'url'        => "#",
+                'url'        => "/admin/module/stock/create",
                 'title'      => __('Estoque'),
                 'icon'       => 'icon ion-ios-business',
                 'permission' => 'event_view',

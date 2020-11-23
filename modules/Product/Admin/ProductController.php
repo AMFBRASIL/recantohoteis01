@@ -60,7 +60,7 @@ class ProductController extends AdminController
             'breadcrumbs'        => [
                 [
                     'name' => __('Produtos'),
-                    'url'  => 'admin/module/supplier'
+                    'url'  => 'admin/module/product'
                 ],
                 [
                     'name'  => __('All'),
@@ -96,7 +96,7 @@ class ProductController extends AdminController
             'breadcrumbs'        => [
                 [
                     'name' => __('Produtos'),
-                    'url'  => 'admin/module/supplier'
+                    'url'  => 'admin/module/product'
                 ],
                 [
                     'name'  => __('Recovery'),

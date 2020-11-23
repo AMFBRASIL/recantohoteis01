@@ -18,7 +18,7 @@ class ProductCategoryController extends AdminController
     public function __construct()
     {
         parent::__construct();
-        $this->setActiveMenu(route('product_category.admin.create'));
+        $this->setActiveMenu(route('product.admin.index'));
         $this->model = ProductCategory::class;
         $this->model_translation = ProductCategoryTranslation::class;
     }
