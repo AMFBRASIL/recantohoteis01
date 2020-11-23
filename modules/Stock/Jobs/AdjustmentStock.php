@@ -52,6 +52,7 @@ class AdjustmentStock implements ShouldQueue
             $product->save();
         }
 
+        $mailList = [];
         if ($this->adjustment->send_section_mail) {
             $mailList[] = env("EMAIL_ADMINISTRATIVO");
         }

@@ -130,7 +130,7 @@ class StockAdjustment extends Bookable
             return $newValue + $oldValue;
         }
 
-        $result = $newValue - $oldValue;
+        $result = $oldValue - $newValue;
         return $result >= 0 ? $result : 0;
     }
 }

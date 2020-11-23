@@ -10,8 +10,8 @@
                         <label>{{__("Tipo Movimento")}}</label>
                         <select name="movement_type" class="form-control">
                             <option @if($row->movement_type == 1) selected @endif value="1" >{{__('Saldo Real')}}</option>
-                            <option @if($row->movement_type == 2) selected @endif value="1" >{{__('Somar Qtde')}}</option>
-                            <option @if($row->movement_type == 3) selected @endif value="2" >{{__('Diminuir Qtde')}}</option>                                                <
+                            <option @if($row->movement_type == 2) selected @endif value="2" >{{__('Somar Qtde')}}</option>
+                            <option @if($row->movement_type == 3) selected @endif value="3" >{{__('Diminuir Qtde')}}</option>                                                <
                         </select>
                     </div>
                 </div>
