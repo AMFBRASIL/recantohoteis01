@@ -9,6 +9,11 @@ class ReservationTypeController extends CrudController
 {
     protected $modelName = ReservationType::class;
 
+    public function __construct()
+    {
+        $this->setActiveMenu(route('reservation.admin.index'));
+    }
+
     protected $titleList = [
         'index'     => 'Tipos de Reservas',
         'page'      => 'Tipos de Reservas',

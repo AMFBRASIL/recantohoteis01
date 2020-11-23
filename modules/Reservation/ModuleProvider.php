@@ -28,7 +28,7 @@ class ModuleProvider extends ModuleServiceProvider
         return [
             'reservation'=>[
                 "position"=>34,
-                'url'        => "#",
+                'url'        => "/admin/module/reservation",
                 'title'      => __('Reservas'),
                 'icon'       => 'icon ion-ios-bed',
                 'permission' => 'reservation_view',

@@ -9,6 +9,11 @@ class PensionTypeController extends CrudController
 {
     protected $modelName = PensionType::class;
 
+    public function __construct()
+    {
+        $this->setActiveMenu(route('reservation.admin.index'));
+    }
+
     protected $titleList = [
         'index'     => 'Tipos de Pensão',
         'page'      => 'Tipos de Pensão',

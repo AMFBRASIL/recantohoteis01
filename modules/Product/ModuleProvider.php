@@ -28,7 +28,7 @@ class ModuleProvider extends ModuleServiceProvider
         return [
             'product'=>[
                 "position"=>33,
-                'url'        => "#",
+                'url'        => "/admin/module/product",
                 'title'      => __('Produtos'),
                 'icon'       => 'icon ion-ios-pricetag',
                 'permission' => 'event_view',

@@ -2,6 +2,8 @@
 
 use \Illuminate\Support\Facades\Route;
 
+Route::get('/', 'PensionTypeController@index')->name('reservation.admin.index');
+
 Route::group(['prefix' => 'pension-type'],function () {
     Route::get('/', 'PensionTypeController@index')->name('pension_type.admin.index');
     Route::get('/create', 'PensionTypeController@create')->name('pension_type.admin.create');

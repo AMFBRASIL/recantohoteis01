@@ -1,6 +1,6 @@
 <?php
 
-namespace  Modules\Stock;
+namespace  Modules\Reservation;
 
 use Modules\Core\Abstracts\BaseSettingsClass;
 use Modules\Core\Models\Settings;
