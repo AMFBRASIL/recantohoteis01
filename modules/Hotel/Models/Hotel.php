@@ -34,6 +34,7 @@ class Hotel extends \Custom\Hotel\CustomHotel
         'title',
         'content',
         'status',
+        'building_id'
     ];
     protected $slugField     = 'slug';
     protected $slugFromField = 'title';
@@ -1067,5 +1068,10 @@ class Hotel extends \Custom\Hotel\CustomHotel
                 "data" => Attributes::getAllAttributesForApi("hotel")
             ]
         ];
+    }
+
+    public function building()
+    {
+        return $this->belongsTo(Building::class,'building_id');
     }
 }
