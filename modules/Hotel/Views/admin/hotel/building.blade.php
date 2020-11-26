@@ -5,7 +5,7 @@
             <label>{{__("Hotel building")}}</label>
             <select class="form-control" name="building_id">
                 @foreach ($buildingList as $option)
-                    @if ($translation->building_id === $option->id)
+                    @if ($translation->building_id == $option->id)
                         <option value="{{$option->id}}" selected>{{$option->name}}</option>
                     @else
                         <option value="{{$option->id}}">{{$option->name}}</option>
