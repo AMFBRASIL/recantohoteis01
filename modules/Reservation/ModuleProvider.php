@@ -42,6 +42,11 @@ class ModuleProvider extends ModuleServiceProvider
                         'url'        => route('reservation_type.admin.index'),
                         'title'      => __('Canais de Venda'),
                         'permission' => 'reservation_type_view',
+                    ],
+                    'check_availability'=>[
+                        'url'        => route('check_availability.admin.index'),
+                        'title'      => __('Verificar disponibilidade'),
+                        'permission' => 'check_availability_view',
                     ]
                 ]
             ]

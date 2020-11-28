@@ -21,3 +21,12 @@ Route::group(['prefix' => 'reservation-type'],function () {
     Route::post('/bulkEdit', 'ReservationTypeController@bulkEdit')->name('reservation_type.admin.bulkEdit');
     Route::get('/recovery', 'ReservationTypeController@recovery')->name('reservation_type.admin.recovery');
 });
+
+Route::group(['prefix' => 'check-availability'],function () {
+    Route::get('/', 'CheckAvailabilityController@index')->name('check_availability.admin.index');
+    Route::get('/create', 'CheckAvailabilityController@create')->name('check_availability.admin.create');
+    Route::get('/edit/{id}', 'CheckAvailabilityController@edit')->name('check_availability.admin.edit');
+    Route::post('/store/{id}', 'CheckAvailabilityController@store')->name('check_availability.admin.store');
+    Route::post('/bulkEdit', 'CheckAvailabilityController@bulkEdit')->name('check_availability.admin.bulkEdit');
+    Route::get('/recovery', 'CheckAvailabilityController@recovery')->name('check_availability.admin.recovery');
+});
