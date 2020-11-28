@@ -15,10 +15,10 @@ class ReservationTypeController extends CrudController
     }
 
     protected $titleList = [
-        'index'     => 'Tipos de Reservas',
-        'page'      => 'Tipos de Reservas',
-        'create'    => 'Tipo de Reserva',
-        'edit'      => 'Tipo de Reserva'
+        'index'     => 'Canais de Venda',
+        'page'      => 'Canais de Venda',
+        'create'    => 'Canal de Venda',
+        'edit'      => 'Canal de Venda'
     ];
 
     protected $permissionList = [
