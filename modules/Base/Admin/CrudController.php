@@ -86,11 +86,13 @@ class CrudController extends AdminController
     {
         $this->checkPermission($this->permissionList['create']);
         $model = new $this->modelName();
+        $translation = $model->translateOrOrigin($request->query('lang'));
         $model->fill(['status' => 'publish']);
         $data = [
             'row'           => $model,
             'page_title'    =>__("{$this->titleList['create']}"),
             'route_list'    => $this->routeList,
+            'translation'   => $translation,
             'breadcrumbs'   => [
                 [
                     'name'  => __("{$this->titleList['page']}"),

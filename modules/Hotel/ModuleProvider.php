@@ -59,7 +59,7 @@ class ModuleProvider extends ModuleServiceProvider
                     ],
                     'building'=>[
                         'url'        => 'admin/module/hotel/building',
-                        'title'      => __('Empreendimentos'),
+                        'title'      => __('Blocos'),
                         'permission' => 'building_view',
                     ],
                 ]

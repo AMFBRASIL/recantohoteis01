@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\AdminController;
 use Modules\Core\Models\Attributes;
+use Modules\Hotel\Models\Building;
 use Modules\Location\Models\Location;
 use Modules\Hotel\Models\Hotel;
 use Modules\Hotel\Models\HotelTerm;
@@ -66,7 +67,8 @@ class HotelController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'=>__("Hotel Management")
+            'page_title'=>__("Hotel Management"),
+            'buildingList' => Building::all(),
         ];
         return view('Hotel::admin.index', $data);
     }
@@ -93,7 +95,8 @@ class HotelController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'     => __("Add new Hotel")
+            'page_title'     => __("Add new Hotel"),
+            'buildingList' => Building::all(),
         ];
         return view('Hotel::admin.detail', $data);
     }
@@ -129,7 +132,8 @@ class HotelController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'=>__("Recovery Hotel Management")
+            'page_title'=>__("Recovery Hotel Management"),
+            'buildingList' => Building::all(),
         ];
         return view('Hotel::admin.index', $data);
     }
@@ -164,7 +168,8 @@ class HotelController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'=>__("Edit: :name",['name'=>$row->title])
+            'page_title'=>__("Edit: :name",['name'=>$row->title]),
+            'buildingList' => Building::all(),
         ];
         return view('Hotel::admin.detail', $data);
     }
@@ -196,6 +201,7 @@ class HotelController extends AdminController
             'gallery',
             'is_featured',
             'policy',
+            'building_id',
             'location_id',
             'address',
             'map_lat',
