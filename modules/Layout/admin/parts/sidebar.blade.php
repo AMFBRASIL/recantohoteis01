@@ -15,6 +15,25 @@ $menus = [
         'permission' => 'setting_update',
         'children'   => \Modules\Core\Models\Settings::getSettingPages()
     ],
+    'cruds'=>[
+        "position"=>33,
+        'url'        => route('supplier.admin.index'),
+        'title'      => __('Cadastros'),
+        'icon'       => 'ion-ios-folder-open',
+        'permission' => 'event_view',
+        'children'   => [
+            'supplier' =>[
+                'url'        => route('supplier.admin.index'),
+                'title'      => __('Fornecedores'),
+                'permission' => 'event_view',
+            ],
+            'company' =>[
+                'url'        => route('company.admin.index'),
+                'title'      => __('Empresa'),
+                'permission' => 'company_view',
+            ],
+        ]
+    ],
     'tools'=>[
         "position"=>90,
         'url'      => 'admin/module/core/tools',

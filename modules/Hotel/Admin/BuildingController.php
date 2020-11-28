@@ -10,10 +10,10 @@ class BuildingController extends CrudController
     protected $modelName = Building::class;
 
     protected $titleList = [
-        'index'     => 'Empreendimentos',
-        'page'      => 'Empreendimentos',
-        'create'    => 'Empreendimento',
-        'edit'      => 'Empreendimento'
+        'index'     => 'Blocos',
+        'page'      => 'Blocos',
+        'create'    => 'Bloco',
+        'edit'      => 'Bloco'
     ];
 
     protected $permissionList = [
