@@ -1,8 +1,7 @@
 <?php
-namespace Modules\Supplier;
+namespace Modules\Company;
 
-use Modules\Supplier\Models\Supplier;
-use Modules\Supplier\Rou;
+use Modules\Company\Models\Company;
 use Modules\ModuleServiceProvider;
 
 class ModuleProvider extends ModuleServiceProvider

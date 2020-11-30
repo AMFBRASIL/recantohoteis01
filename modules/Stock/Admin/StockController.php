@@ -45,7 +45,7 @@ class StockController extends AdminController
             'event_manage_others' => $this->hasPermission('event_manage_others'),
             'breadcrumbs'        => [
                 [
-                    'name' => __('Centro de Estoque'),
+                    'name' => __('Centro de Custo'),
                     'url'  => route('stock.admin.create')
                 ],
                 [
@@ -53,7 +53,7 @@ class StockController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'=>__("Centro de Estoque")
+            'page_title'=>__("Centro de Custo")
         ];
 
         return view('Stock::admin.stock.index', $data);
@@ -79,7 +79,7 @@ class StockController extends AdminController
             'enable_multi_lang'=>true,
             'breadcrumbs'        => [
                 [
-                    'name' => __('Centro de Estoque'),
+                    'name' => __('Centro de Custo'),
                     'url'  => route('stock.admin.create')
                 ],
                 [
@@ -87,7 +87,7 @@ class StockController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'=>__('Centro de Estoque')
+            'page_title'=>__('Centro de Custo')
         ];
         return view('Stock::admin.stock.edit', $data);
     }
@@ -123,9 +123,9 @@ class StockController extends AdminController
         $res = $row->saveOriginOrTranslation($request->input('lang'),true);
         if ($res) {
             if($id > 0 ){
-                return back()->with('success',  __('Centro de Estoque Atualizado') );
+                return back()->with('success',  __('Centro de Custo Atualizado') );
             }else{
-                return redirect(route('stock.admin.create'))->with('success', __('Centro de Estoque Criada') );
+                return redirect(route('stock.admin.create'))->with('success', __('Centro de Custo Criada') );
             }
         }
     }
@@ -210,13 +210,13 @@ class StockController extends AdminController
         if ($row->save()) {
             return response()->json([
                     'status' => 'success',
-                    'message' => _('Centro de Estoque Criado com sucesso!')
+                    'message' => _('Centro de Custo Criado com sucesso!')
             ], 201);
         }
 
         return response()->json([
             'status' => 'error',
-            'message' => _('Não foi possível criar centro de estoque')
+            'message' => _('Não foi possível criar Centro de Custo')
         ]);
     }
 }

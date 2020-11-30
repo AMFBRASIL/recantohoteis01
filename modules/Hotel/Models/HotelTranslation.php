@@ -12,7 +12,8 @@ class HotelTranslation extends Hotel
         'title',
         'content',
         'address',
-        'policy'
+        'policy',
+        'building_id'
     ];
 
     protected $slugField     = false;
