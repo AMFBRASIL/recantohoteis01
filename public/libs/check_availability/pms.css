@@ -45,7 +45,7 @@
     width: 56px;
     height: 30px;
     line-height: 17px;
-    font-size: 12px;
+    font-size: 10px;
     text-align: center;
     border-right: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
@@ -279,7 +279,7 @@ div.bg-warning {
     }
 }
 
-ul li{
+.modal ul li{
   display: inline;
 }
 

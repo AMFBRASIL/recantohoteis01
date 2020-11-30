@@ -6998,7 +6998,7 @@
 
 @section('script.head')
 	<link rel="stylesheet" href="{{asset('libs/jquery-ui/jquery-ui.css')}}">
-	<link rel="stylesheet" href="{{asset('libs/bootstrap/css/bootstrap.min.css')}}">
+	<!-- <link rel="stylesheet" href="{{asset('libs/bootstrap/css/bootstrap.min.css')}}"> -->
 	<link rel="stylesheet" href="{{asset('libs/check_availability/shortcodes.css')}}">
 	<link rel="stylesheet" href="{{asset('libs/check_availability/layout.css')}}">
 	<link rel="stylesheet" href="{{asset('libs/magnific_popup/magnific-popup.min.css')}}">
@@ -7007,7 +7007,7 @@
 
 @section('script.body')
 	<script src="{{asset('libs/jquery-ui/jquery-ui.js')}}"></script>
-	<script src="{{asset('libs/bootstrap/js/bootstrap.min.js')}}"></script>
+	<!-- <script src="{{asset('libs/bootstrap/js/bootstrap.min.js')}}"></script> -->
 	<script src="{{asset('libs/magnific_popup/jquery.magnific-popup.min.js')}}"></script>
 
 	<script>
