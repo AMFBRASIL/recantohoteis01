@@ -1,5 +1,5 @@
 <div class="panel">
-    <div class="panel-title"><strong>{{__("Hotel building")}}</strong></div>
+    <div class="panel-title"><strong>{{__("Hotel Building")}}</strong></div>
     <div class="panel-body">
         <div class="form-group">
             <label>{{__("Hotel building")}}</label>
