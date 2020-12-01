@@ -43,6 +43,11 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('Ajustes'),
                         'permission' => 'event_view',
                     ],
+                    'budget'=>[
+                        'url'        => route('budget.admin.index'),
+                        'title'      => __('Cotações'),
+                        'permission' => 'budget_view',
+                    ],
                 ]
             ]
         ];
