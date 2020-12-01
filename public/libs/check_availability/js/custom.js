@@ -185,7 +185,7 @@ $(function() {
                             'top': e.pageY - 55 + 'px'
                         }).slideDown();
                     }, 100);
-                    console.log(e);
+                    //console.log(e);
                 }
             }
         }

@@ -6997,16 +6997,14 @@
 @endsection
 
 @section('script.head')
-	<link rel="stylesheet" href="{{asset('libs/jquery-ui/jquery-ui.css')}}">
-	<link rel="stylesheet" href="{{asset('libs/check_availability/css/shortcodes.css')}}">
+	<!-- <link rel="stylesheet" href="{{asset('libs/jquery-ui/jquery-ui.css')}}"> -->
+	<!-- <link rel="stylesheet" href="{{asset('libs/check_availability/css/shortcodes.css')}}"> -->
 	<link rel="stylesheet" href="{{asset('libs/check_availability/css/layout.css')}}">
-	<!-- <link rel="stylesheet" href="{{asset('libs/magnific_popup/magnific-popup.min.css')}}"> -->
 	<link rel="stylesheet" href="{{asset('libs/check_availability/css/pms.css')}}">
 @endsection
 
 @section('script.body')
-	<script src="{{asset('libs/jquery-ui/jquery-ui.js')}}"></script>
-	<!-- <script src="{{asset('libs/magnific_popup/jquery.magnific-popup.min.js')}}"></script> -->
+	<!-- <script src="{{asset('libs/jquery-ui/jquery-ui.js')}}"></script> -->
 	<script src="{{asset('libs/check_availability/js/custom.js')}}"></script>
 	<!-- Tooltip -->
     <script src="{{asset('libs/tippy/popper.min.js')}}"></script>
