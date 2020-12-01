@@ -54,12 +54,18 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('news_manage_others');
 
         // Stock Adjustment
-        // Pension Type
         Permission::findOrCreate('stock_adjustment_view');
         Permission::findOrCreate('stock_adjustment_create');
         Permission::findOrCreate('stock_adjustment_update');
         Permission::findOrCreate('stock_adjustment_delete');
         Permission::findOrCreate('stock_adjustment_manage_others');
+
+        // Budget
+        Permission::findOrCreate('budget_view');
+        Permission::findOrCreate('budget_create');
+        Permission::findOrCreate('budget_update');
+        Permission::findOrCreate('budget_delete');
+        Permission::findOrCreate('budget_manage_others');
 
         // Reservation
         Permission::findOrCreate('reservation_view');
@@ -85,7 +91,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('check_availability_delete');
         Permission::findOrCreate('check_availability_manage_others');
         Permission::findOrCreate('reservation_type_manage_others');
-        
+
         // Company
         Permission::findOrCreate('company_view');
         Permission::findOrCreate('company_create');
