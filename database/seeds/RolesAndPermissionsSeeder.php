@@ -93,6 +93,13 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('company_delete');
         Permission::findOrCreate('company_manage_others');
 
+        // CheckList Limpeza
+        Permission::findOrCreate('cleaning_checklist_view');
+        Permission::findOrCreate('cleaning_checklist_manage_others');
+        Permission::findOrCreate('cleaning_checklist_create');
+        Permission::findOrCreate('cleaning_checklist_update');
+        Permission::findOrCreate('cleaning_checklist_delete');
+
         // Billing
         Permission::findOrCreate('billing_view');
         Permission::findOrCreate('billing_create');
