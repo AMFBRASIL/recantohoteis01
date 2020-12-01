@@ -1,9 +1,8 @@
 <?php
 
-namespace  Modules\Supplier;
+namespace  Modules\Company;
 
 use Modules\Core\Abstracts\BaseSettingsClass;
-use Modules\Core\Models\Settings;
 
 class SettingClass extends BaseSettingsClass
 {
