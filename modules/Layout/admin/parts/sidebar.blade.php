@@ -37,6 +37,11 @@ $menus = [
                 'title'      => __('Gov Check Limpeza'),
                 'permission' => 'cleaning_checklist_view',
             ],
+            'Profissões'=>[
+                'url'        => route('profession.admin.index'),
+                'title'      => __("Profissões"),
+                'permission' => 'profession_view',
+            ],
         ]
     ],
     'tools'=>[

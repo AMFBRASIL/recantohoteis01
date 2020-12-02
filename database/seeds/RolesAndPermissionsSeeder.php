@@ -221,6 +221,13 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('building_delete');
         Permission::findOrCreate('building_manage_others');
 
+        // Profession
+        Permission::findOrCreate('profession_view');
+        Permission::findOrCreate('profession_create');
+        Permission::findOrCreate('profession_update');
+        Permission::findOrCreate('profession_delete');
+
+
         // Building Floor
         Permission::findOrCreate('building_floor_view');
         Permission::findOrCreate('building_floor_create');
