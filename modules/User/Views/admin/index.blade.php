@@ -49,9 +49,11 @@
                         <tr>
                             <th width="60px"><input type="checkbox" class="check-all"></th>
                             <th>{{__('Name')}}</th>
+                            <th>{{__('Tipo')}}</th>
                             <th>{{__('Email')}}</th>
                             <th>{{__('Credit')}}</th>
                             <th>{{__('Phone')}}</th>
+                            <th>{{__('Situação')}}</th>
                             <th>{{__('Role')}}</th>
                             <th class="date">{{ __('Date')}}</th>
 {{--                            <th class="status">{{__('Status')}}</th>--}}
@@ -65,9 +67,11 @@
                                 <td class="title">
                                     <a href="{{url('admin/module/user/edit/'.$row->id)}}">{{$row->getDisplayName()}}</a>
                                 </td>
+                                <td>{{$row->user_type}}</td>
                                 <td>{{$row->email}}</td>
                                 <td>{{$row->balance}}</td>
                                 <td>{{$row->phone}}</td>
+                                <td><span class="badge badge-{{ $row->status }}">{{ $row->status }}</span></td>
                                 <td>
                                     @php $roles = $row->getRoleNames();
                                     if(!empty($roles[0])){
@@ -75,7 +79,7 @@
                                     }
                                     @endphp
                                 </td>
-                                <td>{{ display_date($row->created_at)}}</td>
+                                <td>{{ $row->created_at->format('d/m/Y H:i:s')}}</td>
                                 {{--<td class="status">{{$row->status}}</td>--}}
                                 <td>
                                     <div class="dropdown">
