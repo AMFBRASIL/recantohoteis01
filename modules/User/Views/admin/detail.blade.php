@@ -189,9 +189,9 @@
                                             <option value="">{{__("--Select--")}}</option>
                                             @foreach ($companyList as $option)
                                                 @if ($row->company_id === $option->id)
-                                                    <option value="{{$option->id}}" selected>{{$option->name}}</option>
+                                                    <option value="{{$option->id}}" selected>{{$option->title}}</option>
                                                 @else
-                                                    <option value="{{$option->id}}">{{$option->name}}</option>
+                                                    <option value="{{$option->id}}">{{$option->title}}</option>
                                                 @endif
                                             @endforeach
                                         </select>
