@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Modules\AdminController;
+use Modules\Company\Models\Company;
+use Modules\Financial\Models\BankAccount;
+use Modules\Profession\Models\Professions;
 use Modules\User\Events\VendorApproved;
 use Modules\Vendor\Models\VendorRequest;
 use Spatie\Permission\Models\Role;
@@ -40,7 +43,7 @@ class UserController extends AdminController
         $listUser->with(['wallet']);
         $data = [
             'rows' => $listUser->paginate(20),
-            'roles' => Role::all()
+            'roles' => Role::all(),
         ];
         return view('User::admin.index', $data);
     }
@@ -52,6 +55,9 @@ class UserController extends AdminController
         $data = [
             'row' => $row,
             'roles' => Role::all(),
+            'professionList' => Professions::all(),
+            'companyList' => Company::all(),
+            'bankList' => BankAccount::all(),
             'breadcrumbs'=>[
                 [
                     'name'=>__("Users"),
@@ -74,6 +80,9 @@ class UserController extends AdminController
         $data = [
             'row'   => $row,
             'roles' => Role::all(),
+            'professionList' => Professions::all(),
+            'companyList' => Company::all(),
+            'bankList' => BankAccount::all(),
             'breadcrumbs'=>[
                 [
                     'name'=>__("Users"),
@@ -218,6 +227,37 @@ class UserController extends AdminController
         $row->business_name = $request->input('business_name');
         $row->vendor_commission_type = $request->input('vendor_commission_type');
         $row->vendor_commission_amount = $request->input('vendor_commission_amount');
+
+        $row->user_type = $request->input('user_type');
+        $row->cpf_cnpj = $request->input('cpf_cnpj');
+        $row->rg = $request->input('rg');
+        $row->passport = $request->input('passport');
+        $row->phone2 = $request->input('phone2');
+        $row->phone_whatsApp = $request->input('phone_whatsApp');
+
+        $row->business_website = $request->input('business_website');
+        $row->profession_id = $request->input('profession_id');
+        $row->company_id = $request->input('company_id');
+        $row->vehicle_model = $request->input('vehicle_model');
+        $row->vehicle_cor = $request->input('vehicle_cor');
+        $row->vehicle_plate = $request->input('vehicle_plate');
+        $row->differentiated_discount = $request->input('differentiated_discount');
+        $row->fixed_overnight_rate = $request->input('fixed_overnight_rate');
+        $row->billing_day = $request->input('billing_day');
+        $row->number_days_bill = $request->input('number_days_bill');
+        $row->billing_limit = $request->input('billing_limit');
+        $row->hours_of = $request->input('hours_of');
+        $row->hours_until = $request->input('hours_until');
+        $row->day_or_night = $request->input('day_or_night');
+        $row->bank_id = $request->input('bank_id');
+
+        $row->is_pos = $request->input('is_pos');
+        $row->is_iss = $request->input('is_iss');
+        $row->is_smoker = $request->input('is_smoker');
+        $row->is_suspect = $request->input('is_suspect');
+        $row->is_nfe = $request->input('is_nfe');
+        $row->is_nfce = $request->input('is_nfce');
+        $row->is_sat = $request->input('is_sat');
 
         //Block all service when user is block
         if($row->status == "blocked"){
