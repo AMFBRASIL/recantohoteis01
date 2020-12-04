@@ -4,7 +4,7 @@
     <form action="{{url('admin/module/user/store/'.($row->id ?? -1))}}" method="post" class="needs-validation"
           novalidate>
         @csrf
-        <div class="container">
+        <div class="container-fluid">
             <div class="d-flex justify-content-between mb20">
                 <div class="">
                     <h1 class="title-bar">{{$row->id ? 'Edit: '.$row->getDisplayName() : 'Add new user'}}</h1>
@@ -47,7 +47,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label document-label">{{ __('RG')}}</label>
+                                        <label class="control-label">{{ __('RG')}}</label>
                                         <input type="text" value="{{old('rg',$row->rg)}}"
                                                placeholder="{{ __('29.976.027-3')}}" name="rg" class="form-control">
                                     </div>
