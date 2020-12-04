@@ -173,7 +173,7 @@
                                         <select class="form-control" name="profession_id">
                                             <option value="">{{__("--Selecione--")}}</option>
                                             @foreach ($professionList as $option)
-                                                @if ($row->profession_id === $option->id)
+                                                @if ($row->profession_id == $option->id)
                                                     <option value="{{$option->id}}" selected>{{$option->name}}</option>
                                                 @else
                                                     <option value="{{$option->id}}">{{$option->name}}</option>
@@ -188,7 +188,7 @@
                                         <select class="form-control" name="company_id">
                                             <option value="">{{__("--Select--")}}</option>
                                             @foreach ($companyList as $option)
-                                                @if ($row->company_id === $option->id)
+                                                @if ($row->company_id == $option->id)
                                                     <option value="{{$option->id}}" selected>{{$option->title}}</option>
                                                 @else
                                                     <option value="{{$option->id}}">{{$option->title}}</option>
@@ -309,7 +309,7 @@
                                             <select name="bank_id" class="form-control">
                                                 <option value="">{{__("--Select--")}}</option>
                                                 @foreach ($bankList as $option)
-                                                    @if ($row->bank_id === $option->id)
+                                                    @if ($row->bank_id == $option->id)
                                                         <option value="{{$option->id}}"
                                                                 selected>{{$option->bank}}</option>
                                                     @else
