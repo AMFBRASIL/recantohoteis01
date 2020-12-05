@@ -145,6 +145,73 @@
     <hr>
     <div class="row">
         <div class="col-sm-4">
+            <h3 class="form-group-title">{{__('Informações Governança Sistema')}}</h3>
+            <p class="form-group-desc">{{__('Informações para uso do Sistema em Geral')}}</p>
+        </div>
+        <div class="col-sm-8">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>{{__("Name Company")}}</label>
+                        <div class="form-controls">
+                            <input type="text" class="form-control" name="name_company" value="{{$settings['name_company'] ?? '' }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>{{__("Telefone Company")}}</label>
+                        <div class="form-controls">
+                            <input type="text" class="form-control" name="phone_company" value="{{$settings['phone_company'] ?? '' }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>{{__("Estoque Email")}}</label>
+                        <div class="form-controls">
+                            <input type="email" class="form-control" name="email_estoque" value="{{$settings['email_estoque'] ?? '' }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>{{__("Adm Email")}}</label>
+                        <div class="form-controls">
+                            <input type="email" class="form-control" name="email_adm" value="{{$settings['email_adm'] ?? '' }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>{{__("Gerencia Email")}}</label>
+                        <div class="form-controls">
+                            <input type="email" class="form-control" name="email_manager" value="{{$settings['email_manager'] ?? '' }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>{{__("Contas a Pagar Email")}}</label>
+                        <div class="form-controls">
+                            <input type="email" class="form-control" name="email_account_payable" value="{{$settings['email_account_payable'] ?? '' }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>{{__("Contas a Receber Email")}}</label>
+                        <div class="form-controls">
+                            <input type="email" class="form-control" name="email_account_receivable" value="{{$settings['email_account_receivable'] ?? '' }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>{{__("NFe Email")}}</label>
+                        <div class="form-controls">
+                            <input type="email" class="form-control" name="email_nfe" value="{{$settings['email_nfe'] ?? '' }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>{{__("NFCe Email")}}</label>
+                        <div class="form-controls">
+                            <input type="email" class="form-control" name="email_nfce" value="{{$settings['email_nfce'] ?? '' }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-4">
             <h3 class="form-group-title">{{__('Homepage')}}</h3>
             <p class="form-group-desc">{{__('Change your homepage content')}}</p>
         </div>

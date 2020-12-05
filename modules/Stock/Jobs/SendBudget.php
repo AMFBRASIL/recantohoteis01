@@ -3,6 +3,7 @@
 namespace Modules\Stock\Jobs;
 
 use Modules\Base\Jobs\Middleware\InitConfigsFromDatabase;
+use Modules\Core\Models\Settings;
 use Modules\Product\Models\Product;
 use Modules\Product\Models\ProductUnity;
 use Modules\Stock\Emails\SendBudgetNotification;
@@ -45,27 +46,27 @@ class SendBudget implements ShouldQueue
     {
         $mailData = [];
         foreach ($this->budget->product_composition as $key => $composition) {
-            $product = Product::find($composition['product_id']);
-            $unity = ProductUnity::find($composition['unity']);
+            $product = Product::find($composition['product_id'] ?? '');
+            $unity = ProductUnity::find($composition['unity'] ?? '');
             $mailData[$key] = [
-                'product' => $product->title,
+                'product' => $product->title ?? '',
                 'quantity' => $composition['quantity'],
-                'unity' => $unity->acronym,
+                'unity' => $unity->acronym ?? '',
                 'price' => $composition['price']
             ];
         }
 
         $mailList = [];
         if ($this->budget->send_adm_mail) {
-            $mailList[] = env("EMAIL_ADMINISTRATIVO");
+            $mailList[] = Settings::item('email_adm');
         }
 
         if ($this->budget->send_stock_mail) {
-            $mailList[] = env("EMAIL_ESTOQUE");
+            $mailList[] = Settings::item('email_estoque');
         }
 
         if ($this->budget->send_manager_mail) {
-            $mailList[] = env("EMAIL_GERENCIA");
+            $mailList[] = Settings::item('email_manager');
         }
 
         if ($this->budget->send_suppliers_mail) {

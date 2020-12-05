@@ -87,6 +87,16 @@ class SettingsController extends AdminController
                     'page_contact_sub_title',
                     'page_contact_desc',
                     'page_contact_image',
+
+                    'name_company',
+                    'phone_company',
+                    'email_estoque',
+                    'email_adm',
+                    'email_manager',
+                    'email_account_payable',
+                    'email_account_receivable',
+                    'email_nfe',
+                    'email_nfce'
                 ];
                 break;
             case 'style':
