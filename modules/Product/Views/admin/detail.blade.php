@@ -92,6 +92,9 @@
                                 <div class="form-group">
                                     <input type="checkbox" name="is_service" @if($row->is_service) checked @endif value="1"> {{__("Serviço")}}
                                 </div>
+                                <div class="form-group">
+                                    <input type="checkbox" name="facilities" @if($row->facilities) checked @endif value="1"> {{__("Facilities")}}
+                                </div>
                             </div>
                         </div>
 
