@@ -42,6 +42,11 @@ $menus = [
                 'title'      => __("Profissões"),
                 'permission' => 'profession_view',
             ],
+            'point_of_sale'     => [
+                'url'        => route('point_of_sale.admin.index'),
+                'title'      => __('Ponto de Venda'),
+                'permission' => 'point_of_sale_view',
+            ]
         ]
     ],
     'tools'=>[

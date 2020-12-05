@@ -77,6 +77,13 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('pension_type_delete');
         Permission::findOrCreate('pension_type_manage_others');
 
+        // Point Of sale
+        Permission::findOrCreate('point_of_sale_view');
+        Permission::findOrCreate('point_of_sale_create');
+        Permission::findOrCreate('point_of_sale_update');
+        Permission::findOrCreate('point_of_sale_delete');
+        Permission::findOrCreate('point_of_sale_manage_others');
+
         // Reservation Type
         Permission::findOrCreate('reservation_type_view');
         Permission::findOrCreate('reservation_type_create');
