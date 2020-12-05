@@ -34,7 +34,7 @@ $menus = [
             ],
             'cleaning_checklist' =>[
                 'url'        => route('cleaning_checklist.admin.index'),
-                'title'      => __('Gov Check Limpeza'),
+                'title'      => __('Gov Check Lists'),
                 'permission' => 'cleaning_checklist_view',
             ],
             'Profissões'=>[

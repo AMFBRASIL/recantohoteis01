@@ -5,11 +5,47 @@
             <div class="panel-title"><strong>{{__("{$page_title}")}}</strong></div>
             <div class="panel-body">
                 <div class="form-group">
-                    <label class="control-label document-label">{{__("CheckList Limpeza:")}}</label>
+                    <label class="control-label document-label">{{__("CheckList:")}}</label>
                     <input type="text" name="name" class="form-control document-value" value="{{$translation->name}}">
                 </div>
                 <div class="form-group">
-                    <label class="control-label">{{__("Como fazer o CheckList")}}</label>
+                    <label class="control-label document-label">{{__("Sequencia:")}}</label>
+                    <input type="text" name="sequence" placeholder="Sequencia 01,02,03" class="form-control document-value" value="{{$row->sequence}}">
+                </div>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-title"><strong>{{__("Configurações Tipo de CheckList")}}</strong></div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="input-group">
+                            <?php
+                            $type = !empty($row->checklist_type_id) ? Modules\Governance\Models\ChecklistType::find($row->checklist_type_id) : false;
+                            \App\Helpers\AdminForm::select2('checklist_type_id', [
+                                'configs' => [
+                                    'ajax' => [
+                                        'url' => route('checklist_type.admin.ajax_get'),
+                                        'dataType' => 'json'
+                                    ],
+                                    'allowClear'  => true,
+                                    'placeholder' => __('-- Selecione Tipo de Checklist --')
+                                ]
+                            ], !empty($type->id) ? [$type->id, $type->getDisplayName()] : false)
+                            ?>
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-info btn-sm btn-add-item" data-toggle="modal" data-target="#checklist-type"><i class="ion-md-add-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-title"><strong>{{__("Observação CheckList")}}</strong></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="control-label">{{__("Detalhes de como fazer o CheckList")}}</label>
                     <div class="">
                         <textarea name="content" class="d-none has-ckeditor" cols="30" rows="10">{{$translation->content}}</textarea>
                     </div>
@@ -87,4 +123,66 @@
             </div>
         </div>
     </div>
+@endsection
+@section('modal')
+<div class="modal fade" id="checklist-type">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <form method="post" class="modal-form" action="{{ route('checklist_type.admin.ajax_store') }}">
+            @csrf
+            <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Cadastro de Tipo Checklist</h4>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="tab-content">
+                        <span class="response-message"></span>
+                        <br />
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="control-label">{{__("Nome:")}}</label>
+                                        <input type="text" name="name" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <span type="btn" class="btn btn-primary modalSubmit">{{_('Salvar')}}</span>
+                    <span class="btn btn-secondary" data-dismiss="modal">{{_('Fechar')}}</span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
+@section ('script.body')
+    <script>
+        jQuery(function ($) {
+            $(".modal").on("show.bs.modal", function(e) {
+                $('.response-message').attr('class','response-message').text('');
+                $(this).find(':input').val('');
+            });
+            $('.modalSubmit').click(function(e){
+                $.ajax({
+                    url: $(this).parents('.modal-form').attr('action'),
+                    method: 'post',
+                    data: $(this).parents('.modal-form').serialize(),
+                    beforeSend: function() {
+                        $('.response-message').attr('class','response-message alert-info').text('Enviando...');
+                    },
+                    success: function(result, e){
+                        var classMessage = 'success';
+                        $('.response-message').attr('class','response-message alert-' + classMessage).text(result.message);
+                    }
+                });
+            });
+
+            $('.moeda-real').mask('#.##0,00', {reverse: true});
+        });
+    </script>
 @endsection
