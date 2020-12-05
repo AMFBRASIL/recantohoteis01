@@ -77,6 +77,7 @@
                             <th width="130px"> {{ __('Cardápio')}}</th>
                             <th width="130px"> {{ __('POS')}}</th>
                             <th width="130px"> {{ __('Controle Estoque')}}</th>
+                            <th width="130px"> {{ __('Facilities')}}</th>
                             <th width="100px"> {{ __('Status')}}</th>
                             <th width="100px"> {{ __('Composição')}}</th>
                             <th width="100px"> {{ __('Date')}}</th>
@@ -97,6 +98,7 @@
                                     <td><span class="badge badge-{{ $row->show_in_menu ? 'publish' : 'draft'}}">{{\Modules\Product\Models\Product::getConditionalFormattedAttribute($row->show_in_menu)}}</span></td>
                                     <td><span class="badge badge-{{ $row->enable_pos ? 'publish' : 'draft'}}">{{\Modules\Product\Models\Product::getConditionalFormattedAttribute($row->enable_pos)}}</span></td>
                                     <td><span class="badge badge-{{ $row->control_stock ? 'publish' : 'draft'}}">{{\Modules\Product\Models\Product::getConditionalFormattedAttribute($row->control_stock)}}</span></td>
+                                    <td><span class="badge badge-{{ $row->facilities ? 'publish' : 'draft'}}">{{\Modules\Product\Models\Product::getConditionalFormattedAttribute($row->facilities)}}</span></td>
                                     <td><span class="badge badge-{{ $row->status }}">{{ $row->status }}</span></td>
                                     <td><a href="#" class="review-count-approved" data-toggle="modal" class="modal" data-target="#compositionModal" data-value="{{$row->id}}">{{$row->product_composition ? _('Sim') : 'Não'}}</a></td>
                                     <td>{{ display_date($row->updated_at)}}</td>

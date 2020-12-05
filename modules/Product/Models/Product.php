@@ -83,6 +83,7 @@ class Product extends Bookable
         'loan_object',
         'input_product',
         'is_service',
+        'facilities',
         // Role configs
         'status',
     ];

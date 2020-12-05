@@ -241,6 +241,7 @@ class ProductController extends AdminController
             'loan_object',
             'input_product',
             'is_service',
+            'facilities',
             // Role configs
             'status',
         ];
