@@ -24,7 +24,7 @@ class CleaningChecklist extends Model
 
     public function checklistType()
     {
-        return $this->belongsTo(ChecklistType::class, 'checklist_type_id', 'id');
+        return $this->belongsTo(ChecklistType::class, 'checklist_type_id', 'id')->withDefault();
     }
 
     public function getStatusFormattedAttribute()
