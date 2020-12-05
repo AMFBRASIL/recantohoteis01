@@ -3,6 +3,7 @@
 namespace Modules\Stock\Jobs;
 
 use Modules\Base\Jobs\Middleware\InitConfigsFromDatabase;
+use Modules\Core\Models\Settings;
 use Modules\Product\Models\Product;
 use Modules\Stock\Emails\AdjustmentNotification;
 use Modules\Stock\Models\StockAdjustment;
@@ -60,11 +61,11 @@ class AdjustmentStock implements ShouldQueue
 
         $mailList = [];
         if ($this->adjustment->send_section_mail) {
-            $mailList[] = env("EMAIL_ADMINISTRATIVO");
+            $mailList[] = Settings::item('email_adm');
         }
 
         if ($this->adjustment->send_supplier_mail) {
-            $mailList[] = env("EMAIL_ESTOQUE");
+            $mailList[] = Settings::item('email_estoque');
         }
 
         foreach($mailList as $recipient) {
