@@ -5,6 +5,8 @@
     <th width="60px"><input type="checkbox" class="check-all"></th>
     <th> {{ __('Nome')}}</th>
     <th> {{ __('Como fazer')}}</th>
+    <th> {{ __('Sequencia')}}</th>
+    <th> {{ __('Tipo Checklist')}}</th>
     <th> {{ __('Governança')}}</th>
     <th> {{ __('Principal')}}</th>
     <th> {{ __('Obrigatório')}}</th>
@@ -20,6 +22,8 @@
             <td><input type="checkbox" name="ids[]" class="check-item" value="{{$row->id}}"></td>
             <td class="title"> <a href="{{route($route_list['edit'],['id'=>$row->id])}}">{{$row->name}}</a></td>
             <td><a href="#" class="review-count-approved" data-toggle="modal" class="modal" data-target="#checklistModal" data-value="{{$row->content}}">{{ __("+ detalhes")  }}</a></td>
+            <td><span class="badge badge-pill badge-danger">{{ $row->sequence }}</span></td>
+            <td><span class="badge badge-píll badge-primary">{{ $row->checklistType->name }}</span></td>
             <td><span class="badge badge-{{ $row->governance ? 'publish' : 'draft'}}">{{\Modules\Base\Models\Model::getConditionalFormattedAttribute($row->governance)}}</span></td>
             <td><span class="badge badge-{{ $row->main ? 'publish' : 'draft'}}">{{\Modules\Base\Models\Model::getConditionalFormattedAttribute($row->main)}}</span></td>
             <td><span class="badge badge-{{ $row->required ? 'publish' : 'draft'}}">{{\Modules\Base\Models\Model::getConditionalFormattedAttribute($row->required)}}</span></td>

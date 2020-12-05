@@ -20,4 +20,5 @@
            </div>
         </div>
     </form>
+    @yield('modal')
 @endsection

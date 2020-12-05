@@ -15,10 +15,10 @@ class CleaningChecklistController extends CrudController
     }
 
     protected $titleList = [
-        'index'     => 'CheckList Limpeza',
-        'page'      => 'CheckList Limpeza',
-        'create'    => 'CheckList Limpeza',
-        'edit'      => 'CheckList Limpeza'
+        'index'     => 'Todas CheckList',
+        'page'      => 'CheckList',
+        'create'    => 'CheckList',
+        'edit'      => 'CheckList'
     ];
 
     protected $permissionList = [

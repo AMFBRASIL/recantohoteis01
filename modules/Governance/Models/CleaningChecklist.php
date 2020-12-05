@@ -14,11 +14,18 @@ class CleaningChecklist extends Model
 
     protected $fillable = [
         'name',
+        'checklist_type_id',
+        'sequence',
         'content',
         'governance',
         'main',
         'required',
     ];
+
+    public function checklistType()
+    {
+        return $this->belongsTo(ChecklistType::class, 'checklist_type_id', 'id');
+    }
 
     public function getStatusFormattedAttribute()
     {
