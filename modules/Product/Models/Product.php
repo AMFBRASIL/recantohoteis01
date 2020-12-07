@@ -238,4 +238,9 @@ class Product extends Bookable
     {
         return sprintf('%s', $this->title);
     }
+
+    public function isWishList()
+    {
+        return '';
+    }
 }
