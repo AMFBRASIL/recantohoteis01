@@ -2,10 +2,10 @@
 
 namespace Modules\Base\Models;
 
-use Modules\Booking\Models\Bookable;
+use App\BaseModel;
 use Modules\Core\Models\SEO;
 
-class Model extends Bookable
+class Model extends BaseModel
 {
     public $type = '';
     protected $table = '';
