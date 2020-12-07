@@ -1,8 +1,8 @@
 <?php
-namespace Modules\Product\Controllers;
+namespace Modules\PointOfSale\Controllers;
 
 use App\Http\Controllers\Controller;
 
-class ProductController extends Controller
+class PointOfSaleController extends Controller
 {
 }
