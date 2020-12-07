@@ -306,18 +306,34 @@
                                     <div class="form-group">
                                         <label>{{__('Bank')}}</label>
                                         <div class="form-controls">
-                                            <select name="bank_id" class="form-control">
+                                            <select name="bank" class="form-control" required>
                                                 <option value="">{{__("--Select--")}}</option>
                                                 @foreach ($bankList as $option)
-                                                    @if ($row->bank_id == $option->id)
-                                                        <option value="{{$option->id}}"
-                                                                selected>{{$option->bank}}</option>
+                                                    @if ($row->bank == $option->nome_reduzido)
+                                                        <option value="{{$option->nome_reduzido}}"
+                                                                selected>{{$option->nome_reduzido}}</option>
                                                     @else
-                                                        <option value="{{$option->id}}">{{$option->bank}}</option>
+                                                        <option value="{{$option->nome_reduzido}}">{{$option->nome_reduzido}}</option>
                                                     @endif
                                                 @endforeach
                                             </select>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>{{__('Agency')}}</label>
+                                        <input type="text" value="{{old('',$row->agency)}}" required
+                                               name="agency" maxlength="5" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                               placeholder="{{__("2500-0")}}" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>{{__('Account')}}</label>
+                                        <input type="text" value="{{old('',$row->account)}}" required
+                                               name="account" maxlength="6" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                               placeholder="{{__("25000-0")}}" class="form-control">
                                     </div>
                                 </div>
                             </div>

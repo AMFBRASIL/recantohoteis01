@@ -1,6 +1,18 @@
 <div class="form-group">
     <label> {{ __('Banco')}}</label>
-    <input type="text" value="{{$translation->bank}}" placeholder="Banco" name="bank" class="form-control" style="text-transform: uppercase">
+    <div class="form-controls">
+        <select name="bank" class="form-control" required>
+            <option value="">{{__("--Select--")}}</option>
+            @foreach ($bankList as $option)
+                @if ($translation->bank == $option->nome_reduzido)
+                    <option value="{{$option->nome_reduzido}}"
+                            selected>{{$option->nome_reduzido}}</option>
+                @else
+                    <option value="{{$option->nome_reduzido}}">{{$option->nome_reduzido}}</option>
+                @endif
+            @endforeach
+        </select>
+    </div>
 </div>
 <div class="form-group">
     <label> {{ __('Agencia')}}</label>

@@ -71,6 +71,11 @@
                             <th> {{ __('Name')}}</th>
                             <th width="200px"> {{ __('Location')}}</th>
                             <th width="130px"> {{ __('Author')}}</th>
+                            <th width="130px"> {{ __('Max Guests')}}</th>
+                            <th width="130px"> {{ __('Beds')}}</th>
+                            <th width="130px"> {{ __('Bathrooms')}}</th>
+                            <th width="130px"> {{ __('Price')}}</th>
+                            <th width="130px"> {{ __('Sales Price')}}</th>
                             <th width="100px"> {{ __('Status')}}</th>
                             <th width="100px"> {{ __('Reviews')}}</th>
                             <th width="100px"> {{ __('Date')}}</th>
@@ -94,6 +99,11 @@
                                             {{__("[Author Deleted]")}}
                                         @endif
                                     </td>
+                                    <td>{{$row->max_guests ?? ''}}</td>
+                                    <td>{{$row->bed ?? ''}}</td>
+                                    <td>{{$row->bathroom ?? ''}}</td>
+                                    <td>{{$row->price ?? ''}}</td>
+                                    <td>{{$row->sale_price ?? ''}}</td>
                                     <td><span class="badge badge-{{ $row->status }}">{{ $row->status }}</span></td>
                                     <td>
                                         <a target="_blank" href="{{ url("/admin/module/review?service_id=".$row->id) }}" class="review-count-approved">

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Modules\AdminController;
 use Modules\Company\Models\Company;
-use Modules\Financial\Models\BankAccount;
+use Modules\Financial\Models\Bank;
 use Modules\Profession\Models\Professions;
 use Modules\User\Events\VendorApproved;
 use Modules\Vendor\Models\VendorRequest;
@@ -57,7 +57,7 @@ class UserController extends AdminController
             'roles' => Role::all(),
             'professionList' => Professions::all(),
             'companyList' => Company::all(),
-            'bankList' => BankAccount::all(),
+            'bankList' => Bank::all()->sortBy('nome_reduzido'),
             'breadcrumbs'=>[
                 [
                     'name'=>__("Users"),
@@ -82,7 +82,7 @@ class UserController extends AdminController
             'roles' => Role::all(),
             'professionList' => Professions::all(),
             'companyList' => Company::all(),
-            'bankList' => BankAccount::all(),
+            'bankList' => Bank::all()->sortBy('nome_reduzido'),
             'breadcrumbs'=>[
                 [
                     'name'=>__("Users"),
@@ -223,7 +223,7 @@ class UserController extends AdminController
         $row->country = $request->input('country');
         $row->city = $request->input('city');
         $row->state = $request->input('state');
-        $row->zip_code = $request->input('zip_code');
+        $row->zip_code = str_replace('-', '',$request->input('zip_code'));
         $row->business_name = $request->input('business_name');
         $row->vendor_commission_type = $request->input('vendor_commission_type');
         $row->vendor_commission_amount = $request->input('vendor_commission_amount');
@@ -249,7 +249,9 @@ class UserController extends AdminController
         $row->hours_of = $request->input('hours_of');
         $row->hours_until = $request->input('hours_until');
         $row->day_or_night = $request->input('day_or_night');
-        $row->bank_id = $request->input('bank_id');
+        $row->bank = $request->input('bank');
+        $row->agency = $request->input('agency');
+        $row->account = $request->input('account');
 
         $row->is_pos = $request->input('is_pos');
         $row->is_iss = $request->input('is_iss');
