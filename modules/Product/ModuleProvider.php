@@ -55,30 +55,16 @@ class ModuleProvider extends ModuleServiceProvider
 
     public static function getBookableServices()
     {
-        if(!Product::isEnable()) return [];
-        return [
-            'event'=>Product::class
-        ];
+        return [];
     }
 
     public static function getMenuBuilderTypes()
     {
-        if(!Product::isEnable()) return [];
-        return [
-            'event'=>[
-                'class' => Product::class,
-                'name'  => __("Product"),
-                'items' => Product::searchForMenu(),
-                'position'=>51
-            ]
-        ];
+        return [];
     }
 
-    public static function getTemplateBlocks(){
-        if(!Product::isEnable()) return [];
-        return [
-            'form_search_event'=>"\\Modules\\Event\\Blocks\\FormSearchEvent",
-            'list_event'=>"\\Modules\\Event\\Blocks\\ListEvent",
-        ];
+    public static function getTemplateBlocks()
+    {
+        return [];
     }
 }
