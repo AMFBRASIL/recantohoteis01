@@ -20,6 +20,6 @@ class PointOfSale extends Model
 
     public function stock()
     {
-        return $this->hasOne(Stock::class, 'id', 'stock_id');
+        return $this->hasOne(Stock::class, 'id', 'stock_id')->withDefault();
     }
 }

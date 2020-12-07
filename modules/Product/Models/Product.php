@@ -2,21 +2,13 @@
 
 namespace Modules\Product\Models;
 
-use App\Currency;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
+use App\BaseModel;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
-use Modules\Booking\Models\Bookable;
-use Modules\Booking\Models\Booking;
 use Modules\Core\Models\SEO;
-use Modules\Media\Helpers\FileHelper;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Supplier\Models\Supplier;
 
-class Product extends Bookable
+class Product extends BaseModel
 {
     use SoftDeletes;
 
@@ -237,10 +229,5 @@ class Product extends Bookable
     public function getDisplayName()
     {
         return sprintf('%s', $this->title);
-    }
-
-    public function isWishList()
-    {
-        return '';
     }
 }
