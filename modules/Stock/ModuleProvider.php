@@ -24,7 +24,6 @@ class ModuleProvider extends ModuleServiceProvider
 
     public static function getAdminMenu()
     {
-        if(!Product::isEnable()) return [];
         return [
             'stock'=>[
                 "position"=>34,
@@ -50,35 +49,6 @@ class ModuleProvider extends ModuleServiceProvider
                     ],
                 ]
             ]
-        ];
-    }
-
-    public static function getBookableServices()
-    {
-        if(!Product::isEnable()) return [];
-        return [
-            'event'=>Product::class
-        ];
-    }
-
-    public static function getMenuBuilderTypes()
-    {
-        if(!Product::isEnable()) return [];
-        return [
-            'event'=>[
-                'class' => Product::class,
-                'name'  => __("Product"),
-                'items' => Product::searchForMenu(),
-                'position'=>51
-            ]
-        ];
-    }
-
-    public static function getTemplateBlocks(){
-        if(!Product::isEnable()) return [];
-        return [
-            'form_search_event'=>"\\Modules\\Event\\Blocks\\FormSearchEvent",
-            'list_event'=>"\\Modules\\Event\\Blocks\\ListEvent",
         ];
     }
 }

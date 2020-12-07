@@ -205,11 +205,6 @@ class Product extends BaseModel
         return "icofont-ticket";
     }
 
-    public static function isEnable()
-    {
-        return setting_item('event_disable') == false;
-    }
-
     public static function getForSelect2Query($q, $toJson = false)
     {
         $query =  static::query()->select(

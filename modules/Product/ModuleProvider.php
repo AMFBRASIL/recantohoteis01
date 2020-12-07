@@ -24,7 +24,6 @@ class ModuleProvider extends ModuleServiceProvider
 
     public static function getAdminMenu()
     {
-        if(!Product::isEnable()) return [];
         return [
             'product'=>[
                 "position"=>33,
@@ -51,20 +50,5 @@ class ModuleProvider extends ModuleServiceProvider
                 ]
             ]
         ];
-    }
-
-    public static function getBookableServices()
-    {
-        return [];
-    }
-
-    public static function getMenuBuilderTypes()
-    {
-        return [];
-    }
-
-    public static function getTemplateBlocks()
-    {
-        return [];
     }
 }
