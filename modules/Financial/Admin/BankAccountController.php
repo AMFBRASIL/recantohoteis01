@@ -4,6 +4,7 @@ namespace Modules\Financial\Admin;
 
 use Illuminate\Http\Request;
 use Modules\AdminController;
+use Modules\Financial\Models\Bank;
 use Modules\Financial\Models\BankAccount;
 use Modules\Financial\Models\BankAccountTranslation;
 
@@ -36,6 +37,7 @@ class BankAccountController extends AdminController
                 ],
             ],
             'translation' => new BankAccountTranslation(),
+            'bankList' => Bank::all()->sortBy('nome_reduzido'),
             'optionAccount' => [
                 'CONTA CORRENTE',
                 'CONTA POUPANCA',
@@ -66,6 +68,7 @@ class BankAccountController extends AdminController
                 ],
             ],
             'enable_multi_lang' => true,
+            'bankList' => Bank::all()->sortBy('nome_reduzido'),
             'optionAccount' => [
                 'CONTA CORRENTE',
                 'CONTA POUPANCA',

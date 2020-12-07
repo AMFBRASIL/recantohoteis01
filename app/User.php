@@ -81,7 +81,9 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject, Walle
         'hours_of',
         'hours_until',
         'day_or_night',
-        'bank_id',
+        'bank',
+        'agency',
+        'account',
 
         'is_pos',
         'is_iss',
