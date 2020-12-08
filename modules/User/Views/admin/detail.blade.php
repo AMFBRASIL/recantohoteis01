@@ -306,7 +306,7 @@
                                     <div class="form-group">
                                         <label>{{__('Bank')}}</label>
                                         <div class="form-controls">
-                                            <select name="bank" class="form-control" required>
+                                            <select name="bank" class="select_bank form-control" required>
                                                 <option value="">{{__("--Select--")}}</option>
                                                 @foreach ($bankList as $option)
                                                     @if ($row->bank == $option->nome_reduzido)
@@ -489,6 +489,10 @@
 @section ('script.body')
     {!! App\Helpers\MapEngine::scripts() !!}
     <script>
+        $(document).ready(function () {
+            $('.select_bank').select2();
+        });
+
         jQuery(function ($) {
             $(document).on('change', '.person_type', function (){
                 var person = $(this).val();
