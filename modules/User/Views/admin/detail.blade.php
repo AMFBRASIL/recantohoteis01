@@ -311,9 +311,9 @@
                                                 @foreach ($bankList as $option)
                                                     @if ($row->bank == $option->nome_reduzido)
                                                         <option value="{{$option->nome_reduzido}}"
-                                                                selected>{{$option->nome_reduzido}}</option>
+                                                                selected>{{$option->numero_codigo}} - {{$option->nome_reduzido}}</option>
                                                     @else
-                                                        <option value="{{$option->nome_reduzido}}">{{$option->nome_reduzido}}</option>
+                                                        <option value="{{$option->nome_reduzido}}">{{$option->numero_codigo}} - {{$option->nome_reduzido}}}</option>
                                                     @endif
                                                 @endforeach
                                             </select>

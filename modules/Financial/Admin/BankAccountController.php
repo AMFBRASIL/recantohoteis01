@@ -37,7 +37,7 @@ class BankAccountController extends AdminController
                 ],
             ],
             'translation' => new BankAccountTranslation(),
-            'bankList' => Bank::all()->sortBy('nome_reduzido'),
+            'bankList' => Bank::query()->orderBy('numero_codigo', 'asc')->get(),
             'optionAccount' => [
                 'CONTA CORRENTE',
                 'CONTA POUPANCA',
@@ -68,7 +68,7 @@ class BankAccountController extends AdminController
                 ],
             ],
             'enable_multi_lang' => true,
-            'bankList' => Bank::all()->sortBy('nome_reduzido'),
+            'bankList' => Bank::query()->orderBy('numero_codigo', 'asc')->get(),
             'optionAccount' => [
                 'CONTA CORRENTE',
                 'CONTA POUPANCA',
