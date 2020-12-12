@@ -91,13 +91,19 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('reservation_type_delete');
         Permission::findOrCreate('reservation_type_manage_others');
 
+        // Content Template
+        Permission::findOrCreate('content_template_view');
+        Permission::findOrCreate('content_template_create');
+        Permission::findOrCreate('content_template_update');
+        Permission::findOrCreate('content_template_delete');
+        Permission::findOrCreate('content_template_manage_others');
+
         // Check Availability
         Permission::findOrCreate('check_availability_view');
         Permission::findOrCreate('check_availability_create');
         Permission::findOrCreate('check_availability_update');
         Permission::findOrCreate('check_availability_delete');
         Permission::findOrCreate('check_availability_manage_others');
-        Permission::findOrCreate('reservation_type_manage_others');
 
         // Company
         Permission::findOrCreate('company_view');

@@ -15,3 +15,13 @@ Route::post('/bulkEdit','TemplateController@bulkEdit')->name('template.admin.bul
 
 //import/export
 	Route::match(['get'],'/importTemplate','TemplateController@importTemplate')->name('template.admin.importTemplate');
+
+
+Route::group(['prefix' => 'content-template'],function () {
+    Route::get('/', 'ContentTemplateController@index')->name('content_template.admin.index');
+    Route::get('/create', 'ContentTemplateController@create')->name('content_template.admin.create');
+    Route::get('/edit/{id}', 'ContentTemplateController@edit')->name('content_template.admin.edit');
+    Route::post('/store/{id}', 'ContentTemplateController@store')->name('content_template.admin.store');
+    Route::post('/bulkEdit', 'ContentTemplateController@bulkEdit')->name('content_template.admin.bulkEdit');
+    Route::get('/recovery', 'ContentTemplateController@recovery')->name('content_template.admin.recovery');
+});

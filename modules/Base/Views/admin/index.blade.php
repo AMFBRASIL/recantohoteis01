@@ -16,15 +16,15 @@
                     <form method="post" action="{{route($route_list['bulk'])}}" class="filter-form filter-form-left d-flex justify-content-start">
                         {{csrf_field()}}
                         <select name="action" class="form-control">
-                            <option value="">{{__(" Bulk Actions ")}}</option>
-                            <option value="publish">{{__(" Publish ")}}</option>
-                            <option value="draft">{{__(" Move to Draft ")}}</option>
-                            <option value="pending">{{__("Move to Pending")}}</option>
-                            <option value="clone">{{__(" Clone ")}}</option>
+                            <option value="">{{__(" Ação em Massa ")}}</option>
+                            <option value="publish">{{__(" Publicada ")}}</option>
+                            <option value="draft">{{__(" Mover para Rascunho ")}}</option>
+                            <option value="pending">{{__("Mover para Pendente")}}</option>
+                            <option value="clone">{{__(" Clonar ")}}</option>
                             @if(!empty($recovery))
                                 <option value="recovery">{{__(" Recovery ")}}</option>
                             @else
-                                <option value="delete">{{__(" Delete ")}}</option>
+                                <option value="delete">{{__(" Deletar ")}}</option>
                             @endif
                         </select>
                         <button data-confirm="{{__("Do you want to delete?")}}" class="btn-info btn btn-icon dungdt-apply-form-btn" type="button">{{__('Apply')}}</button>

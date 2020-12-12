@@ -21,9 +21,12 @@ class SettingsController extends AdminController
 
     public function index($group)
     {
-
         if(empty($this->groups)){
             $this->setGroups();
+        }
+
+        if (isset($this->groups[$group]['url_module'])) {
+            return redirect($this->groups[$group]['url_module']);
         }
 
         $this->checkPermission('setting_update');
