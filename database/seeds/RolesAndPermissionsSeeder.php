@@ -91,13 +91,19 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('reservation_type_delete');
         Permission::findOrCreate('reservation_type_manage_others');
 
+        // Content Template
+        Permission::findOrCreate('content_template_view');
+        Permission::findOrCreate('content_template_create');
+        Permission::findOrCreate('content_template_update');
+        Permission::findOrCreate('content_template_delete');
+        Permission::findOrCreate('content_template_manage_others');
+
         // Check Availability
         Permission::findOrCreate('check_availability_view');
         Permission::findOrCreate('check_availability_create');
         Permission::findOrCreate('check_availability_update');
         Permission::findOrCreate('check_availability_delete');
         Permission::findOrCreate('check_availability_manage_others');
-        Permission::findOrCreate('reservation_type_manage_others');
 
         // Company
         Permission::findOrCreate('company_view');
@@ -112,6 +118,20 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('cleaning_checklist_create');
         Permission::findOrCreate('cleaning_checklist_update');
         Permission::findOrCreate('cleaning_checklist_delete');
+
+        // Situation
+        Permission::findOrCreate('situation_view');
+        Permission::findOrCreate('situation_manage_others');
+        Permission::findOrCreate('situation_create');
+        Permission::findOrCreate('situation_update');
+        Permission::findOrCreate('situation_delete');
+
+        // Section
+        Permission::findOrCreate('section_view');
+        Permission::findOrCreate('section_manage_others');
+        Permission::findOrCreate('section_create');
+        Permission::findOrCreate('section_update');
+        Permission::findOrCreate('section_delete');
 
         // Billing
         Permission::findOrCreate('billing_view');
