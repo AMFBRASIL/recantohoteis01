@@ -2,7 +2,14 @@
 
 namespace Modules\Reservation\Admin;
 
+use DateInterval;
+use DatePeriod;
+use DateTime;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Base\Admin\CrudController;
+use Modules\Hotel\Models\Building;
+use Modules\Hotel\Models\Hotel;
 use Modules\Reservation\Models\ReservationType;
 
 class CheckAvailabilityController extends CrudController
@@ -52,5 +59,69 @@ class CheckAvailabilityController extends CrudController
         return route($this->routeList['index'], $model->id);
     }
 
+    public function index(Request $request)
+    {
+        $this->checkPermission('check_availability_view');
 
+        $hotel = Hotel::query()->get();
+
+        $now_date = new DateTime();
+        $start_date = $request->has('checkin') ? $request->get('checkin') : new DateTime();
+        $end_date = $request->has('checkout') ? $request->get('checkout') : new DateTime(' +1 month');
+
+        $period = new DatePeriod(
+            $start_date,
+            new DateInterval('P1D'),
+            $end_date
+        );
+
+        $interval = [];
+
+        foreach ($period as $key => $value) {
+            array_push($interval,[
+                'day' => strtoupper(strftime("%a",$value->getTimestamp())),
+                'date' => $value,
+            ]);
+        }
+
+        $data_hotel = [];
+
+        foreach ($hotel as $h){
+            $data_rooms = [];
+
+            foreach ($h->rooms()->get() as $r){
+                array_push($data_rooms,[
+                   'room' => $r,
+                   'bookings' => $r->getBookingsInRange($start_date,$end_date),
+                ]);
+            }
+
+            array_push($data_hotel,[
+               'hotel' => $h,
+               'rooms' => $data_rooms,
+            ]);
+        }
+
+        $data = [
+            'hotels' => $data_hotel,
+            'interval'  => $interval,
+            'now' => $now_date,
+        ];
+
+        $data = [
+            'data'               => $data,
+            'hotel_manage_others' => $this->hasPermission('check_availability_manage_others'),
+            'breadcrumbs'        => [
+                [
+                    'name' => __('Reservas'),
+                    'url'  => 'admin/module/availability'
+                ],
+                [
+                    'name'  => __(' Verificar disponibilidades'),
+                    'class' => 'active'
+                ],
+            ],
+        ];
+        return view('Reservation::admin.check_availability.index',$data);
+    }
 }
