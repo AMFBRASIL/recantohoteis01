@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\User\Admin;
 
 use App\User;
@@ -8,6 +9,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Modules\AdminController;
+use Modules\Company\Models\Company;
+use Modules\Financial\Models\Bank;
+use Modules\Profession\Models\Professions;
 use Modules\User\Events\VendorApproved;
 use Modules\Vendor\Models\VendorRequest;
 use Spatie\Permission\Models\Role;
@@ -53,10 +57,13 @@ class UserController extends AdminController
         $data = [
             'row' => $row,
             'roles' => Role::all(),
-            'breadcrumbs'=>[
+            'professionList' => Professions::all(),
+            'companyList' => Company::all(),
+            'bankList' => Bank::query()->orderBy('numero_codigo', 'asc')->get(),
+            'breadcrumbs' => [
                 [
-                    'name'=>__("Users"),
-                    'url'=>'admin/module/user'
+                    'name' => __("Users"),
+                    'url' => 'admin/module/user'
                 ]
             ]
         ];
@@ -73,15 +80,18 @@ class UserController extends AdminController
             abort(403);
         }
         $data = [
-            'row'   => $row,
+            'row' => $row,
             'roles' => Role::all(),
-            'breadcrumbs'=>[
+            'professionList' => Professions::all(),
+            'companyList' => Company::all(),
+            'bankList' => Bank::query()->orderBy('numero_codigo', 'asc')->get(),
+            'breadcrumbs' => [
                 [
-                    'name'=>__("Users"),
-                    'url'=>'admin/module/user'
+                    'name' => __("Users"),
+                    'url' => 'admin/module/user'
                 ],
                 [
-                    'name'=>__("Edit User: #:id",['id'=>$row->id]),
+                    'name' => __("Edit User: #:id", ['id' => $row->id]),
                     'class' => 'active'
                 ],
             ]
@@ -89,12 +99,13 @@ class UserController extends AdminController
         return view('User::admin.detail', $data);
     }
 
-    public function password(Request $request,$id){
+    public function password(Request $request, $id)
+    {
 
         $row = User::find($id);
-        $data  = [
-            'row'=>$row,
-            'currentUser'=>Auth::user()
+        $data = [
+            'row' => $row,
+            'currentUser' => Auth::user()
         ];
         if (empty($row)) {
             return redirect('admin/module/user');
@@ -102,12 +113,12 @@ class UserController extends AdminController
         if ($row->id != Auth::user()->id and !Auth::user()->hasPermissionTo('user_update')) {
             abort(403);
         }
-        return view('User::admin.password',$data);
+        return view('User::admin.password', $data);
     }
 
     public function changepass(Request $request, $id)
     {
-        if(is_demo_mode()){
+        if (is_demo_mode()) {
             return redirect()->back()->with("error", __("DEMO MODE: You can not change password!"));
         }
         $rules = [];
@@ -116,7 +127,7 @@ class UserController extends AdminController
             abort(403);
         }
         $request->validate([
-            'password'              => 'required|min:6|max:255',
+            'password' => 'required|min:6|max:255',
             'password_confirmation' => 'required',
         ]);
         $password_confirmation = $request->input('password_confirmation');
@@ -151,10 +162,10 @@ class UserController extends AdminController
 
     public function store(Request $request, $id)
     {
-        if($id and $id>0){
+        if ($id and $id > 0) {
             $this->checkPermission('user_update');
             $row = User::find($id);
-            if(empty($row)){
+            if (empty($row)) {
                 abort(404);
             }
             if ($row->id != Auth::user()->id and !Auth::user()->hasPermissionTo('user_update')) {
@@ -162,54 +173,38 @@ class UserController extends AdminController
             }
 
             $request->validate([
-                'first_name'              => 'required|max:255',
-                'last_name'              => 'required|max:255',
-                'status'              => 'required|max:50',
-                'phone'              => 'required',
-                'country'              => 'required',
-                'role_id'              => 'required|max:11',
-                'email'              =>[
+                'first_name' => 'required|max:255',
+                'last_name' => 'required|max:255',
+                'status' => 'required|max:50',
+                'phone' => 'required',
+                'country' => 'required',
+                'role_id' => 'required|max:11',
+                'email' => [
                     'required',
                     'email',
                     'max:255',
                     Rule::unique('users')->ignore($row->id)
                 ],
-                'user_name'=> [
-                    'required',
-                    'max:255',
-                    'min:4',
-                    'string',
-                    'alpha_dash',
-                    Rule::unique('users')->ignore($row->id)
-                ],
             ]);
 
-        }else{
+        } else {
             $this->checkPermission('user_create');
-            $check = Validator::make($request->input(),[
-                'first_name'              => 'required|max:255',
-                'last_name'              => 'required|max:255',
-                'status'              => 'required|max:50',
-                'phone'              => 'required',
-                'country'              => 'required',
-                'role_id'              => 'required|max:11',
-                'email'              =>[
+            $check = Validator::make($request->input(), [
+                'first_name' => 'required|max:255',
+                'last_name' => 'required|max:255',
+                'status' => 'required|max:50',
+                'phone' => 'required',
+                'country' => 'required',
+                'role_id' => 'required|max:11',
+                'email' => [
                     'required',
                     'email',
                     'max:255',
                     Rule::unique('users')
                 ],
-                'user_name'=> [
-                    'required',
-                    'max:255',
-                    'min:4',
-                    'string',
-                    'alpha_dash',
-                    Rule::unique('users')
-                ],
             ]);
 
-            if(!$check->validated()){
+            if (!$check->validated()) {
                 return back()->withInput($request->input());
             }
 
@@ -218,7 +213,6 @@ class UserController extends AdminController
         }
 
         $row->name = $request->input('name');
-        $row->user_name = $request->input('user_name');
         $row->first_name = $request->input('first_name');
         $row->last_name = $request->input('last_name');
         $row->phone = $request->input('phone');
@@ -232,17 +226,50 @@ class UserController extends AdminController
         $row->country = $request->input('country');
         $row->city = $request->input('city');
         $row->state = $request->input('state');
-        $row->zip_code = $request->input('zip_code');
+        $row->zip_code = str_replace('-', '', $request->input('zip_code'));
         $row->business_name = $request->input('business_name');
         $row->vendor_commission_type = $request->input('vendor_commission_type');
         $row->vendor_commission_amount = $request->input('vendor_commission_amount');
 
+        $row->user_type = $request->input('user_type');
+        $row->cpf_cnpj = $request->input('cpf_cnpj');
+        $row->rg = $request->input('rg');
+        $row->passport = $request->input('passport');
+        $row->phone2 = $request->input('phone2');
+        $row->phone_whatsApp = $request->input('phone_whatsApp');
+
+        $row->business_website = $request->input('business_website');
+        $row->profession_id = $request->input('profession_id');
+        $row->company_id = $request->input('company_id');
+        $row->vehicle_model = $request->input('vehicle_model');
+        $row->vehicle_cor = $request->input('vehicle_cor');
+        $row->vehicle_plate = $request->input('vehicle_plate');
+        $row->differentiated_discount = $request->input('differentiated_discount');
+        $row->fixed_overnight_rate = $request->input('fixed_overnight_rate');
+        $row->billing_day = $request->input('billing_day');
+        $row->number_days_bill = $request->input('number_days_bill');
+        $row->billing_limit = $request->input('billing_limit');
+        $row->hours_of = $request->input('hours_of');
+        $row->hours_until = $request->input('hours_until');
+        $row->day_or_night = $request->input('day_or_night');
+        $row->bank = $request->input('bank');
+        $row->agency = $request->input('agency');
+        $row->account = $request->input('account');
+
+        $row->is_pos = $request->input('is_pos');
+        $row->is_iss = $request->input('is_iss');
+        $row->is_smoker = $request->input('is_smoker');
+        $row->is_suspect = $request->input('is_suspect');
+        $row->is_nfe = $request->input('is_nfe');
+        $row->is_nfce = $request->input('is_nfce');
+        $row->is_sat = $request->input('is_sat');
+
         //Block all service when user is block
-        if($row->status == "blocked"){
+        if ($row->status == "blocked") {
             $services = get_bookable_services();
-            if(!empty($services)){
-                foreach ($services as $service){
-                    $service::query()->where("create_user",$row->id)->update(['status' => "draft"]);
+            if (!empty($services)) {
+                foreach ($services as $service) {
+                    $service::query()->where("create_user", $row->id)->update(['status' => "draft"]);
                 }
             }
         }
@@ -254,7 +281,7 @@ class UserController extends AdminController
                     $row->syncRoles($role);
                 }
             }
-            
+
             return back()->with('success', ($id and $id>0) ? __('User updated'):__("User created"));
         }
     }
@@ -271,21 +298,21 @@ class UserController extends AdminController
         $res = $query->orderBy('id', 'desc')->orderBy('first_name', 'asc')->limit(20)->get();
         $data = [];
         if (!empty($res)) {
-            if($request->query("user_type") == "vendor"){
+            if ($request->query("user_type") == "vendor") {
                 //for only vendor
                 foreach ($res as $item) {
-                    if($item->hasPermissionTo("dashboard_vendor_access")){
+                    if ($item->hasPermissionTo("dashboard_vendor_access")) {
                         $data[] = [
-                            'id'   => $item->id,
+                            'id' => $item->id,
                             'text' => $item->getDisplayName() ? $item->getDisplayName() . ' (#' . $item->id . ')' : $item->email . ' (#' . $item->id . ')',
                         ];
                     }
                 }
-            }else{
+            } else {
                 //for all
                 foreach ($res as $item) {
                     $data[] = [
-                        'id'   => $item->id,
+                        'id' => $item->id,
                         'text' => $item->getDisplayName() ? $item->getDisplayName() . ' (#' . $item->id . ')' : $item->email . ' (#' . $item->id . ')',
                     ];
                 }
@@ -298,8 +325,8 @@ class UserController extends AdminController
 
     public function bulkEdit(Request $request)
     {
-        if(is_demo_mode()){
-            return redirect()->back()->with("error","DEMO MODE: You are not allowed to do it");
+        if (is_demo_mode()) {
+            return redirect()->back()->with("error", "DEMO MODE: You are not allowed to do it");
         }
         $ids = $request->input('ids');
         $action = $request->input('action');
@@ -309,10 +336,10 @@ class UserController extends AdminController
             return redirect()->back()->with('error', __('Select an Action!'));
         if ($action == 'delete') {
             foreach ($ids as $id) {
-                if($id == Auth::id()) continue;
+                if ($id == Auth::id()) continue;
                 $query = User::where("id", $id)->first();
-                if(!empty($query)){
-                    $query->email.='_d_'.uniqid().rand(0,99999);
+                if (!empty($query)) {
+                    $query->email .= '_d';
                     $query->save();
                     $query->delete();
                 }
@@ -324,17 +351,19 @@ class UserController extends AdminController
         }
         return redirect()->back()->with('success', __('Updated successfully!'));
     }
+
     public function userUpgradeRequest(Request $request)
     {
         $this->checkPermission('user_view');
         $listUser = VendorRequest::query();
         $data = [
-            'rows' => $listUser->with(['user','role','approvedBy'])->orderBy('id','desc')->paginate(20),
+            'rows' => $listUser->with(['user', 'role', 'approvedBy'])->orderBy('id', 'desc')->paginate(20),
             'roles' => Role::all(),
 
         ];
         return view('User::admin.upgrade-user', $data);
     }
+
     public function userUpgradeRequestApproved(Request $request)
     {
         $this->checkPermission('user_create');
@@ -345,11 +374,11 @@ class UserController extends AdminController
         if (empty($action))
             return redirect()->back()->with('error', __('Select an Action!'));
 
-        switch ($action){
+        switch ($action) {
             case "delete":
                 foreach ($ids as $id) {
-                    $query = VendorRequest::find( $id)->first();
-                    if(!empty($query)){
+                    $query = VendorRequest::find($id)->first();
+                    if (!empty($query)) {
                         $query->delete();
                     }
                 }
@@ -357,35 +386,36 @@ class UserController extends AdminController
                 break;
             default:
                 foreach ($ids as $id) {
-                    $vendorRequest = VendorRequest::find( $id);
-                    if(!empty($vendorRequest)){
-                        $vendorRequest->update(['status' => $action,'approved_time'=>now(),'approved_by'=>Auth::id()]);
+                    $vendorRequest = VendorRequest::find($id);
+                    if (!empty($vendorRequest)) {
+                        $vendorRequest->update(['status' => $action, 'approved_time' => now(), 'approved_by' => Auth::id()]);
                         $user = User::find($vendorRequest->user_id);
-                        if(!empty($user)){
+                        if (!empty($user)) {
                             $user->syncRoles($vendorRequest->role_request);
                         }
-                        event(new VendorApproved($user,$vendorRequest));
+                        event(new VendorApproved($user, $vendorRequest));
                     }
                 }
                 return redirect()->back()->with('success', __('Updated successfully!'));
                 break;
         }
     }
+
     public function userUpgradeRequestApprovedId(Request $request, $id)
     {
         $this->checkPermission('user_create');
         if (empty($id))
             return redirect()->back()->with('error', __('Select at least 1 item!'));
 
-        $vendorRequest = VendorRequest::find( $id);
-        if(!empty($vendorRequest)){
-            $vendorRequest->update(['status' => 'approved','approved_time'=>now(),'approved_by'=>Auth::id()]);
+        $vendorRequest = VendorRequest::find($id);
+        if (!empty($vendorRequest)) {
+            $vendorRequest->update(['status' => 'approved', 'approved_time' => now(), 'approved_by' => Auth::id()]);
             $user = User::find($vendorRequest->user_id);
-            if(!empty($user)){
+            if (!empty($user)) {
                 $user->syncRoles($vendorRequest->role_request);
             }
 
-            event(new VendorApproved($user,$vendorRequest));
+            event(new VendorApproved($user, $vendorRequest));
         }
         return redirect()->back()->with('success', __('Updated successfully!'));
     }

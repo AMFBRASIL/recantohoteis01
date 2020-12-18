@@ -29,49 +29,42 @@ class ModuleProvider extends ModuleServiceProvider
         $noti_verify = User::countVerifyRequest();
         $noti_upgrade = VendorRequest::where('status', 'pending')->count();
         $noti = $noti_verify;
-
-        $options = [
-            "position"=>100,
-            'url'        => 'admin/module/user',
-            'title'      => __('Users :count',['count'=>$noti ? sprintf('<span class="badge badge-warning">%d</span>',$noti) : '']),
-            'icon'       => 'icon ion-ios-contacts',
-            'permission' => 'user_view',
-            'children'   => [
-                'user'=>[
-                    'url'   => 'admin/module/user',
-                    'title' => __('All Users'),
-                    'icon'  => 'fa fa-user',
-                ],
-                'role'=>[
-                    'url'        => 'admin/module/user/role',
-                    'title'      => __('Role Manager'),
-                    'permission' => 'role_view',
-                    'icon'       => 'fa fa-lock',
-                ],
-                'subscriber'=>[
-                    'url'        => 'admin/module/user/subscriber',
-                    'title'      => __('Subscribers'),
-                    'permission' => 'newsletter_manage',
-                ],
-                'userUpgradeRequest'=>[
-                    'url'        => 'admin/module/user/userUpgradeRequest',
-                    'title'      => __('Upgrade Request :count',['count'=>$noti_upgrade ? sprintf('<span class="badge badge-warning">%d</span>',$noti_upgrade) : '']),
-                    'permission' => 'user_view',
-                ],
-            ]
-        ];
-
-        $is_disable_verification_feature = setting_item('user_disable_verification_feature');
-        if(empty($is_disable_verification_feature)){
-            $options['children']['user_verification'] = [
-                'url'        => 'admin/module/user/verification',
-                'title'      => __('Verification Request :count',['count'=>$noti_verify ? sprintf('<span class="badge badge-warning">%d</span>',$noti_verify) : '']),
-                'permission' => 'user_view',
-            ];
-        }
-
         return [
-            'users'=> $options
+            'users'=>[
+                "position"=>100,
+                'url'        => 'admin/module/user',
+                'title'      => __('Users :count',['count'=>$noti ? sprintf('<span class="badge badge-warning">%d</span>',$noti) : '']),
+                'icon'       => 'icon ion-ios-contacts',
+                'permission' => 'user_view',
+                'children'   => [
+                    'user'=>[
+                        'url'   => 'admin/module/user',
+                        'title' => __('All Users'),
+                        'icon'  => 'fa fa-user',
+                    ],
+                    'role'=>[
+                        'url'        => 'admin/module/user/role',
+                        'title'      => __('Role Manager'),
+                        'permission' => 'role_view',
+                        'icon'       => 'fa fa-lock',
+                    ],
+                    'subscriber'=>[
+                        'url'        => 'admin/module/user/subscriber',
+                        'title'      => __('Subscribers'),
+                        'permission' => 'newsletter_manage',
+                    ],
+                    'userUpgradeRequest'=>[
+                        'url'        => 'admin/module/user/userUpgradeRequest',
+                        'title'      => __('Upgrade Request :count',['count'=>$noti_upgrade ? sprintf('<span class="badge badge-warning">%d</span>',$noti_upgrade) : '']),
+                        'permission' => 'user_view',
+                    ],
+                    'user_verification'=>[
+                        'url'        => 'admin/module/user/verification',
+                        'title'      => __('Verification Request :count',['count'=>$noti_verify ? sprintf('<span class="badge badge-warning">%d</span>',$noti_verify) : '']),
+                        'permission' => 'user_view',
+                    ],
+                ]
+            ],
         ];
     }
     public static function getUserMenu()

@@ -23,11 +23,6 @@
                     </div>
                 @endif
                 <div class="form-group">
-                    <label>{{__("User name")}}</label>
-                    <input type="text" name="user_name" value="{{old('user_name',$dataUser->user_name)}}" placeholder="{{__("User name")}}" class="form-control">
-                    <i class="fa fa-user input-icon"></i>
-                </div>
-                <div class="form-group">
                     <label>{{__("E-mail")}}</label>
                     <input type="text" name="email" value="{{old('email',$dataUser->email)}}" placeholder="{{__("E-mail")}}" class="form-control">
                     <i class="fa fa-envelope input-icon"></i>

@@ -63,6 +63,7 @@ class WalletController extends FrontendController
             return redirect(route("user.profile.index"));
         }
         $row = auth()->user();
+
         $rules = [];
         $message = [];
         if(setting_item('wallet_deposit_type') == 'list'){

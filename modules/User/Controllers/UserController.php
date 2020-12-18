@@ -36,6 +36,7 @@ class UserController extends FrontendController
         parent::__construct();
     }
 
+
     public function dashboard(Request $request)
     {
         $this->checkPermission('dashboard_vendor_access');
@@ -88,9 +89,6 @@ class UserController extends FrontendController
 
     public function profileUpdate(Request $request){
         $user = Auth::user();
-        $messages = [
-            'user_name.required'      => __('The User name field is required.'),
-        ];
         $request->validate([
             'first_name' => 'required|max:255',
             'last_name'  => 'required|max:255',
@@ -100,20 +98,9 @@ class UserController extends FrontendController
                 'max:255',
                 Rule::unique('users')->ignore($user->id)
             ],
-            'user_name'=> [
-                'required',
-                'max:255',
-                'min:4',
-                'string',
-                'alpha_dash',
-                Rule::unique('users')->ignore($user->id)
-            ],
-            'phone'       => [
-                'required',
-                Rule::unique('users')->ignore($user->id)
-            ],
-        ],$messages);
+        ]);
         $input = $request->except('bio');
+
         $user->fill($input);
         $user->bio = clean($request->input('bio'));
         $user->birthday = date("Y-m-d", strtotime($user->birthday));

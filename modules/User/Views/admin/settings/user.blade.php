@@ -162,8 +162,8 @@
                         <textarea name="content_email_verify_register_user" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('content_email_verify_register_user',request()->query('lang')) ?? '' }}</textarea>
                     </div>
                 </div>
-               
-            
+
+
             </div>
         </div>
     </div>

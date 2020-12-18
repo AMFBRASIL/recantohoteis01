@@ -11,6 +11,7 @@ use Modules\AdminController;
 //use Modules\Vendor\Models\VendorPlan;
 use Modules\User\Events\AdminUpdateVerificationData;
 use Modules\User\Events\VendorApproved;
+use Modules\Vendor\Models\VendorRequest;
 use Spatie\Permission\Models\Role;
 
 class VerificationController extends AdminController
