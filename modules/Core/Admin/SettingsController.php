@@ -21,12 +21,9 @@ class SettingsController extends AdminController
 
     public function index($group)
     {
+
         if(empty($this->groups)){
             $this->setGroups();
-        }
-
-        if (isset($this->groups[$group]['url_module'])) {
-            return redirect($this->groups[$group]['url_module']);
         }
 
         $this->checkPermission('setting_update');
@@ -90,16 +87,6 @@ class SettingsController extends AdminController
                     'page_contact_sub_title',
                     'page_contact_desc',
                     'page_contact_image',
-
-                    'name_company',
-                    'phone_company',
-                    'email_estoque',
-                    'email_adm',
-                    'email_manager',
-                    'email_account_payable',
-                    'email_account_receivable',
-                    'email_nfe',
-                    'email_nfce'
                 ];
                 break;
             case 'style':
@@ -109,33 +96,6 @@ class SettingsController extends AdminController
                     'style_typo',
                 ];
                 Settings::clearCustomCssCache();
-                break;
-            case 'advance':
-                $keys = [
-                    'map_provider',
-                    'map_gmap_key',
-                    'google_client_secret',
-                    'google_client_id',
-                    'google_enable',
-                    'facebook_client_secret',
-                    'facebook_client_id',
-                    'facebook_enable',
-                    'twitter_enable',
-                    'twitter_client_id',
-                    'twitter_client_secret',
-                    'recaptcha_enable',
-                    'recaptcha_api_key',
-                    'recaptcha_api_secret',
-                    'head_scripts',
-                    'body_scripts',
-                    'footer_scripts',
-                    'size_unit',
-
-                    'cookie_agreement_enable',
-                    'cookie_agreement_button_text',
-                    'cookie_agreement_content',
-
-                ];
                 break;
         }
         if(!empty($group_data['keys'])) $keys = $group_data['keys'];

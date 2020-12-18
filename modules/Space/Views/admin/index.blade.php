@@ -17,13 +17,14 @@
                         {{csrf_field()}}
                         <select name="action" class="form-control">
                             <option value="">{{__(" Bulk Actions ")}}</option>
-                            <option value="publish">{{__(" Publish ")}}</option>
-                            <option value="draft">{{__(" Move to Draft ")}}</option>
-                            <option value="pending">{{__("Move to Pending")}}</option>
-                            <option value="clone">{{__(" Clone ")}}</option>
+
                             @if(!empty($recovery))
                                 <option value="recovery">{{__(" Recovery ")}}</option>
                             @else
+                                <option value="publish">{{__(" Publish ")}}</option>
+                                <option value="draft">{{__(" Move to Draft ")}}</option>
+                                <option value="pending">{{__("Move to Pending")}}</option>
+                                <option value="clone">{{__(" Clone ")}}</option>
                                 <option value="delete">{{__(" Delete ")}}</option>
                             @endif
                         </select>
@@ -71,11 +72,6 @@
                             <th> {{ __('Name')}}</th>
                             <th width="200px"> {{ __('Location')}}</th>
                             <th width="130px"> {{ __('Author')}}</th>
-                            <th width="130px"> {{ __('Max Guests')}}</th>
-                            <th width="130px"> {{ __('Beds')}}</th>
-                            <th width="130px"> {{ __('Bathrooms')}}</th>
-                            <th width="130px"> {{ __('Price')}}</th>
-                            <th width="130px"> {{ __('Sales Price')}}</th>
                             <th width="100px"> {{ __('Status')}}</th>
                             <th width="100px"> {{ __('Reviews')}}</th>
                             <th width="100px"> {{ __('Date')}}</th>
@@ -99,11 +95,6 @@
                                             {{__("[Author Deleted]")}}
                                         @endif
                                     </td>
-                                    <td>{{$row->max_guests ?? ''}}</td>
-                                    <td>{{$row->bed ?? ''}}</td>
-                                    <td>{{$row->bathroom ?? ''}}</td>
-                                    <td>{{$row->price ?? ''}}</td>
-                                    <td>{{$row->sale_price ?? ''}}</td>
                                     <td><span class="badge badge-{{ $row->status }}">{{ $row->status }}</span></td>
                                     <td>
                                         <a target="_blank" href="{{ url("/admin/module/review?service_id=".$row->id) }}" class="review-count-approved">

@@ -63,7 +63,7 @@
                             <th>{{__('Service')}}</th>
                             <th>{{__('Customer')}}</th>
 
-                            <th>{{__('Total')}}</th>
+                            <th>{{__('Payment Information')}}</th>
                             <th width="80px">{{__('Status')}}</th>
                             <th width="150px">{{__('Payment Method')}}</th>
                             <th width="120px">{{__('Created At')}}</th>
@@ -98,7 +98,10 @@
                                         <li>{{__("Custom Requirement:")}} {{$row->customer_notes}}</li>
                                     </ul>
                                 </td>
-                                <td>{{format_money_main($row->total)}}</td>
+                                <td>{{__("Total")}} : {{format_money_main($row->total)}}<br/>
+                                    {{__("Paid")}} : {{format_money_main($row->paid)}}<br/>
+                                    {{__("Remain")}} : {{format_money_main($booking->total - $booking->paid)}}<br/>
+                                </td>
                                 <td>
                                     <span class="label label-{{$row->status}}">{{$row->statusName}}</span>
                                 </td>
@@ -107,66 +110,19 @@
                                 </td>
                                 <td>{{display_datetime($row->updated_at)}}</td>
                                 <td>
-
-                                @if($service = $row->service)
-                                    @include ($service->checkout_booking_detail_modal_file ?? '')
-                                        @if($service->space_internal_regime)
-                                            @include ($service->space_inspection_term ?? '', ['title' =>'space_inspection_term_title', 'content' => 'space_inspection_term'])
-                                            @include ($service->space_internal_regime ?? '', ['title' =>'space_internal_regime_title', 'content' => 'space_internal_regime'])
-                                            @include ($service->space_contract ?? '', ['title' =>'space_contract_title', 'content' => 'space_contract'])
-                                        @endif
-                                        @if($service->hotel_internal_regime)
-                                            @include ($service->hotel_inspection_term ?? '', ['title' =>'hotel_inspection_term_title', 'content' => 'hotel_inspection_term'])
-                                            @include ($service->hotel_internal_regime ?? '', ['title' =>'hotel_internal_regime_title', 'content' => 'hotel_internal_regime'])
-                                            @include ($service->hotel_contract ?? '', ['title' =>'hotel_contract_title', 'content' => 'hotel_contract'])
-                                        @endif
-                                @endif
-
+                                    @if($service = $row->service)
                                         <div class="dropdown">
                                             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{__('Actions')}}
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-booking-{{$row->id}}">{{__('Detail')}}</a>
-                                                @include ($service->checkout_booking_detail_modal_file ?? '')
-
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-paid-{{$row->id}}">{{__('Set Paid')}}</a>
                                                 <a class="dropdown-item" href="{{url('admin/module/report/booking/email_preview/'.$row->id)}}">{{__('Email Preview')}}</a>
-                                                <div class="dropdown-divider"></div>
-
-                                                @if($service->space_internal_regime)
-                                                <a href="#" class="dropdown-item" data-toggle="modal" data-target="#space_modal">
-                                                    {{__("Contrato")}}
-                                                </a>
-                                                @include ($service->space_contract ?? '', ['title' =>'space_contract_title', 'content' => 'space_contract'])
-                                                <a href="#" class="dropdown-item" data-toggle="modal" data-target="#space_inspection_term">
-                                                    {{__("Vistoria")}}
-                                                </a>
-                                                    @include ($service->space_inspection_term ?? '', ['title' =>'space_inspection_term_title', 'content' => 'space_inspection_term'])
-                                                <a href="#" class="dropdown-item" data-toggle="modal" data-target="#space_internal_regime">
-                                                    {{__("Regras")}}
-                                                </a>
-                                                    @include ($service->space_internal_regime ?? '', ['title' =>'space_internal_regime_title', 'content' => 'space_internal_regime'])
-                                                @endif
-
-                                                @if($service->hotel_internal_regime)
-                                                <a href="#" class="dropdown-item" data-toggle="modal" data-target="#hotel_modal">
-                                                    {{__("Contrato")}}
-                                                </a>
-                                                @include ($service->hotel_contract ?? '', ['title' =>'hotel_contract_title', 'content' => 'hotel_contract'])
-                                                <a href="#" class="dropdown-item" data-toggle="modal" data-target="#hotel_inspection_term">
-                                                    {{__("Vistoria")}}
-                                                </a>
-                                                    @include ($service->hotel_inspection_term ?? '', ['title' =>'hotel_inspection_term_title', 'content' => 'hotel_inspection_term'])
-                                                <a href="#" class="dropdown-item" data-toggle="modal" data-target="#hotel_internal_regime">
-                                                    {{__("Regras")}}
-                                                </a>
-                                                    @include ($service->hotel_internal_regime ?? '', ['title' =>'hotel_internal_regime_title', 'content' => 'hotel_internal_regime'])
-                                                @endif
-
-
-
                                             </div>
                                         </div>
-
+                                        @include ($service->checkout_booking_detail_modal_file ?? '')
+                                        @include ($service->set_paid_modal_file ?? '')
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -179,4 +135,24 @@
             {{$rows->links()}}
         </div>
     </div>
+@endsection
+@section('script.body')
+    <script>
+        $(document).on('click', '#set_paid_btn', function (e) {
+            var id = $(this).data('id');
+            $.ajax({
+                url:bookingCore.url+'/booking/setPaidAmount',
+                data:{
+                    id: id,
+                    remain: $('#modal-paid-'+id+' #set_paid_input').val(),
+                },
+                dataType:'json',
+                type:'post',
+                success:function(res){
+                    alert(res.message);
+                    window.location.reload();
+                }
+            });
+        });
+    </script>
 @endsection

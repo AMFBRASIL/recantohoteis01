@@ -7,7 +7,7 @@ class ModuleProvider extends ModuleServiceProvider
 {
     public function boot()
     {
-        $this->loadMigrationsFrom(__DIR__ . '/Migrations');
+
     }
 
     public function register()

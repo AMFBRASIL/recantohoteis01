@@ -1,8 +1,7 @@
 /node_modules
-/docker
-/docker-compose.yml
 /public/hot
 /public/storage
+/public/uploads/0000
 /storage/*.key
 storage/app/*
 !storage/app/public/
@@ -12,7 +11,6 @@ storage/app/public/*
 /.idea
 /resources/ckeditor/node_modules/
 .env
-composer.phar
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml

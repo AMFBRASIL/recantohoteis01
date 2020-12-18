@@ -11,10 +11,6 @@ try {
 
     require('bootstrap');
     window.bootbox = require('bootbox');
-    require('jquery-mask-plugin');
-
-    window.axios = require('axios');
-    window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
     $.ajaxSetup({
         headers: {
@@ -35,9 +31,16 @@ require('./_condition');
 require('./_base');
 require('./_form');
 require('./_menu');
+require('./_notification');
 
 
 import TemplateDetail from '../../module/template/admin/detail.js';
+import MediaManagement from '../../module/media/admin/js/media-management';
+
+// Template
+if(document.getElementById('media-management')){
+    MediaManagement();
+}
 
 // Template
 if(document.getElementById('booking-core-template-detail')){

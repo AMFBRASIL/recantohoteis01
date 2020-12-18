@@ -4,21 +4,18 @@ namespace  Modules\Hotel;
 
 use Modules\Core\Abstracts\BaseSettingsClass;
 use Modules\Core\Models\Settings;
-use Custom\Hotel\CustomSettingsPage;
 
 class SettingClass extends BaseSettingsClass
 {
     public static function getSettingPages()
     {
-        $customSettings = new CustomSettingsPage();
-
         return [
             [
                 'id'   => 'hotel',
                 'title' => __("Hotel Settings"),
                 'position'=>20,
                 'view'=>"Hotel::admin.settings.hotel",
-                "keys"=>$customSettings->customSettings([
+                "keys"=>[
                     'hotel_disable',
                     'hotel_page_search_title',
                     'hotel_page_search_banner',
@@ -42,6 +39,7 @@ class SettingClass extends BaseSettingsClass
                     'hotel_booking_buyer_fees',
                     'hotel_vendor_create_service_must_approved_by_admin',
                     'hotel_allow_vendor_can_change_their_booking_status',
+                    'hotel_allow_vendor_can_change_paid_amount',
                     'hotel_search_fields',
                     'hotel_map_search_fields',
 
@@ -50,7 +48,9 @@ class SettingClass extends BaseSettingsClass
                     'hotel_deposit_type',
                     'hotel_deposit_amount',
                     'hotel_deposit_fomular',
-                ]),
+
+                    'hotel_layout_map_option',
+                ],
                 'html_keys'=>[
 
                 ]

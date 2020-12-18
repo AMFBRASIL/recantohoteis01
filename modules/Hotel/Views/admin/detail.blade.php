@@ -29,9 +29,9 @@
                 <div class="row">
                     <div class="col-md-9">
                         @include('Hotel::admin.hotel.content')
-                        @include('Hotel::admin.hotel.building')
                         @include('Hotel::admin.hotel.pricing')
                         @include('Hotel::admin.hotel.location')
+                        @include('Hotel::admin.hotel.surrounding')
                         @include('Core::admin/seo-meta/seo-meta')
                     </div>
                     <div class="col-md-3">
@@ -135,7 +135,7 @@
                     engineMap.on('zoom_changed', function (zoom) {
                         $("input[name=map_zoom]").attr("value", zoom);
                     });
-
+    
                     engineMap.searchBox($('#customPlaceAddress'),function (dataLatLng) {
                         engineMap.clearMarkers();
                         engineMap.addMarker(dataLatLng, {

@@ -19,22 +19,6 @@ Route::group(['prefix'=>'attribute'],function (){
     Route::get('getForSelect2','AttributeController@getForSelect2')->name('hotel.admin.attribute.term.getForSelect2');
     Route::get('getAttributeForSelect2','AttributeController@getAttributeForSelect2')->name('hotel.admin.attribute.getForSelect2');
 });
-
-Route::group(['prefix'=>'building'],function (){
-    Route::get('/','BuildingController@index')->name('building.admin.index');
-    Route::get('/create','BuildingController@create')->name('building.admin.create');
-    Route::get('/edit/{id}','BuildingController@edit')->name('building.admin.edit');
-    Route::post('/store/{id}','BuildingController@store')->name('building.admin.store');
-    Route::post('/bulkEdit','BuildingController@bulkEdit')->name('building.admin.bulkEdit');
-    Route::get('/recovery','BuildingController@recovery')->name('building.admin.recovery');
-
-    Route::get('/{parent}/floor','BuildingFloorController@indexWithParent')->name('building_floor.admin.index');
-    Route::get('/{parent}/floor/edit/{id}','BuildingFloorController@editWithParent')->name('building_floor.admin.edit');
-    Route::post('/{parent}/floor/store/{id}','BuildingFloorController@storeWithParent')->name('building_floor.admin.store');
-    Route::post('/floor/bulkEdit','BuildingFloorController@bulkEdit')->name('building_floor.admin.bulkEdit');
-    Route::get('/floor/recovery','BuildingFloorController@recovery')->name('building_floor.admin.recovery');
-});
-
 Route::group(['prefix'=>'room'],function (){
 
     Route::group(['prefix'=>'attribute'],function (){
