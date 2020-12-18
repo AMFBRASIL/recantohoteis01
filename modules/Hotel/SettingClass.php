@@ -4,21 +4,18 @@ namespace  Modules\Hotel;
 
 use Modules\Core\Abstracts\BaseSettingsClass;
 use Modules\Core\Models\Settings;
-use Custom\Hotel\CustomSettingsPage;
 
 class SettingClass extends BaseSettingsClass
 {
     public static function getSettingPages()
     {
-        $customSettings = new CustomSettingsPage();
-
         return [
             [
                 'id'   => 'hotel',
                 'title' => __("Hotel Settings"),
                 'position'=>20,
                 'view'=>"Hotel::admin.settings.hotel",
-                "keys"=>$customSettings->customSettings([
+                "keys"=> [
                     'hotel_disable',
                     'hotel_page_search_title',
                     'hotel_page_search_banner',
@@ -53,7 +50,7 @@ class SettingClass extends BaseSettingsClass
                     'hotel_deposit_fomular',
 
                     'hotel_layout_map_option',
-                ]),
+                ],
                 'html_keys'=>[
 
                 ]
