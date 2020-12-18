@@ -23,16 +23,7 @@ class ModuleProvider extends ModuleServiceProvider
 
     public static function getAdminMenu()
     {
-        $count = VendorPayout::countInitial();
-        return [
-            'payout'=>[
-                "position"=>70,
-                'url'        => 'admin/module/vendor/payout',
-                'title'      => __("Payouts :count",['count'=>$count ? sprintf('<span class="badge badge-warning">%d</span>',$count) : '']),
-                'icon'       => 'icon ion-md-card',
-                'permission' => 'user_create',
-            ]
-        ];
+        return [];
     }
 
 
