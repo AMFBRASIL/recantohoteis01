@@ -11,6 +11,10 @@ try {
 
     require('bootstrap');
     window.bootbox = require('bootbox');
+    require('jquery-mask-plugin');
+
+    window.axios = require('axios');
+    window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
     $.ajaxSetup({
         headers: {

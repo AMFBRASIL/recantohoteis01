@@ -16,6 +16,8 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-
+composer.phar
+docker-compose.yml
+docker
 /resources/admin/scss/css
 /storage/installed
