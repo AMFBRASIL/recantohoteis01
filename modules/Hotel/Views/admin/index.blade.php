@@ -17,13 +17,13 @@
                         {{csrf_field()}}
                         <select name="action" class="form-control">
                             <option value="">{{__(" Bulk Actions ")}}</option>
+                            <option value="publish">{{__(" Publish ")}}</option>
+                            <option value="draft">{{__(" Move to Draft ")}}</option>
+                            <option value="pending">{{__("Move to Pending")}}</option>
                             {{--<option value="clone">{{__(" Clone ")}}</option>--}}
                             @if(!empty($recovery))
                                 <option value="recovery">{{__(" Recovery ")}}</option>
                             @else
-                                <option value="publish">{{__(" Publish ")}}</option>
-                                <option value="draft">{{__(" Move to Draft ")}}</option>
-                                <option value="pending">{{__("Move to Pending")}}</option>
                                 <option value="delete">{{__(" Delete ")}}</option>
                             @endif
 
@@ -71,6 +71,9 @@
                             <th width="60px"><input type="checkbox" class="check-all"></th>
                             <th> {{ __('Name')}}</th>
                             <th width="200px"> {{ __('Location')}}</th>
+                            <th width="250px"> {{ __('Building')}}</th>
+                            <th width="250px"> {{ __('CheckIn')}}</th>
+                            <th width="250px"> {{ __('CheckOut')}}</th>
                             <th width="130px"> {{ __('Author')}}</th>
                             <th width="100px"> {{ __('Status')}}</th>
                             <th width="100px"> {{ __('Reviews')}}</th>
@@ -88,6 +91,17 @@
                                         <a href="{{route('hotel.admin.edit',['id'=>$row->id])}}">{{$row->title}}</a>
                                     </td>
                                     <td>{{$row->location->name ?? ''}}</td>
+                                    <td class="title">
+                                        @if ($row->building)
+                                            <a>{{$row->building->name}}</a>
+                                        @endif
+                                    </td>
+                                    <td class="title">
+                                       <a>{{$row->check_in_time}}</a>
+                                    </td>
+                                    <td class="title">
+                                        <a>{{$row->check_out_time}}</a>
+                                    </td>
                                     <td>
                                         @if(!empty($row->author))
                                             {{$row->author->getDisplayName()}}

@@ -11,7 +11,7 @@
         <input type="text" value="{{$row->icon}}" placeholder="{{__("Ex: fa fa-facebook")}}" name="icon" class="form-control">
     </div>
     <div class="form-group">
-        <label >{{__('Upload image size 30px')}}</label>
+        <label >{{__('Image')}}</label>
         {!! \Modules\Media\Helpers\FileHelper::fieldUpload('image_id',$row->image_id) !!}
         <i>
             {{ __("All the Term's image are same size") }}

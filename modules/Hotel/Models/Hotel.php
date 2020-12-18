@@ -34,10 +34,12 @@ class Hotel extends Bookable
 
     public    $set_paid_modal_file                = 'Hotel::frontend/booking/set-paid-modal';
     public    $email_new_booking_file             = 'Hotel::emails.new_booking_detail';
+
     protected $fillable      = [
         'title',
         'content',
         'status',
+        'building_id'
     ];
     protected $slugField     = 'slug';
     protected $slugFromField = 'title';
@@ -972,7 +974,7 @@ class Hotel extends Bookable
         if (!empty($price_range = $request->query('price_range'))) {
             $pri_from = explode(";", $price_range)[0];
             $pri_to = explode(";", $price_range)[1];
-            $raw_sql_min_max = "(  bravo_hotels.price >= ? ) 
+            $raw_sql_min_max = "(  bravo_hotels.price >= ? )
                             AND (  bravo_hotels.price <= ? )";
             $model_hotel->WhereRaw($raw_sql_min_max,[$pri_from,$pri_to]);
         }
@@ -1111,5 +1113,10 @@ class Hotel extends Bookable
                 "data" => Attributes::getAllAttributesForApi("hotel")
             ]
         ];
+    }
+
+    public function building()
+    {
+        return $this->belongsTo(Building::class,'building_id');
     }
 }

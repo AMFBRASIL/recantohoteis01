@@ -13,6 +13,7 @@ class HotelTranslation extends Hotel
         'content',
         'address',
         'policy',
+        'building_id',
         'surrounding'
     ];
 

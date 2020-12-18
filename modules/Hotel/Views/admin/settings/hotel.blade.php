@@ -502,6 +502,7 @@
         </div>
     </div>
 </div>
+@include('Hotel::admin.settings.additional-options')
 
 @endif
 

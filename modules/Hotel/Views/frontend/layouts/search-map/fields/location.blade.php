@@ -1,5 +1,3 @@
-@php($location_search_style = setting_item('hotel_location_search_style'))
-
 <div class="filter-item">
     <div class="form-group">
         <i class="field-icon fa icofont-map"></i>
