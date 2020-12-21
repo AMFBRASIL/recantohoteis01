@@ -32,6 +32,7 @@
                         @include('Hotel::admin.hotel.building')
                         @include('Hotel::admin.hotel.pricing')
                         @include('Hotel::admin.hotel.location')
+                        @include('Hotel::admin.hotel.surrounding')
                         @include('Core::admin/seo-meta/seo-meta')
                     </div>
                     <div class="col-md-3">

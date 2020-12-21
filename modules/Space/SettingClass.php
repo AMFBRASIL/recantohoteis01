@@ -4,20 +4,18 @@ namespace  Modules\Space;
 
 use Modules\Core\Abstracts\BaseSettingsClass;
 use Modules\Core\Models\Settings;
-use Custom\Space\CustomSettingsPage;
 
 class SettingClass extends BaseSettingsClass
 {
     public static function getSettingPages()
     {
-        $customSettings = new CustomSettingsPage();
         return [
             [
                 'id'   => 'space',
                 'title' => __("Space Settings"),
                 'position'=>20,
                 'view'=>"Space::admin.settings.space",
-                "keys"=>$customSettings->customSettings([
+                "keys"=>[
                     'space_disable',
                     'space_page_search_title',
                     'space_page_search_banner',
@@ -39,6 +37,7 @@ class SettingClass extends BaseSettingsClass
                     'space_booking_buyer_fees',
                     'space_vendor_create_service_must_approved_by_admin',
                     'space_allow_vendor_can_change_their_booking_status',
+                    'space_allow_vendor_can_change_paid_amount',
                     'space_search_fields',
                     'space_map_search_fields',
 
@@ -47,7 +46,9 @@ class SettingClass extends BaseSettingsClass
                     'space_deposit_type',
                     'space_deposit_amount',
                     'space_deposit_fomular',
-                ]),
+
+                    'space_layout_map_option',
+                ],
                 'html_keys'=>[
 
                 ]
