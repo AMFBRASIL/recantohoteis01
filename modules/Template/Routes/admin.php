@@ -14,7 +14,8 @@ Route::post('/bulkEdit','TemplateController@bulkEdit')->name('template.admin.bul
 
 
 //import/export
-	Route::match(['get'],'/importTemplate','TemplateController@importTemplate')->name('template.admin.importTemplate');
+Route::match(['get', 'post'],'/importTemplate','TemplateController@importTemplate')->name('template.admin.importTemplate');
+Route::match(['get'],'/exportTemplate/{id}','TemplateController@exportTemplate')->name('template.admin.exportTemplate');
 
 
 Route::group(['prefix' => 'content-template'],function () {

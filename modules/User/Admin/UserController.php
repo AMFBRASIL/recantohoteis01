@@ -15,6 +15,7 @@ use Modules\Profession\Models\Professions;
 use Modules\User\Events\VendorApproved;
 use Modules\Vendor\Models\VendorRequest;
 use Spatie\Permission\Models\Role;
+use Modules\User\Exports\UserExport;
 
 class UserController extends AdminController
 {
@@ -28,23 +29,23 @@ class UserController extends AdminController
     {
         $this->checkPermission('user_view');
         $username = $request->query('s');
-        $listUser = User::query()->orderBy('id', 'desc');
+        $listUser = User::query()->orderBy('id','desc');
         if (!empty($username)) {
-            $listUser->where(function ($query) use ($username) {
-                $query->where('first_name', 'LIKE', '%' . $username . '%');
-                $query->orWhere('id', $username);
-                $query->orWhere('phone', $username);
-                $query->orWhere('email', 'LIKE', '%' . $username . '%');
-                $query->orWhere('last_name', 'LIKE', '%' . $username . '%');
-            });
+             $listUser->where(function($query) use($username){
+                 $query->where('first_name', 'LIKE', '%' . $username . '%');
+                 $query->orWhere('id',  $username);
+                 $query->orWhere('phone',  $username);
+                 $query->orWhere('email', 'LIKE', '%' . $username . '%');
+                 $query->orWhere('last_name', 'LIKE', '%' . $username . '%');
+             });
         }
-        if ($request->query('role')) {
+        if($request->query('role')){
             $listUser->role($request->query('role'));
         }
         $listUser->with(['wallet']);
         $data = [
             'rows' => $listUser->paginate(20),
-            'roles' => Role::all(),
+            'roles' => Role::all()
         ];
         return view('User::admin.index', $data);
     }
@@ -275,10 +276,13 @@ class UserController extends AdminController
 
         if ($row->save()) {
 
-            if ($request->input('role_id') and $role = Role::findById($request->input('role_id'))) {
-                $row->syncRoles($role);
+            if(!is_demo_mode()){
+                if ($request->input('role_id') and $role = Role::findById($request->input('role_id'))) {
+                    $row->syncRoles($role);
+                }
             }
-            return back()->with('success', ($id and $id > 0) ? __('User updated') : __("User created"));
+
+            return back()->with('success', ($id and $id>0) ? __('User updated'):__("User created"));
         }
     }
 
@@ -415,4 +419,21 @@ class UserController extends AdminController
         }
         return redirect()->back()->with('success', __('Updated successfully!'));
     }
+
+    public function export()
+    {
+        return (new UserExport())->download('user-' . date('M-d-Y') . '.xlsx');
+    }
+    public function verifyEmail(Request $request,$id)
+    {
+        $user = User::find($id);
+        if(!empty($user)){
+            $user->email_verified_at = now();
+            $user->save();
+            return redirect()->back()->with('success', __('Verify email successfully!'));
+        }else{
+            return redirect()->back()->with('error', __('Verify email cancel!'));
+        }
+    }
+
 }

@@ -13,7 +13,8 @@ class HotelTranslation extends Hotel
         'content',
         'address',
         'policy',
-        'building_id'
+        'building_id',
+        'surrounding'
     ];
 
     protected $slugField     = false;
@@ -24,9 +25,13 @@ class HotelTranslation extends Hotel
     ];
     protected $casts = [
         'policy'  => 'array',
+        'surrounding' => 'array',
     ];
 
     public function getSeoType(){
         return $this->seo_type;
+    }
+    public function getRecordRoot(){
+        return $this->belongsTo(Hotel::class,'origin_id');
     }
 }

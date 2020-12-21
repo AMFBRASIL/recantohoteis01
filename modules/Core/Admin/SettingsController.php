@@ -21,6 +21,7 @@ class SettingsController extends AdminController
 
     public function index($group)
     {
+
         if(empty($this->groups)){
             $this->setGroups();
         }

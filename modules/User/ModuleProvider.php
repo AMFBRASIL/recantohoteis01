@@ -75,14 +75,19 @@ class ModuleProvider extends ModuleServiceProvider
         $res = [];
         $user = Auth::user();
 
-        $res['wallet']= [
-            'position'   => 27,
-            'icon'       => 'fa fa-money',
-            'url'        => route('user.wallet'),
-            'title'      => __("My Wallet"),
-        ];
+        $is_wallet_module_disable = setting_item('wallet_module_disable');
+        if(empty($is_wallet_module_disable))
+        {
+            $res['wallet']= [
+                'position'   => 27,
+                'icon'       => 'fa fa-money',
+                'url'        => route('user.wallet'),
+                'title'      => __("My Wallet"),
+            ];
+        }
 
-        if(!empty($user->verification_fields))
+        $is_disable_verification_feature = setting_item('user_disable_verification_feature');
+        if(!empty($user->verification_fields) and empty($is_disable_verification_feature))
         {
             $res['verification']= [
                 'url'        => route('user.verification.index'),
@@ -99,6 +104,15 @@ class ModuleProvider extends ModuleServiceProvider
             'title'      => __("Enquiry Report"),
             'permission' => 'enquiry_view',
         ];
+
+        if(setting_item('inbox_enable')) {
+            $res['chat'] = [
+                'position' => 20,
+                'icon' => 'fa fa-comments',
+                'url' => route('user.chat'),
+                'title' => __("Messages"),
+            ];
+        }
 
         return $res;
     }

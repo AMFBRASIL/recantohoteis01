@@ -34,4 +34,9 @@ class ModuleProvider extends ModuleServiceProvider
 
         $this->app->register(RouterServiceProvider::class);
     }
+
+    public static function getAdminMenu()
+    {
+        return [];
+    }
 }

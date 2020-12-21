@@ -13,11 +13,8 @@
     <div class="form-group">
         <label >{{__('Image')}}</label>
         {!! \Modules\Media\Helpers\FileHelper::fieldUpload('image_id',$row->image_id) !!}
+        <i>
+            {{ __("All the Term's image are same size") }}
+        </i>
     </div>
 @endif
-{{--<div class="form-group">--}}
-{{--<label class="control-label">{{__("Description")}}</label>--}}
-{{--<div class="">--}}
-{{--<textarea name="content" class="d-none has-ckeditor" cols="30" rows="10">{{$translation->content}}</textarea>--}}
-{{--</div>--}}
-{{--</div>--}}
