@@ -61,7 +61,7 @@
                         <div class="form-group">
                             <label>{{__("CPF")}}</label>
                             <input type="text" value="{{old('',$dataUser->cpf_cnpj)}}" name="cpf_cnpj"
-                                   placeholder="{{__("303.807.108.03")}}" data-mask="000.000.000-00"
+                                   placeholder="{{__("303.807.108.03")}}"
                                    class="form-control cpf">
                             <i class="fa fa-user input-icon"></i>
                         </div>
@@ -223,4 +223,4 @@
 @endsection
 
 
-
+d
