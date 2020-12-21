@@ -22,7 +22,7 @@
                 'avatar'  => Auth::user()->avatar_url,
                 'link'    => get_link_detail_services($services->type, $services->id, 'index'),
                 'type'    => $services->type,
-                'message' => __(':title was updated the :status status by :by', ['title' => $services->title, 'status' => $services->status,'by'=>$updatedBy->display_name])
+                'message' => __(':title was updated the :status status by :by', ['title' => $services->title, 'status' => $services->status,'by'=>$updatedBy->display_name ?? ''])
             ];
             Auth::user()->notify(new AdminChannelServices($data));
             // notify to vendor
