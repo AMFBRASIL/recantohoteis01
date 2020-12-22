@@ -28,6 +28,10 @@ Route::group(['prefix'=>'building'],function (){
     Route::post('/bulkEdit','BuildingController@bulkEdit')->name('building.admin.bulkEdit');
     Route::get('/recovery','BuildingController@recovery')->name('building.admin.recovery');
 
+    Route::get('/get-select','BuildingController@getForSelect2')->name('building.admin.ajax_get');
+
+    Route::get('/{parent}/floor/get-select','BuildingFloorController@getForSelect2')->name('building_floor.admin.ajax_get');
+
     Route::get('/{parent}/floor','BuildingFloorController@indexWithParent')->name('building_floor.admin.index');
     Route::get('/{parent}/floor/edit/{id}','BuildingFloorController@editWithParent')->name('building_floor.admin.edit');
     Route::post('/{parent}/floor/store/{id}','BuildingFloorController@storeWithParent')->name('building_floor.admin.store');

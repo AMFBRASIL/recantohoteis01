@@ -1,5 +1,5 @@
 <?php
-namespace Modules\Event\Controllers;
+namespace Modules\Supplier\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Event\Models\Event;

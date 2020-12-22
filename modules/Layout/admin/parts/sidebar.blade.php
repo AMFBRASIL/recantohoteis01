@@ -46,6 +46,11 @@ $menus = [
                 'url'        => route('point_of_sale.admin.index'),
                 'title'      => __('Ponto de Venda'),
                 'permission' => 'point_of_sale_view',
+            ],
+            'room_number'     => [
+                'url'        => route('room.admin.index'),
+                'title'      => __('Numeracao UH'),
+                'permission' => 'room_number_view',
             ]
         ]
     ],

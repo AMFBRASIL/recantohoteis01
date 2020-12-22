@@ -254,13 +254,19 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('profession_update');
         Permission::findOrCreate('profession_delete');
 
-
         // Building Floor
         Permission::findOrCreate('building_floor_view');
         Permission::findOrCreate('building_floor_create');
         Permission::findOrCreate('building_floor_update');
         Permission::findOrCreate('building_floor_delete');
         Permission::findOrCreate('building_floor_manage_others');
+
+        // Room Number
+        Permission::findOrCreate('room_view');
+        Permission::findOrCreate('room_create');
+        Permission::findOrCreate('room_update');
+        Permission::findOrCreate('room_delete');
+        Permission::findOrCreate('room_manage_others');
 
         // Car
         Permission::findOrCreate('car_view');

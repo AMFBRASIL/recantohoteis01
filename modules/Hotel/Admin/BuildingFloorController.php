@@ -2,6 +2,7 @@
 
 namespace Modules\Hotel\Admin;
 
+use Illuminate\Http\Request;
 use Modules\Base\Admin\CrudController;
 use Modules\Hotel\Models\Building;
 use Modules\Hotel\Models\BuildingFloor;
@@ -48,5 +49,16 @@ class BuildingFloorController extends CrudController
     protected function redirectUrlAfterStore($model)
     {
         return route($this->routeList['index'], $model->building_id);
+    }
+
+    public function getForSelect2(Request $request, $building)
+    {
+        $q = $request->query('q');
+        $query = $this->modelName::getForSelect2Query($q, $building);
+        $res = $query->orderBy('id', 'desc')->limit(20)->get();
+
+        return response()->json([
+            'results' => $res
+        ]);
     }
 }
