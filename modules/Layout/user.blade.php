@@ -127,5 +127,12 @@
         @include('Layout::parts.footer',['is_user_page'=>1])
     </div>
     {!! setting_item('footer_scripts') !!}
+
+    <!-- Scripts -->
+    <script src="{{ asset('dist/admin/js/manifest.js?_ver='.config('app.version')) }}" ></script>
+    <script src="{{ asset('dist/admin/js/vendor.js?_ver='.config('app.version')) }}" ></script>
+    <script src="{{ asset('dist/admin/js/app.js?_ver='.config('app.version')) }}" ></script>
+
+    @yield('script.body')
 </body>
 </html>

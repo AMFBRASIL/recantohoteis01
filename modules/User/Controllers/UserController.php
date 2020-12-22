@@ -102,6 +102,8 @@ class UserController extends FrontendController
         $input = $request->except('bio');
 
         $user->fill($input);
+        $user->zip_code = str_replace('.','',str_replace('-', '', $request->input('zip_code')));
+        $user->cpf_cnpj = $request->input('cpf_cnpj');
         $user->bio = clean($request->input('bio'));
         $user->birthday = date("Y-m-d", strtotime($user->birthday));
         $user->user_name = Str::slug( $request->input('user_name') ,"_");
