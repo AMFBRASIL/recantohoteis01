@@ -2,6 +2,7 @@
 
 namespace Modules\Supplier\Models;
 
+use App\BaseModel;
 use App\Currency;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Product\Models\Product;
 use Modules\Supplier\Models\SupplierTranslation;
 
-class Supplier extends Bookable
+class Supplier extends BaseModel
 {
     use SoftDeletes;
 
@@ -149,44 +150,6 @@ class Supplier extends Bookable
                 }
             }
         }
-    }
-
-    public static function getServiceIconFeatured()
-    {
-        return "icofont-ticket";
-    }
-
-    public static function isEnable()
-    {
-        return setting_item('event_disable') == false;
-    }
-
-    public static function isEnableEnquiry()
-    {
-        if (!empty(setting_item('booking_enquiry_for_event'))) {
-            return true;
-        }
-        return false;
-    }
-
-    public static function isFormEnquiryAndBook()
-    {
-        $check = setting_item('booking_enquiry_for_event');
-        if (!empty($check) and setting_item('booking_enquiry_type') == "booking_and_enquiry") {
-            return true;
-        }
-        return false;
-    }
-
-    public static function getBookingEnquiryType()
-    {
-        $check = setting_item('booking_enquiry_for_event');
-        if (!empty($check)) {
-            if (setting_item('booking_enquiry_type') == "only_enquiry") {
-                return "enquiry";
-            }
-        }
-        return "book";
     }
 
     public function getSupplierTypeAttribute()

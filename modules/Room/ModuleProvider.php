@@ -1,15 +1,16 @@
 <?php
-namespace Modules\Media;
+namespace Modules\Room;
 
 use Modules\ModuleServiceProvider;
 
 class ModuleProvider extends ModuleServiceProvider
 {
-    public function boot()
-    {
-        $this->loadMigrationsFrom(__DIR__ . '/Migrations');
-    }
 
+    public function boot(){
+
+        $this->loadMigrationsFrom(__DIR__ . '/Migrations');
+
+    }
     /**
      * Register bindings in the container.
      *
@@ -22,13 +23,21 @@ class ModuleProvider extends ModuleServiceProvider
 
     public static function getAdminMenu()
     {
-        return [
-            'media'=>[
-                'position'=>99,
-                'title'=>__("Media"),
-                'icon'=>"fa fa-picture-o",
-                "url"=>route('media.admin.index')
-            ]
-        ];
+        return [];
+    }
+
+    public static function getBookableServices()
+    {
+        return [];
+    }
+
+    public static function getMenuBuilderTypes()
+    {
+        return [];
+    }
+
+    public static function getTemplateBlocks()
+    {
+        return [];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Modules\Hotel\Models;
 
+use Illuminate\Support\Facades\DB;
 use Modules\Base\Models\Model;
 
 class BuildingFloor extends Model
@@ -24,5 +25,19 @@ class BuildingFloor extends Model
     public function building()
     {
         return $this->belongsTo(Building::class, 'building_id', 'id');
+    }
+
+    public static function getForSelect2Query($q, $building)
+    {
+        $query =  static::query()->select('id', DB::raw('name as text'))
+            ->Where("name", 'like', '%' . $q . '%')
+            ->Where('building_id', $building);
+
+        return $query;
+    }
+
+    public function getDisplayName()
+    {
+        return sprintf('%s', $this->name);
     }
 }

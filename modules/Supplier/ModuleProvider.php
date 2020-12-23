@@ -22,23 +22,4 @@ class ModuleProvider extends ModuleServiceProvider
     {
         $this->app->register(RouterServiceProvider::class);
     }
-
-    public static function getAdminMenu()
-    {
-        return [];
-    }
-
-    public static function getBookableServices()
-    {
-        return [];
-    }
-
-    public static function getMenuBuilderTypes()
-    {
-        return [];
-    }
-
-    public static function getTemplateBlocks(){
-        return [];
-    }
 }
