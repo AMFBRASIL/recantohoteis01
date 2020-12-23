@@ -50,7 +50,7 @@ $menus = [
             'room_number'     => [
                 'url'        => route('room.admin.index'),
                 'title'      => __('Numeracao UH'),
-                'permission' => 'room_number_view',
+                'permission' => 'room_view',
             ]
         ]
     ],
