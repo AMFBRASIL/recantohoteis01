@@ -21,3 +21,4 @@ docker-compose.yml
 docker
 /resources/admin/scss/css
 /storage/installed
+/features_hotel/

@@ -221,6 +221,3 @@
         });
     </script>
 @endsection
-
-
-d

@@ -106,7 +106,6 @@ class UserController extends FrontendController
         $user->cpf_cnpj = $request->input('cpf_cnpj');
         $user->bio = clean($request->input('bio'));
         $user->birthday = date("Y-m-d", strtotime($user->birthday));
-        $user->user_name = Str::slug( $request->input('user_name') ,"_");
         $user->save();
         return redirect()->back()->with('success', __('Update successfully'));
     }
