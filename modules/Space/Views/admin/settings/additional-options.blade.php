@@ -4,6 +4,21 @@
     <div class="row">
         <div class="col-sm-4">
             <h3 class="form-group-title">{{__("Contratos")}}</h3>
+
+            <p>[name_client] - Nome do cliente.</p>
+            <p>[address_client] - Endereço.</p>
+            <p>[complement_address_client] - Complemento do endereço.</p>
+            <p>[zipcode_address_client] - CEP.</p>
+            <p>[phone_client] - Telefone 1.</p>
+            <p>[phone_zap_client] - Telefone 2 (Whatsapp).</p>
+            <p>[cpf_client] - CPF.</p>
+            <p>[rg_client] - RG.</p>
+            <p>[id_booking] - Id da reserva.</p>
+            <p>[date_start_booking] - Data inicial da reserva.</p>
+            <p>[date_end_booking] - Data final da reserva.</p>
+            <p>[value_booking] - Valor da reserva.</p>
+            <p>[value_day] - Valor da diária contratada.</p>
+            <p>[date_current] - Data atual.</p>
         </div>
         <div class="col-sm-8">
             <div class="panel">
