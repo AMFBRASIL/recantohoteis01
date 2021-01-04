@@ -5,7 +5,7 @@
         <div class="col-sm-4">
             <h3 class="form-group-title">{{__("Contratos")}}</h3>
         </div>
-        <div class="col-sm-12">
+        <div class="col-sm-8">
             <div class="panel">
                 <div class="panel-title"><strong>{{__("Opções de contrato")}}</strong></div>
                 <div class="panel-body">
