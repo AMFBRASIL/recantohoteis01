@@ -1,9 +1,8 @@
 <?php
 
-namespace  Modules\Space;
+namespace Modules\Space;
 
 use Modules\Core\Abstracts\BaseSettingsClass;
-use Modules\Core\Models\Settings;
 
 class SettingClass extends BaseSettingsClass
 {
@@ -11,11 +10,11 @@ class SettingClass extends BaseSettingsClass
     {
         return [
             [
-                'id'   => 'space',
+                'id' => 'space',
                 'title' => __("Space Settings"),
-                'position'=>20,
-                'view'=>"Space::admin.settings.space",
-                "keys"=>[
+                'position' => 20,
+                'view' => "Space::admin.settings.space",
+                "keys" => [
                     'space_disable',
                     'space_page_search_title',
                     'space_page_search_banner',
@@ -48,8 +47,15 @@ class SettingClass extends BaseSettingsClass
                     'space_deposit_fomular',
 
                     'space_layout_map_option',
+
+                    'space_contract_title',
+                    'space_contract',
+                    'space_inspection_term_title',
+                    'space_inspection_term',
+                    'space_internal_regime_title',
+                    'space_internal_regime',
                 ],
-                'html_keys'=>[
+                'html_keys' => [
 
                 ]
             ]

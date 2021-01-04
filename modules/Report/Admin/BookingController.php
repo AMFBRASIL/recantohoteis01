@@ -1,19 +1,26 @@
 <?php
 namespace Modules\Report\Admin;
 
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\AdminController;
 use Modules\Booking\Emails\NewBookingEmail;
 use Modules\Booking\Events\BookingUpdatedEvent;
 use Modules\Booking\Models\Booking;
+use Modules\Core\Models\Settings;
+use Modules\Report\Service\BookingService;
 
 class BookingController extends AdminController
 {
-    public function __construct()
+    /**
+     * @var BookingService
+     */
+    private $bookingService;
+
+    public function __construct(BookingService $bookingService)
     {
         parent::__construct();
+        $this->bookingService = $bookingService;
         $this->setActiveMenu('admin/module/report/booking');
     }
 
@@ -101,5 +108,18 @@ class BookingController extends AdminController
     {
         $booking = Booking::find($id);
         return (new NewBookingEmail($booking))->render();
+    }
+
+    public function contract($id){
+        $booking = Booking::query()->find($id)->first();
+        $settings = Settings::query()->where("name", "space_contract")->first();
+
+        $contract = $this->bookingService->getContract($settings->val, $booking);
+
+        $data = [
+            'contract' => $contract,
+        ];
+
+        return view('Report::admin.booking.contract.contract', $data);
     }
 }
