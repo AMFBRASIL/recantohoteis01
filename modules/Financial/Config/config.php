@@ -6,4 +6,5 @@ return [
     'financial_payment_methods_route_prefix' => env("FINANCIAL_PAYMENT_METHODS_ROUTER_PREFIX", "paymentMethod"),
     'financial_bank_accounts_route_prefix' => env("FINANCIAL_BANK_ACCOUNTS_ROUTER_PREFIX", "bankAccount"),
     'financial_card_machine_account_route_prefix' => env("FINANCIAL_CARD_MACHINE_ACCOUNTS_ROUTER_PREFIX", "cardMachineAccount"),
+    'financial_cost_center_route_prefix' => env("FINANCIAL_COST_CENTER_ROUTER_PREFIX", "costCenter"),
 ];
