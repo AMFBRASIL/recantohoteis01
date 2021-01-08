@@ -22,7 +22,7 @@ class CostCenterController extends AdminController
 
         $costCenterList = new CostCenter();
 
-        $costCenterList = $costCenterList::query() ;
+        $costCenterList = $costCenterList::query();
 
         if ($costCenterName = $request->query('s')) {
             $costCenterList->where('name', 'LIKE', '%' . $costCenterName . '%');
@@ -124,6 +124,11 @@ class CostCenterController extends AdminController
                 if (!empty($query)) {
                     $query->delete();
                 }
+            }
+        } else if ($action == "clone") {
+            $this->checkPermission('cost_center_create');
+            foreach ($ids as $id ){
+                (new CostCenter)->saveCloneByID($id);
             }
         } else {
             foreach ($ids as $id) {

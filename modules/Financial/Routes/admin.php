@@ -34,12 +34,23 @@ Route::get('/carMachineAccount/edit/{id}', 'CardMachineAccountController@edit')-
 
 Route::post('/carMachineAccount/store/{id}', 'CardMachineAccountController@store')->name('financial.admin.card.machine.account.store');
 
-Route::get('/costCenter', 'CostCenterController@index')->name('financial.admin.cost.center.index');
 
-Route::get('/costCenter/edit/{id}', 'CostCenterController@edit')->name('financial.admin.cost.center.edit');
+Route::group(['prefix' => 'costCenter'], function () {
 
-Route::get('/costCenter/subCost/{id}', 'CostCenterController@subCost')->name('financial.admin.cost.center.sub');
+    Route::get('/', 'CostCenterController@index')->name('financial.admin.cost.center.index');
 
-Route::post('/costCenter/store/{id}', 'CostCenterController@store')->name('financial.admin.cost.center.store');
+    Route::get('/edit/{id}', 'CostCenterController@edit')->name('financial.admin.cost.center.edit');
 
+    Route::post('/store/{id}', 'CostCenterController@store')->name('financial.admin.cost.center.store');
+
+    Route::get('/{parent}/subCost/get-select', 'SubCostCenterController@getForSelect2')->name('financial.admin.sub.cost.ajax_get');
+
+    Route::get('/{parent}/subCost', 'SubCostCenterController@indexWithParent')->name('financial.admin.sub.cost.index');
+
+    Route::get('/{parent}/subCost/edit/{id}', 'SubCostCenterController@editWithParent')->name('financial.admin.sub.cost.edit');
+
+    Route::post('/{parent}/subCost/store/{id}', 'SubCostCenterController@storeWithParent')->name('financial.admin.sub.cost.store');
+
+    Route::post('/subCost/bulkEdit', 'SubCostCenterController@bulkEdit')->name('financial.admin.sub.cost.bulkEdit');
+});
 

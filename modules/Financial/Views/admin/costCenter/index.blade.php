@@ -33,7 +33,7 @@
                                     <option value="publish">{{__(" Publish ")}}</option>
                                     <option value="draft">{{__(" Move to Draft ")}}</option>
                                     <option value="pending">{{__(" Move to Pending ")}}</option>
-                                    {{--<option value="clone">{{__(" Clone")}}</option>--}}
+                                    <option value="clone">{{__(" Clone")}}</option>
                                     <option value="delete">{{__(" Delete ")}}</option>
                                 </select>
                                 <button data-confirm="{{__("Do you want to delete?")}}"
@@ -102,7 +102,7 @@
                                                 <a href="{{route('financial.admin.cost.center.edit',['id'=>$row->id])}}"
                                                    class="btn btn-primary btn-sm"><i
                                                         class="fa fa-edit"></i> {{__('Edit')}}</a>
-                                                <a href="{{route('financial.admin.cost.center.sub',['id'=>$row->id])}}"
+                                                <a href="{{route('financial.admin.sub.cost.index',['parent'=>$row->id])}}"
                                                    class="btn btn-success btn-sm">{{__('Sub Custo')}}</a>
                                             </td>
                                         </tr>
