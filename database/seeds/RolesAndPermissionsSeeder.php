@@ -157,6 +157,20 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('card_machine_account_update');
         Permission::findOrCreate('card_machine_account_delete');
 
+        //Cost Center
+        Permission::findOrCreate('cost_center_view');
+        Permission::findOrCreate('cost_center_create');
+        Permission::findOrCreate('cost_center_update');
+        Permission::findOrCreate('cost_center_delete');
+        Permission::findOrCreate('cost_center_others');
+
+        //Cost Center
+        Permission::findOrCreate('sub_cost_view');
+        Permission::findOrCreate('sub_cost_create');
+        Permission::findOrCreate('sub_cost_update');
+        Permission::findOrCreate('sub_cost_delete');
+        Permission::findOrCreate('sub_cost_manage_others');
+
         // Roles
         Permission::findOrCreate('role_view');
         Permission::findOrCreate('role_create');

@@ -55,6 +55,11 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __("Máquina de Cartão"),
                         'permission' => 'card_machine_account_view',
                     ],
+                    'costCenter'=>[
+                        'url'        => 'admin/module/financial/costCenter',
+                        'title'      => __("Centro de Custo"),
+                        'permission' => 'cost_center_view',
+                    ],
                 ]
             ],
         ];
