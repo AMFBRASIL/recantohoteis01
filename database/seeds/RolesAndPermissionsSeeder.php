@@ -171,6 +171,24 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('sub_cost_delete');
         Permission::findOrCreate('sub_cost_manage_others');
 
+        Permission::findOrCreate('consumptionCard_view');
+        Permission::findOrCreate('consumptionCard_create');
+        Permission::findOrCreate('consumptionCard_update');
+        Permission::findOrCreate('consumptionCard_delete');
+        Permission::findOrCreate('consumptionCard_manage_others');
+
+        Permission::findOrCreate('revenue_view');
+        Permission::findOrCreate('revenue_create');
+        Permission::findOrCreate('revenue_update');
+        Permission::findOrCreate('revenue_delete');
+        Permission::findOrCreate('revenue_manage_others');
+
+        Permission::findOrCreate('history_consumptionCard_view');
+        Permission::findOrCreate('history_consumptionCard_create');
+        Permission::findOrCreate('history_consumptionCard_update');
+        Permission::findOrCreate('history_consumptionCard_delete');
+        Permission::findOrCreate('history_consumptionCard_manage_others');
+
         // Roles
         Permission::findOrCreate('role_view');
         Permission::findOrCreate('role_create');

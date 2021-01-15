@@ -35,6 +35,11 @@ class ModuleProvider extends ModuleServiceProvider
                 'icon'       => 'ion-md-cash',
                 'permission' => 'news_view',
                 'children'   => [
+                    'revenue'=>[
+                        'url'        => 'admin/module/financial/revenue',
+                        'title'      => __("Receita"),
+                        'permission' => 'revenue_view',
+                    ],
                     'billingType'=>[
                         'url'        => 'admin/module/financial/billingType',
                         'title'      => __("Tipo de Faturamento"),

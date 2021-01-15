@@ -6,16 +6,19 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Matrix\Exception;
 use Modules\AdminController;
 use Modules\Company\Models\Company;
 use Modules\Financial\Models\Bank;
 use Modules\Profession\Models\Professions;
+use Modules\User\Events\SendMailUserRegistered;
 use Modules\User\Events\VendorApproved;
+use Modules\User\Exports\UserExport;
 use Modules\Vendor\Models\VendorRequest;
 use Spatie\Permission\Models\Role;
-use Modules\User\Exports\UserExport;
 
 class UserController extends AdminController
 {
@@ -29,17 +32,17 @@ class UserController extends AdminController
     {
         $this->checkPermission('user_view');
         $username = $request->query('s');
-        $listUser = User::query()->orderBy('id','desc');
+        $listUser = User::query()->orderBy('id', 'desc');
         if (!empty($username)) {
-             $listUser->where(function($query) use($username){
-                 $query->where('first_name', 'LIKE', '%' . $username . '%');
-                 $query->orWhere('id',  $username);
-                 $query->orWhere('phone',  $username);
-                 $query->orWhere('email', 'LIKE', '%' . $username . '%');
-                 $query->orWhere('last_name', 'LIKE', '%' . $username . '%');
-             });
+            $listUser->where(function ($query) use ($username) {
+                $query->where('first_name', 'LIKE', '%' . $username . '%');
+                $query->orWhere('id', $username);
+                $query->orWhere('phone', $username);
+                $query->orWhere('email', 'LIKE', '%' . $username . '%');
+                $query->orWhere('last_name', 'LIKE', '%' . $username . '%');
+            });
         }
-        if($request->query('role')){
+        if ($request->query('role')) {
             $listUser->role($request->query('role'));
         }
         $listUser->with(['wallet']);
@@ -276,13 +279,13 @@ class UserController extends AdminController
 
         if ($row->save()) {
 
-            if(!is_demo_mode()){
+            if (!is_demo_mode()) {
                 if ($request->input('role_id') and $role = Role::findById($request->input('role_id'))) {
                     $row->syncRoles($role);
                 }
             }
 
-            return back()->with('success', ($id and $id>0) ? __('User updated'):__("User created"));
+            return back()->with('success', ($id and $id > 0) ? __('User updated') : __("User created"));
         }
     }
 
@@ -424,16 +427,48 @@ class UserController extends AdminController
     {
         return (new UserExport())->download('user-' . date('M-d-Y') . '.xlsx');
     }
-    public function verifyEmail(Request $request,$id)
+
+    public function verifyEmail(Request $request, $id)
     {
         $user = User::find($id);
-        if(!empty($user)){
+        if (!empty($user)) {
             $user->email_verified_at = now();
             $user->save();
             return redirect()->back()->with('success', __('Verify email successfully!'));
-        }else{
+        } else {
             return redirect()->back()->with('error', __('Verify email cancel!'));
         }
     }
 
+
+    public function userRegister(Request $request)
+    {
+        $user = User::query()->create([
+            'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+            'status' => $request->input('publish', 'publish'),
+            'phone' => $request->input('phone'),
+        ]);
+
+        try {
+            event(new SendMailUserRegistered($user));
+        } catch (Exception $exception) {
+            Log::warning("SendMailUserRegistered: " . $exception->getMessage());
+        }
+        return redirect()->back()->with('success', __('User Register successfully!'));
+    }
+
+    public function getForSelectName2(Request $request)
+    {
+        $q = $request->query('q');
+        $query = User::getForSelect2Query($q);
+        $res = $query->orderBy('id', 'desc')->limit(20)->get();
+
+        return response()->json([
+            'results' => $res
+        ]);
+    }
 }

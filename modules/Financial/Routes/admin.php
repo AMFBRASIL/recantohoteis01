@@ -54,3 +54,10 @@ Route::group(['prefix' => 'costCenter'], function () {
     Route::post('/subCost/bulkEdit', 'SubCostCenterController@bulkEdit')->name('financial.admin.sub.cost.bulkEdit');
 });
 
+Route::get('/revenue', 'RevenueController@index')->name('financial.admin.revenue.index');
+
+Route::get('/revenue/edit/{id}', 'RevenueController@edit')->name('financial.admin.revenue.edit');
+
+Route::post('/revenue/store/{id}', 'RevenueController@store')->name('financial.admin.revenue.store');
+
+Route::post('/revenue/create', 'RevenueController@create')->name('financial.admin.revenue.create');

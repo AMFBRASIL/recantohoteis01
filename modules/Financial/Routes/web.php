@@ -8,4 +8,5 @@ Route::group(['prefix' => config('financial.financial_route_prefix')], function 
     Route::get('bankAccount/{slug?}', 'BankAccountController@detail')->name('financial.bank.account.detail');// Detail
     Route::get('carMachineAccount/{slug?}', 'CardMachineAccountController@detail')->name('financial.card.machine.account.detail');// Detail
     Route::get('costCenter/{slug?}', 'CostCenterController@detail')->name('financial.cost.center.detail');// Detail
+    Route::get('revenue/{slug?}', 'RevenueController@detail')->name('financial.revenue.detail');// Detail
 });
