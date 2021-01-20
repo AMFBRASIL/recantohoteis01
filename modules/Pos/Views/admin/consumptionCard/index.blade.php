@@ -61,7 +61,7 @@
                                     <th width="10%" style="color: #D50000"> {{  __('SITUAÇÃO')}} </th>
                                     <th width="10%" style="color: #D50000"> {{  __('OBS.')}} </th>
                                     <th width="10%" style="color: #D50000"> {{  __('DATA')}} </th>
-                                    <th width="5%" ></th>
+                                    <th width="5%"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -185,7 +185,6 @@
     </div>
 @endsection
 @section ('script.body')
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         $('.moeda-real').mask('#.##0,00', {reverse: true});
 

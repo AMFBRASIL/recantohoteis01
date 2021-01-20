@@ -41,6 +41,16 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __("Cartao de Consumo"),
                         'permission' => 'consumptionCard_view',
                     ],
+                    'sale'=>[
+                        'url'        => 'admin/module/pos/sale',
+                        'title'      => __("Vendas"),
+                        'permission' => 'newSale_view',
+                    ],
+                    'authorizationPasswords'=>[
+                        'url'        => 'admin/module/pos/authorizationPassword',
+                        'title'      => __("Senha de Autorização"),
+                        'permission' => 'authorizationPasswords_view',
+                    ],
                 ]
             ],
         ];

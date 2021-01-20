@@ -14,8 +14,28 @@ Route::group(['prefix' => 'consumptionCard'], function () {
 
     Route::post('/store/{id}', 'ConsumptionCardController@store')->name('pos.admin.consumption.card.store');
 
-    Route::get('/{parent}/historical', 'HistoricalConsumerCardController@indexWithParent')->name('pos.admin.historical.consumer.card.index');
+    Route::get('/{parent?}/historical', 'HistoricalConsumerCardController@indexWithParent')->name('pos.admin.historical.consumer.card.index');
 
-    Route::get('/{parent}/closed', 'HistoricalConsumerCardController@closed')->name('pos.admin.historical.consumer.card.closed.index');
+    Route::get('/{parent?}/closed', 'HistoricalConsumerCardController@closed')->name('pos.admin.historical.consumer.card.closed.index');
+});
+
+Route::group(['prefix' => 'authorizationPassword'], function () {
+
+    Route::get('/', 'AuthorizationPasswordController@index')->name('pos.admin.authorization.password.index');
+
+    Route::post('/store/{id}', 'AuthorizationPasswordController@store')->name('pos.admin.authorization.password.store');
+
+    Route::post('renovation/{id?}/', 'AuthorizationPasswordController@renovation')->name('pos.admin.authorization.password.renovation');
+
+    Route::post('expiration/{id?}/', 'AuthorizationPasswordController@expiration')->name('pos.admin.authorization.password.expiration');
+});
+
+Route::group(['prefix' => 'sale'], function () {
+
+    Route::get('/', 'SaleController@index')->name('pos.admin.sale.index');
+
+    Route::get('/create', 'SaleController@create')->name('pos.admin.sale.create');
+
+    Route::post('/store/{id}', 'SaleController@store')->name('pos.admin.sale.store');
 });
 

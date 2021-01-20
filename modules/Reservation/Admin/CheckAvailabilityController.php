@@ -6,9 +6,7 @@ use DateInterval;
 use DatePeriod;
 use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Modules\Base\Admin\CrudController;
-use Modules\Hotel\Models\Building;
 use Modules\Hotel\Models\Hotel;
 use Modules\Reservation\Models\ReservationType;
 

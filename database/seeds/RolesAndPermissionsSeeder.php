@@ -189,6 +189,18 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('history_consumptionCard_delete');
         Permission::findOrCreate('history_consumptionCard_manage_others');
 
+        Permission::findOrCreate('authorizationPasswords_view');
+        Permission::findOrCreate('authorizationPasswords_create');
+        Permission::findOrCreate('authorizationPasswords_update');
+        Permission::findOrCreate('authorizationPasswords_delete');
+        Permission::findOrCreate('authorizationPasswords_manage_others');
+
+        Permission::findOrCreate('newSale_view');
+        Permission::findOrCreate('newSale_create');
+        Permission::findOrCreate('newSale_update');
+        Permission::findOrCreate('newSale_delete');
+        Permission::findOrCreate('newSale_others');
+
         // Roles
         Permission::findOrCreate('role_view');
         Permission::findOrCreate('role_create');

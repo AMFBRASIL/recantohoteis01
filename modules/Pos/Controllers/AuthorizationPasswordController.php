@@ -5,7 +5,7 @@ namespace Modules\Pos\Controllers;
 use Illuminate\Http\Request;
 use Modules\FrontendController;
 
-class CostCenterController extends FrontendController
+class AuthorizationPasswordController extends FrontendController
 {
     public function __construct()
     {
