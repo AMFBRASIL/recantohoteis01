@@ -25,6 +25,7 @@ class ConsumptionCard extends Model
         'user_id',
         'value_card',
         'value_add',
+        'value_consumed',
         'situation_id',
         'payment_method_id',
         'card_transaction_number',

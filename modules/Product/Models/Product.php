@@ -226,8 +226,4 @@ class Product extends BaseModel
     {
         return sprintf('%s', $this->title);
     }
-
-    public function sales(){
-        return $this->belongsToMany(Sale::class);
-    }
 }

@@ -1,15 +1,19 @@
 @extends('admin.layouts.app')
-
+@section('title','Pos')
 @section('content')
-    <form action="{{route('supplier.admin.store',['id'=>($row->id) ? $row->id : '-1','lang'=>request()->query('lang')])}}" method="post">
+    <form
+        action="{{route('supplier.admin.store',['id'=>($row->id) ? $row->id : '-1','lang'=>request()->query('lang')])}}"
+        method="post">
         @csrf
         <div class="container-fluid">
             <div class="d-flex justify-content-between mb20">
                 <div>
                     <h1 class="title-bar">{{$row->id ? __('Edit: ').$row->title : __('Nova Venda')}}</h1>
                 </div>
-            <button type="button" class="btn btn-info btn-sm btn-add-item ListVendas"><i class="fa fa-list"></i> LISTAR TODAS VENDAS </button>
-        </div>
+                <button type="button" class="btn btn-info btn-sm btn-add-item ListVendas"><i class="fa fa-list"></i>
+                    LISTAR TODAS VENDAS
+                </button>
+            </div>
             @include('admin.message')
             <div class="lang-content-box">
                 <div class="row">
@@ -22,48 +26,71 @@
                             <div class="panel-body">
                                 @if(is_default_lang())
                                     <div>
-                                        <label><input @if($row->status=='publish') checked @endif type="radio" name="status" value="publish"> {{__("Publicada")}}
+                                        <label><input @if($row->status=='publish') checked @endif type="radio"
+                                                      name="status" value="publish"> {{__("Publicada")}}
                                         </label></div>
                                     <div>
-                                        <label><input @if($row->status=='draft') checked @endif type="radio" name="status" value="draft"> {{__("Rascunho")}}
+                                        <label><input @if($row->status=='draft') checked @endif type="radio"
+                                                      name="status" value="draft"> {{__("Rascunho")}}
                                         </label></div>
                                 @endif
                                 <div class="text-right">
-                                    <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> {{__('Save Changes')}}</button>
+                                    <button class="btn btn-primary" type="submit"><i
+                                            class="fa fa-save"></i> {{__('Save Changes')}}</button>
                                 </div>
                             </div>
                         </div>
                         @if(is_default_lang())
-                        <div class="panel">
-                            <div class="panel-title"><strong>{{__("Administrador")}}</strong></div>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <?php
-                                    $user = !empty($row->create_user) ? App\User::find($row->create_user) : false;
-                                    \App\Helpers\AdminForm::select2('create_user', [
-                                        'configs' => [
-                                            'ajax'        => [
-                                                'url' => url('/admin/module/user/getForSelect2'),
-                                                'dataType' => 'json'
-                                            ],
-                                            'allowClear'  => true,
-                                            'placeholder' => __('-- Select User --')
-                                        ]
-                                    ], !empty($user->id) ? [
-                                        $user->id,
-                                        $user->getDisplayName() . ' (#' . $user->id . ')'
-                                    ] : false)
-                                    ?>
+                            <div class="panel">
+                                <div class="panel-title"><strong>{{__("Administrador")}}</strong></div>
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <?php
+                                        $user = !empty($row->create_user) ? App\User::find($row->create_user) : false;
+                                        \App\Helpers\AdminForm::select2('create_user', [
+                                            'configs' => [
+                                                'ajax' => [
+                                                    'url' => url('/admin/module/user/getForSelect2'),
+                                                    'dataType' => 'json'
+                                                ],
+                                                'allowClear' => true,
+                                                'placeholder' => __('-- Select User --'),
+                                            ]
+                                        ], !empty($user->id) ? [
+                                            $user->id,
+                                            $user->getDisplayName() . ' (#' . $user->id . ')'
+                                        ] : false)
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         @endif
 
-                        <div class="panel">
+                        <div class="panel" id="somaValores" style="display:none;">
                             <div class="panel-title"><strong>{{__("Total Venda")}}</strong></div>
                             <div class="panel-body">
                                 <div class="col-md-12">
-                                    <h6 class="account">Valor Total com Desconto</h6><span class="mt-5 balance">  <div id="somaTotal" name="somaTotal">R$ 0,00 </div> </span>
+                                    <h6 class="account">{{__("Valor Total com Desconto")}}</h6><span
+                                        class="mt-5 balance">  <div
+                                            id="somaTotal" name="somaTotal">R$ 0,00 </div> </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel" id="contentValores" style="display:none;">
+                            <div class="panel-title"><strong>{{__("Consumo do Cartão Digitado")}}</strong></div>
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    <h6 class="account">{{__("Valor Total Consumido")}}</h6>
+                                    <span class="mt-5 restante"> <i class="fa fa-minus"></i>
+                                        <div id="valorRestante">R$ 0,00 </div>
+                                    </span>
+                                </div>
+                                <div class="col-md-12">
+                                    <h6 class="account">{{__("Valor Total Disponível")}}</h6>
+                                    <span class="mt-5 balance"> <i class="fa fa-plus"></i>
+                                         <div id="valorTotal">R$ 0,00 </div>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -74,21 +101,24 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label>
-                                            <input type="checkbox" name="is_simples" @if($row->is_simples) checked @endif value="1"> {{__("Controlar Estoque")}}
+                                            <input type="checkbox" name="is_simples" @if($row->is_simples) checked
+                                                   @endif value="1"> {{__("Controlar Estoque")}}
                                         </label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label>
-                                            <input type="checkbox" name="is_rural" @if($row->is_rural) checked @endif value="1"> {{__("Enviar E-mail detalhes ao Cliente")}}
+                                            <input type="checkbox" name="is_rural" @if($row->is_rural) checked
+                                                   @endif value="1"> {{__("Enviar E-mail detalhes ao Cliente")}}
                                         </label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label>
-                                            <input type="checkbox" name="is_shipping" @if($row->is_shipping) checked @endif value="1"> {{__("Emissao Nota Fiscal")}}
+                                            <input type="checkbox" name="is_shipping" @if($row->is_shipping) checked
+                                                   @endif value="1"> {{__("Emissao Nota Fiscal")}}
                                         </label>
                                     </div>
                                 </div>
@@ -101,17 +131,76 @@
         </div>
     </form>
 @endsection
-
 @section ('script.body')
-    {!! App\Helpers\MapEngine::scripts() !!}
     <script>
-        jQuery('#ValorRecebido').on('keyup',function(){
+        $('#numberCard').focus();
 
-            var GetValorRecebido = jQuery('#ValorRecebido').val().replace(/[.]/g,'').replace(',','.');
-            var Getdesconto = jQuery('#priceDesconto').val().replace(/[.]/g,'').replace(',','.');
+        $("#numberCard").blur(function () {
+            if ($("#numberCard").val() != "") {
+                $('#passwordAuthorization').modal('show');
+            }
+        });
 
-            var ValorRecebido = parseFloat( GetValorRecebido != '' ? GetValorRecebido : 0);
-            var desconto = parseFloat( Getdesconto != '' ? Getdesconto : 0);
+        $(".autorizarValores").click(function () {
+            let data = {
+                password: $('#password').val(),
+            };
+
+            let url = "/admin/module/pos/authorizationPassword/check";
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: data,
+                success: function (data) {
+                    alert(data.message);
+                    if (data.success) {
+                        buscarCliente();
+                    }
+                }
+            });
+        })
+
+        function buscarCliente() {
+            let data = {
+                card_number: $('#numberCard').val(),
+            };
+
+            let url = "/admin/module/pos/consumptionCard/findCard";
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: data,
+                success: function (data) {
+                    $('#passwordAuthorization').modal('toggle');
+
+                    if (data.success) {
+                        console.log(data);
+                        $('#valorTotal').html('R$ ' + data.cardData.card.value_card);
+
+                        if (data.cardData.card.value_consumed == null) {
+
+                            $('#valorRestante').html('R$ 00.0');
+                        } else {
+                            $('#valorRestante').html('R$ ' + data.cardData.card.value_consumed);
+                        }
+
+                        $('#contentValores').show();
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        }
+
+        jQuery('#ValorRecebido').on('keyup', function () {
+
+            var GetValorRecebido = jQuery('#ValorRecebido').val().replace(/[.]/g, '').replace(',', '.');
+            var Getdesconto = jQuery('#priceDesconto').val().replace(/[.]/g, '').replace(',', '.');
+
+            var ValorRecebido = parseFloat(GetValorRecebido != '' ? GetValorRecebido : 0);
+            var desconto = parseFloat(Getdesconto != '' ? Getdesconto : 0);
 
             var Gastos = parseFloat("120.10");
 
@@ -121,8 +210,8 @@
 
         })
 
-        $('#formPayment').on('change', function() {
-            if(this.value == "Dinheiro"){
+        $('#formPayment').on('change', function () {
+            if (this.value == "Dinheiro") {
                 $('#divCartao').hide();
                 $('#divDinheiroRecebido').show();
                 $('#divTrocoCliente').show();
@@ -133,7 +222,7 @@
             }
         });
 
-        $('#enable_produtos').change(function() {
+        $('#enable_produtos').change(function () {
 
             if ($(this).is(':checked')) {
                 $('#somaValores').show();
@@ -143,25 +232,23 @@
             }
         });
 
-        $( ".ListVendas" ).click(function() {
+        $(".ListVendas").click(function () {
             window.location = "listvendas.php"
         });
 
-        $( ".SomarDesconto" ).click(function() {
+        $(".SomarDesconto").click(function () {
             alert("Somar Desconto e adicionar ao lado... ");
         });
 
 
-
-
         // Aqui pode usar para soma dos itens
-        $( ".btn-remove-item" ).click(function() {
+        $(".btn-remove-item").click(function () {
 
             alert("dede");
 
             var ValoresSomados = parseFloat(jQuery('#somaInterna').val());
 
-            if(jQuery('#somaInterna').val() >= 508){
+            if (jQuery('#somaInterna').val() >= 508) {
                 alert("Seu limite de orçamento esgostou. Favor adicionar mais creditos no cartao.");
                 return false;
             }
@@ -179,20 +266,20 @@
         });
 
         // Aqui pode usar para soma dos itens
-        $( ".somarItem" ).click(function() {
+        $(".somarItem").click(function () {
 
-            var ValoresSomados = parseFloat(jQuery('#somaInterna').val());
+            var ValoresSomados = parseFloat($('#somaInterna').val());
 
-            if(jQuery('#somaInterna').val() >= 508){
+            if ($('#somaInterna').val() >= $('#valorTotal').val()) {
                 alert("Seu limite de orçamento esgostou. Favor adicionar mais creditos no cartao.");
                 return false;
             }
 
             //Pegar isso na hora...
-            var ValorItem = parseFloat("100.50");
-            var QuantidadeItem = 2;
+            let ValorItem = parseFloat("100.50");
+            let QuantidadeItem = 2;
 
-            var ValorCalculadoItem = ValoresSomados + (ValorItem * QuantidadeItem);
+            let ValorCalculadoItem = ValoresSomados + (ValorItem * QuantidadeItem);
 
             jQuery('#somaInterna').val(ValorCalculadoItem.toFixed(2));
 
@@ -200,27 +287,7 @@
 
         });
 
-        $('#numberCard').focus();
-
-        $( "#numberCard" ).blur(function() {
-
-            if($( "#numberCard" ).val() != ""){
-                $('#SenhaAutorizar').modal('show');
-                $('#formPayment').focus();
-            }
-
-        });
-
-        $( ".autorizarValores" ).click(function() {
-
-            alert("Autorizado o uso do Cartao.");
-            $('#NameCliente').val("ANDERSON MAUTONE FERREIRA");
-            $('#contentValores').show();
-            $('#SenhaAutorizar').modal('toggle');
-        });
-
-
-        $(function() {
+        $(function () {
             $('input[name="datetimes"]').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
@@ -229,8 +296,8 @@
                 locale: {
                     format: 'DD/MM/YYYY hh:mm A'
                 },
-                maxYear: parseInt(moment().format('YYYY'),10)
-            }, function(start, end, label) {
+                maxYear: parseInt(moment().format('YYYY'), 10)
+            }, function (start, end, label) {
                 var years = moment().diff(start, 'years');
             });
         });
@@ -267,14 +334,18 @@
         });
 
         $(".balance").css({
-            "font-size": "45px",
+            "font-size": "43px",
             "color": "green"
         });
+
+        $(".restante").css({
+            "font-size": "43px",
+            "color": "red"
+        })
 
         $(document).on('select2:select', '.dungdt-select2-field-lazy, .dungdt-select2-field', function (e) {
             $(this).parents('.row').find('.stock_quantity').val(e.params.data.available_stock);
             $(this).parents('.row').find('.price').val(e.params.data.price);
         })
     </script>
-
 @endsection

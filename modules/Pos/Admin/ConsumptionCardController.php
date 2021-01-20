@@ -14,6 +14,7 @@ use Modules\Pos\Models\ConsumptionCard;
 use Modules\Pos\Models\ConsumptionCardTranslation;
 use Modules\Pos\Models\HistoricalConsumerCard;
 use Modules\Situation\Models\Situation;
+use Modules\User\Models\User;
 
 class ConsumptionCardController extends AdminController
 {
@@ -114,9 +115,9 @@ class ConsumptionCardController extends AdminController
                     $new = str_replace(',', '.', $new);
 
                     $row->value_card = $old + $new;
-                    $row->value_add = $new/
+                    $row->value_add = $new /
 
-                    $row->saveOriginOrTranslation($request->input('lang'));
+                        $row->saveOriginOrTranslation($request->input('lang'));
 
                     $this->createHistory($row, $request);
                     $this->createRevenue($row, $request);
@@ -147,19 +148,20 @@ class ConsumptionCardController extends AdminController
     private function createHistory($card, $request)
     {
         $parent = new HistoricalConsumerCard();
-        $parent->consumption_card_id        =   $card->id;
-        $parent->card_number                =   $card->card_number;
-        $parent->user_id                    =   $card->user_id;
-        $parent->value_card                 =   $card->value_card;
-        $parent->value_add                  =   $card->value_add;
-        $parent->situation_id               =   $card->situation_id;
-        $parent->payment_method_id          =   $card->payment_method_id;
-        $parent->card_transaction_number    =   $card->card_transaction_number;
-        $parent->internal_observations      =   $card->internal_observations;
-        $parent->cost_center_id             =   $card->cost_center_id;
-        $parent->bank_account_id            =   $card->bank_account_id;
-        $parent->transaction_date           =   $card->transaction_date;
-        $parent->date_closing               =   $card->date_closing;
+        $parent->consumption_card_id = $card->id;
+        $parent->card_number = $card->card_number;
+        $parent->user_id = $card->user_id;
+        $parent->value_card = $card->value_card;
+        $parent->value_add = $card->value_add;
+        $parent->value_consumed = $card->value_consumed;
+        $parent->situation_id = $card->situation_id;
+        $parent->payment_method_id = $card->payment_method_id;
+        $parent->card_transaction_number = $card->card_transaction_number;
+        $parent->internal_observations = $card->internal_observations;
+        $parent->cost_center_id = $card->cost_center_id;
+        $parent->bank_account_id = $card->bank_account_id;
+        $parent->transaction_date = $card->transaction_date;
+        $parent->date_closing = $card->date_closing;
 
         $parent->status = "publish";
 
@@ -223,5 +225,36 @@ class ConsumptionCardController extends AdminController
     public function historyConsumerCard(Request $request, $id)
     {
         return redirect(route('pos.admin.history.consumption.card.index'));
+    }
+
+    public function findCard(Request $request)
+    {
+        $card_number = $request->card_number;
+
+        if (!is_null($card_number)) {
+
+            $card = ConsumptionCard::query()->where('card_number', '=', $card_number)->first();
+            $user = User::query()->find($card->user_id);
+
+            if (!empty($card)) {
+                return response()->json([
+                    'success' => true,
+                    'cardData' => [
+                        'card' => $card,
+                        'user' => $user
+                    ]
+                ], 200);
+            }else{
+                return response()->json([
+                    'success' => false,
+                    'message' => "número de cartao não encontrado"
+                ], 200);
+            }
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => "número do cartao não Informada!"
+        ], 200);
     }
 }

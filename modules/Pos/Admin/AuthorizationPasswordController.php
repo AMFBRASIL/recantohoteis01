@@ -122,7 +122,8 @@ class AuthorizationPasswordController extends AdminController
         return redirect()->back()->with('success', __('Update success!'));
     }
 
-    public function expiration(Request $request, $id){
+    public function expiration(Request $request, $id)
+    {
         $this->checkPermission('authorizationPasswords_update');
 
         $row = AuthorizationPassword::query()->find($id);
@@ -135,7 +136,8 @@ class AuthorizationPasswordController extends AdminController
         }
     }
 
-    public function renovation(Request $request, $id){
+    public function renovation(Request $request, $id)
+    {
         $this->checkPermission('authorizationPasswords_update');
 
         $row = AuthorizationPassword::query()->find($id);
@@ -145,7 +147,33 @@ class AuthorizationPasswordController extends AdminController
         $res = $row->saveOriginOrTranslation($request->input('lang'));
 
         if ($res) {
-                return back()->with('success', __('Authorization Password Updated'));
+            return back()->with('success', __('Authorization Password Updated'));
         }
+    }
+
+    public function check(Request $request)
+    {
+        $password = $request->password;
+
+        if (!is_null($password)) {
+
+            $authorization = AuthorizationPassword::check($password);
+
+            if ($authorization) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Autorizado o uso do Cartao!"
+                ], 200);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => "Senha Não Autorizada!"
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => "Senha Não Informada!"
+        ], 200);
     }
 }

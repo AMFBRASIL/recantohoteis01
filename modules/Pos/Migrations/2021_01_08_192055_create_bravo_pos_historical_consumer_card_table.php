@@ -19,6 +19,7 @@ class CreateBravoPosHistoricalConsumerCardTable extends Migration
             $table->bigInteger('card_number')->nullable();
             $table->string('client_name')->nullable();
             $table->string('value_card',20)->nullable();
+            $table->string('value_consumed',20)->nullable();
             $table->string('value_add',20)->nullable();
             $table->bigInteger('situation_id')->nullable();
             $table->bigInteger('payment_method_id')->nullable();
@@ -41,6 +42,7 @@ class CreateBravoPosHistoricalConsumerCardTable extends Migration
             $table->bigInteger('card_number')->nullable();
             $table->string('client_name')->nullable();
             $table->string('value_card',20)->nullable();
+            $table->string('value_consumed',20)->nullable();
             $table->string('value_add',20)->nullable();
             $table->bigInteger('situation_id')->nullable();
             $table->bigInteger('payment_method_id')->nullable();

@@ -5,7 +5,7 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <label> {{__("Número do Cartão Consumo")}}</label>
-                    <input type="number" value="{{$row->card_number}}" placeholder="" name="card_number"
+                    <input id="numberCard"  type="number" value="{{$row->card_number}}" placeholder="" name="card_number"
                            class="form-control">
                 </div>
             </div>
@@ -89,7 +89,7 @@
                 <div class="form-group">
                     <label> {{__("Forma de pagamento")}}</label>
                     <div class="input-group">
-                        <select class="form-control" required name="payment_method_id">
+                        <select id="formPayment" class="form-control" required name="payment_method_id">
                             @foreach ($paymentMethodList as $option)
                                 <option value="{{$option->id}}">{{$option->name}}</option>
                             @endforeach
@@ -130,9 +130,9 @@
                     <label class="control-label">{{__("ITENS")}}</label>
                     <div class="g-items-header">
                         <div class="row">
-                            <div class="col-md-7">Produto</div>
-                            <div class="col-md-1">Estoque Atual</div>
-                            <div class="col-md-1">Qtde Venda</div>
+                            <div class="col-md-5">Produto</div>
+                            <div class="col-md-2">Estoque Atual</div>
+                            <div class="col-md-2">Qtde Venda</div>
                             <div class="col-md-2">Valor Item</div>
                             <div class="col-md-1"></div>
                         </div>
@@ -144,7 +144,7 @@
                             @foreach($row->product_composition as $key => $composition)
                                 <div class="item" data-number="{{$key}}">
                                     <div class="row">
-                                        <div class="col-md-7">
+                                        <div class="col-md-5">
                                             <?php
                                             $product = isset($composition['product_id']) ? Modules\Product\Models\Product::find($composition['product_id']) : false;
                                             \App\Helpers\AdminForm::select2("product_composition[" . $key . "][product_id]", [
@@ -159,12 +159,12 @@
                                             ], !empty($product->id) ? [$product->id, $product->getDisplayName()] : false)
                                             ?>
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-2">
                                             <input type="number" min="0" name="product_composition[{{$key}}][quantity]"
                                                    class="form-control"
                                                    value="{{isset($composition['quantity']) ? $composition['quantity'] : ''}}">
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-2">
                                             <input type="number" min="0" name="product_composition[{{$key}}][stock]"
                                                    class="form-control"
                                                    value="{{isset($composition['stock']) ? $composition['stock'] : ''}}">
@@ -301,6 +301,52 @@
             <div class="modal-body">
                 @include('Pos::admin/sale/form-register/index')
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="passwordAuthorization">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <form method="post" class="modal-form" action="https://homolog.recantohoteis.com.br/admin/module/stock/ajax">
+                <input type="hidden" name="_token" value="">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Senha de Autorizacao</h4>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="tab-content">
+                        <div id="booking-detail-93" class="tab-pane active">
+                            <span class="response-message"></span>
+                            <br>
+                            <div class="booking-review">
+                                <div class="booking-review-content">
+                                    <div class="review-section">
+                                        <div class="review-section">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Senha:</label>
+                                                            <input id="password" type="password" name="description" class="form-control" required="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <span type="btn" class="btn btn-primary autorizarValores">Autenticar</span>
+                    <span class="btn btn-secondary" data-dismiss="modal">Fechar</span>
+                </div>
+            </form>
         </div>
     </div>
 </div>

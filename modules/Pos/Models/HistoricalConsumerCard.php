@@ -25,6 +25,7 @@ class HistoricalConsumerCard extends Model
         'card_number',
         'user_id',
         'value_card',
+        'value_consumed',
         'situation_id',
         'payment_method_id',
         'card_transaction_number',

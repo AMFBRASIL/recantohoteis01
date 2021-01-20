@@ -71,4 +71,26 @@ class AuthorizationPassword extends Model
         return $expiration <= Carbon::now() ? false : true;
 
     }
+
+    public static function check($password)
+    {
+        $authorizationPassword = AuthorizationPassword::query()->where('password', $password)
+            ->whereHas('situation', function ($query) {
+                $query->where('name', 'like', '%Autorizada%')
+                    ->whereHas('section', function ($query) {
+                        $query->where('name', 'like', '%Senhas%');
+                    });
+             })
+            ->first();
+
+        if (!empty($authorizationPassword)){
+            if ($authorizationPassword->validExpirationDate()){
+                return true;
+            }
+            $authorizationPassword->situation_id = AuthorizationPassword::getExpirationSituation()->id;
+            $authorizationPassword->save();
+            return false;
+        }
+        return false;
+    }
 }
