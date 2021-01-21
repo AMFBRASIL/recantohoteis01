@@ -160,14 +160,14 @@
                                             ?>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="number" min="0" name="product_composition[{{$key}}][quantity]"
-                                                   class="form-control"
-                                                   value="{{isset($composition['quantity']) ? $composition['quantity'] : ''}}">
+                                            <input type="number" min="0" name="product_composition[{{$key}}][stock]"
+                                                   class="form-control stock_quantity"
+                                                   value="{{isset($composition['stock']) ? $composition['stock'] : ''}}">
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="number" min="0" name="product_composition[{{$key}}][stock]"
-                                                   class="form-control"
-                                                   value="{{isset($composition['stock']) ? $composition['stock'] : ''}}">
+                                            <input type="number" min="0" name="product_composition[{{$key}}][quantity]"
+                                                   class="form-control sale_quantity" disabled
+                                                   value="{{isset($composition['quantity']) ? $composition['quantity'] : ''}}">
                                         </div>
                                         <div class="col-md-2">
                                             <div class="input-group mb-3">
@@ -175,7 +175,7 @@
                                                     <span class="input-group-text" id="basic-addon1">R$</span>
                                                 </div>
                                                 <input type="text" name="product_composition[{{$key}}][price]"
-                                                       class="form-control moeda-real"
+                                                       class="form-control moeda-real price"
                                                        value="{{isset($composition['price']) ? $composition['price'] : ''}}">
                                             </div>
                                         </div>
@@ -190,34 +190,43 @@
                     </div>
 
                     <div class="text-right">
-                        <span class="btn btn-info btn-sm btn-add-item somarItem"><i
+                        <span class="btn btn-info btn-sm btn-add-item"><i
                                 class="icon ion-ios-add-circle-outline"></i> Add item</span>
                     </div>
 
                     <div class="g-more hide">
                         <div class="item" data-number="__number__">
                             <div class="row">
-                                <div class="col-md-7">
-                                    <select class="form-control dungdt-select2-field-lazy"
-                                            data-options="{&quot;ajax&quot;:{&quot;url&quot;:&quot;/admin/module/product/get-select&quot;,&quot;dataType&quot;:&quot;json&quot;},&quot;allowClear&quot;:true,&quot;placeholder&quot;:&quot;-- Selecione o Estoque --&quot;}"
-                                            name="product_composition[__number__][product_id]">
+                                <div class="col-md-5">
+                                    <select
+                                        id="teste"
+                                        class="form-control teste dungdt-select2-field-lazy"
+                                        data-options='{
+                                            "ajax":{
+                                                "url":"/admin/module/product/get-select",
+                                                "dataType":"json"},"allowClear":true,
+                                                "placeholder":"-- Digite para pesquisar --"
+                                            }'
+                                        name="product_composition[__number__][product_id]"
+                                    >
                                     </select>
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
+                                    <input type="number" min="0" __name__="product_composition[__number__][stock]" disabled
+                                           class="form-control stock_quantity" value="">
+                                </div>
+                                <div class="col-md-2">
                                     <input type="number" min="0" __name__="product_composition[__number__][quantity]"
-                                           class="form-control" value="">
+                                           class="form-control sale_quantity" value="">
                                 </div>
-                                <div class="col-md-1">
-                                    <input type="number" min="0" __name__="product_composition[__number__][estoque]"
-                                           class="form-control" value="">
-                                </div>
+
                                 <div class="col-md-2">
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon1">R$</span>
                                         </div>
-                                        <input type="text" name="sale_price" placeholder="99,99"
-                                               class="form-control moeda-real" value="">
+                                        <input type="text" __name__="product_composition[__number__][price]" placeholder="99,99"
+                                               class="form-control moeda-real price" value="">
                                     </div>
                                 </div>
                                 <div class="col-md-1">
@@ -255,7 +264,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">R$</span>
                                 </div>
-                                <input type="text" name="received_value" id="ValorRecebido" placeholder="99,99"
+                                <input type="text" name="received_value" id="valorRecebido" placeholder="99,99"
                                        class="form-control moeda-real" value="">
                             </div>
                         </div>

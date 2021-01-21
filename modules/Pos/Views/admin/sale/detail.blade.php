@@ -10,7 +10,7 @@
                 <div>
                     <h1 class="title-bar">{{$row->id ? __('Edit: ').$row->title : __('Nova Venda')}}</h1>
                 </div>
-                <button type="button" class="btn btn-info btn-sm btn-add-item ListVendas"><i class="fa fa-list"></i>
+                <button type="button" class="btn btn-info btn-sm btn-add-item listVendas"><i class="fa fa-list"></i>
                     LISTAR TODAS VENDAS
                 </button>
             </div>
@@ -129,10 +129,15 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" id="somaInterna" name="somaInterna" value="0,00">
     </form>
 @endsection
 @section ('script.body')
     <script>
+        $(".listVendas").click(function () {
+            window.location = "/admin/module/pos/sale/";
+        });
+
         $('#numberCard').focus();
 
         $("#numberCard").blur(function () {
@@ -194,24 +199,8 @@
             });
         }
 
-        jQuery('#ValorRecebido').on('keyup', function () {
-
-            var GetValorRecebido = jQuery('#ValorRecebido').val().replace(/[.]/g, '').replace(',', '.');
-            var Getdesconto = jQuery('#priceDesconto').val().replace(/[.]/g, '').replace(',', '.');
-
-            var ValorRecebido = parseFloat(GetValorRecebido != '' ? GetValorRecebido : 0);
-            var desconto = parseFloat(Getdesconto != '' ? Getdesconto : 0);
-
-            var Gastos = parseFloat("120.10");
-
-            var SomaTotal = parseFloat(ValorRecebido - Gastos - desconto).toFixed(2);
-
-            jQuery('#priceTroco').val(SomaTotal);
-
-        })
-
         $('#formPayment').on('change', function () {
-            if (this.value == "Dinheiro") {
+            if (this.value == 5) {
                 $('#divCartao').hide();
                 $('#divDinheiroRecebido').show();
                 $('#divTrocoCliente').show();
@@ -226,19 +215,50 @@
 
             if ($(this).is(':checked')) {
                 $('#somaValores').show();
-                jQuery('#somaTotal').html("R$ 0,00 ");
+                $('#somaTotal').html("R$ 0,00 ");
             } else {
                 $('#somaValores').hide();
             }
         });
 
-        $(".ListVendas").click(function () {
-            window.location = "listvendas.php"
+        $(function ($) {
+            $('.dungdt-select2-field').each(function() {
+                $(this).trigger('select.select2');
+            })
+
+            $(document).on('select2:select', '.dungdt-select2-field-lazy, .dungdt-select2-field', function (e) {
+                $(this).parents('.row').find('.stock_quantity').val(e.params.data.available_stock);
+                $(this).parents('.row').find('.sale_quantity').val("1");
+                $(this).parents('.row').find('.price').val(e.params.data.price);
+
+                somarItens(1, e.params.data.price)
+            })
+
+            $(".form-group-item .btn-add-item").click(function () {
+                var p = $(this).closest(".form-group-item").find(".g-items");
+                p.find('.moeda-real').each(function () {
+                    $(this).mask('#.##0,00', {reverse: true});
+                });
+            });
         });
 
-        $(".SomarDesconto").click(function () {
-            alert("Somar Desconto e adicionar ao lado... ");
-        });
+
+        $('#valorRecebido').on('keyup', function () {
+
+            let getValorRecebido = $('#ValorRecebido').val().replace(/[.]/g, '').replace(',', '.');
+            let getdesconto = $('#priceDesconto').val().replace(/[.]/g, '').replace(',', '.');
+
+            let valorRecebido = parseFloat(getValorRecebido != '' ? getValorRecebido : 0);
+            let desconto = parseFloat(getdesconto != '' ? getdesconto : 0);
+
+            let gastos = parseFloat("120.10");
+
+            let somaTotal = parseFloat(valorRecebido - gastos - desconto).toFixed(2);
+
+            $('#priceTroco').val(somaTotal);
+            $('#somaTotal').html(somaTotal);
+
+        })
 
 
         // Aqui pode usar para soma dos itens
@@ -266,26 +286,24 @@
         });
 
         // Aqui pode usar para soma dos itens
-        $(".somarItem").click(function () {
+        function somarItens(valorItem, qtdItem) {
 
-            var ValoresSomados = parseFloat($('#somaInterna').val());
+            let valoresSomados = parseFloat($('#somaInterna').val());
+            let valorTotalDisponivel = parseFloat($('#valorTotal').val());
 
-            if ($('#somaInterna').val() >= $('#valorTotal').val()) {
+            if (valoresSomados >= valorTotalDisponivel) {
                 alert("Seu limite de orçamento esgostou. Favor adicionar mais creditos no cartao.");
+                console.log(valorTotalDisponivel)
                 return false;
             }
 
-            //Pegar isso na hora...
-            let ValorItem = parseFloat("100.50");
-            let QuantidadeItem = 2;
+            let valorCalculadoItem = valoresSomados + (valorItem * parseInt(qtdItem));
 
-            let ValorCalculadoItem = ValoresSomados + (ValorItem * QuantidadeItem);
+            $('#somaInterna').val(valorCalculadoItem.toFixed(2));
 
-            jQuery('#somaInterna').val(ValorCalculadoItem.toFixed(2));
+            $('#somaTotal').html("R$ " + valorCalculadoItem.toFixed(2));
 
-            jQuery('#somaTotal').html("R$ " + ValorCalculadoItem.toFixed(2));
-
-        });
+        };
 
         $(function () {
             $('input[name="datetimes"]').daterangepicker({
@@ -341,11 +359,6 @@
         $(".restante").css({
             "font-size": "43px",
             "color": "red"
-        })
-
-        $(document).on('select2:select', '.dungdt-select2-field-lazy, .dungdt-select2-field', function (e) {
-            $(this).parents('.row').find('.stock_quantity').val(e.params.data.available_stock);
-            $(this).parents('.row').find('.price').val(e.params.data.price);
         })
     </script>
 @endsection
