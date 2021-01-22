@@ -5,14 +5,14 @@
             <div class="col-lg-3">
                 <div class="form-group">
                     <label> {{__("Número do Cartão Consumo")}}</label>
-                    <input id="numberCard"  type="number" value="{{$row->card_number}}" placeholder="" name="card_number"
+                    <input id="numberCard" type="number" value="{{$row->card_number}}" placeholder="" name="card_number"
                            class="form-control">
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="form-group">
                     <label> {{__("Cliente / Hóspede")}}</label>
-                    <div class="input-group">
+                    <div id="cliente_hospede" class="input-group">
                         <?php
                         $user = !empty($row->user_id) ? App\User::find($row->user_id) : false;
                         \App\Helpers\AdminForm::select2('user_id', [
@@ -35,19 +35,6 @@
                     </div>
                 </div>
             </div>
-            {{--<div class="col-lg-3">
-                <div class="form-group">
-                    <label> Apartamento do Hospede </label>
-                    <div class="input-group">
-                        <select data-placeholder=" " name="aptohospede" class="form-control">
-                            <optgroup label="VENDAS">
-                                <option value="101">101</option>
-                            </optgroup>
-                        </select>
-                    </div>
-                </div>
-            </div>--}}
-
         </div>
 
         <div class="row">
@@ -123,7 +110,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label><input type="checkbox" name="enable_produtos" value="1" id="enable_produtos"> Ativar Itens
+                    <label><input disabled type="checkbox" name="enable_produtos" value="1" id="enable_produtos"> Ativar
+                        Itens
                     </label>
                 </div>
                 <div class="form-group-item" data-condition="enable_produtos:is(1)" style="" data-select2-id="9">
@@ -180,8 +168,8 @@
                                             </div>
                                         </div>
                                         <div class="col-md-1">
-                                            <span class="btn btn-danger btn-sm btn-remove-item"><i
-                                                    class="fa fa-trash"></i></span>
+                                            <button class="btn btn-danger btn-sm btn-remove-item"><i
+                                                    class="fa fa-trash"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -212,7 +200,8 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <input type="number" min="0" __name__="product_composition[__number__][stock]" disabled
+                                    <input type="number" min="0" __name__="product_composition[__number__][stock]"
+                                           disabled
                                            class="form-control stock_quantity" value="">
                                 </div>
                                 <div class="col-md-2">
@@ -225,13 +214,14 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon1">R$</span>
                                         </div>
-                                        <input type="text" __name__="product_composition[__number__][price]" placeholder="99,99"
+                                        <input type="text" __name__="product_composition[__number__][price]"
+                                               placeholder="99,99"
                                                class="form-control moeda-real price" value="">
                                     </div>
                                 </div>
                                 <div class="col-md-1">
-                                    <span class="btn btn-danger btn-sm btn-remove-item "><i
-                                            class="fa fa-trash"></i></span>
+                                    <button class="btn btn-danger btn-sm btn-remove-item "><i
+                                            class="fa fa-trash"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -296,66 +286,25 @@
     </div>
 </div>
 
-<div class="modal fade login" id="register" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content relative">
-            <div class="modal-header">
-                <h4 class="modal-title">{{__('Cadastre-ser')}}</h4>
-                <span class="c-pointer" data-dismiss="modal" aria-label="Close">
-                    <i class="input-icon field-icon fa">
-                        <img src="{{url('images/ico_close.svg')}}" alt="close">
-                    </i>
-                </span>
-            </div>
-            <div class="modal-body">
-                @include('Pos::admin/sale/form-register/index')
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade" id="passwordAuthorization">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <form method="post" class="modal-form" action="https://homolog.recantohoteis.com.br/admin/module/stock/ajax">
-                <input type="hidden" name="_token" value="">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Senha de Autorizacao</h4>
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Senha de Autorizacao</h4>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Senha:</label>
+                    <input id="password" type="password" name="description" class="form-control">
                 </div>
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <div class="tab-content">
-                        <div id="booking-detail-93" class="tab-pane active">
-                            <span class="response-message"></span>
-                            <br>
-                            <div class="booking-review">
-                                <div class="booking-review-content">
-                                    <div class="review-section">
-                                        <div class="review-section">
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="form-group">
-                                                            <label class="control-label">Senha:</label>
-                                                            <input id="password" type="password" name="description" class="form-control" required="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <span type="btn" class="btn btn-primary autorizarValores">Autenticar</span>
-                    <span class="btn btn-secondary" data-dismiss="modal">Fechar</span>
-                </div>
-            </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <span type="btn" class="btn btn-primary autorizarValores">Autenticar</span>
+                <span class="btn btn-secondary" data-dismiss="modal">Fechar</span>
+            </div>
         </div>
     </div>
 </div>

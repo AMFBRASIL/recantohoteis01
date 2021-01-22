@@ -2,7 +2,7 @@
 @section('title','Pos')
 @section('content')
     <form
-        action="{{route('supplier.admin.store',['id'=>($row->id) ? $row->id : '-1','lang'=>request()->query('lang')])}}"
+        action="{{route('pos.admin.sale.store',['id'=>($row->id) ? $row->id : '-1','lang'=>request()->query('lang')])}}"
         method="post">
         @csrf
         <div class="container-fluid">
@@ -35,7 +35,7 @@
                                         </label></div>
                                 @endif
                                 <div class="text-right">
-                                    <button class="btn btn-primary" type="submit"><i
+                                    <button id="save" class="btn btn-primary" type="submit"><i
                                             class="fa fa-save"></i> {{__('Save Changes')}}</button>
                                 </div>
                             </div>
@@ -83,13 +83,13 @@
                                 <div class="col-md-12">
                                     <h6 class="account">{{__("Valor Total Consumido")}}</h6>
                                     <span class="mt-5 restante"> <i class="fa fa-minus"></i>
-                                        <div id="valorRestante">R$ 0,00 </div>
+                                        <div>R$ <span id="valorRestante">0,00</span></div>
                                     </span>
                                 </div>
                                 <div class="col-md-12">
                                     <h6 class="account">{{__("Valor Total Disponível")}}</h6>
                                     <span class="mt-5 balance"> <i class="fa fa-plus"></i>
-                                         <div id="valorTotal">R$ 0,00 </div>
+                                         <div>R$<span id="valorTotal">0,00</span></div>
                                     </span>
                                 </div>
                             </div>
@@ -131,9 +131,29 @@
         </div>
         <input type="hidden" id="somaInterna" name="somaInterna" value="0,00">
     </form>
+    <div class="modal fade login" id="register" tabindex="-1" role="dialog" aria-hidden="true" style="display: none">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content relative">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{__('Cadastre-ser')}}</h4>
+                    <span class="c-pointer" data-dismiss="modal" aria-label="Close">
+                    <i class="input-icon field-icon fa">
+                        <img src="{{url('images/ico_close.svg')}}" alt="close">
+                    </i>
+                </span>
+                </div>
+                <div class="modal-body">
+                    @include('Pos::admin/sale/form-register/index')
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section ('script.body')
     <script>
+        var valor_total_disponivel = 0.0;
+        var valor_total_consumido = 0.0;
+
         $(".listVendas").click(function () {
             window.location = "/admin/module/pos/sale/";
         });
@@ -179,16 +199,25 @@
                 data: data,
                 success: function (data) {
                     $('#passwordAuthorization').modal('toggle');
-
+                    $('#enable_produtos').removeAttr("disabled");
                     if (data.success) {
                         console.log(data);
-                        $('#valorTotal').html('R$ ' + data.cardData.card.value_card);
+
+                        let select = $('#cliente_hospede').find('.dungdt-select2-field');
+                        let name = data.cardData.user.first_name + ' ' + data.cardData.user.last_name
+
+                        select.append(
+                            new Option(name, data.cardData.user.id, null, true));
+
+
+                        $('#valorTotal').html(data.cardData.card.value_card);
+                        valor_total_disponivel = parseFloat(data.cardData.card.value_card);
 
                         if (data.cardData.card.value_consumed == null) {
-
-                            $('#valorRestante').html('R$ 00.0');
+                            $('#valorRestante').html('00.0');
                         } else {
-                            $('#valorRestante').html('R$ ' + data.cardData.card.value_consumed);
+                            $('#valorRestante').html(data.cardData.card.value_consumed);
+                            valor_total_consumido = parseFloat(data.cardData.card.value_consumed);
                         }
 
                         $('#contentValores').show();
@@ -212,7 +241,6 @@
         });
 
         $('#enable_produtos').change(function () {
-
             if ($(this).is(':checked')) {
                 $('#somaValores').show();
                 $('#somaTotal').html("R$ 0,00 ");
@@ -222,129 +250,224 @@
         });
 
         $(function ($) {
-            $('.dungdt-select2-field').each(function() {
+            $('.dungdt-select2-field').each(function () {
                 $(this).trigger('select.select2');
             })
 
-            $(document).on('select2:select', '.dungdt-select2-field-lazy, .dungdt-select2-field', function (e) {
+            $(document).on('select2:select', '.dungdt-select2-field-lazy', function (e) {
                 $(this).parents('.row').find('.stock_quantity').val(e.params.data.available_stock);
                 $(this).parents('.row').find('.sale_quantity').val("1");
+                $(this).parents('.row').find('.sale_quantity').attr({
+                    "max": e.params.data.available_stock,
+                });
                 $(this).parents('.row').find('.price').val(e.params.data.price);
 
-                somarItens(1, e.params.data.price)
-            })
+                let index = $(this).closest('.item').attr('data-number');
 
-            $(".form-group-item .btn-add-item").click(function () {
-                var p = $(this).closest(".form-group-item").find(".g-items");
-                p.find('.moeda-real').each(function () {
+                sessionStorage.setItem('qtd-' + index, 1);
+                sessionStorage.setItem('price-' + index, e.params.data.price);
+                somarItens(index, e.params.data.price, 1)
+
+                $(".btn-remove-item").click(function () {
+                    let index = $(this).closest('.item').attr('data-number');
+                    let qtd_quantity = parseInt($(this).closest('.row').find('.sale_quantity').val());
+                    let price = parseFloat($(this).closest('.row').find('.price').val());
+
+                    removeItens(price, qtd_quantity);
+                    sessionStorage.removeItem('qtd-' + index);
+                    sessionStorage.removeItem('price-' + index);
+                });
+
+                $(".sale_quantity").blur(function () {
+                    let index = $(this).closest('.item').attr('data-number');
+                    let qtd_stock = parseInt($(this).closest('.row').find('.stock_quantity').val());
+                    let qtd_quantity = parseInt($(this).closest('.row').find('.sale_quantity').val());
+                    let price = parseFloat($(this).closest('.row').find('.price').val());
+
+                    if (qtd_quantity > qtd_stock) {
+                        qtd_quantity = qtd_stock;
+                        $(this).closest('.row').find('.sale_quantity').val(qtd_quantity);
+                    }
+
+                    if (qtd_quantity < 1) {
+                        qtd_quantity = 1;
+                        $(this).closest('.row').find('.sale_quantity').val(qtd_quantity);
+                    }
+
+                    let old_qtd = sessionStorage.getItem('qtd-' + index);
+                    console.log(old_qtd);
+                    removeItens(price, old_qtd);
+                    somarItens(index, price, qtd_quantity);
+                    sessionStorage.setItem('qtd-' + index, qtd_quantity);
+                    sessionStorage.setItem('price-' + index, price);
+                });
+
+                $(".price").blur(function () {
+                    let index = $(this).closest('.item').attr('data-number');
+                    let qtd_quantity = parseInt($(this).closest('.row').find('.sale_quantity').val());
+                    let price = parseFloat($(this).closest('.row').find('.price').val());
+
+                    let old_price = sessionStorage.getItem('price-' + index);
+                    removeItens(old_price, qtd_quantity);
+                    somarItens(index, price, qtd_quantity);
+                    sessionStorage.setItem('qtd-' + index, qtd_quantity);
+                    sessionStorage.setItem('price-' + index, price);
+                });
+
+                $('#priceDesconto').blur(function () {
+                    let desconto = parseFloat($(this).val());
+                    let antigo_desconto = sessionStorage.getItem('desconto');
+                    let valoresSomados = parseFloat($('#somaInterna').val());
+                    let valorTotalDisponivel = parseFloat($('#valorTotal').text());
+                    let valorTotalConsumido = parseFloat($('#valorRestante').text());
+
+
+                    if (desconto < 0) {
+                        desconto = 0;
+                        $(this).val(desconto);
+                    } else {
+                        if (antigo_desconto == null) {
+                            sessionStorage.setItem('desconto', desconto);
+                        } else {
+                            antigo_desconto = parseFloat(sessionStorage.getItem('desconto'));
+
+                            valoresSomados += antigo_desconto;
+                            valorTotalDisponivel -= antigo_desconto;
+                            valorTotalConsumido += antigo_desconto;
+                        }
+
+                        console.log(desconto > valoresSomados);
+
+                        if (desconto > valoresSomados) {
+                            desconto = 0;
+                            $(this).val(desconto);
+                        }
+
+                        valoresSomados -= desconto;
+                        valorTotalDisponivel += desconto;
+                        valorTotalConsumido -= desconto;
+                        sessionStorage.setItem('desconto', desconto);
+
+                        //Input interno somatotal
+                        $('#somaInterna').val(valoresSomados.toFixed(2));
+
+                        //Valor Total com Desconto
+                        $('#somaTotal').html("R$ " + valoresSomados.toFixed(2));
+
+                        //Valor total Disponivel
+                        $('#valorTotal').html(valorTotalDisponivel.toFixed(2));
+
+                        //valor total consumido
+                        $('#valorRestante').html(valorTotalConsumido.toFixed(2));
+                    }
+                })
+
+                $('#valorRecebido').blur(function () {
+
+                    let valorRecebido = parseFloat($('#valorRecebido').val());
+                    let valoresSomados = parseFloat($('#somaInterna').val());
+
+                    let somaTotal = valoresSomados - valorRecebido;
+
+                    console.log({
+                        valorRecebido : valorRecebido,
+                        valoresSomados : valoresSomados,
+                        somaTotal : somaTotal < 0 ? (somaTotal*(-1)) : somaTotal,
+                    })
+
+                    $('#priceTroco').val(somaTotal < 0 ? (somaTotal*(-1)) : somaTotal.toFixed(2));
+                })
+
+                $('.moeda-real').each(function () {
                     $(this).mask('#.##0,00', {reverse: true});
                 });
             });
         });
 
-
-        $('#valorRecebido').on('keyup', function () {
-
-            let getValorRecebido = $('#ValorRecebido').val().replace(/[.]/g, '').replace(',', '.');
-            let getdesconto = $('#priceDesconto').val().replace(/[.]/g, '').replace(',', '.');
-
-            let valorRecebido = parseFloat(getValorRecebido != '' ? getValorRecebido : 0);
-            let desconto = parseFloat(getdesconto != '' ? getdesconto : 0);
-
-            let gastos = parseFloat("120.10");
-
-            let somaTotal = parseFloat(valorRecebido - gastos - desconto).toFixed(2);
-
-            $('#priceTroco').val(somaTotal);
-            $('#somaTotal').html(somaTotal);
-
-        })
-
-
-        // Aqui pode usar para soma dos itens
-        $(".btn-remove-item").click(function () {
-
-            alert("dede");
-
-            var ValoresSomados = parseFloat(jQuery('#somaInterna').val());
-
-            if (jQuery('#somaInterna').val() >= 508) {
-                alert("Seu limite de orçamento esgostou. Favor adicionar mais creditos no cartao.");
-                return false;
-            }
-
-            //Pegar isso na hora...
-            var ValorItem = parseFloat("100.50");
-            var QuantidadeItem = 2;
-
-            var ValorCalculadoItem = ValoresSomados - (ValorItem * QuantidadeItem);
-
-            jQuery('#somaInterna').val(ValorCalculadoItem.toFixed(2));
-
-            jQuery('#somaTotal').html("R$ " + ValorCalculadoItem.toFixed(2));
-
-        });
-
-        // Aqui pode usar para soma dos itens
-        function somarItens(valorItem, qtdItem) {
-
+        function somarItens(index, valorItem, qtdItem) {
+            valorItem = parseFloat(valorItem);
+            qtdItem = parseInt(qtdItem);
             let valoresSomados = parseFloat($('#somaInterna').val());
-            let valorTotalDisponivel = parseFloat($('#valorTotal').val());
+            let valorTotalDisponivel = parseFloat($('#valorTotal').text());
+            let valorTotalConsumido = parseFloat($('#valorRestante').text());
+
+            let valorCalculadoItem = valorItem * qtdItem;
+            valoresSomados += valorCalculadoItem;
 
             if (valoresSomados >= valorTotalDisponivel) {
                 alert("Seu limite de orçamento esgostou. Favor adicionar mais creditos no cartao.");
-                console.log(valorTotalDisponivel)
+                removeInvalidItem(index);
                 return false;
             }
 
-            let valorCalculadoItem = valoresSomados + (valorItem * parseInt(qtdItem));
+            valorTotalConsumido += valorCalculadoItem;
+            valorTotalDisponivel -= valorCalculadoItem;
 
-            $('#somaInterna').val(valorCalculadoItem.toFixed(2));
+            //Input interno somatotal
+            $('#somaInterna').val(valoresSomados.toFixed(2));
 
-            $('#somaTotal').html("R$ " + valorCalculadoItem.toFixed(2));
+            //Valor Total com Desconto
+            $('#somaTotal').html("R$ " + valoresSomados.toFixed(2));
 
-        };
+            //Valor total Disponivel
+            $('#valorTotal').html(valorTotalDisponivel.toFixed(2));
 
-        $(function () {
-            $('input[name="datetimes"]').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true,
-                timePicker: true,
-                minYear: 2020,
-                locale: {
-                    format: 'DD/MM/YYYY hh:mm A'
-                },
-                maxYear: parseInt(moment().format('YYYY'), 10)
-            }, function (start, end, label) {
-                var years = moment().diff(start, 'years');
-            });
+            //valor total consumido
+            $('#valorRestante').html(valorTotalConsumido.toFixed(2));
+
+            console.log({
+                Itens: 'soma',
+                valorItem: valorItem,
+                qtdItem: qtdItem,
+                valorCalculadoItem: valorCalculadoItem,
+                valoresSomados: valoresSomados,
+                valorTotalConsumido: valorTotalConsumido,
+                valorTotalDisponivel: valorTotalDisponivel
+            })
+        }
+
+        function removeItens(valorItem, qtdItem) {
+            valorItem = parseFloat(valorItem);
+            qtdItem = parseInt(qtdItem);
+            let valoresSomados = parseFloat($('#somaInterna').val());
+            let valorTotalDisponivel = parseFloat($('#valorTotal').text());
+            let valorTotalConsumido = parseFloat($('#valorRestante').text());
+            let valorCalculadoItem = valorItem * qtdItem;
+
+            valoresSomados -= valorCalculadoItem;
+            valorTotalConsumido -= valorCalculadoItem;
+            valorTotalDisponivel += valorCalculadoItem;
+
+            //Input interno somatotal
+            $('#somaInterna').val(valoresSomados.toFixed(2));
+
+            //Valor Total com Desconto
+            $('#somaTotal').html("R$ " + valoresSomados.toFixed(2));
+
+            //Valor total Disponivel
+            $('#valorTotal').html(valorTotalDisponivel.toFixed(2));
+
+            //valor total consumido
+            $('#valorRestante').html(valorTotalConsumido.toFixed(2));
+
+            console.log({
+                Itens: 'subtracao',
+                valorItem: valorItem,
+                qtdItem: qtdItem,
+                valorCalculadoItem: valorCalculadoItem,
+                valoresSomados: valoresSomados,
+                valorTotalConsumido: valorTotalConsumido,
+                valorTotalDisponivel: valorTotalDisponivel
+            })
+        }
+
+        function removeInvalidItem(index) {
+            $('.item')[index].remove();
+        }
+
+        $('#save').click(() => {
+            sessionStorage.clear();
         });
-
-        jQuery(function ($) {
-            $(".modal").on("show.bs.modal", function (e) {
-                $(".response-message").attr("class", "response-message").text("");
-                $(this).find(":input").val("");
-            });
-            $(".modalSubmit").click(function (e) {
-                $.ajax({
-                    url: $(this).parents(".modal-form").attr("action"),
-                    method: "post",
-                    data: $(this).parents(".modal-form").serialize(),
-                    beforeSend: function () {
-                        $(".response-message").attr("class", "response-message alert-info").text("Enviando...");
-                    },
-                    success: function (result, e) {
-                        var classMessage = "success";
-                        $(".response-message")
-                            .attr("class", "response-message alert-" + classMessage)
-                            .text(result.message);
-                    },
-                });
-            });
-
-            $('.moeda-real').mask('#.##0,00', {reverse: true});
-        });
-
 
         $(".account").css({
             "font-size": "16px",
