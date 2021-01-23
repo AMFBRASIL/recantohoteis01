@@ -23,10 +23,10 @@ class CreateBravoPosSalesTable extends Migration
             $table->bigInteger('situation_id')->nullable();
             $table->bigInteger('payment_method_id')->nullable();
             $table->string('card_transaction_number')->nullable();
-            $table->string('discounts_value',20)->nullable();
-            $table->string('total_value',20)->nullable();
-            $table->string('received_value',20)->nullable();
-            $table->string('returned_value',20)->nullable();
+            $table->decimal('discounts_value', 12, 2)->nullable();
+            $table->decimal('received_value', 12, 2)->nullable();
+            $table->decimal('returned_value', 12, 2)->nullable();
+            $table->decimal('total_value', 12, 2)->nullable();
             $table->text('internal_observations')->nullable();
 
             //Product
@@ -54,10 +54,10 @@ class CreateBravoPosSalesTable extends Migration
             $table->bigInteger('situation_id')->nullable();
             $table->bigInteger('payment_method_id')->nullable();
             $table->string('card_transaction_number')->nullable();
-            $table->string('discounts_value',20)->nullable();
-            $table->string('received_value',20)->nullable();
-            $table->string('returned_value',20)->nullable();
-            $table->string('total_value',20)->nullable();
+            $table->decimal('discounts_value', 12, 2)->nullable();
+            $table->decimal('received_value', 12, 2)->nullable();
+            $table->decimal('returned_value', 12, 2)->nullable();
+            $table->decimal('total_value', 12, 2)->nullable();
             $table->text('internal_observations')->nullable();
             $table->string('locale')->index();
             $table->integer('origin_id')->unsigned();

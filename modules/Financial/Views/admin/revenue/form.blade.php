@@ -63,7 +63,7 @@
             <div class="col-6">
                 <div class="form-group">
                     <label>{{ __('Data da Emissao:')}}</label>
-                    <input type="date" value="{{$row->issue_date}}" disabled="" name="issue_date" class="form-control">
+                    <input type="text" value="{{$row->issue_date->format('d/m/y h:m:s')}}" disabled name="issue_date" class="form-control">
                 </div>
             </div>
             <div class="col-6">

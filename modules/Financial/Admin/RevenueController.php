@@ -111,7 +111,7 @@ class RevenueController extends AdminController
             $row = new Revenue();
             $row->status = "publish";
         }
-
+        $row->issue_date = new Carbon();
         $row->fill($request->input());
 
         $res = $row->saveOriginOrTranslation($request->input('lang'));

@@ -170,7 +170,7 @@
                     <div class="modal-content">
                         <!-- Modal Header -->
                         <div class="modal-header">
-                            <h4 class="modal-title">Detalhes do Cliente Principal da Reserva: #119</h4>
+                            <h4 class="modal-title">Detalhes do Cliente Principal da Reserva</h4>
                         </div>
                         <!-- Modal body -->
                         <div class="modal-body">
@@ -193,47 +193,69 @@
                                                     <ul>
                                                         <li class="info-first-name">
                                                             <div class="label">Primeiro nome</div>
-                                                            <div class="val">UNIFIC</div>
+                                                            @if ($row->user)
+                                                                <div class="val">{{$row->user->first_name}}</div>
+                                                            @endif
                                                         </li>
                                                         <li class="info-last-name">
                                                             <div class="label">Sobrenome</div>
-                                                            <div class="val">UNIFICA</div>
+                                                            @if ($row->user)
+                                                                <div class="val">{{$row->user->last_name}}</div>
+                                                            @endif
                                                         </li>
                                                         <li class="info-email">
                                                             <div class="label">Email</div>
-                                                            <div class="val">atende@unificabrasil.com.br</div>
+                                                            @if ($row->user)
+                                                                <div class="val">{{$row->user->email}}</div>
+                                                            @endif
                                                         </li>
                                                         <li class="info-phone">
                                                             <div class="label">Telefone</div>
-                                                            <div class="val">2292929</div>
+                                                            @if ($row->user)
+                                                                <div class="val">{{$row->user->phone}}</div>
+                                                            @endif
                                                         </li>
                                                         <li class="info-address">
                                                             <div class="label">Endereço</div>
-                                                            <div class="val">END</div>
+                                                            @if ($row->user)
+                                                                <div class="val">{{$row->user->address}}</div>
+                                                            @endif
                                                         </li>
                                                         <li class="info-address2">
                                                             <div class="label">Address line 2</div>
-                                                            <div class="val">eeeu</div>
+                                                            @if ($row->user)
+                                                                <div class="val">{{$row->user->address2}}</div>
+                                                            @endif
                                                         </li>
                                                         <li class="info-city">
                                                             <div class="label">Cidade</div>
-                                                            <div class="val">SAO PAULO</div>
+                                                            @if ($row->user)
+                                                                <div class="val">{{$row->user->city}}</div>
+                                                            @endif
                                                         </li>
                                                         <li class="info-state">
                                                             <div class="label">Estado / Província / Região</div>
-                                                            <div class="val">SP</div>
+                                                            @if ($row->user)
+                                                                <div class="val">{{$row->user->state}}</div>
+                                                            @endif
                                                         </li>
                                                         <li class="info-zip-code">
                                                             <div class="label">Cep / Código postal</div>
-                                                            <div class="val">04571000</div>
+                                                            @if ($row->user)
+                                                                <div class="val">{{$row->user->zip_code}}</div>
+                                                            @endif
                                                         </li>
                                                         <li class="info-country">
                                                             <div class="label">País</div>
-                                                            <div class="val">Brazil</div>
+                                                            @if ($row->user)
+                                                                <div class="val">{{$row->user->country}}</div>
+                                                            @endif
                                                         </li>
                                                         <li class="info-notes">
                                                             <div class="label">Solicitações extra da reserva</div>
-                                                            <div class="val">testeee</div>
+                                                            @if ($row->user)
+                                                                <div class="val"></div>
+                                                            @endif
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -261,7 +283,7 @@
 
                 <!-- Modal Title-->
                 <div class="modal-header">
-                    <h4 class="modal-title">Detalhes do Uso do Cartao #234</h4>
+                    <h4 class="modal-title">Detalhes do Uso do Cartao {{$row->card_number}}</h4>
                 </div>
 
                 <!-- Modal body-->
@@ -352,29 +374,40 @@
                                 <div class="col-md-8 border-right">
                                     <div class="p-1 bg-white">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <h6 class="heading1"> Detalhes do Uso do Cartao #234 </h6>
-                                            <div class="d-flex flex-row align-items-center text-muted"><span
-                                                    class=" days mr-2"> Ultimo Consumo </span> <i
-                                                    class="fa fa-angle-down"></i></div>
+                                            <h6 class="heading1"> Detalhes do Uso do Cartao {{$row->card_number}} </h6>
                                         </div>
                                         <div class="table-responsive">
                                             <table class="table table-borderless">
                                                 <tbody>
                                                 <tr>
                                                     <td>
-                                                        Situação: <strong> EM USO</strong><br>
+                                                        Situação:
+                                                        @if ($row->situation)
+                                                            <strong> {{$row->consumerCard()->situation->name}}</strong>
+                                                            <br>
+                                                        @endif
                                                         Type Card: <strong> DAY USE </strong><br>
                                                     </td>
-
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        ANDERSON MAUTONE FERREIRA<br>
-                                                        Company: Empresa do Anderson<br>
-                                                        AV ENG. LUIS ANTONIO , 19999 - 44B<br>
-                                                        SAO PAULO - SP - CEP: 04571999<br>
-                                                        Phone : 11984401188<br>
-                                                        E-mail : informacao@recantohoteis.com.br
+                                                        @if ($row->user)
+                                                            {{$row->user->getNameAttribute()}}<br>
+                                                        @endif
+                                                        @if(!empty($row->user->business_name))
+                                                            {{'Company: ' . $row->user->business_name}}<br>
+                                                        @endif
+                                                        @if(!empty($row->address))
+                                                            {{$row->address .', '. $row->address2}}<br>
+                                                        @endif
+                                                        @if(!empty($row->city) && !empty($row->state) && !empty($row->zip_code))
+                                                            {{$row->city . ' - '. $row->state .' - CEP: '. $row->user->zip_code}}
+                                                            <br>
+                                                        @endif
+                                                        @if ($row->user)
+                                                            {{'Phone : '. $row->user->phone}}<br>
+                                                            {{'E-mail : ' . $row->user->email}}
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -383,19 +416,22 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="p-3 bg-white">
-                                        <h6 class="account">Valor Total Consumido</h6> <span class="mt-5 restante"> <i
-                                                class="fa fa-minus"></i> R$ 93,29 </span>
-                                    </div>
-
-                                    <div class="p-2 py-2 bg-white">
-
-                                        <div class="p-2 bg-white">
-                                            <h6 class="account">Valor Total Disponível</h6> <span class="mt-5 balance"> <i
-                                                    class="fa fa-plus"></i> R$ 508.55 </span>
+                                    @if($row->consumerCard())
+                                        <div class="p-3 bg-white">
+                                            <h6 class="account">Valor Total Consumido</h6> <span class="mt-5 restante"> <i
+                                                    class="fa fa-minus"></i> R$ {{$row->consumerCard()->value_consumed}} </span>
                                         </div>
 
-                                    </div>
+                                        <div class="p-2 py-2 bg-white">
+
+                                            <div class="p-2 bg-white">
+                                                <h6 class="account">Valor Total Disponível</h6> <span
+                                                    class="mt-5 balance"> <i
+                                                        class="fa fa-plus"></i> R$ {{$row->consumerCard()->value_card}} </span>
+                                            </div>
+
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -416,7 +452,7 @@
 
                 <!-- Modal Title-->
                 <div class="modal-header">
-                    <h4 class="modal-title">Detalhes dos Itens da Venda #858</h4>
+                    <h4 class="modal-title">Detalhes dos Itens da Venda {{$row->id}}</h4>
                 </div>
 
                 <!-- Modal body-->
@@ -509,7 +545,6 @@
                         }
 
                     </style>
-
                     <!-- Modal body -->
                     <div class="modal-body">
                         <div class="container mt-5 mb-5">
@@ -517,7 +552,7 @@
                                 <div class="col-md-8 border-right">
                                     <div class="p-1 bg-white">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <h6 class="heading1">Itens Consumido da Venda (XXXX) </h6>
+                                            <h6 class="heading1">Itens Consumido da Venda ({{$row->id}}) </h6>
                                             <div class="d-flex flex-row align-items-center text-muted"><span
                                                     class=" days mr-2">Ultimos 10 itens</span> <i
                                                     class="fa fa-angle-down"></i></div>
@@ -535,86 +570,17 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr>
-                                                    <td><i class="fa fa-check-circle fa-2x"></i></td>
-                                                    <td>COCA COLA LATA 350ML</td>
-                                                    <td>R$ 19,90</td>
-                                                    <td>2</td>
-                                                    <td>11/12/2020 13:32:11</td>
-                                                    <td><i class="fa fa-ellipsis-v"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><i class="fa fa-check-circle fa-2x"></i></td>
-                                                    <td>VINHO TINTO SECO TANGARA SAFRA 10984</td>
-                                                    <td>R$ 19,90</td>
-                                                    <td>2</td>
-                                                    <td>11/12/2020 13:32:11</td>
-                                                    <td><i class="fa fa-ellipsis-v"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><i class="fa fa-check-circle fa-2x"></i></td>
-                                                    <td>COCA COLA LATA 350ML</td>
-                                                    <td>R$ 19,90</td>
-                                                    <td>2</td>
-                                                    <td>11/12/2020 13:32:11</td>
-                                                    <td><i class="fa fa-ellipsis-v"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><i class="fa fa-check-circle fa-2x"></i></td>
-                                                    <td>VINHO TINTO SECO TANGARA SAFRA 10984</td>
-                                                    <td>R$ 19,90</td>
-                                                    <td>2</td>
-                                                    <td>11/12/2020 13:32:11</td>
-                                                    <td><i class="fa fa-ellipsis-v"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><i class="fa fa-check-circle fa-2x"></i></td>
-                                                    <td>COCA COLA LATA 350ML</td>
-                                                    <td>R$ 19,90</td>
-                                                    <td>2</td>
-                                                    <td>11/12/2020 13:32:11</td>
-                                                    <td><i class="fa fa-ellipsis-v"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><i class="fa fa-check-circle fa-2x"></i></td>
-                                                    <td>VINHO TINTO SECO TANGARA SAFRA 10984</td>
-                                                    <td>R$ 19,90</td>
-                                                    <td>2</td>
-                                                    <td>11/12/2020 13:32:11</td>
-                                                    <td><i class="fa fa-ellipsis-v"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><i class="fa fa-check-circle fa-2x"></i></td>
-                                                    <td>COCA COLA LATA 350ML</td>
-                                                    <td>R$ 19,90</td>
-                                                    <td>2</td>
-                                                    <td>11/12/2020 13:32:11</td>
-                                                    <td><i class="fa fa-ellipsis-v"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><i class="fa fa-check-circle fa-2x"></i></td>
-                                                    <td>VINHO TINTO SECO TANGARA SAFRA 10984</td>
-                                                    <td>R$ 19,90</td>
-                                                    <td>2</td>
-                                                    <td>11/12/2020 13:32:11</td>
-                                                    <td><i class="fa fa-ellipsis-v"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><i class="fa fa-check-circle fa-2x"></i></td>
-                                                    <td>COCA COLA LATA 350ML</td>
-                                                    <td>R$ 19,90</td>
-                                                    <td>2</td>
-                                                    <td>11/12/2020 13:32:11</td>
-                                                    <td><i class="fa fa-ellipsis-v"></i></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><i class="fa fa-check-circle fa-2x"></i></td>
-                                                    <td>VINHO TINTO SECO TANGARA SAFRA 10984</td>
-                                                    <td>R$ 19,90</td>
-                                                    <td>2</td>
-                                                    <td>11/12/2020 13:32:11</td>
-                                                    <td><i class="fa fa-ellipsis-v"></i></td>
-                                                </tr>
+                                                @if(isset($row->product_composition))
+                                                    @foreach($row->product_composition as $item)
+                                                        <tr>
+                                                            <td><i class="fa fa-check-circle fa-2x"></i></td>
+                                                            <td>{{$row->productName($item['product_id']) }}</td>
+                                                            <td>R$ {{$item['price']}}</td>
+                                                            <td>{{$item['quantity']}}</td>
+                                                            <td>{{$row->created_at->format('d/m/y h:m:s')}}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
                                                 </tbody>
                                             </table>
                                         </div>
@@ -624,29 +590,31 @@
                                 </div>
 
                                 <div class="col-md-4">
-
                                     <div class="p-3 bg-white">
                                         <h6 class="account">Valor Total sem Desconto</h6> <span class="mt-5 restante01"> <i
-                                                class="fa fa-minus"></i> R$ 93,29 </span>
+                                                class="fa fa-plus"></i> R$ {{$row->total_value+$row->discounts_value}} </span>
                                     </div>
 
                                     <div class="p-2 py-2 bg-white">
                                         <div class="p-2 bg-white">
                                             <h6 class="account">Desconto Aplicado</h6> <span class="mt-5 desconto"> <i
-                                                    class="fa fa-plus"></i> R$ 10,00 </span>
+                                                    class="fa fa-minus"></i> R$ {{$row->discounts_value}} </span>
                                         </div>
                                     </div>
 
                                     <div class="p-3 bg-white">
                                         <h6 class="account">Valor Total com Desconto</h6> <span
-                                            class="mt-5 restante"> <i class="fa fa-minus"></i> R$ 83,29 </span>
+                                            class="mt-5 balance"> <i
+                                                class="fa fa-plus"></i> R$ {{$row->total_value}} </span>
                                     </div>
 
 
                                     <div class="p-2 py-2 bg-white">
                                         <div class="p-2 bg-white">
                                             <h6 class="account">Valor Restante Cartão</h6> <span
-                                                class="mt-5 balance"> <i class="fa fa-plus"></i> R$ 508,55 </span>
+                                                @if($row->consumerCard())
+                                                class="mt-5 restante"> <i class="fa fa-plus"></i> R$ {{$row->consumerCard()->value_card}}  </span>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

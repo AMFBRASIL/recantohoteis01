@@ -81,7 +81,7 @@
                                             </td>
                                             <td class="title">
                                                 <a href="#" class="review-count-approved" data-toggle="modal"
-                                                   data-target="#observacao">
+                                                   data-target="#observacao" data-value="{{$row->internal_observations}}">
                                                     Ver mais
                                                 </a>
                                             </td>
@@ -100,11 +100,11 @@
                                                             Edit Senha
                                                         </a>
                                                         <a class="dropdown-item" data-toggle="modal"
-                                                           data-target="#expirationPassword">
+                                                           data-target="#expirationPassword" data-value="{{$row->id}}">
                                                             Expirar Senha
                                                         </a>
                                                         <a class="dropdown-item"  data-toggle="modal"
-                                                           data-target="#RenovationPassword">
+                                                           data-target="#RenovationPassword" data-value="{{$row->id}}">
                                                             Renovar + 10 dias
                                                         </a>
                                                     </div>
@@ -137,8 +137,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="col-md-12">
-                        <div class="row">
-                            {!! $row->internal_observations  !!}
+                        <div class="row" id="internal_observations">
                         </div>
                     </div>
                 </div>
@@ -164,8 +163,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <form action="{{route('pos.admin.authorization.password.renovation',['id'=>$row->id])}}" method="post">
+                    <form action="{{route('pos.admin.authorization.password.renovation')}}" method="post">
                         @csrf
+                        <input type="hidden" id="renovation_id" name="id" value="">
                         <button type="submit" class="btn btn-primary">{{__("CONFIRMAR")}}</button>
                     </form>
 
@@ -190,8 +190,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <form action="{{route('pos.admin.authorization.password.expiration',['id'=>$row->id])}}" method="post">
+                    <form action="{{route('pos.admin.authorization.password.expiration')}}" method="post">
                         @csrf
+                        <input type="hidden" id="expiration_id" name="id" value="">
                         <button type="submit" class="btn btn-primary">{{__("CONFIRMAR")}}</button>
                     </form>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__("FECHAR")}}</button>
@@ -201,3 +202,23 @@
     </div>
 @endsection
 
+@section ('script.body')
+    <script>
+        $(function ($) {
+            $("#observacao").on("show.bs.modal", function(e) {
+                let observacao = e.relatedTarget.getAttribute('data-value');
+                $('#internal_observations').html(observacao);
+            });
+
+            $("#expirationPassword").on("show.bs.modal", function(e) {
+                let expiration_id = e.relatedTarget.getAttribute('data-value');
+                $('#expiration_id').val(expiration_id);
+            });
+
+            $("#RenovationPassword").on("show.bs.modal", function(e) {
+                let renovation_id = e.relatedTarget.getAttribute('data-value');
+                $('#renovation_id').val(renovation_id);
+            });
+        });
+    </script>
+@endsection

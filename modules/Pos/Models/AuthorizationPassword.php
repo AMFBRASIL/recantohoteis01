@@ -49,7 +49,6 @@ class AuthorizationPassword extends Model
             ->whereHas('section', function ($query) {
                 $query->where('name', 'like', '%Senhas%');
             });
-
         return $situation->first();
     }
 
@@ -60,7 +59,6 @@ class AuthorizationPassword extends Model
             ->whereHas('section', function ($query) {
                 $query->where('name', 'like', '%Senhas%');
             });
-
         return $situation->first();
     }
 

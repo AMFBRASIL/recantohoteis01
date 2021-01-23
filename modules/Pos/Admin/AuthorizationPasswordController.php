@@ -122,13 +122,12 @@ class AuthorizationPasswordController extends AdminController
         return redirect()->back()->with('success', __('Update success!'));
     }
 
-    public function expiration(Request $request, $id)
+    public function expiration(Request $request)
     {
         $this->checkPermission('authorizationPasswords_update');
 
-        $row = AuthorizationPassword::query()->find($id);
+        $row = AuthorizationPassword::query()->find($request->id);
         $row->situation_id = AuthorizationPassword::getExpirationSituation()->id;
-
         $res = $row->saveOriginOrTranslation($request->input('lang'));
 
         if ($res) {
@@ -136,15 +135,14 @@ class AuthorizationPasswordController extends AdminController
         }
     }
 
-    public function renovation(Request $request, $id)
+    public function renovation(Request $request)
     {
         $this->checkPermission('authorizationPasswords_update');
 
-        $row = AuthorizationPassword::query()->find($id);
+        $row = AuthorizationPassword::query()->find($request->id);
         $row->expiration_date = new DateTime(' +10 days');
         $row->situation_id = AuthorizationPassword::getAuthorizedSituation()->id;
-
-        $res = $row->saveOriginOrTranslation($request->input('lang'));
+        $res = $row->saveOriginOrTranslation();
 
         if ($res) {
             return back()->with('success', __('Authorization Password Updated'));

@@ -58,13 +58,13 @@
                                                        value="{{$row->id}}">
                                             </td>
                                             <td class="title">
-                                                <a id="numero" href="#">{{$row->id}} </a>
+                                                <a href="#">{{$row->id}} </a>
                                             </td>
-                                            <td> {{ display_date($row->created_at->format('d/m/y'))}}</td>
-                                            <td> {{ display_date($row->competency_date->format('d/m/y'))}}</td>
+                                            <td> {{ $row->created_at->format('d/m/Y')}}</td>
+                                            <td> {{ $row->competency_date->format('d/m/Y')}}</td>
                                             <td class="title">
                                                 <a href="#" class="review-count-approved " data-toggle="modal"
-                                                   data-target="#historico">
+                                                   data-target="#historico" data-value="{{$row->historical}}">
                                                     Ver mais
                                                 </a>
                                             </td>
@@ -79,7 +79,7 @@
                                                 @endif
                                             </td>
                                             <td class="title">
-                                                <a>{{$row->total_value}}</a>
+                                                <a>{{$row->total_value_formatted}}</a>
                                             </td>
                                             <td>
                                                 <span class="badge badge-{{ $row->status }}">{{ $row->status }}</span>
@@ -112,8 +112,7 @@
                 <div class="modal-body">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <div class="row">
-                                {!! $row->historical  !!}
+                            <div class="row" id="historical">
                             </div>
                         </div>
                     </div>
@@ -128,6 +127,11 @@
 
 @section ('script.body')
     <script>
-        $("#numero").val(("0000" + $("#numero")).slice(-4));
+        $(function ($) {
+            $("#historico").on("show.bs.modal", function(e) {
+                let historical = e.relatedTarget.getAttribute('data-value');
+                $('#historical').html(historical);
+            });
+        });
     </script>
 @endsection

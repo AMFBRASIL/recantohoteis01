@@ -78,13 +78,17 @@
                                             </td>
                                             <td class="title">
                                                 <span class="badge badge-primary">
-                                                    R$ <span class="moeda-real">
-                                                        {{$row->lastValueCard()}}
+                                                    R$ <span>
+                                                        {{$row->value_card_formatted}}
                                                     </span>
                                                  </span>
                                             </td>
                                             <td class="title">
-                                                <a href="#" class="review-count-approved  detalhesConsumo">R$</a>
+                                                <span class="review-count-approved  detalhesConsumo">
+                                                    R$ <span>
+                                                        {{$row->value_consumed_formatted}}
+                                                    </span>
+                                                 </span>
                                             </td>
                                             <td class="title">
                                                 @if ($row->situation)
@@ -94,7 +98,7 @@
                                             </td>
                                             <td class="title">
                                                 <a href="#" class="review-count-approved" data-toggle="modal"
-                                                   data-target="#observacao">
+                                                   data-target="#observacao" data-value="{{$row->internal_observations}}">
                                                     Ver mais
                                                 </a>
                                             </td>
@@ -154,8 +158,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="col-md-12">
-                        <div class="row">
-                            {!! $row->internal_observations  !!}
+                        <div class="row" id="internal_observations">
                         </div>
                     </div>
                 </div>
@@ -187,6 +190,13 @@
 @section ('script.body')
     <script>
         $('.moeda-real').mask('#.##0,00', {reverse: true});
+
+        $(function ($) {
+            $("#observacao").on("show.bs.modal", function(e) {
+                let observacao = e.relatedTarget.getAttribute('data-value');
+                $('#internal_observations').html(observacao);
+            });
+        });
 
         $(document).ready(function () {
             $(".client").autocomplete({

@@ -19,6 +19,8 @@ Route::group(['prefix' => 'consumptionCard'], function () {
     Route::get('/{parent?}/closed', 'HistoricalConsumerCardController@closed')->name('pos.admin.historical.consumer.card.closed.index');
 
     Route::get('/findCard', 'ConsumptionCardController@findCard')->name('pos.admin.historical.consumer.card.findCard.index');
+
+    Route::get('/findHistoricalCard', 'HistoricalConsumerCardController@findHistoricalCard')->name('pos.admin.historical.consumer.card.findHistoricalCard.index');
 });
 
 Route::group(['prefix' => 'authorizationPassword'], function () {
@@ -27,9 +29,9 @@ Route::group(['prefix' => 'authorizationPassword'], function () {
 
     Route::post('/store/{id}', 'AuthorizationPasswordController@store')->name('pos.admin.authorization.password.store');
 
-    Route::post('renovation/{id?}/', 'AuthorizationPasswordController@renovation')->name('pos.admin.authorization.password.renovation');
+    Route::post('renovation', 'AuthorizationPasswordController@renovation')->name('pos.admin.authorization.password.renovation');
 
-    Route::post('expiration/{id?}/', 'AuthorizationPasswordController@expiration')->name('pos.admin.authorization.password.expiration');
+    Route::post('expiration', 'AuthorizationPasswordController@expiration')->name('pos.admin.authorization.password.expiration');
 
     Route::get('/check', 'AuthorizationPasswordController@check')->name('pos.admin.authorization.password.check');
 });

@@ -40,6 +40,48 @@ class HistoricalConsumerCard extends Model
         'updated_at',
     ];
 
+    public function setValueCardAttribute($value)
+    {
+        $this->attributes['value_card'] = str_replace(',', '.', str_replace('.','', $value));
+    }
+
+    public function getValueCardFormattedAttribute()
+    {
+        $value = '0,00';
+        if ($this->value_card) {
+            $value = number_format($this->value_card, 2, ',', '.');
+        }
+        return $value;
+    }
+
+    public function setValueAddAttribute($value)
+    {
+        $this->attributes['value_add'] = str_replace(',', '.', str_replace('.','', $value));
+    }
+
+    public function getValueAddFormattedAttribute()
+    {
+        $value = '0,00';
+        if ($this->value_add) {
+            $value = number_format($this->value_add, 2, ',', '.');
+        }
+        return $value;
+    }
+
+    public function setValueConsumedAttribute($value)
+    {
+        $this->attributes['value_consumed'] = str_replace(',', '.', str_replace('.','', $value));
+    }
+
+    public function getValueConsumedFormattedAttribute()
+    {
+        $value = '0,00';
+        if ($this->value_consumed) {
+            $value = number_format($this->value_consumed, 2, ',', '.');
+        }
+        return $value;
+    }
+
     public function ConsumptionCard()
     {
         return $this->belongsTo(ConsumptionCard::class, 'consumption_card_id', 'id');

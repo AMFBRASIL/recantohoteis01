@@ -18,9 +18,9 @@ class CreateBravoFinancialRevenueTable extends Migration
             $table->bigInteger('bank_account_id')->nullable();
             $table->bigInteger('cost_center_id')->nullable();
             $table->bigInteger('payment_method_id')->nullable();
-            $table->string('fine_value',20)->nullable();
-            $table->string('interest_value',20)->nullable();
-            $table->string('total_value',20)->nullable();
+            $table->decimal('total_value', 12, 2)->nullable();
+            $table->decimal('fine_value', 12, 2)->nullable();
+            $table->decimal('interest_value', 12, 2)->nullable();
             $table->text('historical')->nullable();
             $table->timestamp('issue_date')->nullable();
             $table->timestamp('competency_date')->nullable();
@@ -36,9 +36,9 @@ class CreateBravoFinancialRevenueTable extends Migration
             $table->bigInteger('bank_account_id')->nullable();
             $table->bigInteger('cost_center_id')->nullable();
             $table->bigInteger('payment_method_id')->nullable();
-            $table->string('fine_value',20)->nullable();
-            $table->string('interest_value',20)->nullable();
-            $table->string('total_value',20)->nullable();
+            $table->decimal('total_value', 12, 2)->nullable();
+            $table->decimal('fine_value', 12, 2)->nullable();
+            $table->decimal('interest_value', 12, 2)->nullable();
             $table->text('historical')->nullable();
             $table->timestamp('issue_date')->nullable();
             $table->timestamp('competency_date')->nullable();

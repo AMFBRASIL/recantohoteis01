@@ -109,18 +109,12 @@ class ConsumptionCardController extends AdminController
                 $historical->saveOriginOrTranslation($request->input('lang'));
 
                 if ($situationClosed->id != $row->situation_id) {
-                    $old = str_replace('.', '', $row->value_card);
-                    $old = str_replace(',', '.', $old);
-                    $new = str_replace('.', '', $request->input('priceAdd'));
-                    $new = str_replace(',', '.', $new);
+                    $row->value_card = floatval($row->value_card) + floatval($request->input('priceAdd'));
 
-                    $row->value_card = $old + $new;
-                    $row->value_add = $new /
+                    $row->saveOriginOrTranslation();
 
-                        $row->saveOriginOrTranslation($request->input('lang'));
-
-                    $this->createHistory($row, $request);
-                    $this->createRevenue($row, $request);
+                    $row->createHistory($row);
+                    $row->createRevenue($row);
                 } else {
                     $row->date_closing = new Carbon();
                     $row->saveOriginOrTranslation($request->input('lang'));
@@ -138,50 +132,13 @@ class ConsumptionCardController extends AdminController
 
             $row->saveOriginOrTranslation($request->input('lang'));
 
-            $this->createHistory($row, $request);
-            $this->createRevenue($row, $request);
+            $row->createHistory($row);
+            $row->createRevenue($row);
 
             return redirect(route('pos.admin.consumption.card.index'))->with('success', __('Consumption Card Created'));
         }
     }
 
-    private function createHistory($card, $request)
-    {
-        $parent = new HistoricalConsumerCard();
-        $parent->consumption_card_id = $card->id;
-        $parent->card_number = $card->card_number;
-        $parent->user_id = $card->user_id;
-        $parent->value_card = $card->value_card;
-        $parent->value_add = $card->value_add;
-        $parent->value_consumed = $card->value_consumed;
-        $parent->situation_id = $card->situation_id;
-        $parent->payment_method_id = $card->payment_method_id;
-        $parent->card_transaction_number = $card->card_transaction_number;
-        $parent->internal_observations = $card->internal_observations;
-        $parent->cost_center_id = $card->cost_center_id;
-        $parent->bank_account_id = $card->bank_account_id;
-        $parent->transaction_date = $card->transaction_date;
-        $parent->date_closing = $card->date_closing;
-
-        $parent->status = "publish";
-
-        $parent->saveOriginOrTranslation($request->input('lang'));
-    }
-
-    private function createRevenue($card, $request)
-    {
-        $revenue = new Revenue();
-
-        $revenue->bank_account_id = $card->bank_account_id;
-        $revenue->cost_center_id = $card->cost_center_id;
-        $revenue->payment_method_id = $card->payment_method_id;
-        $revenue->total_value = $card->value_card;
-        $revenue->issue_date = $card->transaction_date;
-        $revenue->competency_date = $card->transaction_date;
-        $revenue->status = "publish";
-
-        $revenue->saveOriginOrTranslation($request->input('lang'));
-    }
 
     public function bulkEdit(Request $request)
     {
@@ -235,16 +192,18 @@ class ConsumptionCardController extends AdminController
 
             $card = ConsumptionCard::query()->where('card_number', '=', $card_number)->first();
             $user = User::query()->find($card->user_id);
-
+            $cash_payment = PaymentMethod::query()
+                ->where('name','like', '%dinheiro%')->get('id')->first();
             if (!empty($card)) {
                 return response()->json([
                     'success' => true,
                     'cardData' => [
                         'card' => $card,
-                        'user' => $user
+                        'user' => $user,
+                        'cash_payment' => $cash_payment->id
                     ]
                 ], 200);
-            }else{
+            } else {
                 return response()->json([
                     'success' => false,
                     'message' => "número de cartao não encontrado"

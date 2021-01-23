@@ -17,9 +17,9 @@ class CreateBravoPosConsumptionCardTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('card_number')->nullable();
             $table->bigInteger('user_id')->nullable();
-            $table->string('value_card',20)->nullable();
-            $table->string('value_consumed',20)->nullable();
-            $table->string('value_add',20)->nullable();
+            $table->decimal('value_card', 12, 2)->nullable();
+            $table->decimal('value_consumed', 12, 2)->nullable();
+            $table->decimal('value_add', 12, 2)->nullable();
             $table->bigInteger('situation_id')->nullable();
             $table->bigInteger('payment_method_id')->nullable();
             $table->string('card_transaction_number')->nullable();
@@ -39,9 +39,9 @@ class CreateBravoPosConsumptionCardTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('card_number')->nullable();
             $table->bigInteger('user_id')->nullable();
-            $table->string('value_card',20)->nullable();
-            $table->string('value_consumed',20)->nullable();
-            $table->string('value_add',20)->nullable();
+            $table->decimal('value_card', 12, 2)->nullable();
+            $table->decimal('value_consumed', 12, 2)->nullable();
+            $table->decimal('value_add', 12, 2)->nullable();
             $table->bigInteger('situation_id')->nullable();
             $table->bigInteger('payment_method_id')->nullable();
             $table->string('card_transaction_number')->nullable();

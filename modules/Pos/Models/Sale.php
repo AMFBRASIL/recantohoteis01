@@ -35,7 +35,6 @@ class Sale extends Model
         'total_value',
         'discounts_value',
         'received_value',
-        'returned_value',
 
         //products
         'product_composition',
@@ -52,6 +51,51 @@ class Sale extends Model
         'updated_at',
     ];
 
+    protected $casts = [
+        'product_composition' => 'array',
+    ];
+
+    public function setTotalValueAttribute($value)
+    {
+        $this->attributes['total_value'] = str_replace(',', '.', str_replace('.','', $value));
+    }
+
+    public function getTotalValueFormattedAttribute()
+    {
+        $value = '0,00';
+        if ($this->total_value) {
+            $value = number_format($this->total_value, 2, ',', '.');
+        }
+        return $value;
+    }
+
+    public function setDiscountsValueAttribute($value)
+    {
+        $this->attributes['discounts_value'] = str_replace(',', '.', str_replace('.','', $value));
+    }
+
+    public function getDiscountsValueFormattedAttribute()
+    {
+        $value = '0,00';
+        if ($this->discounts_value) {
+            $value = number_format($this->discounts_value, 2, ',', '.');
+        }
+        return $value;
+    }
+
+    public function setReceivedValueAttribute($value)
+    {
+        $this->attributes['received_value'] = str_replace(',', '.', str_replace('.','', $value));
+    }
+
+    public function getReceivedValueFormattedAttribute()
+    {
+        $value = '0,00';
+        if ($this->received_value) {
+            $value = number_format($this->received_value, 2, ',', '.');
+        }
+        return $value;
+    }
 
     public function paymentMethod()
     {
@@ -74,5 +118,13 @@ class Sale extends Model
     public function situation()
     {
         return $this->belongsTo(Situation::class, 'situation_id');
+    }
+
+    public function consumerCard(){
+        return ConsumptionCard::query()->where('card_number', '=', $this->card_number)->first();
+    }
+
+    public function productName($id){
+        return Product::query()->where('id', '=', $id)->get('title')->first()->title;
     }
 }

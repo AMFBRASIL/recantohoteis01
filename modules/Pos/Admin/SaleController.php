@@ -2,14 +2,17 @@
 
 namespace Modules\Pos\Admin;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\AdminController;
 use Modules\Financial\Models\PaymentMethod;
 use Modules\PointOfSale\Models\PointOfSale;
 use Modules\Pos\Models\AuthorizationPassword;
+use Modules\Pos\Models\ConsumptionCard;
 use Modules\Pos\Models\Sale;
 use Modules\Pos\Models\SaleTranslation;
+use Modules\Product\Models\Product;
 use Modules\Situation\Models\Situation;
 
 class SaleController extends AdminController
@@ -124,6 +127,12 @@ class SaleController extends AdminController
         }
 
         $row->fill($request->input());
+
+        $this->updateCarConsumer($row->card_number, $request->input('total_value'));
+        $this->updateProduct($row->product_composition);
+
+        $row->sales_date = new Carbon();
+
         $res = $row->saveOriginOrTranslation($request->input('lang'));
 
         if ($res) {
@@ -132,6 +141,32 @@ class SaleController extends AdminController
             } else {
                 return redirect(route('pos.admin.sale.index'))->with('success', __('Sale Created'));
             }
+        }
+    }
+
+    function updateCarConsumer($card_number, $total){
+        $card = ConsumptionCard::query()->where('card_number', '=', $card_number)->first();
+
+        $value_card = str_replace('.','',$card->value_card);
+        $value_card = str_replace(',','.',$value_card);
+
+        $value_consumed = str_replace('.','',$card->value_consumed);
+        $value_consumed = str_replace(',','.',$value_consumed);
+
+        $value_card =  floatval($value_card) - floatval($total);
+        $value_consumed = floatval($value_consumed) + floatval($total);
+
+        $card->value_card = number_format($value_card,2);
+        $card-> value_consumed = number_format($value_consumed,2);
+
+        $card->saveOriginOrTranslation();
+    }
+
+    function updateProduct($products){
+        foreach ($products as $item){
+            $product = Product::query()->find($item['product_id']);
+            $product->available_stock = $product->available_stock - $item['quantity'];
+            $product->saveOriginOrTranslation();
         }
     }
 

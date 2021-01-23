@@ -24,6 +24,7 @@ class Revenue extends Model
         'interest_value',
         'total_value',
         'historical',
+        'competency_date',
         'status',
     ];
 
@@ -34,6 +35,47 @@ class Revenue extends Model
         'updated_at',
     ];
 
+    public function setFineValueAttribute($value)
+    {
+        $this->attributes['fine_value'] = str_replace(',', '.', str_replace('.','', $value));
+    }
+
+    public function getFineValueFormattedAttribute()
+    {
+        $value = '0,00';
+        if ($this->fine_value) {
+            $value = number_format($this->fine_value, 2, ',', '.');
+        }
+        return $value;
+    }
+
+    public function setInterestValueAttribute($value)
+    {
+        $this->attributes['interest_value'] = str_replace(',', '.', str_replace('.','', $value));
+    }
+
+    public function getInterestValueFormattedAttribute()
+    {
+        $value = '0,00';
+        if ($this->interest_value) {
+            $value = number_format($this->interest_value, 2, ',', '.');
+        }
+        return $value;
+    }
+
+    public function setTotalValueAttribute($value)
+    {
+        $this->attributes['total_value'] = str_replace(',', '.', str_replace('.','', $value));
+    }
+
+    public function getTotalValueFormattedAttribute()
+    {
+        $value = '0,00';
+        if ($this->total_value) {
+            $value = number_format($this->total_value, 2, ',', '.');
+        }
+        return $value;
+    }
 
     public function getDetailUrl($locale = false)
     {

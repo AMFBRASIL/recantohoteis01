@@ -10,7 +10,7 @@ use Modules\Financial\Models\PaymentMethod;
 use Modules\Pos\Models\ConsumptionCard;
 use Modules\Pos\Models\HistoricalConsumerCard;
 use Modules\Situation\Models\Situation;
-use function Symfony\Component\String\s;
+use Modules\User\Models\User;
 
 class HistoricalConsumerCardController extends CrudController
 {
@@ -65,7 +65,7 @@ class HistoricalConsumerCardController extends CrudController
 
         if ($search = $request->input('s')) {
             $query->whereHas('situation', function ($query) use ($search) {
-                $query->where('name', 'like', '%'.$search.'%');
+                $query->where('name', 'like', '%' . $search . '%');
             });
         }
 
@@ -126,5 +126,20 @@ class HistoricalConsumerCardController extends CrudController
     protected function redirectUrlAfterStore($model)
     {
         return route($this->routeList['index'], $model->cost_center_id);
+    }
+
+    public function findHistoricalCard(Request $request)
+    {
+        $historicalCard = HistoricalConsumerCard::query()->where('id', '=', $request->id)->first();
+        $user = User::query()->find($historicalCard->user_id);
+
+        return response()->json([
+            'success' => true,
+            'historicalData' => [
+                'historicalCard' => $historicalCard,
+                'situation' => $historicalCard->situation->name,
+                'user' => $user,
+            ]
+        ], 200);
     }
 }
