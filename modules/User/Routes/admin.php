@@ -16,6 +16,7 @@ Route::get('/autocomplete', 'UserController@getForSelectName2')->name('user.admi
 Route::get('/userUpgradeRequest', 'UserController@userUpgradeRequest')->name('user.admin.upgrade');
 Route::get('/upgrade/{id}','UserController@userUpgradeRequestApprovedId')->name('user.admin.upgradeId');
 Route::post('/userUpgradeRequestApproved', 'UserController@userUpgradeRequestApproved')->name('user.admin.userUpgradeRequestApproved');
+Route::get('/getUser', 'UserController@getUser')->name('user.admin.getUser');
 
 
 Route::group(['prefix' => 'role'], function () {

@@ -207,4 +207,16 @@ class SaleController extends AdminController
 
         return redirect()->back()->with('success', __('Update success!'));
     }
+
+    public function getSales(Request $request)
+    {
+        $sale = Sale::query()->find($request->id);
+        $card = ConsumptionCard::query()->where('card_number', '=', $sale->card_number)->first();
+
+        return response()->json([
+            'sale' => $sale,
+            'card' => $card,
+            'created_at' => $sale->created_at->format('d/m/y h:m:s')
+        ]);
+    }
 }

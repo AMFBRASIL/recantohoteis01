@@ -261,7 +261,9 @@
             })
 
             $(document).on('select2:select', '.dungdt-select2-field-lazy', function (e) {
+                console.log(e.params.data);
                 $(this).parents('.row').find('.stock_quantity').val(e.params.data.available_stock);
+                $(this).parents('.row').find('.item_name').val(e.params.data.text);
                 $(this).parents('.row').find('.sale_quantity').val("1");
                 $(this).parents('.row').find('.sale_quantity').attr({
                     "max": e.params.data.available_stock,
@@ -493,9 +495,11 @@
             $('.item')[index].remove();
         }
 
-        function formatNumber($value){
-            return $value.toFixed(2).replace('.', ',')
-                .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+        function formatNumber(value){
+            if(value != null) {
+                return value.toFixed(2).replace('.', ',')
+                    .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+            }
         }
 
         $(".account").css({

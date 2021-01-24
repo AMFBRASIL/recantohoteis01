@@ -471,4 +471,13 @@ class UserController extends AdminController
             'results' => $res
         ]);
     }
+
+    public function getUser(Request $request)
+    {
+        $user = User::query()->find($request->id);
+
+        return response()->json([
+            'user' => $user
+        ]);
+    }
 }

@@ -200,7 +200,8 @@ class ConsumptionCardController extends AdminController
                     'cardData' => [
                         'card' => $card,
                         'user' => $user,
-                        'cash_payment' => $cash_payment->id
+                        'cash_payment' => $cash_payment->id,
+                        'situation' => $card->situation->name,
                     ]
                 ], 200);
             } else {

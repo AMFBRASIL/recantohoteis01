@@ -186,6 +186,7 @@
                         <div class="item" data-number="__number__">
                             <div class="row">
                                 <div class="col-md-5">
+                                    <input type="hidden" class="item_name" name="product_composition[__number__][title]" value="">
                                     <select
                                         id="teste"
                                         class="form-control teste dungdt-select2-field-lazy"

@@ -43,5 +43,7 @@ Route::group(['prefix' => 'sale'], function () {
     Route::get('/create', 'SaleController@create')->name('pos.admin.sale.create');
 
     Route::post('/store/{id}', 'SaleController@store')->name('pos.admin.sale.store');
+
+    Route::get('getSales/', 'SaleController@getSales')->name('pos.admin.sale.getSales');
 });
 
