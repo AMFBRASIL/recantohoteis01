@@ -128,10 +128,13 @@ class SaleController extends AdminController
 
         $row->fill($request->input());
 
-        $this->updateCarConsumer($row->card_number, $request->input('total_value'));
+        $this->updateCarConsumer($row->card_number, $request->input('value_card'),$request->input('value_consumed'));
         $this->updateProduct($row->product_composition);
 
         $row->sales_date = new Carbon();
+        $row->discounts_value = str_replace('.', ',',$row->discounts_value);
+        $row->received_value = str_replace('.', ',',$row->received_value);
+        $row->total_value = str_replace('.', ',',$row->total_value);
 
         $res = $row->saveOriginOrTranslation($request->input('lang'));
 
@@ -144,20 +147,11 @@ class SaleController extends AdminController
         }
     }
 
-    function updateCarConsumer($card_number, $total){
+    function updateCarConsumer($card_number, $value_card, $value_consumed){
         $card = ConsumptionCard::query()->where('card_number', '=', $card_number)->first();
 
-        $value_card = str_replace('.','',$card->value_card);
-        $value_card = str_replace(',','.',$value_card);
-
-        $value_consumed = str_replace('.','',$card->value_consumed);
-        $value_consumed = str_replace(',','.',$value_consumed);
-
-        $value_card =  floatval($value_card) - floatval($total);
-        $value_consumed = floatval($value_consumed) + floatval($total);
-
-        $card->value_card = number_format($value_card,2);
-        $card-> value_consumed = number_format($value_consumed,2);
+        $card->value_card = str_replace('.', ',',$value_card);
+        $card-> value_consumed = str_replace('.', ',',$value_consumed);
 
         $card->saveOriginOrTranslation();
     }

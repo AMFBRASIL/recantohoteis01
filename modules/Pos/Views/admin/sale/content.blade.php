@@ -133,6 +133,9 @@
                                 <div class="item" data-number="{{$key}}">
                                     <div class="row">
                                         <div class="col-md-5">
+                                            <input type="hidden" class=" form-control item_name"
+                                                   name="product_composition[{{$key}}][title]"
+                                                   value="{{isset($composition['title']) ? $composition['title'] : ''}}">
                                             <?php
                                             $product = isset($composition['product_id']) ? Modules\Product\Models\Product::find($composition['product_id']) : false;
                                             \App\Helpers\AdminForm::select2("product_composition[" . $key . "][product_id]", [
@@ -186,7 +189,8 @@
                         <div class="item" data-number="__number__">
                             <div class="row">
                                 <div class="col-md-5">
-                                    <input type="hidden" class="item_name" name="product_composition[__number__][title]" value="">
+                                    <input type="hidden" class="form-control item_name"
+                                           __name__="product_composition[__number__][title]" value="">
                                     <select
                                         id="teste"
                                         class="form-control teste dungdt-select2-field-lazy"

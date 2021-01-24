@@ -26,11 +26,11 @@
                             <div class="panel-body">
                                 @if(is_default_lang())
                                     <div>
-                                        <label><input @if($row->status=='publish') checked @endif type="radio"
+                                        <label><input checked type="radio"
                                                       name="status" value="publish"> {{__("Publicada")}}
                                         </label></div>
                                     <div>
-                                        <label><input @if($row->status=='draft') checked @endif type="radio"
+                                        <label><input type="radio"
                                                       name="status" value="draft"> {{__("Rascunho")}}
                                         </label></div>
                                 @endif
@@ -129,7 +129,9 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" id="somaInterna" name="total_value" value="0,00">
+        <input type="hidden" class="form-control moeda-real" id="somaInterna" name="total_value" value="0,00">
+        <input type="hidden" class="form-control moeda-real" id="somaTotalcard" name="value_card" value="0,00">
+        <input type="hidden" class="form-control moeda-real" id="somaTotalCardConsumer" name="value_consumed" value="0,00">
     </form>
     <div class="modal fade login" id="register" tabindex="-1" role="dialog" aria-hidden="true" style="display: none">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -261,37 +263,47 @@
             })
 
             $(document).on('select2:select', '.dungdt-select2-field-lazy', function (e) {
-                console.log(e.params.data);
-                $(this).parents('.row').find('.stock_quantity').val(e.params.data.available_stock);
-                $(this).parents('.row').find('.item_name').val(e.params.data.text);
-                $(this).parents('.row').find('.sale_quantity').val("1");
-                $(this).parents('.row').find('.sale_quantity').attr({
-                    "max": e.params.data.available_stock,
-                });
-                $(this).parents('.row').find('.price').val(e.params.data.price);
-
                 let index = $(this).closest('.item').attr('data-number');
+                let product_id = e.params.data.id;
 
-                sessionStorage.setItem('qtd-' + index, 1);
-                sessionStorage.setItem('price-' + index, e.params.data.price);
+                let product = sessionStorage.getItem('product-' + product_id);
 
-                somarItens(index, e.params.data.price, 1)
+                if (product == null || product.index == index) {
+                    $(this).closest('.row').find('.stock_quantity').val(e.params.data.available_stock);
+                    $(this).closest('.row').find('.item_name').val(e.params.data.text);
+                    $(this).closest('.row').find('.sale_quantity').val("1");
+                    $(this).closest('.row').find('.sale_quantity').attr({
+                        "max": e.params.data.available_stock,
+                    });
+                    $(this).closest('.row').find('.price').val(e.params.data.price);
+
+                    sessionStorage.setItem('product-' + product_id,JSON.stringify({
+                        index : index,
+                        id : product_id,
+                        price : e.params.data.price,
+                        qtd : 1
+                    }));
+
+                    somarItens(index, e.params.data.price, 1)
+                }else{
+                    alert('Produto já inserido na lista');
+                    removeInvalidItem(index);
+                    --qtd_Item;
+                }
 
                 $(".btn-remove-item").click(function () {
-                    let index = $(this).closest('.item').attr('data-number');
                     let qtd_quantity = parseInt($(this).closest('.row').find('.sale_quantity').val());
                     let price = parseFloat($(this).closest('.row').find('.price').val());
+                    let product_id = $(this).closest('.row').find("select option:selected").val();
 
                     removeItens(price, qtd_quantity);
 
-                    sessionStorage.removeItem('qtd-' + index);
-                    sessionStorage.removeItem('price-' + index);
-
+                    sessionStorage.removeItem('product-' + product_id);
                     --qtd_Item;
-                    console.log(qtd_Item);
+
                     if(qtd_Item == 0) {
                         let desconto = parseFloat(($('#priceDesconto').val()).replace('.','').replace(',','.'));
-                        let valoresSomados = parseFloat(($('#somaInterna').val()));
+                        let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.','').replace(',','.'));
 
                         if(desconto > 0){
                             valoresSomados = desconto + valoresSomados;
@@ -303,7 +315,7 @@
                 });
 
                 $(".sale_quantity").blur(function () {
-                    let index = $(this).closest('.item').attr('data-number');
+                    let product_id = $(this).closest('.row').find("select option:selected").val();
                     let qtd_stock = parseInt($(this).closest('.row').find('.stock_quantity').val());
                     let qtd_quantity = parseInt($(this).closest('.row').find('.sale_quantity').val());
                     let price = $(this).closest('.row').find('.price').val();
@@ -320,34 +332,38 @@
                         $(this).closest('.row').find('.sale_quantity').val(qtd_quantity);
                     }
 
-                    let old_qtd = parseInt(sessionStorage.getItem('qtd-' + index));
+                    let product = JSON.parse(sessionStorage.getItem('product-' + product_id));
 
-                    removeItens(price, old_qtd);
-                    somarItens(index, price, qtd_quantity);
+                    removeItens(price,parseInt(product.qtd));
+                    somarItens(product.index, price, qtd_quantity);
 
-                    sessionStorage.setItem('qtd-' + index, qtd_quantity);
-                    sessionStorage.setItem('price-' + index, price);
+                    product.qtd = qtd_quantity;
+                    product.price = price;
+
+                    sessionStorage.setItem('product-' + product_id, JSON.stringify(product));
                 });
 
                 $(".price").blur(function () {
-                    let index = $(this).closest('.item').attr('data-number');
+                    let product_id = $(this).closest('.row').find("select option:selected").val();
                     let qtd_quantity = parseInt($(this).closest('.row').find('.sale_quantity').val());
                     let price = $(this).closest('.row').find('.price').val();
-                    let old_price = parseFloat(sessionStorage.getItem('price-' + index));
+                    let product = JSON.parse(sessionStorage.getItem('product-' + product_id));
 
                     price = parseFloat(price.replace('.','').replace(',','.'));
 
-                    removeItens(old_price, qtd_quantity);
-                    somarItens(index, price, qtd_quantity);
+                    removeItens(product.price, qtd_quantity);
+                    somarItens(product.index, price, qtd_quantity);
 
-                    sessionStorage.setItem('qtd-' + index, qtd_quantity);
-                    sessionStorage.setItem('price-' + index, price);
+                    product.qtd = qtd_quantity;
+                    product.price = price;
+
+                    sessionStorage.setItem('product-' + index, JSON.stringify(product));
                 });
 
                 $('#priceDesconto').blur(function () {
                     let desconto = parseFloat(($(this).val()).replace('.','').replace(',','.'));
                     let antigo_desconto = sessionStorage.getItem('desconto');
-                    let valoresSomados = parseFloat(($('#somaInterna').val()));
+                    let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.','').replace(',','.'));
 
 
                     if (desconto < 0 || isNaN(desconto)) {
@@ -389,15 +405,11 @@
                 })
 
                 $('#valorRecebido').blur(function () {
-
                     let valorRecebido = parseFloat(($('#valorRecebido').val()).replace('.','').replace(',','.'));
-                    let valoresSomados = parseFloat(($('#somaInterna').val()));
+                    let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.','').replace(',','.'));
 
                     if (!isNaN(valorRecebido)) {
                         let somaTotal = valoresSomados - valorRecebido;
-                        console.log(
-                            {troco : somaTotal,}
-                        )
 
                         $('#priceTroco').val(somaTotal < 0 ? formatNumber((somaTotal * (-1))) : formatNumber(somaTotal));
                     }
@@ -418,7 +430,7 @@
             valorItem = parseFloat(valorItem);
             qtdItem = parseInt(qtdItem);
 
-            let valoresSomados = parseFloat($('#somaInterna').val());
+            let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.','').replace(',','.'));
             let valorCalculadoItem = valorItem * qtdItem;
 
             valoresSomados += valorCalculadoItem;
@@ -457,7 +469,7 @@
             valorItem = parseFloat(valorItem);
             qtdItem = parseInt(qtdItem);
 
-            let valoresSomados = parseFloat($('#somaInterna').val());
+            let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.','').replace(',','.'));
             let valorCalculadoItem = valorItem * qtdItem;
 
             valoresSomados -= valorCalculadoItem;
@@ -478,17 +490,26 @@
         }
 
         function exibirValores(valoresSomados){
+           /* console.log({
+                text : 'gravando',
+                valoresSomados : valoresSomados,
+                valor_total_disponivel : valor_total_disponivel,
+                valor_total_consumido :  valor_total_consumido
+            })*/
+
             //Input interno somatotal
-            $('#somaInterna').val(valoresSomados);
+            $('#somaInterna').val(formatNumber(valoresSomados));
 
             //Valor Total com Desconto
             $('#somaTotal').html("R$ " + formatNumber(valoresSomados));
 
             //Valor total Disponivel
             $('#valorTotal').html(formatNumber(valor_total_disponivel));
+            $('#somaTotalcard').val(formatNumber(valor_total_disponivel));
 
             //valor total consumido
             $('#valorRestante').html(formatNumber(valor_total_consumido));
+            $('#somaTotalCardConsumer').val(formatNumber(valor_total_consumido));
         }
 
         function removeInvalidItem(index) {
