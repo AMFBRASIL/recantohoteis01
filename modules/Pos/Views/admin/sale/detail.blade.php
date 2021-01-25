@@ -131,7 +131,8 @@
         </div>
         <input type="hidden" class="form-control moeda-real" id="somaInterna" name="total_value" value="0,00">
         <input type="hidden" class="form-control moeda-real" id="somaTotalcard" name="value_card" value="0,00">
-        <input type="hidden" class="form-control moeda-real" id="somaTotalCardConsumer" name="value_consumed" value="0,00">
+        <input type="hidden" class="form-control moeda-real" id="somaTotalCardConsumer" name="value_consumed"
+               value="0,00">
     </form>
     <div class="modal fade login" id="register" tabindex="-1" role="dialog" aria-hidden="true" style="display: none">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -206,7 +207,7 @@
                     $('#passwordAuthorization').modal('toggle');
                     $('#enable_produtos').removeAttr("disabled");
                     if (data.success) {
-                        console.log(data);
+                        /*console.log(data);*/
 
                         let select = $('#cliente_hospede').find('.dungdt-select2-field');
                         let name = data.cardData.user.first_name + ' ' + data.cardData.user.last_name
@@ -222,8 +223,9 @@
                         if (data.cardData.card.value_consumed == null) {
                             $('#valorRestante').html('0.00');
                         } else {
-                            valor_total_consumido = data.cardData.card.value_consumed.replace(',','').replace('.','');
-                            valor_total_consumido = parseFloat(valor_total_consumido).toFixed(2);
+                            valor_total_consumido = data.cardData.card.value_consumed;
+                            valor_total_consumido = parseFloat(valor_total_consumido);
+
                             $('#valorRestante').html(formatNumber(valor_total_consumido));
                         }
                         cash_payment = data.cardData.cash_payment;
@@ -269,49 +271,64 @@
                 let product = sessionStorage.getItem('product-' + product_id);
 
                 if (product == null || product.index == index) {
-                    $(this).closest('.row').find('.stock_quantity').val(e.params.data.available_stock);
-                    $(this).closest('.row').find('.item_name').val(e.params.data.text);
-                    $(this).closest('.row').find('.sale_quantity').val("1");
-                    $(this).closest('.row').find('.sale_quantity').attr({
-                        "max": e.params.data.available_stock,
-                    });
-                    $(this).closest('.row').find('.price').val(e.params.data.price);
+                    if (e.params.data.available_stock == 0) {
 
-                    sessionStorage.setItem('product-' + product_id,JSON.stringify({
-                        index : index,
-                        id : product_id,
-                        price : e.params.data.price,
-                        qtd : 1
-                    }));
+                        check(index);
 
-                    somarItens(index, e.params.data.price, 1)
-                }else{
-                    alert('Produto já inserido na lista');
+                        alert('Produto sem estoque disponível!');
+                        removeInvalidItem(index);
+                    } else {
+                        $(this).closest('.row').find('.stock_quantity').val(e.params.data.available_stock);
+                        $(this).closest('.row').find('.item_name').val(e.params.data.text);
+                        $(this).closest('.row').find('.sale_quantity').val("1");
+                        $(this).closest('.row').find('.sale_quantity').attr({
+                            "max": e.params.data.available_stock,
+                        });
+                        $(this).closest('.row').find('.price').val(e.params.data.price);
+
+                        check(index);
+
+                        sessionStorage.setItem('index-' + index, 'product-' + product_id);
+                        sessionStorage.setItem('product-' + product_id, JSON.stringify({
+                            index: index,
+                            id: product_id,
+                            price: e.params.data.price,
+                            qtd: 1
+                        }));
+
+
+                        somarItens(index, e.params.data.price, 1)
+                        calculateReceivedValue();
+                    }
+                } else {
+                    alert('Produto já inserido na lista!');
+                    check(index);
                     removeInvalidItem(index);
                     --qtd_Item;
                 }
 
                 $(".btn-remove-item").click(function () {
-                    let qtd_quantity = parseInt($(this).closest('.row').find('.sale_quantity').val());
-                    let price = parseFloat($(this).closest('.row').find('.price').val());
-                    let product_id = $(this).closest('.row').find("select option:selected").val();
+                    let index = $(this).closest('.item').attr('data-number');
 
-                    removeItens(price, qtd_quantity);
+                    check(index);
 
-                    sessionStorage.removeItem('product-' + product_id);
-                    --qtd_Item;
+                    if (qtd_Item == 0) {
+                        let desconto = parseFloat(($('#priceDesconto').val()).replace('.', '').replace(',', '.'));
+                        let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.', '').replace(',', '.'));
 
-                    if(qtd_Item == 0) {
-                        let desconto = parseFloat(($('#priceDesconto').val()).replace('.','').replace(',','.'));
-                        let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.','').replace(',','.'));
-
-                        if(desconto > 0){
+                        if (desconto > 0) {
                             valoresSomados = desconto + valoresSomados;
                             valor_total_disponivel = valor_total_disponivel - desconto;
                             valor_total_consumido = valor_total_consumido + desconto;
+                            sessionStorage.removeItem('desconto');
                             exibirValores(valoresSomados)
                         }
+
+                        $('#priceDesconto').val(formatNumber(0));
+                        $('#valorRecebido').val(formatNumber(0));
+                        $('#priceTroco').val(formatNumber(0));
                     }
+                    calculateReceivedValue();
                 });
 
                 $(".sale_quantity").blur(function () {
@@ -320,7 +337,7 @@
                     let qtd_quantity = parseInt($(this).closest('.row').find('.sale_quantity').val());
                     let price = $(this).closest('.row').find('.price').val();
 
-                    price = parseFloat(price.replace('.','').replace(',','.'));
+                    price = parseFloat(price.replace('.', '').replace(',', '.'));
 
                     if (qtd_quantity > qtd_stock) {
                         qtd_quantity = qtd_stock;
@@ -334,12 +351,13 @@
 
                     let product = JSON.parse(sessionStorage.getItem('product-' + product_id));
 
-                    removeItens(price,parseInt(product.qtd));
+                    removeItens(price, parseInt(product.qtd));
                     somarItens(product.index, price, qtd_quantity);
 
                     product.qtd = qtd_quantity;
                     product.price = price;
 
+                    calculateReceivedValue();
                     sessionStorage.setItem('product-' + product_id, JSON.stringify(product));
                 });
 
@@ -349,7 +367,7 @@
                     let price = $(this).closest('.row').find('.price').val();
                     let product = JSON.parse(sessionStorage.getItem('product-' + product_id));
 
-                    price = parseFloat(price.replace('.','').replace(',','.'));
+                    price = parseFloat(price.replace('.', '').replace(',', '.'));
 
                     removeItens(product.price, qtd_quantity);
                     somarItens(product.index, price, qtd_quantity);
@@ -357,16 +375,16 @@
                     product.qtd = qtd_quantity;
                     product.price = price;
 
-                    sessionStorage.setItem('product-' + index, JSON.stringify(product));
+                    calculateReceivedValue();
+                    sessionStorage.setItem('product-' + product_id, JSON.stringify(product));
                 });
 
                 $('#priceDesconto').blur(function () {
-                    let desconto = parseFloat(($(this).val()).replace('.','').replace(',','.'));
+                    let desconto = parseFloat(($(this).val()).replace('.', '').replace(',', '.'));
                     let antigo_desconto = sessionStorage.getItem('desconto');
-                    let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.','').replace(',','.'));
+                    let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.', '').replace(',', '.'));
 
-
-                    if (desconto < 0 || isNaN(desconto)) {
+                    if (desconto <= 0 || isNaN(desconto)) {
                         desconto = 0;
                         $(this).val(desconto);
                     } else {
@@ -384,35 +402,26 @@
                             $(this).val(desconto);
                         }
 
-                        console.log(valoresSomados);
-
                         valoresSomados -= desconto;
 
                         valor_total_disponivel += desconto;
                         valor_total_consumido -= desconto;
                         sessionStorage.setItem('desconto', desconto);
 
-                        console.log({
+                        /*console.log({
                             desconto: desconto,
-                            antigo_desconto:antigo_desconto,
-                            valoresSomados:valoresSomados,
-                            valor_total_consumido:valor_total_consumido,
-                            valor_total_disponivel:valor_total_disponivel
-                        });
-
+                            antigo_desconto: antigo_desconto,
+                            valoresSomados: valoresSomados,
+                            valor_total_consumido: valor_total_consumido,
+                            valor_total_disponivel: valor_total_disponivel
+                        });*/
                         exibirValores(valoresSomados)
+                        calculateReceivedValue();
                     }
                 })
 
                 $('#valorRecebido').blur(function () {
-                    let valorRecebido = parseFloat(($('#valorRecebido').val()).replace('.','').replace(',','.'));
-                    let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.','').replace(',','.'));
-
-                    if (!isNaN(valorRecebido)) {
-                        let somaTotal = valoresSomados - valorRecebido;
-
-                        $('#priceTroco').val(somaTotal < 0 ? formatNumber((somaTotal * (-1))) : formatNumber(somaTotal));
-                    }
+                    calculateReceivedValue();
                 })
 
                 $('.moeda-real').each(function () {
@@ -421,16 +430,41 @@
             });
         });
 
-        $(".btn-add-item").click(()=>{
-           qtd_Item +=1;
-           console.log(qtd_Item);
+        $(".btn-add-item").click(() => {
+            qtd_Item += 1;
+            /*console.log(qtd_Item);*/
         });
+
+        function check(index) {
+            check_index = sessionStorage.getItem('index-' + index);
+            check_product = JSON.parse(sessionStorage.getItem(check_index));
+
+            if (check_index != null
+                && check_product != null
+                && check_product.index == index) {
+                removeItens(check_product.price, check_product.qtd);
+                sessionStorage.removeItem(check_index);
+                sessionStorage.removeItem('index-' + index);
+                --qtd_Item;
+            }
+        }
+
+        function calculateReceivedValue(){
+            let valorRecebido = parseFloat(($('#valorRecebido').val()).replace('.', '').replace(',', '.'));
+            let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.', '').replace(',', '.'));
+
+            if (!isNaN(valorRecebido) && valorRecebido > 0) {
+                let somaTotal = valoresSomados - valorRecebido;
+
+                $('#priceTroco').val(formatNumber(somaTotal * (-1)));
+            }
+        }
 
         function somarItens(index, valorItem, qtdItem) {
             valorItem = parseFloat(valorItem);
             qtdItem = parseInt(qtdItem);
 
-            let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.','').replace(',','.'));
+            let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.', '').replace(',', '.'));
             let valorCalculadoItem = valorItem * qtdItem;
 
             valoresSomados += valorCalculadoItem;
@@ -469,7 +503,7 @@
             valorItem = parseFloat(valorItem);
             qtdItem = parseInt(qtdItem);
 
-            let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.','').replace(',','.'));
+            let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.', '').replace(',', '.'));
             let valorCalculadoItem = valorItem * qtdItem;
 
             valoresSomados -= valorCalculadoItem;
@@ -477,7 +511,6 @@
             valor_total_disponivel += valorCalculadoItem;
 
             exibirValores(valoresSomados);
-
             /*console.log({
                 Itens: 'subtracao',
                 valorItem: valorItem,
@@ -489,13 +522,13 @@
             })*/
         }
 
-        function exibirValores(valoresSomados){
-           /* console.log({
-                text : 'gravando',
-                valoresSomados : valoresSomados,
-                valor_total_disponivel : valor_total_disponivel,
-                valor_total_consumido :  valor_total_consumido
-            })*/
+        function exibirValores(valoresSomados) {
+            /* console.log({
+                 text : 'gravando',
+                 valoresSomados : valoresSomados,
+                 valor_total_disponivel : valor_total_disponivel,
+                 valor_total_consumido :  valor_total_consumido
+             })*/
 
             //Input interno somatotal
             $('#somaInterna').val(formatNumber(valoresSomados));
@@ -516,8 +549,8 @@
             $('.item')[index].remove();
         }
 
-        function formatNumber(value){
-            if(value != null) {
+        function formatNumber(value) {
+            if (value != null) {
                 return value.toFixed(2).replace('.', ',')
                     .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
             }

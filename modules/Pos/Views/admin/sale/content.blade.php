@@ -9,7 +9,7 @@
                            class="form-control">
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-9">
                 <div class="form-group">
                     <label> {{__("Cliente / Hóspede")}}</label>
                     <div id="cliente_hospede" class="input-group">
