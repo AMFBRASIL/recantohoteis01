@@ -71,7 +71,7 @@
                             <div class="panel-body">
                                 <div class="col-md-12">
                                     <h6 class="account">{{__("Valor Total com Desconto")}}</h6><span
-                                        class="mt-5 balance">  <div
+                                        class="balance">  <div
                                             id="totalSum" name="totalSum">R$ 0,00 </div> </span>
                                 </div>
                             </div>
@@ -82,14 +82,14 @@
                             <div class="panel-body">
                                 <div class="col-md-12">
                                     <h6 class="account">{{__("Valor Total Consumido")}}</h6>
-                                    <span class="mt-5 restante"> <i class="fa fa-minus"></i>
+                                    <span class="restante"> <i class="fa fa-minus"></i>
                                         <div>R$ <span id="valueRemaining" class="moeda-real">0,00</span></div>
                                     </span>
                                 </div>
                                 <div class="col-md-12">
                                     <h6 class="account">{{__("Valor Total Disponível")}}</h6>
-                                    <span class="mt-5 balance"> <i class="fa fa-plus"></i>
-                                         <div>R$<span id="totalValue" class="moeda-real">0,00</span></div>
+                                    <span class="balance"> <i class="fa fa-plus"></i>
+                                         <div>R$ <span id="totalValue" class="moeda-real">0,00</span></div>
                                     </span>
                                 </div>
                             </div>
@@ -562,12 +562,16 @@
 
         $(".balance").css({
             "font-size": "43px",
-            "color": "green"
+            "color": "green",
+            "display": "flex",
+            "align-items": "center"
         });
 
         $(".restante").css({
             "font-size": "43px",
-            "color": "red"
+            "color": "red",
+            "display": "flex",
+            "align-items": "center"
         })
     </script>
 @endsection
