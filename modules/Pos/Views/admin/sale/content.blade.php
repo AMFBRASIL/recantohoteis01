@@ -12,7 +12,7 @@
             <div class="col-lg-9">
                 <div class="form-group">
                     <label> {{__("Cliente / Hóspede")}}</label>
-                    <div id="cliente_hospede" class="input-group">
+                    <div id="client_host" class="input-group">
                         <?php
                         $user = !empty($row->user_id) ? App\User::find($row->user_id) : false;
                         \App\Helpers\AdminForm::select2('user_id', [
@@ -110,11 +110,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label><input disabled type="checkbox" name="enable_produtos" value="1" id="enable_produtos"> Ativar
+                    <label><input disabled type="checkbox" name="enable_products" value="1" id="enable_products"> Ativar
                         Itens
                     </label>
                 </div>
-                <div class="form-group-item" data-condition="enable_produtos:is(1)" style="" data-select2-id="9">
+                <div class="form-group-item" data-condition="enable_products:is(1)" style="" data-select2-id="9">
                     <label class="control-label">{{__("ITENS")}}</label>
                     <div class="g-items-header">
                         <div class="row">
@@ -246,33 +246,33 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">R$</span>
                                 </div>
-                                <input type="text" name="discounts_value" id="priceDesconto" placeholder="99,99"
+                                <input type="text" name="discounts_value" id="priceDiscount" placeholder="99,99"
                                        class="form-control moeda-real" value="">
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-3" id="divDinheiroRecebido" name="divDinheiroRecebido" style="display:none;">
+                    <div class="col-lg-3" id="divMoneyReceived" name="divMoneyReceived" style="display:none;">
                         <div class="form-group">
                             <label class="control-label">Valor Recebido em Dinheiro:</label>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">R$</span>
                                 </div>
-                                <input type="text" name="received_value" id="valorRecebido" placeholder="99,99"
+                                <input type="text" name="received_value" id="amountReceived" placeholder="99,99"
                                        class="form-control moeda-real" value="">
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-3" id="divTrocoCliente" name="divTrocoCliente" style="display:none;">
+                    <div class="col-lg-3" id="divChangeCustomer" name="divChangeCustomer" style="display:none;">
                         <div class="form-group">
                             <label class="control-label">Troco do Cliente:</label>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">R$</span>
                                 </div>
-                                <input type="text" name="returned_value" id="priceTroco" placeholder="99,99"
+                                <input type="text" name="returned_value" id="priceExchange" placeholder="99,99"
                                        class="form-control moeda-real" value="" disabled="">
                             </div>
                         </div>
@@ -307,7 +307,7 @@
             </div>
             <!-- Modal footer -->
             <div class="modal-footer">
-                <span type="btn" class="btn btn-primary autorizarValores">Autenticar</span>
+                <span type="btn" class="btn btn-primary authorizeValues">Autenticar</span>
                 <span class="btn btn-secondary" data-dismiss="modal">Fechar</span>
             </div>
         </div>

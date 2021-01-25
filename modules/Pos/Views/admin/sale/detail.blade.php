@@ -66,30 +66,30 @@
                             </div>
                         @endif
 
-                        <div class="panel" id="somaValores" style="display:none;">
+                        <div class="panel" id="sumValues" style="display:none;">
                             <div class="panel-title"><strong>{{__("Total Venda")}}</strong></div>
                             <div class="panel-body">
                                 <div class="col-md-12">
                                     <h6 class="account">{{__("Valor Total com Desconto")}}</h6><span
                                         class="mt-5 balance">  <div
-                                            id="somaTotal" name="somaTotal">R$ 0,00 </div> </span>
+                                            id="totalSum" name="totalSum">R$ 0,00 </div> </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="panel" id="contentValores" style="display:none;">
+                        <div class="panel" id="contentValues" style="display:none;">
                             <div class="panel-title"><strong>{{__("Consumo do Cartão Digitado")}}</strong></div>
                             <div class="panel-body">
                                 <div class="col-md-12">
                                     <h6 class="account">{{__("Valor Total Consumido")}}</h6>
                                     <span class="mt-5 restante"> <i class="fa fa-minus"></i>
-                                        <div>R$ <span id="valorRestante" class="moeda-real">0,00</span></div>
+                                        <div>R$ <span id="valueRemaining" class="moeda-real">0,00</span></div>
                                     </span>
                                 </div>
                                 <div class="col-md-12">
                                     <h6 class="account">{{__("Valor Total Disponível")}}</h6>
                                     <span class="mt-5 balance"> <i class="fa fa-plus"></i>
-                                         <div>R$<span id="valorTotal" class="moeda-real">0,00</span></div>
+                                         <div>R$<span id="totalValue" class="moeda-real">0,00</span></div>
                                     </span>
                                 </div>
                             </div>
@@ -129,9 +129,9 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" class="form-control moeda-real" id="somaInterna" name="total_value" value="0,00">
-        <input type="hidden" class="form-control moeda-real" id="somaTotalcard" name="value_card" value="0,00">
-        <input type="hidden" class="form-control moeda-real" id="somaTotalCardConsumer" name="value_consumed"
+        <input type="hidden" class="form-control moeda-real" id="internalSum" name="total_value" value="0,00">
+        <input type="hidden" class="form-control moeda-real" id="sumTotalCard" name="value_card" value="0,00">
+        <input type="hidden" class="form-control moeda-real" id="sumTotalCardConsumer" name="value_consumed"
                value="0,00">
     </form>
     <div class="modal fade login" id="register" tabindex="-1" role="dialog" aria-hidden="true" style="display: none">
@@ -156,11 +156,11 @@
     <script>
         sessionStorage.clear();
         var cash_payment;
-        var valor_total_disponivel = 0.0;
-        var valor_total_consumido = 0.0;
+        var total_value_available = 0.0;
+        var total_consumed_value = 0.0;
         var qtd_Item = 0;
 
-        $(".listVendas").click(function () {
+        $(".listSales").click(function () {
             window.location = "/admin/module/pos/sale/";
         });
 
@@ -172,7 +172,7 @@
             }
         });
 
-        $(".autorizarValores").click(function () {
+        $(".authorizeValues").click(function () {
             let data = {
                 password: $('#password').val(),
             };
@@ -186,13 +186,13 @@
                 success: function (data) {
                     alert(data.message);
                     if (data.success) {
-                        buscarCliente();
+                        searchClient();
                     }
                 }
             });
         })
 
-        function buscarCliente() {
+        function searchClient() {
             let data = {
                 card_number: $('#numberCard').val(),
             };
@@ -205,32 +205,32 @@
                 data: data,
                 success: function (data) {
                     $('#passwordAuthorization').modal('toggle');
-                    $('#enable_produtos').removeAttr("disabled");
+                    $('#enable_products').removeAttr("disabled");
                     if (data.success) {
                         /*console.log(data);*/
 
-                        let select = $('#cliente_hospede').find('.dungdt-select2-field');
+                        let select = $('#client_host').find('.dungdt-select2-field');
                         let name = data.cardData.user.first_name + ' ' + data.cardData.user.last_name
 
                         select.append(
                             new Option(name, data.cardData.user.id, null, true));
 
-                        valor_total_disponivel = data.cardData.card.value_card;
-                        valor_total_disponivel = parseFloat(valor_total_disponivel);
+                        total_value_available = data.cardData.card.value_card;
+                        total_value_available = parseFloat(total_value_available);
 
-                        $('#valorTotal').html(formatNumber(valor_total_disponivel));
+                        $('#totalValue').html(formatNumber(total_value_available));
 
                         if (data.cardData.card.value_consumed == null) {
-                            $('#valorRestante').html('0.00');
+                            $('#valueRemaining').html('0.00');
                         } else {
-                            valor_total_consumido = data.cardData.card.value_consumed;
-                            valor_total_consumido = parseFloat(valor_total_consumido);
+                            total_consumed_value = data.cardData.card.value_consumed;
+                            total_consumed_value = parseFloat(total_consumed_value);
 
-                            $('#valorRestante').html(formatNumber(valor_total_consumido));
+                            $('#valueRemaining').html(formatNumber(total_consumed_value));
                         }
                         cash_payment = data.cardData.cash_payment;
 
-                        $('#contentValores').show();
+                        $('#contentValues').show();
                     } else {
                         alert(data.message);
                     }
@@ -240,22 +240,22 @@
 
         $('#formPayment').on('change', function () {
             if (this.value == cash_payment) {
-                $('#divCartao').hide();
-                $('#divDinheiroRecebido').show();
-                $('#divTrocoCliente').show();
+                $('#divCard').hide();
+                $('#divMoneyReceived').show();
+                $('#divChangeCustomer').show();
             } else {
-                $('#divCartao').show();
-                $('#divDinheiroRecebido').hide();
-                $('#divTrocoCliente').hide();
+                $('#divCard').show();
+                $('#divMoneyReceived').hide();
+                $('#divChangeCustomer').hide();
             }
         });
 
-        $('#enable_produtos').change(function () {
+        $('#enable_products').change(function () {
             if ($(this).is(':checked')) {
-                $('#somaValores').show();
-                $('#somaTotal').html("R$ 0,00 ");
+                $('#sumValues').show();
+                $('#totalSum').html("R$ 0,00 ");
             } else {
-                $('#somaValores').hide();
+                $('#sumValues').hide();
             }
         });
 
@@ -296,8 +296,7 @@
                             qtd: 1
                         }));
 
-
-                        somarItens(index, e.params.data.price, 1)
+                        sumItems(index, e.params.data.price, 1)
                         calculateReceivedValue();
                     }
                 } else {
@@ -313,20 +312,20 @@
                     check(index);
 
                     if (qtd_Item == 0) {
-                        let desconto = parseFloat(($('#priceDesconto').val()).replace('.', '').replace(',', '.'));
-                        let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.', '').replace(',', '.'));
+                        let desconto = parseFloat(($('#priceDiscount').val()).replace('.', '').replace(',', '.'));
+                        let valoresSomados = parseFloat(($('#internalSum').val()).replace('.', '').replace(',', '.'));
 
                         if (desconto > 0) {
                             valoresSomados = desconto + valoresSomados;
-                            valor_total_disponivel = valor_total_disponivel - desconto;
-                            valor_total_consumido = valor_total_consumido + desconto;
+                            total_value_available = total_value_available - desconto;
+                            total_consumed_value = total_consumed_value + desconto;
                             sessionStorage.removeItem('desconto');
-                            exibirValores(valoresSomados)
+                            showValues(valoresSomados)
                         }
 
-                        $('#priceDesconto').val(formatNumber(0));
-                        $('#valorRecebido').val(formatNumber(0));
-                        $('#priceTroco').val(formatNumber(0));
+                        $('#priceDiscount').val(formatNumber(0));
+                        $('#amountReceived').val(formatNumber(0));
+                        $('#priceExchange').val(formatNumber(0));
                     }
                     calculateReceivedValue();
                 });
@@ -351,8 +350,8 @@
 
                     let product = JSON.parse(sessionStorage.getItem('product-' + product_id));
 
-                    removeItens(price, parseInt(product.qtd));
-                    somarItens(product.index, price, qtd_quantity);
+                    removeItems(price, parseInt(product.qtd));
+                    sumItems(product.index, price, qtd_quantity);
 
                     product.qtd = qtd_quantity;
                     product.price = price;
@@ -369,8 +368,8 @@
 
                     price = parseFloat(price.replace('.', '').replace(',', '.'));
 
-                    removeItens(product.price, qtd_quantity);
-                    somarItens(product.index, price, qtd_quantity);
+                    removeItems(product.price, qtd_quantity);
+                    sumItems(product.index, price, qtd_quantity);
 
                     product.qtd = qtd_quantity;
                     product.price = price;
@@ -379,34 +378,34 @@
                     sessionStorage.setItem('product-' + product_id, JSON.stringify(product));
                 });
 
-                $('#priceDesconto').blur(function () {
-                    let desconto = parseFloat(($(this).val()).replace('.', '').replace(',', '.'));
-                    let antigo_desconto = sessionStorage.getItem('desconto');
-                    let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.', '').replace(',', '.'));
+                $('#priceDiscount').blur(function () {
+                    let discount = parseFloat(($(this).val()).replace('.', '').replace(',', '.'));
+                    let old_discount = sessionStorage.getItem('desconto');
+                    let valuesAdded = parseFloat(($('#internalSum').val()).replace('.', '').replace(',', '.'));
 
-                    if (desconto <= 0 || isNaN(desconto)) {
-                        desconto = 0;
-                        $(this).val(desconto);
+                    if (discount <= 0 || isNaN(discount)) {
+                        discount = 0;
+                        $(this).val(discount);
                     } else {
-                        if (antigo_desconto == null) {
-                            sessionStorage.setItem('desconto', desconto);
+                        if (old_discount == null) {
+                            sessionStorage.setItem('desconto', discount);
                         } else {
-                            antigo_desconto = parseFloat(sessionStorage.getItem('desconto'));
-                            valoresSomados += antigo_desconto;
-                            valor_total_disponivel -= antigo_desconto;
-                            valor_total_consumido += antigo_desconto;
+                            old_discount = parseFloat(sessionStorage.getItem('desconto'));
+                            valuesAdded += old_discount;
+                            total_value_available -= old_discount;
+                            total_consumed_value += old_discount;
                         }
 
-                        if (desconto > valoresSomados) {
-                            desconto = 0;
-                            $(this).val(desconto);
+                        if (discount > valuesAdded) {
+                            discount = 0;
+                            $(this).val(discount);
                         }
 
-                        valoresSomados -= desconto;
+                        valuesAdded -= discount;
 
-                        valor_total_disponivel += desconto;
-                        valor_total_consumido -= desconto;
-                        sessionStorage.setItem('desconto', desconto);
+                        total_value_available += discount;
+                        total_consumed_value -= discount;
+                        sessionStorage.setItem('desconto', discount);
 
                         /*console.log({
                             desconto: desconto,
@@ -415,12 +414,12 @@
                             valor_total_consumido: valor_total_consumido,
                             valor_total_disponivel: valor_total_disponivel
                         });*/
-                        exibirValores(valoresSomados)
+                        showValues(valuesAdded)
                         calculateReceivedValue();
                     }
                 })
 
-                $('#valorRecebido').blur(function () {
+                $('#amountReceived').blur(function () {
                     calculateReceivedValue();
                 })
 
@@ -442,7 +441,7 @@
             if (check_index != null
                 && check_product != null
                 && check_product.index == index) {
-                removeItens(check_product.price, check_product.qtd);
+                removeItems(check_product.price, check_product.qtd);
                 sessionStorage.removeItem(check_index);
                 sessionStorage.removeItem('index-' + index);
                 --qtd_Item;
@@ -450,26 +449,26 @@
         }
 
         function calculateReceivedValue(){
-            let valorRecebido = parseFloat(($('#valorRecebido').val()).replace('.', '').replace(',', '.'));
-            let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.', '').replace(',', '.'));
+            let amountReceived = parseFloat(($('#amountReceived').val()).replace('.', '').replace(',', '.'));
+            let valuesAdded = parseFloat(($('#internalSum').val()).replace('.', '').replace(',', '.'));
 
-            if (!isNaN(valorRecebido) && valorRecebido > 0) {
-                let somaTotal = valoresSomados - valorRecebido;
+            if (!isNaN(amountReceived) && amountReceived > 0) {
+                let totalSum = valuesAdded - amountReceived;
 
-                $('#priceTroco').val(formatNumber(somaTotal * (-1)));
+                $('#priceExchange').val(formatNumber(totalSum * (-1)));
             }
         }
 
-        function somarItens(index, valorItem, qtdItem) {
-            valorItem = parseFloat(valorItem);
+        function sumItems(index, valueItem, qtdItem) {
+            valueItem = parseFloat(valueItem);
             qtdItem = parseInt(qtdItem);
 
-            let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.', '').replace(',', '.'));
-            let valorCalculadoItem = valorItem * qtdItem;
+            let valuesAdded = parseFloat(($('#internalSum').val()).replace('.', '').replace(',', '.'));
+            let valueCalculatedItem = valueItem * qtdItem;
 
-            valoresSomados += valorCalculadoItem;
+            valuesAdded += valueCalculatedItem;
 
-            if (valoresSomados >= valor_total_disponivel) {
+            if (valuesAdded >= total_value_available) {
                 alert("Seu limite de orçamento esgostou. Favor adicionar mais creditos no cartao.");
                 removeInvalidItem(index);
                 /*console.log({
@@ -484,10 +483,10 @@
                 return false;
             }
 
-            valor_total_consumido += valorCalculadoItem;
-            valor_total_disponivel -= valorCalculadoItem;
+            total_consumed_value += valueCalculatedItem;
+            total_value_available -= valueCalculatedItem;
 
-            exibirValores(valoresSomados);
+            showValues(valuesAdded);
             /*console.log({
                 Itens: 'soma',
                 valorItem: valorItem,
@@ -499,18 +498,18 @@
             })*/
         }
 
-        function removeItens(valorItem, qtdItem) {
-            valorItem = parseFloat(valorItem);
+        function removeItems(valueItem, qtdItem) {
+            valueItem = parseFloat(valueItem);
             qtdItem = parseInt(qtdItem);
 
-            let valoresSomados = parseFloat(($('#somaInterna').val()).replace('.', '').replace(',', '.'));
-            let valorCalculadoItem = valorItem * qtdItem;
+            let valuesAdded = parseFloat(($('#internalSum').val()).replace('.', '').replace(',', '.'));
+            let valueCalculatedItem = valueItem * qtdItem;
 
-            valoresSomados -= valorCalculadoItem;
-            valor_total_consumido -= valorCalculadoItem;
-            valor_total_disponivel += valorCalculadoItem;
+            valuesAdded -= valueCalculatedItem;
+            total_consumed_value -= valueCalculatedItem;
+            total_value_available += valueCalculatedItem;
 
-            exibirValores(valoresSomados);
+            showValues(valuesAdded);
             /*console.log({
                 Itens: 'subtracao',
                 valorItem: valorItem,
@@ -522,7 +521,7 @@
             })*/
         }
 
-        function exibirValores(valoresSomados) {
+        function showValues(valoresSomados) {
             /* console.log({
                  text : 'gravando',
                  valoresSomados : valoresSomados,
@@ -531,18 +530,18 @@
              })*/
 
             //Input interno somatotal
-            $('#somaInterna').val(formatNumber(valoresSomados));
+            $('#internalSum').val(formatNumber(valoresSomados));
 
             //Valor Total com Desconto
-            $('#somaTotal').html("R$ " + formatNumber(valoresSomados));
+            $('#totalSum').html("R$ " + formatNumber(valoresSomados));
 
             //Valor total Disponivel
-            $('#valorTotal').html(formatNumber(valor_total_disponivel));
-            $('#somaTotalcard').val(formatNumber(valor_total_disponivel));
+            $('#totalValue').html(formatNumber(total_value_available));
+            $('#sumTotalCard').val(formatNumber(total_value_available));
 
             //valor total consumido
-            $('#valorRestante').html(formatNumber(valor_total_consumido));
-            $('#somaTotalCardConsumer').val(formatNumber(valor_total_consumido));
+            $('#valueRemaining').html(formatNumber(total_consumed_value));
+            $('#sumTotalCardConsumer').val(formatNumber(total_consumed_value));
         }
 
         function removeInvalidItem(index) {
