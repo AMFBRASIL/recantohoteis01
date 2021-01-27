@@ -6,6 +6,7 @@ use App\BaseModel;
 use Illuminate\Support\Facades\DB;
 use Modules\Core\Models\SEO;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Pos\Models\Sale;
 use Modules\Supplier\Models\Supplier;
 
 class Product extends BaseModel

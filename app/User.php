@@ -439,5 +439,14 @@
         public function getNameAttribute(){
             return $this->first_name.' '.$this->last_name;
         }
+
+        public static function getForSelect2Query($q)
+        {
+            $query =  static::query()->select(
+                'id', DB::raw('name as text'))
+                ->Where("name", 'like', '%' . $q . '%');
+
+            return $query;
+        }
     }
 
