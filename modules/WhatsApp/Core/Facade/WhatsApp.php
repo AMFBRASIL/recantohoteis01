@@ -15,6 +15,6 @@ class WhatsApp extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'whatsApp';
+        return 'WhatsApp';
     }
 }

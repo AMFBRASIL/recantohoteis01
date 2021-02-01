@@ -31,6 +31,6 @@ class WhatsAppManager extends Manager
     {
 	    $channel = setting_item('whatsApp_driver');
 	    Config::set('whatsApp.default', $channel);
-	    return $this->app['config']['sms.default'] ?? '';
+	    return $this->app['config']['whatsApp.default'] ?? '';
     }
 }

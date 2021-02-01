@@ -313,7 +313,7 @@
             var cant_test = 1;
             $(document).on('click', '#whatsApp-testing', function (e) {
                 event.preventDefault();
-                var to = $('#whatsApp').val();
+                var to = $('#to-whatsApp-testing').val();
                 var message = $('#message-whatsApp-testing').val();
                 var country = $('#country-whatsApp-testing').val();
                 $.ajax({
