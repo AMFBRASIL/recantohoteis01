@@ -2,8 +2,6 @@
 
 namespace Modules\WhatsApp\Core ;
 
-use Modules\WhatsApp\Core\WhatsAppManager;
-use Illuminate\Support\ServiceProvider;
 use Modules\WhatsApp\ModuleProvider;
 
 class WhatsAppServiceProvider extends ModuleProvider

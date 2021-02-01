@@ -13,7 +13,7 @@ class ModuleProvider extends ModuleServiceProvider
 
 	public function register()
 	{
-		$this->app->register(SmsServiceProvider::class);
+		$this->app->register(WhatsAppServiceProvider::class);
 
 	}
 	public function boot(){

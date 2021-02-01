@@ -2,10 +2,8 @@
 
 namespace Modules\WhatsApp\Core\Drivers;
 
-use Illuminate\Support\Arr;
-use Modules\Sms\Core\Contracts\SMS;
 use Modules\Sms\Core\Contracts\WHATSAPP;
-use Modules\Sms\Core\Exceptions\WhatsAppException;
+use Modules\WhatsApp\Core\Exceptions\WhatsAppException;
 
 abstract class Driver implements WHATSAPP
 {
@@ -13,14 +11,14 @@ abstract class Driver implements WHATSAPP
      * The recipient of the message.
      *
      * @var string
-    */
+     */
     protected $recipient;
 
     /**
      * The message to send.
      *
      * @var string
-    */
+     */
     protected $message;
 
     /**
@@ -31,10 +29,10 @@ abstract class Driver implements WHATSAPP
     /**
      * Set the recipient of the message.
      *
-     * @param string  $recipient
+     * @param string $recipient
      *
      * @return $this
-    *@throws \Modules\Sms\Core\Exceptions\WhatsAppException
+     * @throws \Modules\WhatsApp\Core\Exceptions\WhatsAppException
      *
      */
     public function to(string $recipient)

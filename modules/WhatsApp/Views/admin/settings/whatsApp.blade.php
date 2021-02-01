@@ -294,7 +294,7 @@
                     </div>
                     <div class="form-controls">
                         <br>
-                        <div id="whatsApp-testing" style="cursor: pointer;" class="btn btn-primary">{{__('Send WhatsAppms Test')}}</div>
+                        <div id="whatsApp-testing" style="cursor: pointer;" class="btn btn-primary">{{__('Send WhatsApp Test')}}</div>
                     </div>
                 </div>
                 <div class="form-group">
