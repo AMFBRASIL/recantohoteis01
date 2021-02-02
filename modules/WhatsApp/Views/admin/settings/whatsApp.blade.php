@@ -36,19 +36,19 @@
                         <div class="form-group">
                             <label class="">{{__("Twilio Account Sid")}}</label>
                             <div class="form-controls">
-                                <input type="text" class="form-control" name="whatsApp_twilio_account_sid" value="{{setting_item('whatsApp_twilio_account_sid',config('whatsApp.twilio.sid'))}}">
+                                <input type="text" class="form-control" name="whatsApp_twilio_account_sid" value="{{setting_item('whatsApp_twilio_account_sid',config('whatsapp.twilio.sid'))}}">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="">{{__("Twilio Account Token")}}</label>
                             <div class="form-controls">
-                                <input type="text" class="form-control" name="whatsApp_twilio_account_token" value="{{setting_item('whatsApp_twilio_account_token',config('whatsApp.twilio.token'))}}">
+                                <input type="text" class="form-control" name="whatsApp_twilio_account_token" value="{{setting_item('whatsApp_twilio_account_token',config('whatsapp.twilio.token'))}}">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="">{{__("From")}}</label>
                             <div class="form-controls">
-                                <input type="number" class="form-control" name="whatsApp_twilio_api_from" value="{{setting_item('whatsApp_twilio_api_from',config('whatsApp.twilio.from'))}}">
+                                <input type="number" class="form-control" name="whatsApp_twilio_api_from" value="{{setting_item('whatsApp_twilio_api_from',config('whatsapp.twilio.from'))}}">
                             </div>
                         </div>
                     </div>

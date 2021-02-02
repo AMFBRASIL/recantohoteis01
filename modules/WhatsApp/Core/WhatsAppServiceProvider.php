@@ -20,13 +20,13 @@ class WhatsAppServiceProvider extends ModuleProvider
      */
     public function boot(){
     	$this->publishes([
-		    __DIR__.'/Config/whatsApp.php'=>config_path('whatsApp.php')
+		    __DIR__.'/Config/whatsapp.php'=>config_path('whatsapp.php')
 	    ]);
     }
     public function register()
     {
 	    $this->mergeConfigFrom(
-		    __DIR__.'/Config/whatsApp.php', 'whatsApp'
+		    __DIR__.'/Config/whatsapp.php', 'whatsapp'
 	    );
         $this->app->singleton('WhatsApp', function ($app) {
             return new WhatsAppManager($app);
@@ -40,6 +40,6 @@ class WhatsAppServiceProvider extends ModuleProvider
      */
     public function provides()
     {
-        return ['whatsApp'];
+        return ['whatsapp'];
     }
 }

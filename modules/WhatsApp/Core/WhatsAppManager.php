@@ -3,6 +3,7 @@
 namespace Modules\WhatsApp\Core;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Manager;
+use Modules\Sms\Core\Drivers\NullDriver;
 use Modules\WhatsApp\Core\Drivers\TwilioDriver;
 
 class WhatsAppManager extends Manager
@@ -14,13 +15,14 @@ class WhatsAppManager extends Manager
 
 	public function createTwilioDriver()
 	{
-		\config()->set('whatsApp.twilio.from',setting_item('whatsApp_twilio_api_from',\config('whatsApp.twilio.from')));
-		\config()->set('whatsApp.twilio.sid',setting_item('whatsApp_twilio_account_sid',\config('whatsApp.twilio.sid')));
-		\config()->set('whatsApp.twilio.token',setting_item('whatsApp_twilio_account_token',\config('whatsApp.twilio.token')));
+		\config()->set('whatsapp.twilio.from',setting_item('whatsapp_twilio_api_from',\config('whatsapp.twilio.from')));
+		\config()->set('whatsapp.twilio.sid',setting_item('whatsapp_twilio_account_sid',\config('whatsapp.twilio.sid')));
+		\config()->set('whatsapp.twilio.token',setting_item('whatsapp_twilio_account_token',\config('whatsapp.twilio.token')));
 		return new TwilioDriver(
-			$this->app['config']['whatsApp.twilio']
+			$this->app['config']['whatsapp.twilio']
 		);
 	}
+
 
     /**
      * Get the default SMS driver name.
@@ -29,8 +31,8 @@ class WhatsAppManager extends Manager
      */
     public function getDefaultDriver()
     {
-	    $channel = setting_item('whatsApp_driver');
-	    Config::set('whatsApp.default', $channel);
-	    return $this->app['config']['whatsApp.default'] ?? '';
+	    $channel = setting_item('whatsapp_driver');
+	    Config::set('whatsapp.twilio', $channel);
+	    return $this->app['config']['whatsapp.twilio'] ?? '';
     }
 }
