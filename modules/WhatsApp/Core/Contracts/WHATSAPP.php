@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Sms\Core\Contracts;
+namespace Modules\WhatsApp\Core\Contracts;
 
 interface WHATSAPP
 {

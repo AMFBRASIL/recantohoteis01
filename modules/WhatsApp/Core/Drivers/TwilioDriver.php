@@ -6,7 +6,6 @@ use Modules\WhatsApp\Core\Exceptions\WhatsAppException;
 
 class TwilioDriver extends Driver
 {
-
     protected $config;
 
     public function __construct($config)
