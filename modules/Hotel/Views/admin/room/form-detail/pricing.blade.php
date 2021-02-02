@@ -1,15 +1,29 @@
 @if(is_default_lang())
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-{{ $editMode ? 3 : 6 }}">
             <div class="form-group">
                 <label>{{__("Price")}} <span class="text-danger">*</span></label>
                 <input type="number" required value="{{$row->price}}" min="1" placeholder="{{__("Price")}}" name="price" class="form-control">
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-{{ $editMode ? 3 : 6 }}">
             <div class="form-group">
                 <label>{{__("Number of room")}} <span class="text-danger">*</span></label>
                 <input type="number" required value="{{$row->number ?? 1}}" min="1" max="100" placeholder="{{__("Number")}}" name="number" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-{{ $editMode ? 6 : 12 }}">
+            <div class="form-group">
+                <label>{{__("Number UH")}} <span class="text-danger">*</span></label>
+                <select class="form-control" required name="room_id">
+                    @foreach ($rooms as $option)
+                        @if ($row->room_id == $option->id)
+                            <option value="{{$option->id}}" selected>{{$option->number}}</option>
+                        @else
+                            <option value="{{$option->id}}">{{$option->number}}</option>
+                        @endif
+                    @endforeach
+                </select>
             </div>
         </div>
     </div>

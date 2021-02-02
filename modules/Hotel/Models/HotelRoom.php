@@ -14,6 +14,7 @@ use Modules\Media\Helpers\FileHelper;
 use Modules\Review\Models\Review;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Hotel\Models\HotelTranslation;
+use Modules\Room\Models\Room;
 use Modules\User\Models\UserWishList;
 
 class HotelRoom extends Bookable
@@ -26,6 +27,7 @@ class HotelRoom extends Bookable
     protected $fillable = [
         'title',
         'content',
+        'room_id',
         'status',
     ];
 
@@ -36,6 +38,7 @@ class HotelRoom extends Bookable
     protected $roomDateClass;
     protected $hotelRoomTermClass;
     protected $roomBookingClass;
+    protected $room;
 
     public function __construct(array $attributes = [])
     {
@@ -44,6 +47,7 @@ class HotelRoom extends Bookable
         $this->roomDateClass = HotelRoomDate::class;
         $this->hotelRoomTermClass = HotelRoomTerm::class;
         $this->roomBookingClass = HotelRoomBooking::class;
+        $this->room = Room::class;
     }
 
     public static function getModelName()
@@ -54,6 +58,11 @@ class HotelRoom extends Bookable
     public static function getTableName()
     {
         return with(new static)->table;
+    }
+
+    public function room()
+    {
+        return $this->hasOne($this->room ,'id', 'building_id');
     }
 
 
