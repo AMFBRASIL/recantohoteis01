@@ -2,12 +2,11 @@
 namespace Modules\Core\Admin;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 use Modules\AdminController;
 use Modules\Core\Models\Settings;
-use Illuminate\Support\Facades\Cache;
+use Modules\Situation\Models\Situation;
 
 class SettingsController extends AdminController
 {
@@ -45,6 +44,9 @@ class SettingsController extends AdminController
             ],
             'page_title'    => $this->groups[$group]['name'] ?? $this->groups[$group]['title'] ?? $group,
             'group'         => $this->groups[$group],
+            'situationList' => Situation::query()->whereHas('section', function ($query) {
+                $query->where('name', 'like', '%Reservas%');
+            })->get(),
             'enable_multi_lang'=>true
         ];
         return view('Core::admin.settings.index', $data);
@@ -100,7 +102,13 @@ class SettingsController extends AdminController
                     'email_account_payable',
                     'email_account_receivable',
                     'email_nfe',
-                    'email_nfce'
+                    'email_nfce',
+
+                    'situation_hotel_id',
+                    'situation_space_id',
+                    'situation_tour_id',
+                    'situation_event_id',
+                    'situation_car_id',
                 ];
                 break;
             case 'style':

@@ -9,57 +9,63 @@
                 <div class="form-group">
                     <label class="">{{__("Site title")}}</label>
                     <div class="form-controls">
-                        <input type="text" class="form-control" name="site_title" value="{{setting_item_with_lang('site_title',request()->query('lang'))}}">
+                        <input type="text" class="form-control" name="site_title"
+                               value="{{setting_item_with_lang('site_title',request()->query('lang'))}}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label>{{__("Site Desc")}}</label>
                     <div class="form-controls">
-                        <textarea name="site_desc" class="form-control" cols="30" rows="7">{{setting_item_with_lang('site_desc',request()->query('lang'))}}</textarea>
+                        <textarea name="site_desc" class="form-control" cols="30"
+                                  rows="7">{{setting_item_with_lang('site_desc',request()->query('lang'))}}</textarea>
                     </div>
                 </div>
 
                 @if(is_default_lang())
-                <div class="form-group">
-                    <label class="" >{{__("Favicon")}}</label>
-                    <div class="form-controls form-group-image">
-                        {!! \Modules\Media\Helpers\FileHelper::fieldUpload('site_favicon',$settings['site_favicon'] ?? "") !!}
+                    <div class="form-group">
+                        <label class="">{{__("Favicon")}}</label>
+                        <div class="form-controls form-group-image">
+                            {!! \Modules\Media\Helpers\FileHelper::fieldUpload('site_favicon',$settings['site_favicon'] ?? "") !!}
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label>{{__("Date format")}}</label>
-                    <div class="form-controls">
-                        <input type="text" class="form-control" name="date_format" value="{{$settings['date_format'] ?? 'm/d/Y' }}">
+                    <div class="form-group">
+                        <label>{{__("Date format")}}</label>
+                        <div class="form-controls">
+                            <input type="text" class="form-control" name="date_format"
+                                   value="{{$settings['date_format'] ?? 'm/d/Y' }}">
+                        </div>
                     </div>
-                </div>
                 @endif
                 @if(is_default_lang())
-                <div class="form-group">
-                    <label>{{__("Timezone")}}</label>
-                    @php
-                        $path = resource_path('module/core/timezone.json');
-                        $timezones = json_decode(\Illuminate\Support\Facades\File::get($path));
-                    @endphp
-                    <div class="form-controls">
-                        <select name="site_timezone" class="form-control">
-                            <option value="UTC">{{__("-- Default --")}}</option>
-                            @if(!empty($timezones))
-                                @foreach($timezones as $item=>$value)
-                                    <option @if($item == ($settings['site_timezone'] ?? '') ) selected @endif value="{{$item}}">{{$value}}</option>
-                                @endforeach
-                            @endif
-                        </select>
+                    <div class="form-group">
+                        <label>{{__("Timezone")}}</label>
+                        @php
+                            $path = resource_path('module/core/timezone.json');
+                            $timezones = json_decode(\Illuminate\Support\Facades\File::get($path));
+                        @endphp
+                        <div class="form-controls">
+                            <select name="site_timezone" class="form-control">
+                                <option value="UTC">{{__("-- Default --")}}</option>
+                                @if(!empty($timezones))
+                                    @foreach($timezones as $item=>$value)
+                                        <option @if($item == ($settings['site_timezone'] ?? '') ) selected
+                                                @endif value="{{$item}}">{{$value}}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
                     </div>
-                </div>
-                 <div class="form-group">
-                    <label>{{__("Change the first day of week for the calendars")}}</label>
-                    <div class="form-controls">
-                        <select name="site_first_day_of_the_weekin_calendar" class="form-control">
-                            <option @if("1" == ($settings['site_first_day_of_the_weekin_calendar'] ?? '') ) selected @endif value="1">{{__("Monday")}}</option>
-                            <option @if("0" == ($settings['site_first_day_of_the_weekin_calendar'] ?? '') ) selected @endif value="0">{{__("Sunday")}}</option>
-                        </select>
+                    <div class="form-group">
+                        <label>{{__("Change the first day of week for the calendars")}}</label>
+                        <div class="form-controls">
+                            <select name="site_first_day_of_the_weekin_calendar" class="form-control">
+                                <option @if("1" == ($settings['site_first_day_of_the_weekin_calendar'] ?? '') ) selected
+                                        @endif value="1">{{__("Monday")}}</option>
+                                <option @if("0" == ($settings['site_first_day_of_the_weekin_calendar'] ?? '') ) selected
+                                        @endif value="0">{{__("Sunday")}}</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
                 @endif
             </div>
         </div>
@@ -86,7 +92,9 @@
                                 @endphp
 
                                 @foreach($langs as $lang)
-                                    <option @if($lang->locale == ($settings['site_locale'] ?? '') ) selected @endif value="{{$lang->locale}}">{{$lang->name}} - ({{$lang->locale}})</option>
+                                    <option @if($lang->locale == ($settings['site_locale'] ?? '') ) selected
+                                            @endif value="{{$lang->locale}}">{{$lang->name}} - ({{$lang->locale}})
+                                    </option>
                                 @endforeach
                             </select>
                             <p><i><a href="{{url('admin/module/language')}}">{{__("Manage languages here")}}</a></i></p>
@@ -95,14 +103,17 @@
                     <div class="form-group">
                         <label>{{__("Enable Multi Languages")}}</label>
                         <div class="form-controls">
-                            <label><input type="checkbox" @if(setting_item('site_enable_multi_lang') ?? '' == 1) checked @endif name="site_enable_multi_lang" value="1">{{__('Enable')}}</label>
+                            <label><input type="checkbox" @if(setting_item('site_enable_multi_lang') ?? '' == 1) checked
+                                          @endif name="site_enable_multi_lang" value="1">{{__('Enable')}}</label>
                         </div>
                     </div>
                 @endif
                 <div class="form-group">
                     <label>{{__("Enable RTL")}}</label>
                     <div class="form-controls">
-                        <label><input type="checkbox" @if(setting_item_with_lang('enable_rtl',request()->query('lang')) ?? '' == 1) checked @endif name="enable_rtl" value="1">{{__('Enable')}}</label>
+                        <label><input type="checkbox"
+                                      @if(setting_item_with_lang('enable_rtl',request()->query('lang')) ?? '' == 1) checked
+                                      @endif name="enable_rtl" value="1">{{__('Enable')}}</label>
                     </div>
                 </div>
             </div>
@@ -123,19 +134,22 @@
                     <div class="form-group">
                         <label>{{__("Admin Email")}}</label>
                         <div class="form-controls">
-                            <input type="email" class="form-control" name="admin_email" value="{{$settings['admin_email'] ?? '' }}">
+                            <input type="email" class="form-control" name="admin_email"
+                                   value="{{$settings['admin_email'] ?? '' }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>{{__("Email Form Name")}}</label>
                         <div class="form-controls">
-                            <input type="text" class="form-control" name="email_from_name" value="{{$settings['email_from_name'] ?? '' }}">
+                            <input type="text" class="form-control" name="email_from_name"
+                                   value="{{$settings['email_from_name'] ?? '' }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>{{__("Email Form Address")}}</label>
                         <div class="form-controls">
-                            <input type="email" class="form-control" name="email_from_address" value="{{$settings['email_from_address'] ?? '' }}">
+                            <input type="email" class="form-control" name="email_from_address"
+                                   value="{{$settings['email_from_address'] ?? '' }}">
                         </div>
                     </div>
                 </div>
@@ -154,55 +168,193 @@
                     <div class="form-group">
                         <label>{{__("Name Company")}}</label>
                         <div class="form-controls">
-                            <input type="text" class="form-control" name="name_company" value="{{$settings['name_company'] ?? '' }}">
+                            <input type="text" class="form-control" name="name_company"
+                                   value="{{$settings['name_company'] ?? '' }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>{{__("Telefone Company")}}</label>
                         <div class="form-controls">
-                            <input type="text" class="form-control" name="phone_company" value="{{$settings['phone_company'] ?? '' }}">
+                            <input type="text" class="form-control" name="phone_company"
+                                   value="{{$settings['phone_company'] ?? '' }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>{{__("Estoque Email")}}</label>
                         <div class="form-controls">
-                            <input type="email" class="form-control" name="email_estoque" value="{{$settings['email_estoque'] ?? '' }}">
+                            <input type="email" class="form-control" name="email_estoque"
+                                   value="{{$settings['email_estoque'] ?? '' }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>{{__("Adm Email")}}</label>
                         <div class="form-controls">
-                            <input type="email" class="form-control" name="email_adm" value="{{$settings['email_adm'] ?? '' }}">
+                            <input type="email" class="form-control" name="email_adm"
+                                   value="{{$settings['email_adm'] ?? '' }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>{{__("Gerencia Email")}}</label>
                         <div class="form-controls">
-                            <input type="email" class="form-control" name="email_manager" value="{{$settings['email_manager'] ?? '' }}">
+                            <input type="email" class="form-control" name="email_manager"
+                                   value="{{$settings['email_manager'] ?? '' }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>{{__("Contas a Pagar Email")}}</label>
                         <div class="form-controls">
-                            <input type="email" class="form-control" name="email_account_payable" value="{{$settings['email_account_payable'] ?? '' }}">
+                            <input type="email" class="form-control" name="email_account_payable"
+                                   value="{{$settings['email_account_payable'] ?? '' }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>{{__("Contas a Receber Email")}}</label>
                         <div class="form-controls">
-                            <input type="email" class="form-control" name="email_account_receivable" value="{{$settings['email_account_receivable'] ?? '' }}">
+                            <input type="email" class="form-control" name="email_account_receivable"
+                                   value="{{$settings['email_account_receivable'] ?? '' }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>{{__("NFe Email")}}</label>
                         <div class="form-controls">
-                            <input type="email" class="form-control" name="email_nfe" value="{{$settings['email_nfe'] ?? '' }}">
+                            <input type="email" class="form-control" name="email_nfe"
+                                   value="{{$settings['email_nfe'] ?? '' }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label>{{__("NFCe Email")}}</label>
                         <div class="form-controls">
-                            <input type="email" class="form-control" name="email_nfce" value="{{$settings['email_nfce'] ?? '' }}">
+                            <input type="email" class="form-control" name="email_nfce"
+                                   value="{{$settings['email_nfce'] ?? '' }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-4">
+            <h3 class="form-group-title">{{__('Sequencia de Situacoes de Cada Modulo')}}</h3>
+            <p class="form-group-desc">{{__('When the selected module is requested in the system, the configured situation will be applied as a default.')}}</p>
+        </div>
+        <div class="col-sm-8">
+            <div class="panel">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#situacao_default_hotel">Hotel</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#situacao_default_spaces">Spaces</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#situacao_default_tour">Tour</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#situacao_default_evento">Eventos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#situacao_default_car">Cars</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="situacao_default_hotel">
+                                <div class="form-group">
+                                    <label class="control-label">Default Situation for Hotel</label>
+                                    <div class="form-group">
+                                        <div class="form-controls">
+                                            <select class="form-control" name="situation_hotel_id">
+                                                @foreach ($situationList as $option)
+                                                    @if (setting_item('situation_hotel_id') == $option->id)
+                                                        <option value="{{$option->id}}"
+                                                                selected>{{$option->name}}</option>
+                                                    @else
+                                                        <option value="{{$option->id}}">{{$option->name}}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="situacao_default_spaces">
+                                <div class="form-group">
+                                    <label class="control-label">Default Situation for Spaces</label>
+                                    <div class="form-group">
+                                        <div class="form-controls">
+                                            <select class="form-control" name="situation_space_id">
+                                                @foreach ($situationList as $option)
+                                                    @if (setting_item('situation_space_id') == $option->id)
+                                                        <option value="{{$option->id}}"
+                                                                selected>{{$option->name}}</option>
+                                                    @else
+                                                        <option value="{{$option->id}}">{{$option->name}}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="situacao_default_tour">
+                                <div class="form-group">
+                                    <label class="control-label">Default Situation for Tour</label>
+                                    <div class="form-group">
+                                        <div class="form-controls">
+                                            <select class="form-control" name="situation_tour_id">
+                                                @foreach ($situationList as $option)
+                                                    @if (setting_item('situation_tour_id') == $option->id)
+                                                        <option value="{{$option->id}}"
+                                                                selected>{{$option->name}}</option>
+                                                    @else
+                                                        <option value="{{$option->id}}">{{$option->name}}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="situacao_default_evento">
+                                <div class="form-group">
+                                    <label class="control-label">Default Situation for Event</label>
+                                    <div class="form-group">
+                                        <div class="form-controls">
+                                            <select class="form-control" name="situation_event_id">
+                                                @foreach ($situationList as $option)
+                                                    @if (setting_item('situation_event_id') == $option->id)
+                                                        <option value="{{$option->id}}"
+                                                                selected>{{$option->name}}</option>
+                                                    @else
+                                                        <option value="{{$option->id}}">{{$option->name}}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="situacao_default_car">
+                                <div class="form-group">
+                                    <label class="control-label">Default Situation for Cars</label>
+                                    <div class="form-group">
+                                        <div class="form-controls">
+                                            <select class="form-control" name="situation_car_id">
+                                                @foreach ($situationList as $option)
+                                                    @if (setting_item('situation_car_id') == $option->id)
+                                                        <option value="{{$option->id}}"
+                                                                selected>{{$option->name}}</option>
+                                                    @else
+                                                        <option value="{{$option->id}}">{{$option->name}}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -227,7 +379,7 @@
                             \App\Helpers\AdminForm::select2('home_page_id', [
                                 'configs' => [
                                     'ajax' => [
-                                        'url'      => url('/admin/module/page/getForSelect2'),
+                                        'url' => url('/admin/module/page/getForSelect2'),
                                         'dataType' => 'json'
                                     ]
                                 ]
@@ -252,20 +404,22 @@
         <div class="panel">
             <div class="panel-body">
                 @if(is_default_lang())
-                <div class="form-group">
-                    <label>{{__("Logo")}}</label>
-                    <div class="form-controls form-group-image">
-                        {!! \Modules\Media\Helpers\FileHelper::fieldUpload('logo_id',$settings['logo_id'] ?? '') !!}
-                    </div>
-                </div>
-                @endif
                     <div class="form-group">
-                        <label>{{__("Topbar Left Text")}}</label>
-                        <div class="form-controls">
-                            <div id="topbar_left_text_editor" class="ace-editor" style="height: 400px" data-theme="textmate" data-mod="html">{{setting_item_with_lang('topbar_left_text',request()->query('lang'))}}</div>
-                            <textarea class="d-none" name="topbar_left_text" > {{ setting_item_with_lang('topbar_left_text',request()->query('lang')) }} </textarea>
+                        <label>{{__("Logo")}}</label>
+                        <div class="form-controls form-group-image">
+                            {!! \Modules\Media\Helpers\FileHelper::fieldUpload('logo_id',$settings['logo_id'] ?? '') !!}
                         </div>
                     </div>
+                @endif
+                <div class="form-group">
+                    <label>{{__("Topbar Left Text")}}</label>
+                    <div class="form-controls">
+                        <div id="topbar_left_text_editor" class="ace-editor" style="height: 400px" data-theme="textmate"
+                             data-mod="html">{{setting_item_with_lang('topbar_left_text',request()->query('lang'))}}</div>
+                        <textarea class="d-none"
+                                  name="topbar_left_text"> {{ setting_item_with_lang('topbar_left_text',request()->query('lang')) }} </textarea>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label>{{__("Footer List Widget")}}</label>
                     <div class="form-controls">
@@ -281,55 +435,73 @@
                                 </div>
                                 <div class="g-items">
                                     <?php
-                                    $social_share = setting_item_with_lang('list_widget_footer',request()->query('lang'));
-                                    if(!empty($social_share)) $social_share = json_decode($social_share,true);
-                                    if(empty($social_share) or !is_array($social_share))
+                                    $social_share = setting_item_with_lang('list_widget_footer', request()->query('lang'));
+                                    if (!empty($social_share)) $social_share = json_decode($social_share, true);
+                                    if (empty($social_share) or !is_array($social_share))
                                         $social_share = [];
                                     ?>
                                     @foreach($social_share as $key=>$item)
                                         <div class="item" data-number="{{$key}}">
                                             <div class="row">
                                                 <div class="col-md-3">
-                                                    <input type="text" name="list_widget_footer[{{$key}}][title]" class="form-control" value="{{$item['title']}}">
+                                                    <input type="text" name="list_widget_footer[{{$key}}][title]"
+                                                           class="form-control" value="{{$item['title']}}">
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <select class="form-control" name="list_widget_footer[{{$key}}][size]">
-                                                        <option @if(!empty($item['size']) && $item['size']=='3') selected @endif value="3">1/4</option>
-                                                        <option @if(!empty($item['size']) && $item['size']=='4') selected @endif value="4">1/3</option>
-                                                        <option @if(!empty($item['size']) && $item['size']=='6') selected @endif value="6">1/2</option>
+                                                    <select class="form-control"
+                                                            name="list_widget_footer[{{$key}}][size]">
+                                                        <option
+                                                            @if(!empty($item['size']) && $item['size']=='3') selected
+                                                            @endif value="3">1/4
+                                                        </option>
+                                                        <option
+                                                            @if(!empty($item['size']) && $item['size']=='4') selected
+                                                            @endif value="4">1/3
+                                                        </option>
+                                                        <option
+                                                            @if(!empty($item['size']) && $item['size']=='6') selected
+                                                            @endif value="6">1/2
+                                                        </option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <textarea name="list_widget_footer[{{$key}}][content]" rows="5" class="form-control">{{$item['content']}}</textarea>
+                                                    <textarea name="list_widget_footer[{{$key}}][content]" rows="5"
+                                                              class="form-control">{{$item['content']}}</textarea>
                                                 </div>
                                                 <div class="col-md-1">
-                                                    <span class="btn btn-danger btn-sm btn-remove-item"><i class="fa fa-trash"></i></span>
+                                                    <span class="btn btn-danger btn-sm btn-remove-item"><i
+                                                            class="fa fa-trash"></i></span>
                                                 </div>
                                             </div>
                                         </div>
                                     @endforeach
                                 </div>
                                 <div class="text-right">
-                                    <span class="btn btn-info btn-sm btn-add-item"><i class="icon ion-ios-add-circle-outline"></i> {{__('Add item')}}</span>
+                                    <span class="btn btn-info btn-sm btn-add-item"><i
+                                            class="icon ion-ios-add-circle-outline"></i> {{__('Add item')}}</span>
                                 </div>
                                 <div class="g-more hide">
                                     <div class="item" data-number="__number__">
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <input type="text" __name__="list_widget_footer[__number__][title]" class="form-control" value="">
+                                                <input type="text" __name__="list_widget_footer[__number__][title]"
+                                                       class="form-control" value="">
                                             </div>
                                             <div class="col-md-2">
-                                                <select class="form-control" __name__="list_widget_footer[__number__][size]">
+                                                <select class="form-control"
+                                                        __name__="list_widget_footer[__number__][size]">
                                                     <option value="3">1/4</option>
                                                     <option value="4">1/3</option>
                                                     <option value="6">1/2</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <textarea __name__="list_widget_footer[__number__][content]" class="form-control" rows="5"></textarea>
+                                                <textarea __name__="list_widget_footer[__number__][content]"
+                                                          class="form-control" rows="5"></textarea>
                                             </div>
                                             <div class="col-md-1">
-                                                <span class="btn btn-danger btn-sm btn-remove-item"><i class="fa fa-trash"></i></span>
+                                                <span class="btn btn-danger btn-sm btn-remove-item"><i
+                                                        class="fa fa-trash"></i></span>
                                             </div>
                                         </div>
                                     </div>
@@ -341,13 +513,15 @@
                 <div class="form-group">
                     <label>{{__("Footer Text Left")}}</label>
                     <div class="form-controls">
-                        <textarea name="footer_text_left" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('footer_text_left',request()->query('lang')) }}</textarea>
+                        <textarea name="footer_text_left" class="d-none has-ckeditor" cols="30"
+                                  rows="10">{{setting_item_with_lang('footer_text_left',request()->query('lang')) }}</textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>{{__("Footer Text Right")}}</label>
                     <div class="form-controls">
-                        <textarea name="footer_text_right" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('footer_text_right',request()->query('lang')) }}</textarea>
+                        <textarea name="footer_text_right" class="d-none has-ckeditor" cols="30"
+                                  rows="10">{{setting_item_with_lang('footer_text_right',request()->query('lang')) }}</textarea>
                     </div>
                 </div>
             </div>
@@ -366,13 +540,15 @@
                 <div class="form-group">
                     <label class="">{{__("Contact title")}}</label>
                     <div class="form-controls">
-                        <input type="text" class="form-control" name="page_contact_title" value="{{setting_item_with_lang('page_contact_title',request()->query('lang'),"We'd love to hear from you")}}">
+                        <input type="text" class="form-control" name="page_contact_title"
+                               value="{{setting_item_with_lang('page_contact_title',request()->query('lang'),"We'd love to hear from you")}}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label>{{__("Contact sub title")}}</label>
                     <div class="form-controls">
-                        <input type="text" class="form-control" name="page_contact_sub_title" value="{{setting_item_with_lang('page_contact_sub_title',request()->query('lang'),"Send us a message and we'll respond as soon as possible")}}">
+                        <input type="text" class="form-control" name="page_contact_sub_title"
+                               value="{{setting_item_with_lang('page_contact_sub_title',request()->query('lang'),"Send us a message and we'll respond as soon as possible")}}">
                     </div>
                 </div>
                 <div class="form-group">
@@ -405,11 +581,11 @@
         (function ($) {
             $('.ace-editor').each(function () {
                 var editor = ace.edit($(this).attr('id'));
-                editor.setTheme("ace/theme/"+$(this).data('theme'));
-                editor.session.setMode("ace/mode/"+$(this).data('mod'));
+                editor.setTheme("ace/theme/" + $(this).data('theme'));
+                editor.session.setMode("ace/mode/" + $(this).data('mod'));
                 var me = $(this);
 
-                editor.session.on('change', function(delta) {
+                editor.session.on('change', function (delta) {
                     // delta.start, delta.end, delta.lines, delta.action
                     me.next('textarea').val(editor.getValue());
                 });

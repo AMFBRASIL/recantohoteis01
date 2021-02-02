@@ -144,6 +144,7 @@ class BookingController extends \App\Http\Controllers\Controller
          * @var $booking Booking
          * @var $user User
          */
+
         $res = $this->validateDoCheckout();
         if($res !== true) return $res;
         $user = auth()->user();
@@ -156,6 +157,7 @@ class BookingController extends \App\Http\Controllers\Controller
             ]);
         }
         $service = $booking->service;
+
         if (empty($service)) {
             return $this->sendError(__("Service not found"));
         }
