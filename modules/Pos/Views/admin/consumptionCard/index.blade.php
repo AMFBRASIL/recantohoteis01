@@ -220,6 +220,50 @@
                 }
             });
         });
+
+        $('#priceAdd').on('keyup',function(){
+
+            $("#somaValores").show();
+
+            var priceAdd = $('#priceAdd').val();
+
+            if(priceAdd == ''){
+                $("#somaValores").hide();
+            }
+
+            // Somando valores
+            var totalValores = priceAdd;
+            var totalValoresCobrar = priceAdd;
+
+            $('#somaTotal').html("R$ " + totalValores);
+            $('#somaTotalCobrar').html("R$ " + totalValoresCobrar);
+        })
+
+        /*$('#formPayment').on('change', function() {
+            if(this.value == "5"){
+                $('#divNSU').hide();
+            } else {
+                $('#divNSU').show();
+                $('#nsuinput').focus();
+            }
+        });*/
+
+        $(".account").css({
+            "margin-bottom": "36px !important",
+            "font-size": "14px",
+            "color": "#1A237E"
+        });
+
+        $(".balance").css({
+            "font-size": "36px",
+            "color": "green"
+        });
+
+        $(".restante").css({
+            "font-size": "36px",
+            "color": "red"
+        });
+
     </script>
 @endsection
 
