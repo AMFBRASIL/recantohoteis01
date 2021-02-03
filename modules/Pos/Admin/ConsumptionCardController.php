@@ -58,7 +58,7 @@ class ConsumptionCardController extends AdminController
             'paymentMethodList' => PaymentMethod::all(),
             'costCenterList' => CostCenter::all(),
             'situationList' => Situation::query()->whereHas('section', function ($query) {
-                $query->where('name', 'like', '%CARTAO DE CONSUMO%');
+                $query->where('name', 'like', '%CARTAO CONSUMO%');
             })->get()
         ];
 
