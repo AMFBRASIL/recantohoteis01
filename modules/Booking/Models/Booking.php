@@ -13,6 +13,7 @@ use Modules\Booking\Emails\NewBookingEmail;
 use Modules\Booking\Emails\StatusUpdatedEmail;
 use Modules\Booking\Events\BookingUpdatedEvent;
 use Modules\Hotel\Models\HotelRoomBooking;
+use Modules\Situation\Models\Situation;
 use Modules\Space\Models\Space;
 use Modules\Tour\Models\Tour;
 use App\User;
@@ -89,6 +90,11 @@ class Booking extends BaseModel
     public function payment()
     {
         return $this->hasOne(Payment::class, 'id', 'payment_id');
+    }
+
+    public function situation()
+    {
+        return $this->belongsTo(Situation::class, 'situation_id');
     }
 
     public function getCheckoutUrl()
