@@ -239,7 +239,6 @@ class BookingController extends \App\Http\Controllers\Controller
         $booking->pay_now = floatval($booking->deposit == null ? $booking->total : $booking->deposit);
 
         $settings = Settings::query()->where('name', 'situation_'.$booking->object_model.'_id')->first();
-
         $booking->situation_id = $settings->val;
 
         // If using credit
