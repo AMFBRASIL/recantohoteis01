@@ -13,6 +13,7 @@ use Modules\Booking\Events\BookingCreatedEvent;
 use Modules\Booking\Events\BookingUpdatedEvent;
 use Modules\Booking\Events\EnquirySendEvent;
 use Modules\Booking\Events\SetPaidAmountEvent;
+use Modules\Core\Models\Settings;
 use Modules\Tour\Models\TourDate;
 use Validator;
 use Illuminate\Http\Request;
@@ -237,6 +238,9 @@ class BookingController extends \App\Http\Controllers\Controller
         $booking->wallet_total_used = floatval($wallet_total_used);
         $booking->pay_now = floatval($booking->deposit == null ? $booking->total : $booking->deposit);
 
+        $settings = Settings::query()->where('name', 'situation_'.$booking->object_model.'_id')->first();
+
+        $booking->situation_id = $settings->val;
 
         // If using credit
         if($booking->wallet_total_used > 0){
