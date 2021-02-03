@@ -55,6 +55,7 @@
                                     <tr>
                                         <th width="45px"><input type="checkbox" class="check-all"></th>
                                         <th> {{ __('Room name')}}</th>
+                                        <th width="100px"> {{ __('UH')}}</th>
                                         <th width="100px"> {{ __('Number')}}</th>
                                         <th width="100px"> {{ __('Price')}}</th>
                                         <th width="100px"> {{ __('Status')}}</th>
@@ -70,6 +71,7 @@
                                                 <td class="title">
                                                     <a href="{{route('hotel.admin.room.edit',['hotel_id'=>$hotel->id,'id'=>$row->id])}}">{{$row->title}}</a>
                                                 </td>
+                                                <td>{{$row->room_id}}</td>
                                                 <td>{{$row->number}}</td>
                                                 <td>{{format_money($row->price)}}</td>
                                                 <td><span class="badge badge-{{ $row->status }}">{{ $row->status }}</span></td>

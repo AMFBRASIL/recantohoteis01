@@ -195,6 +195,7 @@ class RoomController extends AdminController
             'image_id',
             'gallery',
             'price',
+            'room_id',
             'number',
             'beds',
             'size',
