@@ -8,6 +8,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', 'ConsumptionCardController@index');
+
 Route::group(['prefix' => 'consumptionCard'], function () {
 
     Route::get('/', 'ConsumptionCardController@index')->name('pos.admin.consumption.card.index');

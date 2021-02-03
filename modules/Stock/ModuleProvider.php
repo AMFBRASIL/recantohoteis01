@@ -34,7 +34,7 @@ class ModuleProvider extends ModuleServiceProvider
                 'children'   => [
                     'add'=>[
                         'url'        => route('stock.admin.create'),
-                        'title'      => __('Centro de Custo'),
+                        'title'      => __('Local de Estoque'),
                         'permission' => 'event_view',
                     ],
                     'adjustment'=>[

@@ -31,7 +31,7 @@ class ModuleProvider extends ModuleServiceProvider
         return [
             'pos'=>[
                 "position"=>39,
-                'url'        => 'admin/module/pos/consumptionCard',
+                'url'        => 'admin/module/pos/',
                 'title'      => __("Pos"),
                 'icon'       => 'fa fa-building-o',
                 'permission' => 'consumptionCard_view',
