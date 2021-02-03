@@ -285,7 +285,7 @@
         <div class="form-group">
             <label class="control-label">{{__("Observações Venda")}}</label>
             <textarea name="internal_observations" class="d-none has-ckeditor" cols="30"
-                      rows="10">{{setting_item_with_lang('space_internal_regime',request()->query('lang')) }}</textarea>
+                      rows="10"></textarea>
         </div>
 
     </div>
