@@ -213,4 +213,16 @@ class SaleController extends AdminController
             'created_at' => $sale->created_at->format('d/m/y h:m:s')
         ]);
     }
+
+    public function getSalesCard(Request $request)
+    {
+        $card = ConsumptionCard::query()->find($request->id);
+        $sale = Sale::query()->where('card_number', '=', $card->card_number)->orderBy('created_at','DESC')->first();
+        return response()->json([
+            'sale' => $sale,
+            'card' => $card,
+            'created_at' => $sale->created_at->format('d/m/y h:m:s')
+        ]);
+    }
+
 }

@@ -84,11 +84,12 @@
                                                  </span>
                                             </td>
                                             <td class="title">
-                                                <span class="review-count-approved  detalhesConsumo">
+                                                <a href="#" class="review-count-approved  detalhesConsumo"
+                                                   data-toggle="modal" data-target="#product" data-value="{{$row->id}}">
                                                     R$ <span>
                                                         {{$row->value_consumed_formatted}}
                                                     </span>
-                                                 </span>
+                                                 </a>
                                             </td>
                                             <td class="title">
                                                 @if ($row->situation)
@@ -186,6 +187,115 @@
             </div>
         </div>
     </div>
+
+    <div id="product" class="modal fade" role="dialog" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+
+                <!-- Modal Title-->
+                <div class="modal-header">
+                    <h4 class="modal-title">Detalhes Consumo Cartão : #{{$row->id}}</h4>
+                </div>
+
+                <!-- Modal body-->
+                <div class="modal-body">
+                    <style>
+                        .heading1 {
+                            font-size: 16px;
+                            color: #1A237E
+                        }
+
+                        .days {
+                            font-size: 15px;
+                            color: #9FA8DA
+                        }
+
+                        th {
+                            font-size: 14px;
+                            color: #D50000
+                        }
+
+                        tr {
+                            font-size: 13px
+                        }
+
+                        .solditems {
+                            font-size: 13px;
+                            color: #9FA8DA
+                        }
+
+                        .balance {
+                            font-size: 45px;
+                            color: green
+                        }
+
+                        .desconto {
+                            font-size: 25px;
+                            color: green
+                        }
+
+                        .restante01 {
+                            font-size: 25px;
+                            color: red
+                        }
+
+                        .restante {
+                            font-size: 45px;
+                            color: red
+                        }
+
+                        .account {
+                            margin-bottom: 36px !important;
+                            font-size: 16px;
+                            color: #1A237E
+                        }
+
+                        .transaction {
+                            font-size: 13px
+                        }
+
+                        .progress {
+                            height: 3px !important
+                        }
+
+                        .money {
+                            color: #9FA8DA
+                        }
+
+                        .goal {
+                            font-size: 17px;
+                            color: #D50000;
+                            font-weight: 400
+                        }
+
+                        .revenue {
+                            font-size: 14px;
+                            color: #311B92;
+                            font-weight: 500
+                        }
+
+                        .orders {
+                            font-size: 14px;
+                            color: #311B92;
+                            font-weight: 500
+                        }
+
+                        .customer {
+                            font-size: 14px;
+                            color: #311B92;
+                            font-weight: 500
+                        }
+
+                    </style>
+                    <!-- Modal body -->
+                    <div class="modal-body sale-information">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section ('script.body')
     <script>
@@ -195,6 +305,26 @@
             $("#observacao").on("show.bs.modal", function(e) {
                 let observacao = e.relatedTarget.getAttribute('data-value');
                 $('#internal_observations').html(observacao);
+            });
+
+            $("#product").on("show.bs.modal", function (e) {
+
+                $(".sale-information").empty();
+                let id = e.relatedTarget.getAttribute('data-value');
+                let data = {
+                    id: id,
+                };
+
+                let url = "/admin/module/pos/sale/getSalesCard";
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: data,
+                    success: function (data) {
+                        carregaModalSale(data);
+                    }
+                });
             });
         });
 
@@ -238,6 +368,72 @@
             $('#somaTotal').html("R$ " + totalValores);
             $('#somaTotalCobrar').html("R$ " + totalValoresCobrar);
         })
+
+        function carregaModalSale(data){
+            let html = `
+                      <div class="container mt-5 mb-5">
+                            <div class="row g-0">
+                                <div class="col-md-8 border-right">
+                                    <div class="p-1 bg-white">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="heading1">Itens Consumido Cartão</h6>
+                                            <div class="d-flex flex-row align-items-center text-muted"><span
+                                                    class=" days mr-2">Ultimos 10 itens</span> <i
+                                                    class="fa fa-angle-down"></i></div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-borderless">
+                                                <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Item</th>
+                                                    <th>valor</th>
+                                                    <th>Qtde</th>
+                                                    <th>Data</th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>`;
+            $.each(data.sale.product_composition, function (index, item) {
+                html +=` <tr>
+                        <td><i class="fa fa-check-circle fa-2x"></i></td>
+                        <td>${item.title}</td>
+                        <td>R$ ${item.price}</td>
+                        <td>${item.quantity}</td>
+                        <td>${data.created_at}</td>
+                    </tr>                                                            `;
+            });
+            html += `</tbody>
+        </table>
+    </div>
+</div>
+<div class="bg-white border-top p-3"><span
+        class="solditems "> Itens consumido </span></div>
+</div>
+
+<div class="col-md-4">
+                                    <div class="p-3 bg-white">
+                                        <h6 class="account">Valor Total Consumido</h6> <span
+                                            class="mt-5 restante"> <i
+                                                class="fa fa-minus"></i> R$ ${data.card.value_consumed} </span>
+                                    </div>
+
+
+                                    <div class="p-2 py-2 bg-white">
+                                        <div class="p-2 bg-white">
+                                            <h6 class="account">Valor Total Disponível</h6> <span
+            class="mt-5 balance"> <i class="fa fa-plus"></i> R$ ${data.card.value_card}  </span>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="modal-footer">
+<span class="btn btn-secondary" data-dismiss="modal">FECHAR</span>
+</div>
+`;
+            $(".sale-information").html(html);
+        }
 
         /*$('#formPayment').on('change', function() {
             if(this.value == "5"){

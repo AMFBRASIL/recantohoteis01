@@ -408,82 +408,6 @@
                     </style>
                     <!-- Modal body -->
                     <div class="modal-body sale-information">
-                        <div class="container mt-5 mb-5">
-                            <div class="row g-0">
-                                <div class="col-md-8 border-right">
-                                    <div class="p-1 bg-white">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <h6 class="heading1">Itens Consumido da Venda ({{$row->id}}) </h6>
-                                            <div class="d-flex flex-row align-items-center text-muted"><span
-                                                    class=" days mr-2">Ultimos 10 itens</span> <i
-                                                    class="fa fa-angle-down"></i></div>
-                                        </div>
-                                        <div class="table-responsive">
-                                            <table class="table table-borderless">
-                                                <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Item</th>
-                                                    <th>valor</th>
-                                                    <th>Qtde</th>
-                                                    <th>Data</th>
-                                                    <th></th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                @if(isset($row->product_composition))
-                                                    @foreach($row->product_composition as $item)
-                                                        <tr>
-                                                            <td><i class="fa fa-check-circle fa-2x"></i></td>
-                                                            <td>{{$row->productName($item['product_id']) }}</td>
-                                                            <td>R$ {{$item['price']}}</td>
-                                                            <td>{{$item['quantity']}}</td>
-                                                            <td>{{$row->created_at->format('d/m/y h:m:s')}}</td>
-                                                        </tr>
-                                                    @endforeach
-                                                @endif
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="bg-white border-top p-3"><span
-                                            class="solditems "> Itens consumido </span></div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="p-3 bg-white">
-                                        <h6 class="account">Valor Total sem Desconto</h6> <span class="mt-5 restante01"> <i
-                                                class="fa fa-plus"></i> R$ {{$row->total_value+$row->discounts_value}} </span>
-                                    </div>
-
-                                    <div class="p-2 py-2 bg-white">
-                                        <div class="p-2 bg-white">
-                                            <h6 class="account">Desconto Aplicado</h6> <span class="mt-5 desconto"> <i
-                                                    class="fa fa-minus"></i> R$ {{$row->discounts_value}} </span>
-                                        </div>
-                                    </div>
-
-                                    <div class="p-3 bg-white">
-                                        <h6 class="account">Valor Total com Desconto</h6> <span
-                                            class="mt-5 balance"> <i
-                                                class="fa fa-plus"></i> R$ {{$row->total_value}} </span>
-                                    </div>
-
-
-                                    <div class="p-2 py-2 bg-white">
-                                        <div class="p-2 bg-white">
-                                            <h6 class="account">Valor Restante Cartão</h6> <span
-                                                @if($row->consumerCard())
-                                                class="mt-5 restante"> <i class="fa fa-plus"></i> R$ {{$row->consumerCard()->value_card}}  </span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <span class="btn btn-secondary" data-dismiss="modal">FECHAR</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -493,7 +417,7 @@
 @section ('script.body')
     <script>
         $(function ($) {
-            $("#observation").on("show.bs.modal", function(e) {
+            $("#observation").on("show.bs.modal", function (e) {
                 let observacao = e.relatedTarget.getAttribute('data-value');
                 $('#internal_observations').html(observacao);
             });
@@ -561,7 +485,6 @@
                 });
             });
 
-
             $("#product").on("show.bs.modal", function (e) {
 
                 $(".sale-information").empty();
@@ -606,25 +529,25 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    ${data.cardData.user.first_name +' '+ data.cardData.user.last_name}<br>`;
+                                                    ${data.cardData.user.first_name + ' ' + data.cardData.user.last_name}<br>`;
 
-            if(data.cardData.user.business_name != null){
-                html +=` ${'Company: ' + data.cardData.user.business_name}<br>`;
+            if (data.cardData.user.business_name != null) {
+                html += ` ${'Company: ' + data.cardData.user.business_name}<br>`;
             }
 
-            if(data.cardData.user.address != null){
+            if (data.cardData.user.address != null) {
                 html += `${data.cardData.user.address}`;
             }
 
-            if(data.cardData.user.address2 != null){
-                html += `${', '+ data.cardData.user.address2}<br>`;
+            if (data.cardData.user.address2 != null) {
+                html += `${', ' + data.cardData.user.address2}<br>`;
             }
 
-            if(data.cardData.user.city != null && data.cardData.user.state != null && data.cardData.user.zip_code != null ){
-                html += `${data.cardData.user.city + ' - '+ data.cardData.user.state +' - CEP: '+ data.cardData.user.zip_code}<br>`;
+            if (data.cardData.user.city != null && data.cardData.user.state != null && data.cardData.user.zip_code != null) {
+                html += `${data.cardData.user.city + ' - ' + data.cardData.user.state + ' - CEP: ' + data.cardData.user.zip_code}<br>`;
             }
 
-            html += `${'Phone : '+ data.cardData.user.phone}}<br>
+            html += `${'Phone : ' + data.cardData.user.phone}}<br>
                                                     ${'E-mail : ' + data.cardData.user.email}}
                                                 </td>
                                             </tr>
@@ -656,7 +579,7 @@
             $(".card-modal-body").html(html);
         }
 
-        function carregaModalClient(data){
+        function carregaModalClient(data) {
             let html = `<ul>
                             <li class="info-first-name">
                                 <div class="label">Primeiro nome</div>
@@ -672,7 +595,7 @@
                             </li>
                             <li class="info-phone">
                                 <div class="label">Telefone</div>
-                                <div class="val">${data.user.phone != null ? data.user.phone: ''}</div>
+                                <div class="val">${data.user.phone != null ? data.user.phone : ''}</div>
                             </li>
                             <li class="info-address">
                                 <div class="label">Endereço</div>
@@ -706,7 +629,7 @@
             $(".user-information").html(html);
         }
 
-        function carregaModalSale(data){
+        function carregaModalSale(data) {
             let html = `
                       <div class="container mt-5 mb-5">
                             <div class="row g-0">
@@ -732,7 +655,7 @@
                                                 </thead>
                                                 <tbody>`;
             $.each(data.sale.product_composition, function (index, item) {
-             html +=` <tr>
+                html += ` <tr>
                         <td><i class="fa fa-check-circle fa-2x"></i></td>
                         <td>${item.title}</td>
                         <td>R$ ${item.price}</td>
@@ -740,7 +663,7 @@
                         <td>${data.created_at}</td>
                     </tr>                                                            `;
             });
-          html += `</tbody>
+            html += `</tbody>
         </table>
     </div>
 </div>
