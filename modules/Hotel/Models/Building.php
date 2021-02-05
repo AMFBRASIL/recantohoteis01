@@ -38,6 +38,11 @@ class Building extends Model
         return $this->hasMany(BuildingFloor::class, 'building_id', 'id');
     }
 
+    public function floorByID($id)
+    {
+        return BuildingFloor::query()->find($id);
+    }
+
     public static function getForSelect2Query($q)
     {
         $query =  static::query()->select(

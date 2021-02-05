@@ -39,7 +39,8 @@ class Hotel extends Bookable
         'title',
         'content',
         'status',
-        'building_id'
+        'building_id',
+        'floor_id'
     ];
     protected $slugField     = 'slug';
     protected $slugFromField = 'title';
