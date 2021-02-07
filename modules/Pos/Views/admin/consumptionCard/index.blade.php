@@ -89,7 +89,7 @@
                                                     R$ <span>
                                                         {{$row->value_consumed_formatted}}
                                                     </span>
-                                                 </a>
+                                                </a>
                                             </td>
                                             <td class="title">
                                                 @if ($row->situation)
@@ -99,7 +99,8 @@
                                             </td>
                                             <td class="title">
                                                 <a href="#" class="review-count-approved" data-toggle="modal"
-                                                   data-target="#observacao" data-value="{{$row->internal_observations}}">
+                                                   data-target="#observacao"
+                                                   data-value="{{$row->internal_observations}}">
                                                     Ver mais
                                                 </a>
                                             </td>
@@ -196,7 +197,7 @@
 
                 <!-- Modal Title-->
                 <div class="modal-header">
-                    <h4 class="modal-title">Detalhes Consumo Cartão : #{{$row->id}}</h4>
+                    <h4 class="modal-title" id="modal-card-title"></h4>
                 </div>
 
                 <!-- Modal body-->
@@ -291,6 +292,69 @@
                     </style>
                     <!-- Modal body -->
                     <div class="modal-body sale-information">
+                        <div class="container mt-5 mb-5">
+                            <div class="row g-0">
+                                <div class="col-md-8 border-right">
+                                    <div class="p-1 bg-white">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="heading1" id="card"></h6>
+                                            <div class="d-flex flex-row align-items-center text-muted">
+                                                <span
+                                                    class=" days mr-2">Ultimas Vendas
+                                                </span>
+                                                <i class="fa fa-angle-down"></i>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table id="tab-sales" class="table table-borderless">
+                                                <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Venda</th>
+                                                    <th>Item</th>
+                                                    <th>valor</th>
+                                                    <th>Qtde</th>
+                                                    <th>Data</th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white border-top p-3">
+                                        <span
+                                            class="solditems "> Itens consumido
+                                        </span>
+                                    </div>
+                                    <nav>
+                                        <ul id="pagination-sales" class="pagination pagination-sm justify-content-end">
+                                        </ul>
+                                    </nav>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="p-3 bg-white">
+                                        <h6 class="account">Valor Total Consumido</h6>
+                                        <span class="mt-5 restante">
+                                            <i class="fa fa-minus"></i>
+                                        </span>
+                                    </div>
+                                    <div class="p-2 py-2 bg-white">
+                                        <div class="p-2 bg-white">
+                                            <h6 class="account">Valor Total Disponível</h6>
+                                            <span class="mt-5 balance">
+                                                <i class="fa fa-plus"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <span class="btn btn-secondary" data-dismiss="modal">FECHAR</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -299,17 +363,20 @@
 @endsection
 @section ('script.body')
     <script>
+        let sales;
+        let current_page = 1;
+        let rows = 1;
+        let max_page = 1;
+
         $('.moeda-real').mask('#.##0,00', {reverse: true});
 
         $(function ($) {
-            $("#observacao").on("show.bs.modal", function(e) {
+            $("#observacao").on("show.bs.modal", function (e) {
                 let observacao = e.relatedTarget.getAttribute('data-value');
                 $('#internal_observations').html(observacao);
             });
 
             $("#product").on("show.bs.modal", function (e) {
-
-                $(".sale-information").empty();
                 let id = e.relatedTarget.getAttribute('data-value');
                 let data = {
                     id: id,
@@ -322,42 +389,55 @@
                     type: 'GET',
                     data: data,
                     success: function (data) {
-                        carregaModalSale(data);
+                        sales = data;
+                        loadModalSale();
+                        loadTableModalSale(sales.itensSales, rows, current_page);
+                        SetupPagination(sales.itensSales, rows);
                     }
                 });
             });
         });
 
-        $(document).ready(function () {
-            $(".client").autocomplete({
-                source: function (request, response) {
-                    $.ajax({
-                        url: "{{route('user.admin.autocomplete')}}",
-                        type: 'get',
-                        dataType: "json",
-                        data: {
-                            search: request.term
-                        },
-                        success: function (data) {
-                            response(data);
-                        }
-                    });
-                },
-                select: function (event, ui) {
-                    // Set selection
-                    $('.client').val(ui.item.label); // display the selected text
-                    return false;
-                }
-            });
-        });
+        $("#pagination-sales").on('click', 'li a', function () {
+            let itens = sales.itensSales;
 
-        $('#priceAdd').on('keyup',function(){
+            let capturedValue = $(this).text();
 
+            switch (capturedValue) {
+                case '<<':
+                    current_page--;
+                    break;
+                case '>>':
+                    current_page++;
+                    break;
+                default:
+                    current_page = capturedValue;
+                    break;
+            }
+
+            if(current_page > 1){
+                $("#anterior").closest('li').removeClass("disabled")
+            }else{
+                $("#anterior").closest('li').addClass("disabled")
+            }
+
+            if(current_page == max_page){
+                $("#proximo").closest('li').addClass("disabled")
+            }else{
+                $("#proximo").closest('li').removeClass("disabled")
+            }
+
+            loadTableModalSale(itens, rows, current_page);
+
+            activePagination();
+        })
+
+        $('#priceAdd').on('keyup', function () {
             $("#somaValores").show();
 
             var priceAdd = $('#priceAdd').val();
 
-            if(priceAdd == ''){
+            if (priceAdd == '') {
                 $("#somaValores").hide();
             }
 
@@ -369,70 +449,78 @@
             $('#somaTotalCobrar').html("R$ " + totalValoresCobrar);
         })
 
-        function carregaModalSale(data){
-            let html = `
-                      <div class="container mt-5 mb-5">
-                            <div class="row g-0">
-                                <div class="col-md-8 border-right">
-                                    <div class="p-1 bg-white">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <h6 class="heading1">Itens Consumido Cartão</h6>
-                                            <div class="d-flex flex-row align-items-center text-muted"><span
-                                                    class=" days mr-2">Ultimos 10 itens</span> <i
-                                                    class="fa fa-angle-down"></i></div>
-                                        </div>
-                                        <div class="table-responsive">
-                                            <table class="table table-borderless">
-                                                <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Item</th>
-                                                    <th>valor</th>
-                                                    <th>Qtde</th>
-                                                    <th>Data</th>
-                                                    <th></th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>`;
-            $.each(data.sale.product_composition, function (index, item) {
-                html +=` <tr>
-                        <td><i class="fa fa-check-circle fa-2x"></i></td>
-                        <td>${item.title}</td>
-                        <td>R$ ${item.price}</td>
-                        <td>${item.quantity}</td>
-                        <td>${data.created_at}</td>
-                    </tr>                                                            `;
-            });
-            html += `</tbody>
-        </table>
-    </div>
-</div>
-<div class="bg-white border-top p-3"><span
-        class="solditems "> Itens consumido </span></div>
-</div>
 
-<div class="col-md-4">
-                                    <div class="p-3 bg-white">
-                                        <h6 class="account">Valor Total Consumido</h6> <span
-                                            class="mt-5 restante"> <i
-                                                class="fa fa-minus"></i> R$ ${data.card.value_consumed} </span>
-                                    </div>
+        function activePagination(){
+            $("#pagination-sales li").removeClass("active");
+            $(`#pagination-sales li a:contains(${current_page})`).closest('li').addClass("active");
+        }
 
 
-                                    <div class="p-2 py-2 bg-white">
-                                        <div class="p-2 bg-white">
-                                            <h6 class="account">Valor Total Disponível</h6> <span
-            class="mt-5 balance"> <i class="fa fa-plus"></i> R$ ${data.card.value_card}  </span>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-<div class="modal-footer">
-<span class="btn btn-secondary" data-dismiss="modal">FECHAR</span>
-</div>
-`;
-            $(".sale-information").html(html);
+        function loadModalSale() {
+            $("#modal-card-title").html(`Detalhes Consumo Cartão : #${sales.card.id}`);
+            $("#card").html(`Itens Consumido Cartão (#${sales.card.id})`);
+
+            $(".restante").html(`R$ ${sales.card.value_consumed}`);
+            $(".balance").html(`R$ ${sales.card.value_card}`);
+        }
+
+        function loadTableModalSale(items, rows_per_page, page) {
+            page--;
+
+            let html = '';
+            let start = rows_per_page * page;
+            let end = start + rows_per_page;
+            let paginatedItems = items.slice(start, end)
+
+            for (var i = 0; i < paginatedItems.length; i++) {
+                let item = paginatedItems[i];
+
+                html += ` <tr>
+                            <td><i class="fa fa-check-circle fa-2x"></i></td>
+                            <td>#${item.sale_id}</td>
+                            <td>${item.title}</td>
+                            <td>R$ ${item.price}</td>
+                            <td>${item.quantity}</td>
+                            <td>${item.created_at}</td>
+                         </tr>`
+            }
+            $("#tab-sales > tbody:last-child").html(html);
+        }
+
+        function SetupPagination(items, rows_per_page) {
+            let html = '';
+            let page_count = Math.ceil(items.length / rows_per_page);
+
+            max_page = page_count
+
+            html += `<li class="page-item disabled">
+                        <a class="page-link" id="anterior" href="#" aria-label="Previous"><<</a>
+                    </li>`;
+
+            for (let i = 1; i < page_count + 1; i++) {
+                html += PaginationButton(i);
+            }
+
+            html += `<li class="page-item ${max_page == 1 ? 'disabled' : 0}">
+                        <a id="proximo" class="page-link" href="#" aria-label="Next">>></a>
+                    </li>`;
+
+            $("#pagination-sales").html(html);
+        }
+
+        function PaginationButton(page) {
+            let html = '';
+
+            if (current_page == page) {
+                html += `<li class="page-item active" aria-current="page">
+                            <a class="page-link" href="#">${page}</a>
+                        </li>`
+            } else {
+                html += `<li class="page-item">
+                            <a class="page-link" href="#">${page}</a>
+                        </li>`
+            }
+            return html;
         }
 
         /*$('#formPayment').on('change', function() {

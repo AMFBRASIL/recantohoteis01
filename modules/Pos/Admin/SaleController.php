@@ -217,11 +217,27 @@ class SaleController extends AdminController
     public function getSalesCard(Request $request)
     {
         $card = ConsumptionCard::query()->find($request->id);
-        $sale = Sale::query()->where('card_number', '=', $card->card_number)->orderBy('created_at','DESC')->first();
+        $sales = Sale::query()->where('card_number', '=', $card->card_number)->get();
+
+        $itensSales = [];
+
+        foreach ($sales as $s) {
+            foreach ($s->product_composition as $product) {
+                $item = [
+                    'sale_id' => $s->id,
+                    'title' => $product['title'],
+                    'price' => $product['price'],
+                    'quantity' => $product['quantity'],
+                    'created_at' => $s->created_at->format('d/m/y h:m:s'),
+                ];
+
+                array_push($itensSales, $item);
+            }
+        }
+
         return response()->json([
-            'sale' => $sale,
+            'itensSales' => $itensSales,
             'card' => $card,
-            'created_at' => $sale->created_at->format('d/m/y h:m:s')
         ]);
     }
 
