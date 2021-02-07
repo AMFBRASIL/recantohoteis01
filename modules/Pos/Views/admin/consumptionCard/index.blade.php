@@ -338,14 +338,12 @@
                                     <div class="p-3 bg-white">
                                         <h6 class="account">Valor Total Consumido</h6>
                                         <span class="mt-5 restante">
-                                            <i class="fa fa-minus"></i>
                                         </span>
                                     </div>
                                     <div class="p-2 py-2 bg-white">
                                         <div class="p-2 bg-white">
                                             <h6 class="account">Valor Total Disponível</h6>
                                             <span class="mt-5 balance">
-                                                <i class="fa fa-plus"></i>
                                             </span>
                                         </div>
                                     </div>
@@ -365,7 +363,7 @@
     <script>
         let sales;
         let current_page = 1;
-        let rows = 1;
+        let rows = 10;
         let max_page = 1;
 
         $('.moeda-real').mask('#.##0,00', {reverse: true});
@@ -397,6 +395,23 @@
                 });
             });
         });
+
+        $('#priceAdd').on('keyup', function () {
+            $("#somaValores").show();
+
+            var priceAdd = $('#priceAdd').val();
+
+            if (priceAdd == '') {
+                $("#somaValores").hide();
+            }
+
+            // Somando valores
+            var totalValores = priceAdd;
+            var totalValoresCobrar = priceAdd;
+
+            $('#somaTotal').html("R$ " + totalValores);
+            $('#somaTotalCobrar').html("R$ " + totalValoresCobrar);
+        })
 
         $("#pagination-sales").on('click', 'li a', function () {
             let itens = sales.itensSales;
@@ -432,36 +447,17 @@
             activePagination();
         })
 
-        $('#priceAdd').on('keyup', function () {
-            $("#somaValores").show();
-
-            var priceAdd = $('#priceAdd').val();
-
-            if (priceAdd == '') {
-                $("#somaValores").hide();
-            }
-
-            // Somando valores
-            var totalValores = priceAdd;
-            var totalValoresCobrar = priceAdd;
-
-            $('#somaTotal').html("R$ " + totalValores);
-            $('#somaTotalCobrar').html("R$ " + totalValoresCobrar);
-        })
-
-
         function activePagination(){
             $("#pagination-sales li").removeClass("active");
             $(`#pagination-sales li a:contains(${current_page})`).closest('li').addClass("active");
         }
 
-
         function loadModalSale() {
             $("#modal-card-title").html(`Detalhes Consumo Cartão : #${sales.card.id}`);
             $("#card").html(`Itens Consumido Cartão (#${sales.card.id})`);
 
-            $(".restante").html(`R$ ${sales.card.value_consumed}`);
-            $(".balance").html(`R$ ${sales.card.value_card}`);
+            $(".restante").html(`<i class="fa fa-minus"></i> R$ ${sales.card.value_consumed}`);
+            $(".balance").html(`<i class="fa fa-plus"></i> R$ ${sales.card.value_card}`);
         }
 
         function loadTableModalSale(items, rows_per_page, page) {
@@ -472,7 +468,7 @@
             let end = start + rows_per_page;
             let paginatedItems = items.slice(start, end)
 
-            for (var i = 0; i < paginatedItems.length; i++) {
+            for (let i = 0; i < paginatedItems.length; i++) {
                 let item = paginatedItems[i];
 
                 html += ` <tr>
