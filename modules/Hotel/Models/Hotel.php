@@ -1120,4 +1120,9 @@ class Hotel extends Bookable
     {
         return $this->belongsTo(Building::class,'building_id');
     }
+
+    public function floor()
+    {
+        return $this->belongsTo(BuildingFloor::class,'floor_id');
+    }
 }

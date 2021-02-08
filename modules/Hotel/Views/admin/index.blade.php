@@ -98,8 +98,8 @@
                                         @endif
                                     </td>
                                     <td class="title">
-                                        @if ($row->building)
-                                            <a>{{$row->building->floorByID($row->floor_id)}}</a>
+                                        @if ($row->floor)
+                                            <a>{{$row->floor->name}}</a>
                                         @endif
                                     </td>
                                     <td class="title">
