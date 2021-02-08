@@ -260,6 +260,12 @@
         });
 
         $(function ($) {
+            $('.moeda-real').on('blur', function () {
+                $(this).each(function () {
+                    $(this).mask('#.##0,00', {reverse: true});
+                });
+            });
+
             $('.dungdt-select2-field').each(function () {
                 $(this).trigger('select.select2');
             })
