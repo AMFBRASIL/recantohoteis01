@@ -71,7 +71,11 @@
                                                 <td class="title">
                                                     <a href="{{route('hotel.admin.room.edit',['hotel_id'=>$hotel->id,'id'=>$row->id])}}">{{$row->title}}</a>
                                                 </td>
-                                                <td>{{$row->room_id}}</td>
+                                                <td>
+                                                    @if ($row->room)
+                                                        <span>{{$row->room->number}}</span>
+                                                    @endif
+                                                </td>
                                                 <td>{{$row->number}}</td>
                                                 <td>{{format_money($row->price)}}</td>
                                                 <td><span class="badge badge-{{ $row->status }}">{{ $row->status }}</span></td>
