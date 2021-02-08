@@ -313,7 +313,7 @@
 
                 <!-- Modal Title-->
                 <div class="modal-header">
-                    <h4 class="modal-title">Detalhes dos Itens da Venda {{$row->id}}</h4>
+                    <h4 id="modal-sales-title" class="modal-title"></h4>
                 </div>
 
                 <!-- Modal body-->
@@ -413,13 +413,16 @@
                                 <div class="col-md-8 border-right">
                                     <div class="p-1 bg-white">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <h6 class="heading1">Itens Consumido da Venda ({{$row->id}}) </h6>
-                                            <div class="d-flex flex-row align-items-center text-muted"><span
-                                                    class=" days mr-2">Ultimos 10 itens</span> <i
-                                                    class="fa fa-angle-down"></i></div>
+                                            <h6 class="heading1" id="sale-information">Itens Consumidos da Venda</h6>
+                                            <div class="d-flex flex-row align-items-center text-muted">
+                                                <span
+                                                    class=" days mr-2">Ultimos 10 itens
+                                                </span>
+                                                <i class="fa fa-angle-down"></i>
+                                            </div>
                                         </div>
                                         <div class="table-responsive">
-                                            <table class="table table-borderless">
+                                            <table id="tab-sales" class="table table-borderless">
                                                 <thead>
                                                 <tr>
                                                     <th></th>
@@ -427,55 +430,50 @@
                                                     <th>valor</th>
                                                     <th>Qtde</th>
                                                     <th>Data</th>
-                                                    <th></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                @if(isset($row->product_composition))
-                                                    @foreach($row->product_composition as $item)
-                                                        <tr>
-                                                            <td><i class="fa fa-check-circle fa-2x"></i></td>
-                                                            <td>{{$row->productName($item['product_id']) }}</td>
-                                                            <td>R$ {{$item['price']}}</td>
-                                                            <td>{{$item['quantity']}}</td>
-                                                            <td>{{$row->created_at->format('d/m/y h:m:s')}}</td>
-                                                        </tr>
-                                                    @endforeach
-                                                @endif
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="bg-white border-top p-3"><span
-                                            class="solditems "> Itens consumido </span></div>
+                                    <div class="bg-white border-top p-3">
+                                        <span
+                                            class="solditems"> Itens consumido
+                                        </span>
+                                    </div>
+                                    <nav>
+                                        <ul id="pagination-sales" class="pagination pagination-sm justify-content-end">
+                                        </ul>
+                                    </nav>
                                 </div>
 
                                 <div class="col-md-4">
                                     <div class="p-3 bg-white">
-                                        <h6 class="account">Valor Total sem Desconto</h6> <span class="mt-5 restante01"> <i
-                                                class="fa fa-plus"></i> R$ {{$row->total_value+$row->discounts_value}} </span>
+                                        <h6 class="account">Valor Total sem Desconto</h6>
+                                        <span id="sale-total-no-discounts" class="mt-5 restante01">
+                                        </span>
                                     </div>
 
                                     <div class="p-2 py-2 bg-white">
                                         <div class="p-2 bg-white">
-                                            <h6 class="account">Desconto Aplicado</h6> <span class="mt-5 desconto"> <i
-                                                    class="fa fa-minus"></i> R$ {{$row->discounts_value}} </span>
+                                            <h6 class="account">Desconto Aplicado</h6>
+                                            <span id="sale-value-discounts" class="mt-5 desconto">
+                                            </span>
                                         </div>
                                     </div>
 
                                     <div class="p-3 bg-white">
-                                        <h6 class="account">Valor Total com Desconto</h6> <span
-                                            class="mt-5 balance"> <i
-                                                class="fa fa-plus"></i> R$ {{$row->total_value}} </span>
+                                        <h6 class="account">Valor Total com Desconto</h6>
+                                        <span id="sale-total-value" class="mt-5 restante">
+                                        </span>
                                     </div>
-
 
                                     <div class="p-2 py-2 bg-white">
                                         <div class="p-2 bg-white">
-                                            <h6 class="account">Valor Restante Cartão</h6> <span
-                                                @if($row->consumerCard())
-                                                class="mt-5 restante"> <i class="fa fa-plus"></i> R$ {{$row->consumerCard()->value_card}}  </span>
-                                            @endif
+                                            <h6 class="account">Valor Restante Cartão</h6>
+                                            <span id="sale-value-card" class="mt-5 balance">
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -492,14 +490,18 @@
 @endsection
 @section ('script.body')
     <script>
+        let sale;
+        let current_page = 1;
+        let rows = 10;
+        let max_page = 1;
+
         $(function ($) {
-            $("#observation").on("show.bs.modal", function(e) {
+            $("#observation").on("show.bs.modal", function (e) {
                 let observacao = e.relatedTarget.getAttribute('data-value');
                 $('#internal_observations').html(observacao);
             });
 
             $("#card").on("show.bs.modal", function (e) {
-
                 $(".card-modal-body").empty();
                 let card_number = e.relatedTarget.getAttribute('data-value');
                 let data = {
@@ -516,13 +518,31 @@
                         console.log(data);
                         $(".card-title").html("Detalhes do Uso do Cartao #" + data.cardData.card.card_number);
 
-                        carregaModalDetalhesConsumo(data);
+                        loadModalDetailsConsumer(data);
                     }
                 });
             });
 
             $("#client").on("show.bs.modal", function (e) {
+                $(".user-information").empty();
+                let id = e.relatedTarget.getAttribute('data-value');
+                let data = {
+                    id: id,
+                };
 
+                let url = "/admin/module/user/getUser";
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: data,
+                    success: function (data) {
+                        loadModalClient(data);
+                    }
+                });
+            });
+
+            $("#client").on("show.bs.modal", function (e) {
                 $(".user-information").empty();
                 let id = e.relatedTarget.getAttribute('data-value');
                 let data = {
@@ -540,31 +560,8 @@
                     }
                 });
             });
-
-            $("#client").on("show.bs.modal", function (e) {
-
-                $(".user-information").empty();
-                let id = e.relatedTarget.getAttribute('data-value');
-                let data = {
-                    id: id,
-                };
-
-                let url = "/admin/module/user/getUser";
-
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: data,
-                    success: function (data) {
-                        carregaModalClient(data);
-                    }
-                });
-            });
-
 
             $("#product").on("show.bs.modal", function (e) {
-
-                $(".sale-information").empty();
                 let id = e.relatedTarget.getAttribute('data-value');
                 let data = {
                     id: id,
@@ -577,14 +574,50 @@
                     type: 'GET',
                     data: data,
                     success: function (data) {
-                        carregaModalSale(data);
+                        sale = data
+                        loadModalSale();
+                        loadTableModalSale(sale.sale.product_composition, rows, current_page);
+                        SetupPagination(sale.sale.product_composition, rows);
                     }
                 });
             });
         });
 
-        function carregaModalDetalhesConsumo(data) {
+        $("#pagination-sales").on('click', 'li a', function () {
+            let itens = sale.sale.product_composition;
 
+            let capturedValue = $(this).text();
+
+            switch (capturedValue) {
+                case '<<':
+                    current_page--;
+                    break;
+                case '>>':
+                    current_page++;
+                    break;
+                default:
+                    current_page = capturedValue;
+                    break;
+            }
+
+            if(current_page > 1){
+                $("#anterior").closest('li').removeClass("disabled")
+            }else{
+                $("#anterior").closest('li').addClass("disabled")
+            }
+
+            if(current_page == max_page){
+                $("#proximo").closest('li').addClass("disabled")
+            }else{
+                $("#proximo").closest('li').removeClass("disabled")
+            }
+
+            loadTableModalSale(itens, rows, current_page);
+
+            activePagination();
+        })
+
+        function loadModalDetailsConsumer(data) {
             let html = `
                 <div class="modal-body">
                     <div class="container mt-5 mb-5">
@@ -606,25 +639,25 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    ${data.cardData.user.first_name +' '+ data.cardData.user.last_name}<br>`;
+                                                    ${data.cardData.user.first_name + ' ' + data.cardData.user.last_name}<br>`;
 
-            if(data.cardData.user.business_name != null){
-                html +=` ${'Company: ' + data.cardData.user.business_name}<br>`;
+            if (data.cardData.user.business_name != null) {
+                html += ` ${'Company: ' + data.cardData.user.business_name}<br>`;
             }
 
-            if(data.cardData.user.address != null){
+            if (data.cardData.user.address != null) {
                 html += `${data.cardData.user.address}`;
             }
 
-            if(data.cardData.user.address2 != null){
-                html += `${', '+ data.cardData.user.address2}<br>`;
+            if (data.cardData.user.address2 != null) {
+                html += `${', ' + data.cardData.user.address2}<br>`;
             }
 
-            if(data.cardData.user.city != null && data.cardData.user.state != null && data.cardData.user.zip_code != null ){
-                html += `${data.cardData.user.city + ' - '+ data.cardData.user.state +' - CEP: '+ data.cardData.user.zip_code}<br>`;
+            if (data.cardData.user.city != null && data.cardData.user.state != null && data.cardData.user.zip_code != null) {
+                html += `${data.cardData.user.city + ' - ' + data.cardData.user.state + ' - CEP: ' + data.cardData.user.zip_code}<br>`;
             }
 
-            html += `${'Phone : '+ data.cardData.user.phone}}<br>
+            html += `${'Phone : ' + data.cardData.user.phone}}<br>
                                                     ${'E-mail : ' + data.cardData.user.email}}
                                                 </td>
                                             </tr>
@@ -656,7 +689,7 @@
             $(".card-modal-body").html(html);
         }
 
-        function carregaModalClient(data){
+        function loadModalClient(data) {
             let html = `<ul>
                             <li class="info-first-name">
                                 <div class="label">Primeiro nome</div>
@@ -672,7 +705,7 @@
                             </li>
                             <li class="info-phone">
                                 <div class="label">Telefone</div>
-                                <div class="val">${data.user.phone != null ? data.user.phone: ''}</div>
+                                <div class="val">${data.user.phone != null ? data.user.phone : ''}</div>
                             </li>
                             <li class="info-address">
                                 <div class="label">Endereço</div>
@@ -706,82 +739,76 @@
             $(".user-information").html(html);
         }
 
-        function carregaModalSale(data){
-            let html = `
-                      <div class="container mt-5 mb-5">
-                            <div class="row g-0">
-                                <div class="col-md-8 border-right">
-                                    <div class="p-1 bg-white">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <h6 class="heading1">Itens Consumido da Venda (${data.sale.id}) </h6>
-                                            <div class="d-flex flex-row align-items-center text-muted"><span
-                                                    class=" days mr-2">Ultimos 10 itens</span> <i
-                                                    class="fa fa-angle-down"></i></div>
-                                        </div>
-                                        <div class="table-responsive">
-                                            <table class="table table-borderless">
-                                                <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Item</th>
-                                                    <th>valor</th>
-                                                    <th>Qtde</th>
-                                                    <th>Data</th>
-                                                    <th></th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>`;
-            $.each(data.sale.product_composition, function (index, item) {
-             html +=` <tr>
-                        <td><i class="fa fa-check-circle fa-2x"></i></td>
-                        <td>${item.title}</td>
-                        <td>R$ ${item.price}</td>
-                        <td>${item.quantity}</td>
-                        <td>${data.created_at}</td>
-                    </tr>                                                            `;
-            });
-          html += `</tbody>
-        </table>
-    </div>
-</div>
-<div class="bg-white border-top p-3"><span
-        class="solditems "> Itens consumido </span></div>
-</div>
+        function activePagination(){
+            $("#pagination-sales li").removeClass("active");
+            $(`#pagination-sales li a:contains(${current_page})`).closest('li').addClass("active");
+        }
 
-<div class="col-md-4">
-<div class="p-3 bg-white">
-    <h6 class="account">Valor Total sem Desconto</h6> <span class="mt-5 restante01"> <i
-            class="fa fa-plus"></i> R$ ${parseFloat(data.sale.total_value) + parseFloat(data.sale.discounts_value)} </span>
-                                    </div>
+        function loadModalSale() {
+            $("#modal-sales-title").html(`Detalhes dos Itens da Venda : #${sale.sale.id}`);
+            $("#sale-total-no-discounts").html(`<i class="fa fa-minus"></i> R$ ${parseFloat(sale.sale.total_value)
+                + parseFloat(sale.sale.discounts_value)}`);
+            $("#sale-value-discounts").html(`<i class="fa fa-plus"></i> R$ ${sale.sale.discounts_value}`);
+            $("#sale-total-value").html(`<i class="fa fa-minus"></i> R$ ${sale.sale.total_value}`);
+            $("#sale-value-card").html(`<i class="fa fa-plus"></i> R$ ${sale.card.value_card}`);
+        }
 
-                                    <div class="p-2 py-2 bg-white">
-                                        <div class="p-2 bg-white">
-                                            <h6 class="account">Desconto Aplicado</h6> <span class="mt-5 desconto"> <i
-                                                    class="fa fa-minus"></i> R$ ${data.sale.discounts_value} </span>
-                                        </div>
-                                    </div>
+        function loadTableModalSale(items, rows_per_page, page) {
+            page--;
 
-                                    <div class="p-3 bg-white">
-                                        <h6 class="account">Valor Total com Desconto</h6> <span
-                                            class="mt-5 balance"> <i
-                                                class="fa fa-plus"></i> R$ ${data.sale.total_value} </span>
-                                    </div>
+            let html = '';
+            let start = rows_per_page * page;
+            let end = start + rows_per_page;
+            let paginatedItems = items.slice(start, end)
 
+            for (let i = 0; i < paginatedItems.length; i++) {
+                let item = paginatedItems[i];
 
-                                    <div class="p-2 py-2 bg-white">
-                                        <div class="p-2 bg-white">
-                                            <h6 class="account">Valor Restante Cartão</h6> <span
-            class="mt-5 restante"> <i class="fa fa-plus"></i> R$ ${data.card.value_card}  </span>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-<div class="modal-footer">
-<span class="btn btn-secondary" data-dismiss="modal">FECHAR</span>
-</div>
-`;
-            $(".sale-information").html(html);
+                html += ` <tr>
+                            <td><i class="fa fa-check-circle fa-2x"></i></td>
+                            <td>${item.title}</td>
+                            <td>R$ ${item.price}</td>
+                            <td>${item.quantity}</td>
+                            <td>${sale.created_at}</td>
+                         </tr>`
+            }
+            $("#tab-sales > tbody:last-child").html(html);
+        }
+
+        function SetupPagination(items, rows_per_page) {
+            let html = '';
+            let page_count = Math.ceil(items.length / rows_per_page);
+
+            max_page = page_count
+
+            html += `<li class="page-item disabled">
+                        <a class="page-link" id="anterior" href="#" aria-label="Previous"><<</a>
+                    </li>`;
+
+            for (let i = 1; i < page_count + 1; i++) {
+                html += PaginationButton(i);
+            }
+
+            html += `<li class="page-item ${max_page == 1 ? 'disabled' : 0}">
+                        <a id="proximo" class="page-link" href="#" aria-label="Next">>></a>
+                    </li>`;
+
+            $("#pagination-sales").html(html);
+        }
+
+        function PaginationButton(page) {
+            let html = '';
+
+            if (current_page == page) {
+                html += `<li class="page-item active" aria-current="page">
+                            <a class="page-link" href="#">${page}</a>
+                        </li>`
+            } else {
+                html += `<li class="page-item">
+                            <a class="page-link" href="#">${page}</a>
+                        </li>`
+            }
+            return html;
         }
     </script>
 @endsection
