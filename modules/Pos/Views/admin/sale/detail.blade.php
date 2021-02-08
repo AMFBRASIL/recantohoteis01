@@ -10,7 +10,7 @@
                 <div>
                     <h1 class="title-bar">{{$row->id ? __('Edit: ').$row->title : __('Nova Venda')}}</h1>
                 </div>
-                <button type="button" class="btn btn-info btn-sm btn-add-item listVendas"><i class="fa fa-list"></i>
+                <button type="button" class="btn btn-info btn-sm btn-add-item listSales"><i class="fa fa-list"></i>
                     LISTAR TODAS VENDAS
                 </button>
             </div>
@@ -296,7 +296,9 @@
                             qtd: 1
                         }));
 
-                        sumItems(index, e.params.data.price, 1)
+                        let product_value = e.params.data.price.replace('.', '').replace(',', '.');
+
+                        sumItems(index, product_value, 1)
                         calculateReceivedValue();
                     }
                 } else {
@@ -460,7 +462,7 @@
         }
 
         function sumItems(index, valueItem, qtdItem) {
-            valueItem = parseFloat(valueItem);
+            valueItem = parseFloat(valueItem).toFixed(2);
             qtdItem = parseInt(qtdItem);
 
             let valuesAdded = parseFloat(($('#internalSum').val()).replace('.', '').replace(',', '.'));
@@ -487,14 +489,14 @@
             total_value_available -= valueCalculatedItem;
 
             showValues(valuesAdded);
-            /*console.log({
+           /*console.log({
                 Itens: 'soma',
-                valorItem: valorItem,
+                valorItem: valueItem,
                 qtdItem: qtdItem,
-                valorCalculadoItem: valorCalculadoItem,
-                valoresSomados: valoresSomados,
-                valorTotalConsumido: valorTotalConsumido,
-                valorTotalDisponivel: valorTotalDisponivel
+                valorCalculadoItem: valueCalculatedItem,
+                valoresSomados: valuesAdded,
+                valorTotalConsumido: total_consumed_value,
+                valorTotalDisponivel: total_value_available
             })*/
         }
 
