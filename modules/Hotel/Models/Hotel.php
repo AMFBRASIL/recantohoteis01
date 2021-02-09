@@ -39,7 +39,8 @@ class Hotel extends Bookable
         'title',
         'content',
         'status',
-        'building_id'
+        'building_id',
+        'floor_id'
     ];
     protected $slugField     = 'slug';
     protected $slugFromField = 'title';
@@ -1118,5 +1119,10 @@ class Hotel extends Bookable
     public function building()
     {
         return $this->belongsTo(Building::class,'building_id');
+    }
+
+    public function floor()
+    {
+        return $this->belongsTo(BuildingFloor::class,'floor_id');
     }
 }

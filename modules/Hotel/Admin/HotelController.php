@@ -213,6 +213,7 @@ class HotelController extends AdminController
             'is_featured',
             'policy',
             'building_id',
+            'floor_id',
             'location_id',
             'address',
             'map_lat',
