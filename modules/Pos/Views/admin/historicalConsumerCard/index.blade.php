@@ -63,7 +63,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>{{ __('Situação do Carta')}}</label>
+                                <label>{{ __('Situação do Cartão')}}</label>
                                 <div class="input-group">
                                     <select class="form-control" required name="situation_id">
                                         @foreach ($situationList as $option)
