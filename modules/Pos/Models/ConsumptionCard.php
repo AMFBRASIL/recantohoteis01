@@ -118,7 +118,7 @@ class ConsumptionCard extends Model
         $situation = Situation::query()
             ->where('name', 'like', '%fechada%')
             ->whereHas('section', function ($query) {
-                $query->where('name', 'like', '%CARTAO DE CONSUMO%');
+                $query->where('name', 'like', '%CARTAO CONSUMO%');
             });
 
         return $situation->first();
