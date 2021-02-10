@@ -27,7 +27,6 @@ class HotelRoom extends Bookable
     protected $fillable = [
         'title',
         'content',
-        'room_id',
         'status',
     ];
 
@@ -62,7 +61,7 @@ class HotelRoom extends Bookable
 
     public function room()
     {
-        return $this->hasOne($this->room ,'id', 'building_id');
+        return $this->hasOne($this->room ,'id', 'room_id');
     }
 
 
