@@ -116,7 +116,7 @@ class ConsumptionCard extends Model
 
     public static function getClosedSituation(){
         $situation = Situation::query()
-            ->where('name', 'like', '%fechada%')
+            ->where('name', 'like', '%FECHADO%')
             ->whereHas('section', function ($query) {
                 $query->where('name', 'like', '%CARTAO CONSUMO%');
             });
