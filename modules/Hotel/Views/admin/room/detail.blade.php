@@ -33,9 +33,7 @@
 @endsection
 @section ('script.body')
     <script>
-
-        let room_id = $("#room_id").val();
-        console.log(room_id)
+        let room_id = $("#room_id").attr('data-value');
 
         getRooms();
 
