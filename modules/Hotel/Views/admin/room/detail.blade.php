@@ -32,4 +32,39 @@
     </form>
 @endsection
 @section ('script.body')
+    <script>
+console.log("CHEGOU");
+        getRooms();
+
+        $("#floor_id").on('change', function (e) {
+            getRooms();
+        })
+
+        function getRooms() {
+            let data = {
+                floor_id: $('#floor_id').val(),
+            };
+
+            let url = "/admin/module/hotel/room/findRoomByFloorID";
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: data,
+                success: function (data) {
+                    let select = $('#room_id');
+                    select.empty();
+                    $.each(data.results, function (index, item) {
+                        if(item.id == room_id){
+                            select.append(
+                                new Option(item.number, item.id, null, true));
+                        }else{
+                            select.append(
+                                new Option(item.number, item.id, null, false));
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 @endsection
