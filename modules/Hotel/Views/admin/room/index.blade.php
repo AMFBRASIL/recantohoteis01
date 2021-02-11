@@ -55,12 +55,14 @@
                                     <tr>
                                         <th width="45px"><input type="checkbox" class="check-all"></th>
                                         <th> {{ __('Room name')}}</th>
+                                        <th width="100px"> {{ __('Bloco')}}</th>
                                         <th width="100px"> {{ __('Floor')}}</th>
                                         <th width="100px"> {{ __('UH')}}</th>
-                                        <th width="100px"> {{ __('Number')}}</th>
+                                        <th width="100px"> {{ __('N. Rooms')}}</th>
+                                        <th width="100px"> {{ __('N. Bed')}}</th>
                                         <th width="100px"> {{ __('Price')}}</th>
                                         <th width="100px"> {{ __('Status')}}</th>
-                                        <th width="100px"></th>
+                                        <th width="100px">{{__('Ação')}}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -71,6 +73,13 @@
                                                 </td>
                                                 <td class="title">
                                                     <a href="{{route('hotel.admin.room.edit',['hotel_id'=>$hotel->id,'id'=>$row->id])}}">{{$row->title}}</a>
+                                                </td>
+                                                <td class="title">
+                                                    @if ($row->room)
+                                                        @if ($row->room->building)
+                                                            <a>{{$row->room->building->name}}</a>
+                                                        @endif
+                                                    @endif
                                                 </td>
                                                 <td class="title">
                                                     @if ($row->room)
@@ -85,6 +94,7 @@
                                                     @endif
                                                 </td>
                                                 <td>{{$row->number}}</td>
+                                                <td>{{$row->beds}}</td>
                                                 <td>{{format_money($row->price)}}</td>
                                                 <td><span class="badge badge-{{ $row->status }}">{{ $row->status }}</span></td>
                                                 <td>

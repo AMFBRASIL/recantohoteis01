@@ -179,7 +179,6 @@ class HotelRoom extends Bookable
        return $this->roomBookingClass::query()->where('room_id',$this->id)->active()->inRange($from,$to)->get(['bravo_hotel_room_bookings.*']);
     }
 
-
     public function getGallery($featuredIncluded = false)
     {
         if (empty($this->gallery))
