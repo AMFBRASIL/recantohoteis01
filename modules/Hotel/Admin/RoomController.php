@@ -5,13 +5,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\AdminController;
 use Modules\Core\Models\Attributes;
+use Modules\Hotel\Models\Hotel;
 use Modules\Hotel\Models\HotelRoom;
 use Modules\Hotel\Models\HotelRoomTerm;
 use Modules\Hotel\Models\HotelRoomTranslation;
 use Modules\Location\Models\Location;
-use Modules\Hotel\Models\Hotel;
-use Modules\Hotel\Models\HotelTerm;
-use Modules\Hotel\Models\HotelTranslation;
 use Modules\Room\Models\Room;
 
 class RoomController extends AdminController

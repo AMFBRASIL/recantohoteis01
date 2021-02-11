@@ -64,7 +64,6 @@ class HotelRoom extends Bookable
         return $this->hasOne($this->room ,'id', 'room_id');
     }
 
-
     public function terms(){
         return $this->hasMany($this->hotelRoomTermClass, "target_id");
     }
