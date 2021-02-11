@@ -33,7 +33,10 @@
 @endsection
 @section ('script.body')
     <script>
-console.log("CHEGOU");
+
+        let room_id = $("#room_id").val();
+        console.log(room_id)
+
         getRooms();
 
         $("#floor_id").on('change', function (e) {

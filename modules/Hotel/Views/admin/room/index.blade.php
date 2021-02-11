@@ -134,7 +134,6 @@
 @endsection
 @section ('script.body')
     <script>
-        console.log("CHEGOU");
         getRooms();
 
         $("#floor_id").on('change', function (e) {

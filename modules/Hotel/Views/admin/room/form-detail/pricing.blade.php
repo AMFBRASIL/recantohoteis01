@@ -15,7 +15,7 @@
         <div class="col-md-{{ $editMode ? 3 : 12 }}">
             <div class="form-group">
                 <label>{{__("Floor")}} <span class="text-danger">*</span></label>
-                <select class="form-control" id="floor_id">
+                <select class="form-control" id="floor_id" data-value="{{$row->room_id}}">
                     @foreach ($floors as $option)
                             <option value="{{$option->id}}">{{$option->name}}</option>
                     @endforeach
