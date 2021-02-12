@@ -63,9 +63,9 @@
                                     <tr>
                                         <th width="45px"><input type="checkbox" class="check-all"></th>
                                         <th> {{ __('Room name')}}</th>
+                                        <th width="100px"> {{ __('UH')}}</th>
                                         <th width="100px"> {{ __('Bloco')}}</th>
                                         <th width="100px"> {{ __('Floor')}}</th>
-                                        <th width="100px"> {{ __('UH')}}</th>
                                         <th width="100px"> {{ __('N. Rooms')}}</th>
                                         <th width="100px"> {{ __('N. Bed')}}</th>
                                         <th width="100px"> {{ __('Price')}}</th>
@@ -83,6 +83,11 @@
                                                 <td class="title">
                                                     <a href="{{route('hotel.admin.room.edit',['hotel_id'=>$hotel->id,'id'=>$row->id])}}">{{$row->title}}</a>
                                                 </td>
+                                                <td>
+                                                    @if ($row->room)
+                                                        <span>{{$row->room->number}}</span>
+                                                    @endif
+                                                </td>
                                                 <td class="title">
                                                     @if ($row->room)
                                                         @if ($row->room->building)
@@ -95,11 +100,6 @@
                                                         @if ($row->room->buildingFloor)
                                                             <a>{{$row->room->buildingFloor->name}}</a>
                                                         @endif
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($row->room)
-                                                        <span>{{$row->room->number}}</span>
                                                     @endif
                                                 </td>
                                                 <td>{{$row->number}}</td>
