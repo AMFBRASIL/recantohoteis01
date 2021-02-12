@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="d-flex justify-content-between mb20">
-            <h1 class="title-bar"> {{ __('Cartão de Consumo')}}</h1>
+            <h1 class="title-bar"> {{ __('+ Cartão de Consumo')}}</h1>
         </div>
         @include('admin.message')
         <div class="row">
@@ -56,7 +56,7 @@
                                 <tr>
                                     <th width="15%" style="color: #D50000"> {{ __('CARTÃO')}} </th>
                                     <th width="30%" style="color: #D50000"> {{ __('CLIENTE')}} </th>
-                                    <th width="10%" style="color: #D50000"> {{  __('ÚLTIMO VALOR')}} </th>
+                                    <th width="10%" style="color: #D50000"> {{  __('VALOR DISPONÍVEL')}} </th>
                                     <th width="10%" style="color: #D50000"> {{  __('EM USO')}} </th>
                                     <th width="10%" style="color: #D50000"> {{  __('SITUAÇÃO')}} </th>
                                     <th width="10%" style="color: #D50000"> {{  __('OBS.')}} </th>
@@ -69,7 +69,7 @@
                                     @foreach($rows as $row)
                                         <tr>
                                             <td class="title">
-                                                <a href="#">{{$row->card_number}}</a>
+                                                <a href="#">#{{$row->card_number}}</a>
                                             </td>
                                             <td class="title">
                                                 @if ($row->user)
@@ -519,14 +519,16 @@
             return html;
         }
 
-        /*$('#formPayment').on('change', function() {
-            if(this.value == "5"){
+        let cashPayment = $("#formPayment").attr("data-value");
+        console.log(cashPayment);
+        $('#formPayment').on('change', function() {
+            if(this.value == cashPayment){
                 $('#divNSU').hide();
             } else {
                 $('#divNSU').show();
                 $('#nsuinput').focus();
             }
-        });*/
+        });
 
         $(".account").css({
             "margin-bottom": "36px !important",
