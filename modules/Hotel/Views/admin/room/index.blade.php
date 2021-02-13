@@ -134,7 +134,11 @@
 @endsection
 @section ('script.body')
     <script>
-        getRooms();
+        $(function ($) {
+            $('.select_room').select2();
+        });
+
+        /*getRooms();
 
         $("#floor_id").on('change', function (e) {
             getRooms();
@@ -160,6 +164,6 @@
                     });
                 }
             });
-        }
+        }*/
     </script>
 @endsection

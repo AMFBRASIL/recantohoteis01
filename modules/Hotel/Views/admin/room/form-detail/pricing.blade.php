@@ -12,7 +12,7 @@
                 <input type="number" required value="{{$row->number ?? 1}}" min="1" max="100" placeholder="{{__("Number")}}" name="number" class="form-control">
             </div>
         </div>
-        <div class="col-md-{{ $editMode ? 3 : 12 }}">
+        {{--<div class="col-md-{{ $editMode ? 3 : 12 }}">
             <div class="form-group">
                 <label>{{__("Floor")}} <span class="text-danger">*</span></label>
                 <select class="form-control" id="floor_id">
@@ -26,6 +26,20 @@
             <div class="form-group">
                 <label>{{__("Number UH")}} <span class="text-danger">*</span></label>
                 <select id="room_id" class="form-control" required name="room_id" data-value="{{$row->room_id}}">
+                </select>
+            </div>
+        </div>--}}
+        <div class="col-md-{{ $editMode ? 6 : 12 }}">
+            <div class="form-group">
+                <label>{{__("Number UH")}} <span class="text-danger">*</span></label>
+                <select class="select_room form-control" required name="room_id">
+                    @foreach ($rooms as $option)
+                        @if ($row->room_id == $option->id)
+                            <option value="{{$option->id}}" selected>{{$option->number}} - {{$option->building->name}} - {{$option->buildingFloor->name}}</option>
+                        @else
+                            <option value="{{$option->id}}">{{$option->number}} - {{$option->building->name}} - {{$option->buildingFloor->name}}</option>
+                        @endif
+                    @endforeach
                 </select>
             </div>
         </div>

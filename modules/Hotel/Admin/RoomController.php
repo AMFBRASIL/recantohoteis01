@@ -68,7 +68,9 @@ class RoomController extends AdminController
             abort(403);
         }
 
-        $floors = BuildingFloor::query()->where('building_id', '=' , $this->currentHotel->building_id)->get();
+//        $floors = BuildingFloor::query()->where('building_id', '=' , $this->currentHotel->building_id)->get();
+
+        $rooms = Room::query()->where('building_id', '=' , $this->currentHotel->building_id)->get();
 
         $query = $this->roomClass::query() ;
 
@@ -98,7 +100,8 @@ class RoomController extends AdminController
             ],
             'page_title'=>__("Room Management"),
             'hotel'=>$this->currentHotel,
-            'floors' => $floors,
+//            'floors' => $floors,
+            'rooms' => $rooms,
             'row'=> new $this->roomClass(),
             'editMode' => false,
             'translation'=>new $this->roomTranslationClass(),
@@ -121,7 +124,8 @@ class RoomController extends AdminController
             return redirect(route('hotel.admin.room.index',['hotel_id'=>$hotel_id]));
         }
 
-        $floors = BuildingFloor::query()->where('building_id', '=' , $this->currentHotel->building_id)->get();
+//        $floors = BuildingFloor::query()->where('building_id', '=' , $this->currentHotel->building_id)->get();
+        $rooms = Room::query()->where('building_id', '=' , $this->currentHotel->building_id)->get();
 
         $translation = $row->translateOrOrigin($request->query('lang'));
         if (!$this->hasPermission('hotel_manage_others')) {
@@ -153,7 +157,8 @@ class RoomController extends AdminController
                     'url'  => 'admin/module/hotel/room/'.$this->currentHotel->id.'/edit/'.$id
                 ],
             ],
-            'floors' => $floors,
+//            'floors' => $floors,
+            'rooms' => $rooms,
             'editMode' => true,
             'page_title'=>__("Edit: :name",['name'=>$row->title]),
             'hotel'=>$this->currentHotel
