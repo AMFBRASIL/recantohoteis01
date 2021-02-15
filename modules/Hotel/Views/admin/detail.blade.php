@@ -164,40 +164,6 @@
                     });
                 }
             });
-
-            let floor_id = $("#building").attr('data-value');
-            getFloors();
-
-            $("#building").on('change', function (e) {
-                getFloors();
-            })
-
-            function getFloors() {
-                let data = {
-                    building_id: $('#building').val(),
-                };
-
-                let url = "/admin/module/hotel/building/findFloorByBuildingID";
-
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: data,
-                    success: function (data) {
-                        let select = $('#floor');
-                        select.empty();
-                        $.each(data.results, function (index, item) {
-                            if(item.id == floor_id){
-                                select.append(
-                                    new Option(item.name, item.id, null, true));
-                            }else{
-                                select.append(
-                                    new Option(item.name, item.id, null, false));
-                            }
-                        });
-                    }
-                });
-            }
         })
     </script>
 @endsection

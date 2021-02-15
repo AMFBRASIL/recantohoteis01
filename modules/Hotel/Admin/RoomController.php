@@ -5,13 +5,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\AdminController;
 use Modules\Core\Models\Attributes;
+use Modules\Hotel\Models\BuildingFloor;
+use Modules\Hotel\Models\Hotel;
 use Modules\Hotel\Models\HotelRoom;
 use Modules\Hotel\Models\HotelRoomTerm;
 use Modules\Hotel\Models\HotelRoomTranslation;
 use Modules\Location\Models\Location;
-use Modules\Hotel\Models\Hotel;
-use Modules\Hotel\Models\HotelTerm;
-use Modules\Hotel\Models\HotelTranslation;
 use Modules\Room\Models\Room;
 
 class RoomController extends AdminController
@@ -69,6 +68,8 @@ class RoomController extends AdminController
             abort(403);
         }
 
+//        $floors = BuildingFloor::query()->where('building_id', '=' , $this->currentHotel->building_id)->get();
+
         $rooms = Room::query()->where('building_id', '=' , $this->currentHotel->building_id)->get();
 
         $query = $this->roomClass::query() ;
@@ -99,6 +100,7 @@ class RoomController extends AdminController
             ],
             'page_title'=>__("Room Management"),
             'hotel'=>$this->currentHotel,
+//            'floors' => $floors,
             'rooms' => $rooms,
             'row'=> new $this->roomClass(),
             'editMode' => false,
@@ -122,6 +124,7 @@ class RoomController extends AdminController
             return redirect(route('hotel.admin.room.index',['hotel_id'=>$hotel_id]));
         }
 
+//        $floors = BuildingFloor::query()->where('building_id', '=' , $this->currentHotel->building_id)->get();
         $rooms = Room::query()->where('building_id', '=' , $this->currentHotel->building_id)->get();
 
         $translation = $row->translateOrOrigin($request->query('lang'));
@@ -154,6 +157,7 @@ class RoomController extends AdminController
                     'url'  => 'admin/module/hotel/room/'.$this->currentHotel->id.'/edit/'.$id
                 ],
             ],
+//            'floors' => $floors,
             'rooms' => $rooms,
             'editMode' => true,
             'page_title'=>__("Edit: :name",['name'=>$row->title]),
@@ -288,5 +292,14 @@ class RoomController extends AdminController
                 return redirect()->back()->with('success', __('Update success!'));
                 break;
         }
+    }
+
+    public function findRoomByFloorID(Request $request)
+    {
+        $rooms = Room::query()->where('building_floor_id','=' ,$request->floor_id)->get();
+
+        return response()->json([
+            'results' => $rooms
+        ]);
     }
 }

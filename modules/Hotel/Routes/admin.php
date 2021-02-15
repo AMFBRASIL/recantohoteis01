@@ -25,7 +25,6 @@ Route::group(['prefix'=>'building'],function (){
     Route::get('/create','BuildingController@create')->name('building.admin.create');
     Route::get('/edit/{id}','BuildingController@edit')->name('building.admin.edit');
     Route::post('/store/{id}','BuildingController@store')->name('building.admin.store');
-    Route::get('/findFloorByBuildingID','BuildingController@findFloorByBuildingID')->name('building.admin.findFloorByBuildingID');
     Route::post('/bulkEdit','BuildingController@bulkEdit')->name('building.admin.bulkEdit');
     Route::get('/recovery','BuildingController@recovery')->name('building.admin.recovery');
 
@@ -58,11 +57,10 @@ Route::group(['prefix'=>'room'],function (){
     Route::get('{hotel_id}/index','RoomController@index')->name('hotel.admin.room.index');
     Route::get('{hotel_id}/create','RoomController@create')->name('hotel.admin.room.create');
     Route::get('{hotel_id}/edit/{id}','RoomController@edit')->name('hotel.admin.room.edit');
+    Route::get('findRoomByFloorID','RoomController@findRoomByFloorID')->name('hotel.admin.room.findRoomByFloorID');
     Route::post('{hotel_id}/store/{id}','RoomController@store')->name('hotel.admin.room.store');
 
-
     Route::post('/bulkEdit','RoomController@bulkEdit')->name('hotel.admin.room.bulkEdit');
-
 });
 
 Route::group(['prefix'=>'{hotel_id}/availability'],function(){
