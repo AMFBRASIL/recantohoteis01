@@ -64,7 +64,6 @@ class HotelRoom extends Bookable
         return $this->hasOne($this->room ,'id', 'room_id');
     }
 
-
     public function terms(){
         return $this->hasMany($this->hotelRoomTermClass, "target_id");
     }
@@ -179,7 +178,6 @@ class HotelRoom extends Bookable
     {
        return $this->roomBookingClass::query()->where('room_id',$this->id)->active()->inRange($from,$to)->get(['bravo_hotel_room_bookings.*']);
     }
-
 
     public function getGallery($featuredIncluded = false)
     {
