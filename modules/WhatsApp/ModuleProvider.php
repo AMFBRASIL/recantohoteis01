@@ -17,7 +17,7 @@ class ModuleProvider extends ModuleServiceProvider
 
 	}
 	public function boot(){
-		Event::listen(BookingCreatedEvent::class,SendWhatsAppBookingListen::class);
-		Event::listen(BookingUpdatedEvent::class,SendWhatsAppUpdateBookingListen::class);
+		/*Event::listen(BookingCreatedEvent::class,SendWhatsAppBookingListen::class);
+		Event::listen(BookingUpdatedEvent::class,SendWhatsAppUpdateBookingListen::class);*/
 	}
 }
