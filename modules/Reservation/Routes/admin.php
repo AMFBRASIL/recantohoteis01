@@ -30,3 +30,7 @@ Route::group(['prefix' => 'check-availability'],function () {
     Route::post('/bulkEdit', 'CheckAvailabilityController@bulkEdit')->name('check_availability.admin.bulkEdit');
     Route::get('/recovery', 'CheckAvailabilityController@recovery')->name('check_availability.admin.recovery');
 });
+
+Route::group(['prefix' => 'mapAvailable'],function () {
+    Route::get('/', 'MapAvailableController@index')->name('mapAvailable.admin.index');
+});

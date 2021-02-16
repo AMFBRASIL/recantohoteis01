@@ -1,7 +1,6 @@
 <?php
 namespace Modules\Reservation;
 
-use Modules\Product\Models\Product;
 use Modules\ModuleServiceProvider;
 
 class ModuleProvider extends ModuleServiceProvider
@@ -46,6 +45,11 @@ class ModuleProvider extends ModuleServiceProvider
                         'url'        => route('check_availability.admin.index'),
                         'title'      => __('Verificar disponibilidade'),
                         'permission' => 'check_availability_view',
+                    ],
+                    'Visão Quartos Liberados'=>[
+                        'url' => route('mapAvailable.admin.index'),
+                        'title' => __('Visão Quartos Liberados'),
+                        'permission' => 'map_available_view',
                     ]
                 ]
             ]
