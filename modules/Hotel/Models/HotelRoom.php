@@ -15,6 +15,7 @@ use Modules\Review\Models\Review;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Hotel\Models\HotelTranslation;
 use Modules\Room\Models\Room;
+use Modules\Situation\Models\Situation;
 use Modules\User\Models\UserWishList;
 
 class HotelRoom extends Bookable
@@ -28,6 +29,7 @@ class HotelRoom extends Bookable
         'title',
         'content',
         'status',
+        'situation_id',
     ];
 
     protected $seo_type = 'hotel_room';
@@ -57,6 +59,11 @@ class HotelRoom extends Bookable
     public static function getTableName()
     {
         return with(new static)->table;
+    }
+
+    public function situation()
+    {
+        return $this->belongsTo(Situation::class, 'situation_id');
     }
 
     public function room()
