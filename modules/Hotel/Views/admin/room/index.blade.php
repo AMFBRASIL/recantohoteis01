@@ -71,6 +71,8 @@
                                         <th width="200px"> {{ __('Room name')}}</th>
                                         <th width="190px"> {{ __('UH / Ala / Andar ')}}</th>
                                         <th width="80px"> {{ __('Rooms/Beds/Cap')}}</th>
+                                        <th width="100px"> {{ __('Carac.')}}</th>
+                                        <th width="100px"> {{ __('Tipo')}}</th>
                                         <th width="100px"> {{ __('Price')}}</th>
                                         <th width="100px"> {{ __('Status')}}</th>
                                         <th width="100px"> {{ __('Situação')}}</th>
@@ -96,11 +98,27 @@
                                                                 class="badge badge-primary">{{$row->room->building->name}} </span>
                                                         @endif
                                                         @if ($row->room->buildingFloor)
-                                                            <span class="badge badge-primary"> {{$row->room->buildingFloor->name}} </span>
+                                                            <span
+                                                                class="badge badge-primary"> {{$row->room->buildingFloor->name}} </span>
                                                         @endif
                                                     @endif
                                                 </td>
-                                                <td>{{$row->number .'/'. $row->beds . '/' .$row->adults}}</td>
+                                                <td>
+                                                    <span class="badge badge-info">{{$row->number}}</span>
+                                                    <span class="badge badge-info">{{$row->beds}}</span>
+                                                    <span class="badge badge-info">{{$row->adults}}</span>
+                                                <td class="title">
+                                                    @if ($row->classification)
+                                                        <span
+                                                            style="text-transform: uppercase">{{$row->classification->name}}</span>
+                                                    @endif
+                                                </td>
+                                                <td class="title">
+                                                    @if ($row->characteristic)
+                                                        <span
+                                                            style="text-transform: uppercase">{{$row->characteristic->name}}</span>
+                                                    @endif
+                                                </td>
                                                 <td><b>{{format_money($row->price)}}</b></td>
                                                 <td><span
                                                         class="badge badge-{{ $row->status }}">{{ $row->status }}</span>

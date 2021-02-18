@@ -28,11 +28,43 @@
         </div>
         <div class="col-md-{{ $editMode ? 3 : 12 }}">
             <div class="form-group">
-                <label>Situacao Quarto </label>
+                <label>Situacao Quarto <span class="text-danger">*</span></label>
                 <div class="input-group">
                     <select class="form-control" name="situation_id">
                         @foreach ($situationList as $option)
                             @if ($row->situation_id == $option->id)
+                                <option value="{{$option->id}}" selected>{{$option->name}}</option>
+                            @else
+                                <option value="{{$option->id}}">{{$option->name}}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-{{ $editMode ? 6 : 12 }}">
+            <div class="form-group">
+                <label>Tipo do Apartamento <span class="text-danger">*</span> </label>
+                <div class="input-group">
+                    <select class="form-control" name="classification_id">
+                        @foreach ($classificationList as $option)
+                            @if ($row->classification_id == $option->id)
+                                <option value="{{$option->id}}" selected>{{$option->name}}</option>
+                            @else
+                                <option value="{{$option->id}}">{{$option->name}}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-{{ $editMode ? 6 : 12 }}">
+            <div class="form-group">
+                <label>Caracteristicas do Apartamento <span class="text-danger">*</span></label>
+                <div class="input-group">
+                    <select class="form-control" name="characteristic_id">
+                        @foreach ($characteristicList as $option)
+                            @if ($row->characteristic_id == $option->id)
                                 <option value="{{$option->id}}" selected>{{$option->name}}</option>
                             @else
                                 <option value="{{$option->id}}">{{$option->name}}</option>
