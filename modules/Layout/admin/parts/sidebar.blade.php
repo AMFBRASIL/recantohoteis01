@@ -47,6 +47,16 @@ $menus = [
                 'title'      => __('Ponto de Venda'),
                 'permission' => 'point_of_sale_view',
             ],
+            'classification'     => [
+                'url'        => route('classification.admin.index'),
+                'title'      => __('Classificação UH'),
+                'permission' => 'classification_view',
+            ],
+            'characteristic'     => [
+                'url'        => route('characteristic.admin.index'),
+                'title'      => __('Característica UH'),
+                'permission' => 'characteristic_view',
+            ],
             'room_number'     => [
                 'url'        => route('room.admin.index'),
                 'title'      => __('Numeracao UH'),
