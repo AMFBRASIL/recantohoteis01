@@ -6,7 +6,7 @@ use Modules\Base\Models\Model;
 
 class Characteristic extends Model
 {
-    public $type = 'Classification';
+    public $type = 'Characteristic';
     protected $table = 'bravo_characteristic';
     protected $modelName = Characteristic::class;
     protected $transClass = CharacteristicTranslation::class;

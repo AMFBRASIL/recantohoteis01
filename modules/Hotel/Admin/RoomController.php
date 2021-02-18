@@ -5,6 +5,8 @@ namespace Modules\Hotel\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\AdminController;
+use Modules\Characteristic\Models\Characteristic;
+use Modules\Classification\Models\Classification;
 use Modules\Core\Models\Attributes;
 use Modules\Hotel\Models\Hotel;
 use Modules\Hotel\Models\HotelRoom;
@@ -107,7 +109,9 @@ class RoomController extends AdminController
             'attributes' => $this->attributesClass::where('service', 'hotel_room')->get(),
             'situationList' => Situation::query()->whereHas('section', function ($query) {
                 $query->where('name', 'like', '%QUARTO%');
-            })->get()
+            })->get(),
+            'classificationList' => Classification::all(),
+            'characteristicList' => Characteristic::all(),
         ];
         return view('Hotel::admin.room.index', $data);
     }
@@ -163,7 +167,9 @@ class RoomController extends AdminController
             'hotel' => $this->currentHotel,
             'situationList' => Situation::query()->whereHas('section', function ($query) {
                 $query->where('name', 'like', '%QUARTO%');
-            })->get()
+            })->get(),
+            'classificationList' => Classification::all(),
+            'characteristicList' => Characteristic::all(),
         ];
         return view('Hotel::admin.room.detail', $data);
     }
@@ -200,6 +206,8 @@ class RoomController extends AdminController
             'price',
             'room_id',
             'situation_id',
+            'classification_id',
+            'characteristic_id',
             'number',
             'beds',
             'size',
@@ -305,7 +313,6 @@ class RoomController extends AdminController
             return redirect()->back()->with('error', __('Please select an action!'));
         }
     }
-
 
     /*    public function findRoomByFloorID(Request $request)
         {
