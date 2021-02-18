@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="d-flex justify-content-between mb20">
-            <h1 class="title-bar"> {{ __('Cartão de Consumo')}}</h1>
+            <h1 class="title-bar"> {{ __('+ Cartão de Consumo')}}</h1>
         </div>
         @include('admin.message')
         <div class="row">
@@ -56,7 +56,7 @@
                                 <tr>
                                     <th width="15%" style="color: #D50000"> {{ __('CARTÃO')}} </th>
                                     <th width="30%" style="color: #D50000"> {{ __('CLIENTE')}} </th>
-                                    <th width="10%" style="color: #D50000"> {{  __('ÚLTIMO VALOR')}} </th>
+                                    <th width="10%" style="color: #D50000"> {{  __('VALOR DISPONÍVEL')}} </th>
                                     <th width="10%" style="color: #D50000"> {{  __('EM USO')}} </th>
                                     <th width="10%" style="color: #D50000"> {{  __('SITUAÇÃO')}} </th>
                                     <th width="10%" style="color: #D50000"> {{  __('OBS.')}} </th>
@@ -69,7 +69,7 @@
                                     @foreach($rows as $row)
                                         <tr>
                                             <td class="title">
-                                                <a href="#">{{$row->card_number}}</a>
+                                                <a href="#">#{{$row->card_number}}</a>
                                             </td>
                                             <td class="title">
                                                 @if ($row->user)
@@ -337,13 +337,13 @@
                                 <div class="col-md-4">
                                     <div class="p-3 bg-white">
                                         <h6 class="account">Valor Total Consumido</h6>
-                                        <span class="mt-5 restante">
+                                        <span id="value-consumed-modal-em-uso" class="mt-5 restante">
                                         </span>
                                     </div>
                                     <div class="p-2 py-2 bg-white">
                                         <div class="p-2 bg-white">
                                             <h6 class="account">Valor Total Disponível</h6>
-                                            <span class="mt-5 balance">
+                                            <span id="value-card-modal-em-uso" class="mt-5 balance">
                                             </span>
                                         </div>
                                     </div>
@@ -375,6 +375,7 @@
             });
 
             $("#product").on("show.bs.modal", function (e) {
+                clearModalEmUso();
                 let id = e.relatedTarget.getAttribute('data-value');
                 let data = {
                     id: id,
@@ -389,8 +390,10 @@
                     success: function (data) {
                         sales = data;
                         loadModalSale();
-                        loadTableModalSale(sales.itensSales, rows, current_page);
-                        SetupPagination(sales.itensSales, rows);
+                        if(sales.itensSales.length >= 1){
+                            loadTableModalSale(sales.itensSales, rows, current_page);
+                            SetupPagination(sales.itensSales, rows);
+                        }
                     }
                 });
             });
@@ -399,15 +402,15 @@
         $('#priceAdd').on('keyup', function () {
             $("#somaValores").show();
 
-            var priceAdd = $('#priceAdd').val();
+            let priceAdd = $('#priceAdd').val();
 
             if (priceAdd == '') {
                 $("#somaValores").hide();
             }
 
             // Somando valores
-            var totalValores = priceAdd;
-            var totalValoresCobrar = priceAdd;
+            let totalValores = priceAdd;
+            let totalValoresCobrar = priceAdd;
 
             $('#somaTotal').html("R$ " + totalValores);
             $('#somaTotalCobrar').html("R$ " + totalValoresCobrar);
@@ -447,6 +450,15 @@
             activePagination();
         })
 
+        function clearModalEmUso(){
+            $("#tab-sales tr").remove();
+            $("#pagination-sales li").remove();
+            $("#modal-card-title").html(``);
+            $("#card").html(``);
+            $("#value-consumed-modal-em-uso").html(``);
+            $("#value-card-modal-em-uso").html(`<i `);
+        }
+
         function activePagination(){
             $("#pagination-sales li").removeClass("active");
             $(`#pagination-sales li a:contains(${current_page})`).closest('li').addClass("active");
@@ -456,8 +468,9 @@
             $("#modal-card-title").html(`Detalhes Consumo Cartão : #${sales.card.id}`);
             $("#card").html(`Itens Consumido Cartão (#${sales.card.id})`);
 
-            $(".restante").html(`<i class="fa fa-minus"></i> R$ ${sales.card.value_consumed}`);
-            $(".balance").html(`<i class="fa fa-plus"></i> R$ ${sales.card.value_card}`);
+            $("#value-consumed-modal-em-uso").html(`<i class="fa fa-minus"></i> R$ ${sales.card.value_consumed != null
+                    ? sales.card.value_consumed : '0.00'}`);
+            $("#value-card-modal-em-uso").html(`<i class="fa fa-plus"></i> R$ ${sales.card.value_card}`);
         }
 
         function loadTableModalSale(items, rows_per_page, page) {
@@ -519,14 +532,15 @@
             return html;
         }
 
-        /*$('#formPayment').on('change', function() {
-            if(this.value == "5"){
+        let cashPayment = $("#formPayment").attr("data-value");
+        $('#formPayment').on('change', function() {
+            if(this.value == cashPayment){
                 $('#divNSU').hide();
             } else {
                 $('#divNSU').show();
                 $('#nsuinput').focus();
             }
-        });*/
+        });
 
         $(".account").css({
             "margin-bottom": "36px !important",
