@@ -16,13 +16,6 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>{{__("Floor")}}</label>
-                    <select id="floor" class="form-control" name="floor_id"->
-                    </select>
-                </div>
-            </div>
         </div>
     </div>
 </div>

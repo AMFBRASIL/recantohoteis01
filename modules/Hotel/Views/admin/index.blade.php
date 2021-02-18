@@ -72,7 +72,6 @@
                             <th> {{ __('Name')}}</th>
                             <th width="200px"> {{ __('Location')}}</th>
                             <th width="250px"> {{ __('Building')}}</th>
-                            <th width="250px"> {{ __('Floor')}}</th>
                             <th width="250px"> {{ __('CheckIn')}}</th>
                             <th width="250px"> {{ __('CheckOut')}}</th>
                             <th width="130px"> {{ __('Author')}}</th>
@@ -95,11 +94,6 @@
                                     <td class="title">
                                         @if ($row->building)
                                             <a>{{$row->building->name}}</a>
-                                        @endif
-                                    </td>
-                                    <td class="title">
-                                        @if ($row->floor)
-                                            <a>{{$row->floor->name}}</a>
                                         @endif
                                     </td>
                                     <td class="title">

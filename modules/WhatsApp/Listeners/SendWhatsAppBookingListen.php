@@ -37,7 +37,7 @@ class SendWhatsAppBookingListen
      */
     public function handle(BookingUpdatedEvent $event)
     {
-        $booking = $event->booking;
+        /*$booking = $event->booking;
         $vendor = $booking->vendor;
         $adminPhone = setting_item('admin_phone_has_booking');
         $adminCountry = setting_item('admin_country_has_booking');
@@ -69,7 +69,7 @@ class SendWhatsAppBookingListen
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
             }
-        }
+        }*/
     }
 
     public function replaceMessage($booking, $content)

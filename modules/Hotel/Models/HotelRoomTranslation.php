@@ -25,6 +25,7 @@ class HotelRoomTranslation extends Bookable
         'title',
         'content',
         'status',
+        'floor_id'
     ];
 
     protected $seo_type = 'hotel_room_translation';
