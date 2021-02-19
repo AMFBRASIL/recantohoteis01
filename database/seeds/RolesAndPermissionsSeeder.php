@@ -315,6 +315,20 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('room_delete');
         Permission::findOrCreate('room_manage_others');
 
+        // Room Number
+        Permission::findOrCreate('classification_view');
+        Permission::findOrCreate('classification_create');
+        Permission::findOrCreate('classification_update');
+        Permission::findOrCreate('classification_delete');
+        Permission::findOrCreate('classification_manage_others');
+
+        // Room Number
+        Permission::findOrCreate('characteristic_view');
+        Permission::findOrCreate('characteristic_create');
+        Permission::findOrCreate('characteristic_update');
+        Permission::findOrCreate('characteristic_delete');
+        Permission::findOrCreate('characteristic_manage_others');
+
         // Car
         Permission::findOrCreate('car_view');
         Permission::findOrCreate('car_create');

@@ -3,19 +3,14 @@
 namespace Modules\Hotel\Models;
 
 use ICal\ICal;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Booking\Models\Bookable;
 use Modules\Booking\Models\Booking;
-use Modules\Core\Models\SEO;
+use Modules\Characteristic\Models\Characteristic;
+use Modules\Classification\Models\Classification;
 use Modules\Media\Helpers\FileHelper;
-use Modules\Review\Models\Review;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Hotel\Models\HotelTranslation;
 use Modules\Room\Models\Room;
-use Modules\User\Models\UserWishList;
+use Modules\Situation\Models\Situation;
 
 class HotelRoom extends Bookable
 {
@@ -28,6 +23,9 @@ class HotelRoom extends Bookable
         'title',
         'content',
         'status',
+        'situation_id',
+        'classification_id',
+        'characteristic_id',
     ];
 
     protected $seo_type = 'hotel_room';
@@ -57,6 +55,21 @@ class HotelRoom extends Bookable
     public static function getTableName()
     {
         return with(new static)->table;
+    }
+
+    public function situation()
+    {
+        return $this->belongsTo(Situation::class, 'situation_id');
+    }
+
+    public function classification()
+    {
+        return $this->belongsTo(Classification::class, 'classification_id');
+    }
+
+    public function characteristic()
+    {
+        return $this->belongsTo(Characteristic::class, 'characteristic_id');
     }
 
     public function room()

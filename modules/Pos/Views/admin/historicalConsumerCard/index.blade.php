@@ -161,7 +161,6 @@
                                     <th width="10%" style="color: #D50000"> {{  __('SITUAÇÃO')}}</th>
                                     <th width="10%" style="color: #D50000"> {{  __('FORMA DE PGTO')}}</th>
                                     <th width="15%" style="color: #D50000"> {{  __('TRANSAÇÃO')}}</th>
-                                    <th width="5%" style="color: #D50000"> {{  __('CONSUMO')}}</th>
                                     <th width="10%" style="color: #D50000"> {{  __('OBS.')}}</th>
                                     <th width="10%" style="color: #D50000"> {{  __('DATA')}}</th>
                                     <th width="5%" style="color: #D50000"> {{  __('AÇÕES')}}</th>
@@ -172,11 +171,11 @@
                                     @foreach($rows as $key => $row)
                                         <tr>
                                             <td class="title">
-                                                <a>{{$row->id}}</a>
+                                                <a>#{{$row->id}}</a>
                                             </td>
 
                                             <td class="title">
-                                                <a href="#">{{$row->card_number}}</a>
+                                                <a href="#">#{{$row->card_number}}</a>
                                             </td>
                                             <td class="title">
                                                 @if ($row->user)
@@ -202,12 +201,6 @@
                                             </td>
                                             <td class="title">
                                                 <a href="#">{{$row->card_transaction_number}}</a>
-                                            </td>
-                                            <td class="title">
-                                                <a href="#" class="review-count-approved " data-toggle="modal"
-                                                   data-target="#card" data-value="{{$row->id}}">
-                                                    Mostrar
-                                                </a>
                                             </td>
                                             <td class="title">
                                                 <a href="#" class="review-count-approved"
@@ -271,104 +264,6 @@
             </div>
         </div>
     </div>
-
-    <div id="card" class="modal fade">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-            <!-- Modal content-->
-            <div class="modal-content">
-
-                <!-- Modal Title-->
-                <div class="modal-header">
-                    <h4 class="modal-title card-title"></h4>
-                </div>
-
-                <!-- Modal body-->
-                <div class="modal-body">
-                    <style>
-                        .heading1 {
-                            font-size: 16px;
-                            color: #1A237E
-                        }
-
-                        .days {
-                            font-size: 15px;
-                            color: #9FA8DA
-                        }
-
-                        th {
-                            font-size: 14px;
-                            color: #D50000
-                        }
-
-                        tr {
-                            font-size: 13px
-                        }
-
-                        .solditems {
-                            font-size: 13px;
-                            color: #9FA8DA
-                        }
-
-                        .balance {
-                            font-size: 45px;
-                            color: green
-                        }
-
-                        .restante {
-                            font-size: 45px;
-                            color: red
-                        }
-
-                        .account {
-                            margin-bottom: 36px !important;
-                            font-size: 16px;
-                            color: #1A237E
-                        }
-
-                        .transaction {
-                            font-size: 13px
-                        }
-
-                        .progress {
-                            height: 3px !important
-                        }
-
-                        .money {
-                            color: #9FA8DA
-                        }
-
-                        .goal {
-                            font-size: 17px;
-                            color: #D50000;
-                            font-weight: 400
-                        }
-
-                        .revenue {
-                            font-size: 14px;
-                            color: #311B92;
-                            font-weight: 500
-                        }
-
-                        .orders {
-                            font-size: 14px;
-                            color: #311B92;
-                            font-weight: 500
-                        }
-
-                        .customer {
-                            font-size: 14px;
-                            color: #311B92;
-                            font-weight: 500
-                        }
-
-                    </style>
-                    <!-- Modal body -->
-                    <div class="modal-body card-modal-body">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 @section ('script.body')
     <script>
@@ -377,103 +272,7 @@
                 let observacao = e.relatedTarget.getAttribute('data-value');
                 $('#internal_observations').html(observacao);
             });
-
-            $("#card").on("show.bs.modal", function (e) {
-
-                $(".card-modal-body").empty();
-                let id = e.relatedTarget.getAttribute('data-value');
-                let data = {
-                    id: id,
-                };
-
-                let url = "/admin/module/pos/consumptionCard/findHistoricalCard";
-
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: data,
-                    success: function (data) {
-                        console.log(data);
-                        $(".card-title").html("Detalhes do Uso do Cartao #" + data.historicalData.historicalCard.card_number);
-
-                        carregaModalDetalhesConsumo(data);
-                    }
-                });
-            });
         });
-
-        function carregaModalDetalhesConsumo(data) {
-
-            let html = `
-                <div class="modal-body">
-                    <div class="container mt-5 mb-5">
-                        <div class="row g-0">
-                            <div class="col-md-8 border-right">
-                                <div class="p-1 bg-white">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <h6 class="heading1"> Detalhes do Uso do Cartao  #${data.historicalData.historicalCard.card_number}</h6>
-                                    </div>
-                                    <div class="table-responsive">
-                                        <table class="table table-borderless">
-                                            <tbody>
-                                            <tr>
-                                                <td>
-                                                    Situação:
-                                                    <strong> ${data.historicalData.situation}</strong><br>
-                                                    Type Card: <strong> DAY USE </strong><br>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    ${data.historicalData.user.first_name +' '+ data.historicalData.user.last_name}<br>`;
-
-            if(data.historicalData.user.business_name != null){
-                html +=` ${'Company: ' + data.historicalData.user.business_name}<br>`;
-            }
-
-            if(data.historicalData.user.address != null){
-                html += `${data.historicalData.user.address}`;
-            }
-
-            if(data.historicalData.user.address2 != null){
-                html += `${', '+ data.historicalData.user.address2}<br>`;
-            }
-
-            if(data.historicalData.user.city != null && data.historicalData.user.state != null && data.historicalData.user.zip_code != null ){
-                html += `${data.historicalData.user.city + ' - '+ data.historicalData.user.state +' - CEP: '+ data.historicalData.user.zip_code}<br>`;
-            }
-
-        html += `${'Phone : '+ data.historicalData.user.phone}}<br>
-                                                    ${'E-mail : ' + data.historicalData.user.email}}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    <div class="col-md-4">
-                <div class="p-3 bg-white">
-                <h6 class="account">Valor Total Consumido</h6>
-                    <span class="mt-5 restante moeda-real">
-                         <i class="fa fa-minus "></i> R$ ${data.historicalData.historicalCard.value_consumed == null ? '0.00' : data.historicalData.historicalCard.value_consumed} </span>
-                                    </div>
-                                    <div class="p-2 py-2 bg-white">
-                                        <div class="p-2 bg-white">
-                                            <h6 class="account">Valor Total Disponível</h6> <span class="mt-5 balance"> <i
-                                                    class="fa fa-plus"></i> R$ ${data.historicalData.historicalCard.value_card} </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <span class="btn btn-secondary" data-dismiss="modal">FECHAR</span>
-                        </div>
-                    </div>`;
-
-            $(".card-modal-body").html(html);
-        }
 
         $('.novo-cartao-consumo').click(function () {
             window.location.href = "{{route('pos.admin.consumption.card.index')}}";

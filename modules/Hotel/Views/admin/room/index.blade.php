@@ -12,7 +12,7 @@
         </div>
         @include('admin.message')
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <form novalidate class="needs-validation"
                       action="{{route('hotel.admin.room.store',['hotel_id'=>$hotel->id,'id'=>($row->id) ? $row->id : '-1','lang'=>request()->query('lang')])}}"
                       method="post">
@@ -29,7 +29,7 @@
                     </div>
                 </form>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="filter-div d-flex justify-content-between ">
                     <div class="col-left">
                         @if(!empty($rows))
@@ -43,6 +43,12 @@
                                     <option value="pending">{{__("Move to Pending")}}</option>
                                     {{--<option value="clone">{{__(" Clone ")}}</option>--}}
                                     <option value="delete">{{__(" Delete ")}}</option>
+                                </select>
+                                <select class="form-control" name="situation_id">
+                                    <option value="">{{__(" Situação Quarto ")}}</option>
+                                    @foreach ($situationList as $option)
+                                        <option value="{{$option->id}}">{{$option->name}}</option>
+                                    @endforeach
                                 </select>
                                 <button data-confirm="{{__("Do you want to delete?")}}"
                                         class="btn-info btn btn-icon dungdt-apply-form-btn"
@@ -62,14 +68,14 @@
                                     <thead>
                                     <tr>
                                         <th width="45px"><input type="checkbox" class="check-all"></th>
-                                        <th> {{ __('Room name')}}</th>
-                                        <th width="100px"> {{ __('UH')}}</th>
-                                        <th width="100px"> {{ __('Bloco')}}</th>
-                                        <th width="100px"> {{ __('Floor')}}</th>
-                                        <th width="100px"> {{ __('N. Rooms')}}</th>
-                                        <th width="100px"> {{ __('N. Bed')}}</th>
+                                        <th width="200px"> {{ __('Room name')}}</th>
+                                        <th width="190px"> {{ __('UH / Ala / Andar ')}}</th>
+                                        <th width="80px"> {{ __('Rooms/Beds/Cap')}}</th>
+                                        <th width="100px"> {{ __('Carac.')}}</th>
+                                        <th width="100px"> {{ __('Tipo')}}</th>
                                         <th width="100px"> {{ __('Price')}}</th>
                                         <th width="100px"> {{ __('Status')}}</th>
+                                        <th width="100px"> {{ __('Situação')}}</th>
                                         <th width="100px">{{__('Ação')}}</th>
                                     </tr>
                                     </thead>
@@ -85,28 +91,43 @@
                                                 </td>
                                                 <td>
                                                     @if ($row->room)
-                                                        <span>{{$row->room->number}}</span>
-                                                    @endif
-                                                </td>
-                                                <td class="title">
-                                                    @if ($row->room)
+                                                        <span
+                                                            class="badge badge-primary"> {{$row->room->number}} </span>
                                                         @if ($row->room->building)
-                                                            <a>{{$row->room->building->name}}</a>
+                                                            <span
+                                                                class="badge badge-primary">{{$row->room->building->name}} </span>
                                                         @endif
+                                                        @if ($row->room->buildingFloor)
+                                                            <span
+                                                                class="badge badge-primary"> {{$row->room->buildingFloor->name}} </span>
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-info">{{$row->number}}</span>
+                                                    <span class="badge badge-info">{{$row->beds}}</span>
+                                                    <span class="badge badge-info">{{$row->adults}}</span>
+                                                <td class="title">
+                                                    @if ($row->classification)
+                                                        <span
+                                                            style="text-transform: uppercase">{{$row->classification->name}}</span>
                                                     @endif
                                                 </td>
                                                 <td class="title">
-                                                    @if ($row->room)
-                                                        @if ($row->room->buildingFloor)
-                                                            <a>{{$row->room->buildingFloor->name}}</a>
-                                                        @endif
+                                                    @if ($row->characteristic)
+                                                        <span
+                                                            style="text-transform: uppercase">{{$row->characteristic->name}}</span>
                                                     @endif
                                                 </td>
-                                                <td>{{$row->number}}</td>
-                                                <td>{{$row->beds}}</td>
-                                                <td>{{format_money($row->price)}}</td>
+                                                <td><b>{{format_money($row->price)}}</b></td>
                                                 <td><span
                                                         class="badge badge-{{ $row->status }}">{{ $row->status }}</span>
+                                                </td>
+                                                <td class="title">
+                                                    @if ($row->situation)
+                                                        <span class="badge badge-{{$row->situation->label}}"
+                                                              style="text-transform: uppercase">{{$row->situation->name}}</span>
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     <a href="{{route('hotel.admin.room.edit',['id'=>$row->id,'hotel_id'=>$hotel->id])}}"

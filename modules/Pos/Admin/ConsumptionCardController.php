@@ -57,9 +57,10 @@ class ConsumptionCardController extends AdminController
             'bankAccountList' => BankAccount::all(),
             'paymentMethodList' => PaymentMethod::all(),
             'costCenterList' => CostCenter::all(),
+            'cashPayment' => PaymentMethod::query()->where('name','like', '%dinheiro%')->get('id')->first(),
             'situationList' => Situation::query()->whereHas('section', function ($query) {
                 $query->where('name', 'like', '%CARTAO CONSUMO%');
-            })->get()
+            })->get(),
         ];
 
         return view('Pos::admin.consumptionCard.index', $data);
