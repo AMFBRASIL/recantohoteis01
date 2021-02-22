@@ -313,13 +313,4 @@ class RoomController extends AdminController
             return redirect()->back()->with('error', __('Please select an action!'));
         }
     }
-
-    /*    public function findRoomByFloorID(Request $request)
-        {
-            $rooms = Room::query()->where('building_floor_id','=' ,$request->floor_id)->get();
-
-            return response()->json([
-                'results' => $rooms
-            ]);
-        }*/
 }

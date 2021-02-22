@@ -33,4 +33,6 @@ Route::group(['prefix' => 'check-availability'],function () {
 
 Route::group(['prefix' => 'mapAvailable'],function () {
     Route::get('/', 'MapAvailableController@index')->name('mapAvailable.admin.index');
+    Route::get('findFloorByBuildingID','MapAvailableController@findFloorByBuildingID')->name('mapAvailable.admin.findFloorByBuildingID');
+    Route::get('findByFilter','MapAvailableController@findByFilter')->name('mapAvailable.admin.findByFilter');
 });
