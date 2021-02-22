@@ -532,13 +532,14 @@
             return html;
         }
 
-        let cashPayment = $("#formPayment").attr("data-value");
+        let creditCardPayment = JSON.parse($("#formPayment").attr("data-value"));
+
         $('#formPayment').on('change', function() {
-            if(this.value == cashPayment){
-                $('#divNSU').hide();
-            } else {
+            if(creditCardPayment.some(item => item.id == this.value)){
                 $('#divNSU').show();
                 $('#nsuinput').focus();
+            } else {
+                $('#divNSU').hide();
             }
         });
 
