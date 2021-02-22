@@ -79,7 +79,7 @@
                             <div class="form-group">
                                 <label>{{ __('Forma de Pagamento')}}</label>
                                 <div class="input-group" data-select2-id="25">
-                                    <select class="form-control" required name="payment_method_id">
+                                    <select id="formPayment" class="form-control" required name="payment_method_id"  data-value="{{$creditCardPayment}}">
                                         @foreach ($paymentMethodList as $option)
                                             @if ($parent->payment_method_id == $option->id)
                                                 <option value="{{$option->id}}" selected>{{$option->name}}</option>
@@ -90,9 +90,9 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div id="divNSU" class="form-group">
                                 <label>{{ __('Número da Transação Cartão')}}</label>
-                                <input type="text" value="{{$parent->card_transaction_number}}"
+                                <input id="nsuinput"  type="text" value="{{$parent->card_transaction_number}}"
                                        placeholder="AUHDEUY804837943" name="card_transaction_number"
                                        class="form-control">
                             </div>
@@ -303,6 +303,18 @@
 
             $('#somaTotalCobrar').html("R$ " + totalValoresCobrar);
         })
+
+        let creditCardPayment = JSON.parse($("#formPayment").attr("data-value"));
+        console.log(creditCardPayment)
+
+        $('#formPayment').on('change', function() {
+            if(creditCardPayment.some(item => item.id == this.value)){
+                $('#divNSU').show();
+                $('#nsuinput').focus();
+            } else {
+                $('#divNSU').hide();
+            }
+        });
 
         $(".account").css({
             "margin-bottom": "36px !important",

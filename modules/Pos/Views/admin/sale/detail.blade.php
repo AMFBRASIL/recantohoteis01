@@ -563,6 +563,17 @@
             }
         }
 
+        let creditCardPayment = JSON.parse($("#formPayment").attr("data-value"));
+
+        $('#formPayment').on('change', function() {
+            if(creditCardPayment.some(item => item.id == this.value)){
+                $('#divNSU').show();
+                $('#nsuinput').focus();
+            } else {
+                $('#divNSU').hide();
+            }
+        });
+
         $(".account").css({
             "font-size": "16px",
             "color": "#1A237E"

@@ -45,7 +45,7 @@ class SaleController extends AdminController
             'breadcrumbs' => [
                 [
                     'name' => __('Pos'),
-                    'url' => 'admin/module/pos'
+                    'url' => 'admin/module/pos/sale'
                 ],
             ],
             'situationList' => Situation::query()->whereHas('section', function ($query) {
@@ -68,14 +68,15 @@ class SaleController extends AdminController
             'translation' => new SaleTranslation(),
             'breadcrumbs' => [
                 [
-                    'name' => __('Hotels'),
-                    'url' => 'admin/module/hotel'
+                    'name' => __('Sales'),
+                    'url' => 'admin/module/pos/sale'
                 ],
                 [
-                    'name' => __('Add Hotel'),
+                    'name' => __('Add Sales'),
                     'class' => 'active'
                 ],
             ],
+            'creditCardPayment' => PaymentMethod::query()->where('name','like', '%Cartao de credito%')->get('id'),
             'pointSalesList' => PointOfSale::all(),
             'paymentMethodList' => PaymentMethod::all(),
             'situationList' => Situation::query()->whereHas('section', function ($query) {
@@ -106,7 +107,7 @@ class SaleController extends AdminController
             ],
             'enable_multi_lang' => true,
             'situationList' => Situation::query()->whereHas('section', function ($query) {
-                $query->where('name', 'like', '%SENHAS%');
+                $query->where('name', 'like', '%Vendas%');
             })->get()
         ];
         return view('Pos::admin.sale.detail', $data);

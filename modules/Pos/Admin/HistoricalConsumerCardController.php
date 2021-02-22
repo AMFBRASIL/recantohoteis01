@@ -82,6 +82,7 @@ class HistoricalConsumerCardController extends CrudController
             'bankAccountList' => BankAccount::all(),
             'paymentMethodList' => PaymentMethod::all(),
             'costCenterList' => CostCenter::all(),
+            'creditCardPayment' => PaymentMethod::query()->where('name','like', '%Cartao de credito%')->get('id'),
             'situationList' => Situation::query()->whereHas('section', function ($query) {
                 $query->where('name', 'like', '%CARTAO CONSUMO%');
             })->get()

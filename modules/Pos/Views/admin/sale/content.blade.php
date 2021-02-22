@@ -76,7 +76,7 @@
                 <div class="form-group">
                     <label> {{__("Forma de pagamento")}}</label>
                     <div class="input-group">
-                        <select id="formPayment" class="form-control" required name="payment_method_id">
+                        <select id="formPayment" class="form-control" required name="payment_method_id" data-value="{{$creditCardPayment}}">
                             @foreach ($paymentMethodList as $option)
                                 <option value="{{$option->id}}">{{$option->name}}</option>
                             @endforeach
@@ -85,10 +85,10 @@
                 </div>
             </div>
 
-            <div class="col-lg-4" id="divCartao" name="divCartao" style="display:block;">
+            <div id="divNSU" class="col-lg-4" id="divCartao" name="divCartao" style="display:block;">
                 <div class="form-group">
                     <label>{{ __('Número da Transação Cartão')}}</label>
-                    <input type="text" value="{{$row->card_transaction_number}}"
+                    <input id="nsuinput" type="text" value="{{$row->card_transaction_number}}"
                            placeholder="AUHDEUY804837943" name="card_transaction_number"
                            class="form-control">
                 </div>
