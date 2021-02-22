@@ -21,7 +21,7 @@ class RolesAndPermissionsSeeder extends Seeder
         // Contact Submissions
         Permission::findOrCreate('contact_manage');
 
-        //Newsletter
+        //Newslettercheck_availability_view
         Permission::findOrCreate('newsletter_manage');
 
         // Language
@@ -104,6 +104,9 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('check_availability_update');
         Permission::findOrCreate('check_availability_delete');
         Permission::findOrCreate('check_availability_manage_others');
+
+        //Map Available
+        Permission::findOrCreate('map_available_view');
 
         // Company
         Permission::findOrCreate('company_view');
