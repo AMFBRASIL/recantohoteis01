@@ -267,12 +267,29 @@
 @endsection
 @section ('script.body')
     <script>
+        let creditCardPayment = JSON.parse($("#formPayment").attr("data-value"));
+
         $(function ($) {
             $("#observacao").on("show.bs.modal", function (e) {
                 let observacao = e.relatedTarget.getAttribute('data-value');
                 $('#internal_observations').html(observacao);
             });
+
+            $('#formPayment').on('change', function() {
+                showTransitionNumber()
+            });
+
+            showTransitionNumber();
         });
+
+        function showTransitionNumber(){
+            if(creditCardPayment.some(item => item.id == $("#formPayment").val())){
+                $('#divNSU').show();
+                $('#nsuinput').focus();
+            } else {
+                $('#divNSU').hide();
+            }
+        }
 
         $('.novo-cartao-consumo').click(function () {
             window.location.href = "{{route('pos.admin.consumption.card.index')}}";
@@ -303,18 +320,6 @@
 
             $('#somaTotalCobrar').html("R$ " + totalValoresCobrar);
         })
-
-        let creditCardPayment = JSON.parse($("#formPayment").attr("data-value"));
-        console.log(creditCardPayment)
-
-        $('#formPayment').on('change', function() {
-            if(creditCardPayment.some(item => item.id == this.value)){
-                $('#divNSU').show();
-                $('#nsuinput').focus();
-            } else {
-                $('#divNSU').hide();
-            }
-        });
 
         $(".account").css({
             "margin-bottom": "36px !important",

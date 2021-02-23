@@ -155,109 +155,12 @@
 @section ('script.body')
     <script>
         sessionStorage.clear();
-        var cash_payment;
-        var total_value_available = 0.0;
-        var total_consumed_value = 0.0;
-        var qtd_Item = 0;
+        let cash_payment;
+        let total_value_available = 0.0;
+        let total_consumed_value = 0.0;
+        let qtd_Item = 0;
 
-        $(".listSales").click(function () {
-            window.location = "/admin/module/pos/sale/";
-        });
-
-        $('#numberCard').focus();
-
-        $("#numberCard").blur(function () {
-            if ($("#numberCard").val() != "") {
-                $('#passwordAuthorization').modal('show');
-            }
-        });
-
-        $(".authorizeValues").click(function () {
-            let data = {
-                password: $('#password').val(),
-            };
-
-            let url = "/admin/module/pos/authorizationPassword/check";
-
-            $.ajax({
-                url: url,
-                type: 'GET',
-                data: data,
-                success: function (data) {
-                    alert(data.message);
-                    if (data.success) {
-                        searchClient();
-                    }
-                }
-            });
-        })
-
-        function searchClient() {
-            let data = {
-                card_number: $('#numberCard').val(),
-            };
-
-            let url = "/admin/module/pos/consumptionCard/findCard";
-
-            $.ajax({
-                url: url,
-                type: 'GET',
-                data: data,
-                success: function (data) {
-                    $('#passwordAuthorization').modal('toggle');
-                    $('#enable_products').removeAttr("disabled");
-                    if (data.success) {
-                        /*console.log(data);*/
-
-                        let select = $('#client_host').find('.dungdt-select2-field');
-                        let name = data.cardData.user.first_name + ' ' + data.cardData.user.last_name
-
-                        select.append(
-                            new Option(name, data.cardData.user.id, null, true));
-
-                        total_value_available = data.cardData.card.value_card;
-                        total_value_available = parseFloat(total_value_available);
-
-                        $('#totalValue').html(formatNumber(total_value_available));
-
-                        if (data.cardData.card.value_consumed == null) {
-                            $('#valueRemaining').html('0.00');
-                        } else {
-                            total_consumed_value = data.cardData.card.value_consumed;
-                            total_consumed_value = parseFloat(total_consumed_value);
-
-                            $('#valueRemaining').html(formatNumber(total_consumed_value));
-                        }
-                        cash_payment = data.cardData.cash_payment;
-
-                        $('#contentValues').show();
-                    } else {
-                        alert(data.message);
-                    }
-                }
-            });
-        }
-
-        $('#formPayment').on('change', function () {
-            if (this.value == cash_payment) {
-                $('#divCard').hide();
-                $('#divMoneyReceived').show();
-                $('#divChangeCustomer').show();
-            } else {
-                $('#divCard').show();
-                $('#divMoneyReceived').hide();
-                $('#divChangeCustomer').hide();
-            }
-        });
-
-        $('#enable_products').change(function () {
-            if ($(this).is(':checked')) {
-                $('#sumValues').show();
-                $('#totalSum').html("R$ 0,00 ");
-            } else {
-                $('#sumValues').hide();
-            }
-        });
+        let creditCardPayment = JSON.parse($("#formPayment").attr("data-value"));
 
         $(function ($) {
             $('.moeda-real').on('blur', function () {
@@ -435,12 +338,114 @@
                     $(this).mask('#.##0,00', {reverse: true});
                 });
             });
+
+            $('#formPayment').on('change', function() {
+                showTransitionNumber()
+            });
+
+            showTransitionNumber();
+        });
+
+        $(".listSales").click(function () {
+            window.location = "/admin/module/pos/sale/";
+        });
+
+        $("#numberCard").focus();
+
+        $("#numberCard").blur(function () {
+            if ($("#numberCard").val() != "") {
+                $('#passwordAuthorization').modal('show');
+            }
+        });
+
+        $(".authorizeValues").click(function () {
+            let data = {
+                password: $('#password').val(),
+            };
+
+            let url = "/admin/module/pos/authorizationPassword/check";
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: data,
+                success: function (data) {
+                    alert(data.message);
+                    if (data.success) {
+                        searchClient();
+                    }
+                }
+            });
+        })
+
+        $("#enable_products").change(function () {
+            if ($(this).is(':checked')) {
+                $('#sumValues').show();
+                $('#totalSum').html("R$ 0,00 ");
+            } else {
+                $('#sumValues').hide();
+            }
         });
 
         $(".btn-add-item").click(() => {
             qtd_Item += 1;
             /*console.log(qtd_Item);*/
         });
+
+        function showTransitionNumber(){
+            if(creditCardPayment.some(item => item.id == $("#formPayment").val())){
+                $('#divNSU').show();
+                $('#nsuinput').focus();
+            } else {
+                $('#divNSU').hide();
+            }
+        }
+
+        function searchClient() {
+            let data = {
+                card_number: $('#numberCard').val(),
+            };
+
+            let url = "/admin/module/pos/consumptionCard/findCard";
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: data,
+                success: function (data) {
+                    $('#passwordAuthorization').modal('toggle');
+                    $('#enable_products').removeAttr("disabled");
+                    if (data.success) {
+                        /*console.log(data);*/
+
+                        let select = $('#client_host').find('.dungdt-select2-field');
+                        let name = data.cardData.user.first_name + ' ' + data.cardData.user.last_name
+
+                        select.append(
+                            new Option(name, data.cardData.user.id, null, true));
+
+                        total_value_available = data.cardData.card.value_card;
+                        total_value_available = parseFloat(total_value_available);
+
+                        $('#totalValue').html(formatNumber(total_value_available));
+
+                        if (data.cardData.card.value_consumed == null) {
+                            $('#valueRemaining').html('0.00');
+                        } else {
+                            total_consumed_value = data.cardData.card.value_consumed;
+                            total_consumed_value = parseFloat(total_consumed_value);
+
+                            $('#valueRemaining').html(formatNumber(total_consumed_value));
+                        }
+                        cash_payment = data.cardData.cash_payment;
+
+                        $('#contentValues').show();
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        }
 
         function check(index) {
             check_index = sessionStorage.getItem('index-' + index);
@@ -562,17 +567,6 @@
                     .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
             }
         }
-
-        let creditCardPayment = JSON.parse($("#formPayment").attr("data-value"));
-
-        $('#formPayment').on('change', function() {
-            if(creditCardPayment.some(item => item.id == this.value)){
-                $('#divNSU').show();
-                $('#nsuinput').focus();
-            } else {
-                $('#divNSU').hide();
-            }
-        });
 
         $(".account").css({
             "font-size": "16px",

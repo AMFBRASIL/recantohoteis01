@@ -366,7 +366,7 @@
         let rows = 10;
         let max_page = 1;
 
-        $('.moeda-real').mask('#.##0,00', {reverse: true});
+        let creditCardPayment = JSON.parse($("#formPayment").attr("data-value"));
 
         $(function ($) {
             $("#observacao").on("show.bs.modal", function (e) {
@@ -397,7 +397,15 @@
                     }
                 });
             });
+
+            $('#formPayment').on('change', function() {
+                showTransitionNumber()
+            });
+
+            showTransitionNumber();
         });
+
+        $('.moeda-real').mask('#.##0,00', {reverse: true});
 
         $('#priceAdd').on('keyup', function () {
             $("#somaValores").show();
@@ -532,16 +540,14 @@
             return html;
         }
 
-        let creditCardPayment = JSON.parse($("#formPayment").attr("data-value"));
-
-        $('#formPayment').on('change', function() {
-            if(creditCardPayment.some(item => item.id == this.value)){
+        function showTransitionNumber(){
+            if(creditCardPayment.some(item => item.id == $("#formPayment").val())){
                 $('#divNSU').show();
                 $('#nsuinput').focus();
             } else {
                 $('#divNSU').hide();
             }
-        });
+        }
 
         $(".account").css({
             "margin-bottom": "36px !important",
