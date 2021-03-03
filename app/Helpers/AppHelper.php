@@ -1125,3 +1125,34 @@ function format_interval($d1, $d2 = ''){
 
     return $result;
 }
+
+function situationClass($situation){
+    if(!is_null($situation)){
+        $situation = $situation->name;
+    }else {
+        return 'default';
+    }
+
+    switch($situation){
+        case 'BLOQUEADA':
+            $class = 'blocked';
+            break;
+        case 'PRE RESERVA':
+            $class = 'booking';
+            break;
+        case 'CONFIRMADA':
+            $class = 'confirmed';
+            break;
+        case 'CHECK-IN':
+            $class = 'checkin';
+            break;
+        case 'CHECK-OUT':
+            $class = 'checkout';
+            break;
+        default:
+            $class = 'default';
+            break;
+    }
+
+    return $class;
+}

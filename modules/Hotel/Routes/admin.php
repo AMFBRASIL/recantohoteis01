@@ -27,6 +27,7 @@ Route::group(['prefix'=>'building'],function (){
     Route::post('/store/{id}','BuildingController@store')->name('building.admin.store');
     Route::post('/bulkEdit','BuildingController@bulkEdit')->name('building.admin.bulkEdit');
     Route::get('/recovery','BuildingController@recovery')->name('building.admin.recovery');
+    Route::get('/findFloorByBuildingID','BuildingController@findFloorByBuildingID')->name('building.admin.findFloorByBuildingID');
 
     Route::get('/get-select','BuildingController@getForSelect2')->name('building.admin.ajax_get');
 

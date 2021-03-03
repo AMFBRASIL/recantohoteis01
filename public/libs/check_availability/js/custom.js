@@ -1,5 +1,4 @@
 $(function() {
-
     var msg_error = '';
     var msg_success = '';
     var msg_notice = '';
@@ -45,7 +44,6 @@ $(function() {
 })
 
 $(function() {
-
     var curr_start_id = '';
     var prev_class = '';
     var curr_room = 0;
@@ -138,7 +136,6 @@ $(function() {
                 }
 
                 if (!booked) {
-
                     end_id = $(this).attr('id');
                     end_clicked = true;
                     start_clicked = false;
@@ -174,7 +171,7 @@ $(function() {
                     //$('#context-menu').html('<a href="index.php?view=form&id=0&booking_id_hotel_0='+hotel+'&booking_from_date_0='+curr_date+'&booking_to_date_0='+date+'&booking_nights_0='+nnights+'&booking_status_0=1&booking_room_id_hotel_0='+hotel+'&booking_room_id_room_0='+room+'&booking_room_title_0='+room_title+'">New booking</a>'+
                     //'<a href="../room/index.php?view=form&id='+room+'&room_closing_from_date_0='+curr_date+'&room_closing_to_date_0='+date+'">New closing date</a>');
 
-                    var botaoAcoes = '<a href="#" data-toggle="modal" data-target="#modal_nova_reserva" >New booking</a>' +
+                    var botaoAcoes = '<a href="#" data-toggle="modal" data-target="#new_reservation" >New booking</a>' +
                         '<a href=""  data-toggle="modal" data-target="#modal_edit_reserva">Edit closing date</a>';
 
                     $('#context-menu').html(botaoAcoes);

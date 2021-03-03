@@ -58,4 +58,15 @@ class BuildingController extends CrudController
             'results' => $res
         ]);
     }
+
+    public function findFloorByBuildingID(Request $request)
+    {
+        $building = $this->modelName::query()->find($request->building_id);
+
+        $floors = $building->floors;
+
+        return response()->json([
+            'results' => $floors
+        ]);
+    }
 }
