@@ -926,7 +926,7 @@ class Space extends Bookable
         if (!empty($price_range = $request->query('price_range'))) {
             $pri_from = explode(";", $price_range)[0];
             $pri_to = explode(";", $price_range)[1];
-            $raw_sql_min_max = "( (IFNULL(bravo_spaces.sale_price,0) > 0 and bravo_spaces.sale_price >= ? ) OR (IFNULL(bravo_spaces.sale_price,0) <= 0 and bravo_spaces.price >= ? ) ) 
+            $raw_sql_min_max = "( (IFNULL(bravo_spaces.sale_price,0) > 0 and bravo_spaces.sale_price >= ? ) OR (IFNULL(bravo_spaces.sale_price,0) <= 0 and bravo_spaces.price >= ? ) )
                             AND ( (IFNULL(bravo_spaces.sale_price,0) > 0 and bravo_spaces.sale_price <= ? ) OR (IFNULL(bravo_spaces.sale_price,0) <= 0 and bravo_spaces.price <= ? ) )";
             $model_space->WhereRaw($raw_sql_min_max,[$pri_from,$pri_from,$pri_to,$pri_to]);
         }
@@ -1070,5 +1070,14 @@ class Space extends Bookable
                 "data" => Attributes::getAllAttributesForApi("space")
             ]
         ];
+    }
+
+    public function getSalePriceFormattedAttribute()
+    {
+        $value = '0,00';
+        if ($this->sale_price) {
+            $value = number_format($this->sale_price, 2, ',', '.');
+        }
+        return $value;
     }
 }

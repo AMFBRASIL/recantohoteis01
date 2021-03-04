@@ -69,8 +69,13 @@
                         <thead>
                         <tr>
                             <th width="60px"><input type="checkbox" class="check-all"></th>
-                            <th> {{ __('Name')}}</th>
-                            <th width="200px"> {{ __('Location')}}</th>
+                            <th  width="300px"> {{ __('Name')}}</th>
+                            <th width="150px"> {{ __('Location')}}</th>
+                            <th width="80px"> {{ __('No. Bed')}}</th>
+                            <th width="80px"> {{ __('No. Bathroom')}}</th>
+                            <th width="80px"> {{ __('Square')}}</th>
+                            <th width="80px"> {{ __('Sale Price')}}</th>
+                            <th width="80px"> {{ __('Max Guests')}}</th>
                             <th width="130px"> {{ __('Author')}}</th>
                             <th width="100px"> {{ __('Status')}}</th>
                             <th width="100px"> {{ __('Reviews')}}</th>
@@ -88,6 +93,11 @@
                                         <a href="{{route('space.admin.edit',['id'=>$row->id])}}">{{$row->title}}</a>
                                     </td>
                                     <td>{{$row->location->name ?? ''}}</td>
+                                    <td>{{$row->bathroom}}</td>
+                                    <td>{{$row->bed}}</td>
+                                    <td>{{$row->square}}M2</td>
+                                    <td>R${{($row->sale_price_formatted)}}</td>
+                                    <td>{{$row->max_guests}}</td>
                                     <td>
                                         @if(!empty($row->author))
                                             {{$row->author->getDisplayName()}}
