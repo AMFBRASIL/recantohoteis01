@@ -8,33 +8,72 @@
 
         <div class="panel">
             <div class="panel-body">
-                <div class="filter-div d-flex justify-content-between ">
-                    <form class="form-inline">
-                        <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="input-checkout"><i class="ion-ios-calendar"></i>&nbsp;{{__("Check-in:")}}</span>
-                            </div>
-                            <input type="date" name="check_in" class="form-control" value="">
-                        </div>
-                        <div class="input-group mb-2 mr-sm-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="input-checkout"><i class="ion-ios-calendar"></i>&nbsp;{{__("Check-out:")}}</span>
-                            </div>
-                            <input type="date" name="check_out" class="form-control" value="">
-                        </div>
-                        <div class="input-group mb-2 mr-sm-2">
-                            <button type="button" class="btn btn-info">{{__("Pesquisar")}}</button>
-                        </div>
+                <div class="filter-div d-flex justify-content-between">
+                    <div class="filter-div d-flex justify-content-between">
                         <div class="input-group mb-2 mr-sm-2">
                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#new_reservation">{{__("Nova Reserva")}}</button>
                         </div>
+                    </div>
+
+                    <form class="form-inline" method="get" action="{{route('check_availability.admin.index')}}">
+                        <select name="building_id" id="building" class="select_bank form-control"
+                                style="background: #fff; cursor: pointer; padding: 10px 15px; border: 2px solid #ccc;">
+                            <option value="">--Selecione os Blocos--</option>
+                            @foreach ($data['building'] as $option)
+                                @if (!empty(Request()->building_id) and Request()->building_id == $option->id)
+                                    <option value="{{$option->id}}" selected>{{$option->name}}</option>
+                                @else
+                                    <option value="{{$option->id}}">{{$option->name}}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                        &nbsp;&nbsp;&nbsp;
+                        <select name="floor_id" id="floor" class="select_bank form-control"
+                                style="display:none;  background: #fff; cursor: pointer; padding: 10px 15px; border: 2px solid #ccc;">
+                        </select>
+                        &nbsp;&nbsp;
+                        <div class="col-right">
+                            <div id="reportrange"
+                                 style="background: #fff; cursor: pointer; padding: 10px 20px; border: 2px solid #ccc;">
+                                <i class="fa fa-calendar"></i>&nbsp;
+                                <span></span>
+                                <i class="fa fa-caret-down"></i></div>
+                        </div>
+                        <input type="hidden" class="form-control" id="startDate" name="checkin" value="">
+                        <input type="hidden" class="form-control" id="endDate" name="checkout" value="">
+                        &nbsp;&nbsp;
+                        <div class="input-group-append">
+                            <button id="search" type="submit" class="btn btn-success btn-lg "
+                                    style="cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">Search
+                            </button>
+                        </div>
                     </form>
                 </div>
-
             </div>
         </div>
 
+        <div class="card full-height">
+            <div class="card-body">
+                <div class="card-title">Overall statistics</div>
+                <div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
+                    @foreach ($data['statistics'] as $statistics_option)
+                        <div class="px-5 pb-5 pb-md-0 text-center">
+                            <div
+                                class="c100 p{{$statistics_option['percentage']}} {{$statistics_option['label']}} small">
+                                <span>{{$statistics_option['total']}}</span>
+                                <div class="slice">
+                                    <div class="bar"></div>
+                                    <div class="fill"></div>
+                                </div>
+                            </div>
+                            <h6 class="fw-bold mt-3 mb-0">{{$statistics_option['situation']['name']}}</h6>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        <hr>
         <div class="panel">
             <div class="panel-title"><strong>{{__('Disponibilidades')}}</strong></div>
             <div class="panel-body mb15">
@@ -55,7 +94,7 @@
                         <div class="col-lg-8 col-md-9 col-sm-8 timeline-wrapper">
                             <div class="timeline-row" style="width: 1736px;">
                                 @foreach($data['interval'] as $interval)
-                                    @if($interval['date'] == $data['now'])
+                                    @if($interval['date']->format('Y-m-d') == $data['now']->format('Y-m-d'))
                                         <div class="timeline-cel timeline-d today">
                                             <b>{{ $interval['day'] }}</b><br>{{ $interval['date']->format('d/m') }}<br>
                                             <div class="badge">0</div>
@@ -97,7 +136,7 @@
                                 <div class="room-row">
                                     <div class="timeline-row" style="width: 1736px;">
                                         @foreach($data['interval'] as $interval)
-                                            @if($interval['date'] == $data['now'])
+                                            @if($interval['date']->format('Y-m-d') == $data['now']->format('Y-m-d'))
                                                 <div class="timeline-cel timeline-price today">
                                                     <div>$ 129</div>
                                                     <div></div>
@@ -121,25 +160,40 @@
                                     @foreach ($hotel_option['rooms'] as $kr => $rooms_option)
                                         <div class="timeline-row" style="width: 1736px;">
                                             @foreach($data['interval'] as $interval)
-                                                @forelse($rooms_option['bookings'] as $booking)
-                                                    @if($interval['date'] >= $booking->start_date && $interval['date'] <= $booking->end_date)
-                                                        <div id="cel-{{$kh}}-1-{{$kr}}-{{$interval['date']->getTimestamp()}}"
-                                                             class="timeline-cel timeline-default booked start-d confirmed">
-                                                            <a data-html="true" data-container="body"
-                                                               class="tips ajax-popup-link confirmed" href="#"
-                                                               onclick="return false" data-toggle="modal"
-                                                               data-target="#booking_summary" title=""
-                                                               data-params="id={{$rooms_option['room']->id}}"
-                                                               data-tippy-content="<b>ddkdj kekke</b><br>#{{ $booking->id }}<br>{{$booking->start_date}} → {{ $booking->end_date }}<br>Total: ${{$booking->price}}"></a>
-                                                        </div>
-                                                    @else
-                                                        <div id="cel-{{$kh}}-1-{{$kr}}-{{$interval['date']->getTimestamp()}}"
-                                                             class="timeline-cel timeline-default"></div>
+                                                @php $hasBooking = false;  $period = '';@endphp
+                                                @foreach($rooms_option['hotel_bookings'] as $hotel_booking)
+                                                    @if($interval['date']->format('d/m/y') > (new DateTime($hotel_booking->start_date))->format('d/m/y')
+                                                        and $interval['date']->format('d/m/y') < (new DateTime($hotel_booking->end_date))->format('d/m/y'))
+                                                        @php $hasBooking = true;  $period = 'full';@endphp
+                                                        @break
+                                                    @elseif($interval['date']->format('d/m/y') == (new DateTime($hotel_booking->start_date))->format('d/m/y'))
+                                                        @php $hasBooking = true;  $period = 'start-d';@endphp
+                                                        @break
+                                                    @elseif($interval['date']->format('d/m/y') == (new DateTime($hotel_booking->end_date))->format('d/m/y'))
+                                                        @php $hasBooking = true;  $period = 'end-d';@endphp
+                                                        @break
                                                     @endif
-                                                @empty
-                                                    <div id="cel-{{$kh}}-1-{{$kr}}-{{$interval['date']->getTimestamp()}}"
-                                                         class="timeline-cel timeline-default"></div>
-                                                @endforelse
+                                                @endforeach
+                                                @if($hasBooking)
+                                                    <div
+                                                        id="cel-{{$kh}}-1-{{$kr}}-{{$interval['date']->getTimestamp()}}"
+                                                        class="timeline-cel timeline-default {{$period}} {{situationClass($hotel_booking->booking->situation)}}">
+                                                        <a data-html="true" data-container="body"
+                                                           class="tips ajax-popup-link {{situationClass($hotel_booking->booking->situation)}}" href="#"
+                                                           onclick="return false" data-toggle="modal"
+                                                           data-value="{{$hotel_booking->booking_id}}"
+                                                           data-target="#booking_summary" title=""
+                                                           data-params="id={{$rooms_option['room']->id}}"
+                                                           data-tippy-content="<b>{{$hotel_booking->booking->first_name . ' ' . $hotel_booking->booking->last_name}}</b>
+                                                               <br><b> Status : {{$hotel_booking->booking->situation ? $hotel_booking->booking->situation->name : ''}} </b>
+                                                               <br>#{{ $hotel_booking->booking_id }}<br>{{date_format(new DateTime($hotel_booking->start_date), 'd/m/y')}} → {{date_format(new DateTime($hotel_booking->end_date),'d/m/y')}}
+                                                               <br>Total: R{{format_money($hotel_booking->price)}}"></a>
+                                                    </div>
+                                                @else
+                                                    <div
+                                                        id="cel-{{$kh}}-1-{{$kr}}-{{$interval['date']->getTimestamp()}}"
+                                                        class="timeline-cel timeline-default"></div>
+                                                @endif
                                             @endforeach
                                         </div>
                                     @endforeach
@@ -157,18 +211,17 @@
             <div class="panel-body no-padding">
                 <div class="row">
                     <div class="col-md-2">
-                        <div class="timeline-legend in-house"></div>
-                        <div class="legend-label mb5">In house</div>
+                        <div class="timeline-legend blocked"></div>
+                        <div class="legend-label mb5">BLOQUEADA</div>
+                        <div class="timeline-legend booking"></div>
+                        <div class="legend-label mb5">PRE RESERVA</div>
                         <div class="timeline-legend confirmed"></div>
-                        <div class="legend-label mb5">Confirmed</div>
-                        <div class="timeline-legend pending"></div>
-                        <div class="legend-label mb5">Pending</div>
-                        <div class="timeline-legend booked-ext"></div>
-                        <div class="legend-label mb5">External_booking</div>
-                        <div class="timeline-legend checked-out"></div>
-                        <div class="legend-label mb5">Checked out</div>
-                        <div class="timeline-legend closed"></div>
-                        <div class="legend-label mb5">Unavailable</div>
+                        <div class="legend-label mb5">CONFIRMADA</div>
+                        <div class="timeline-legend checkin"></div>
+                        <div class="legend-label mb5">CHECK-IN</div>
+                        <div class="timeline-legend checkout"></div>
+                        <div class="legend-label mb5">CHECK-OUT</div>
+
                     </div>
                     <div class="col-md-10">
                         <div class="timeline-cel timeline-d">
@@ -221,7 +274,6 @@
                             <span class="text-muted">1</span>
                         </div>
                         <div class="pull-left">
-                            <hr class="mt0 mb0">
                             <div class="legend-label">
                                 <svg class="svg-inline--fa fa-caret-left fa-w-6" aria-hidden="true" focusable="false"
                                      data-prefix="fas" data-icon="caret-left" role="img"
@@ -270,6 +322,30 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('Fechar')}}</button>
                     <button type="button" class="btn btn-primary" @click="saveForm">{{__('Salvar alterações')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- edit_reservation -->
+    <div id="modal_edit_reserva" class="modal fade">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{__("Edit Reservation : #92")}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            Abrir modal para nova reserva...
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('Fechar')}}</button>
                 </div>
             </div>
         </div>
@@ -343,163 +419,146 @@
     </div>
 
     <!-- booking_summary -->
-    <div id="booking_summary" class="modal fade">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal fade" id="booking_summary" role="dialog" data-backdrop="static" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <!-- Modal content-->
             <div class="modal-content">
+                <!-- Modal Title-->
                 <div class="modal-header">
-                    <h5 class="modal-title">{{__("Booking summary #2242")}}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h4 class="modal-title"></h4>
                 </div>
-                <div class="modal-body">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <ul class="pull-right">
-                                <li>
-                                    <a href="#" onclick="js:window.print(); return false;">
-                                        <span class="icon text-center text-primary"><i class="fa fa-print"></i></span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" onclick="return false;">
-                                        <span class="icon text-center text-primary"><i class="fa fa-edit"></i></span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <table class="table table-responsive table-bordered">
-                                <tbody>
-                                <tr class="text-center">
-                                    <th width="500px">Booking details</th>
-                                    <th width="50%">Billing address</th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Check-in <strong>2020-10-27</strong><br>
-                                        Check-out <strong>2020-11-25</strong><br>
-                                        <strong>29</strong> Nights<br>
-                                        <strong>1</strong> Persons -
-                                        Adults: <strong>1</strong> /
-                                        Children: <strong></strong>
-                                    </td>
-                                    <td>
-                                        z asdasd<br>Company : RollOfis Bilişim A.Ş<br>Göztepe Mh. 2366 Sk. No:18/2<br>
-                                        asd Bağcılar<br>
-                                        Phone : 05446869933<br>E-mail : info@Rollofis.com
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <table class="table table-responsive table-bordered">
-                                <tbody>
-                                <tr class="text-center">
-                                    <th width="40%">Room</th>
-                                    <th width="40%">Persons</th>
-                                    <th width="200px">Total</th>
-                                </tr>
-                                <tr>
-                                    <td>St James Hotel - Deluxe room</td>
-                                    <td>
-                                        1 person (1 adult )
-                                    </td>
-                                    <td class="text-right">$ 4,988</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <table class="table table-responsive table-bordered">
-                                <tbody>
-                                <tr class="text-center">
-                                    <th width="40%">Services</th>
-                                    <th width="40%">Quantity</th>
-                                    <th width="200px">Total</th>
-                                </tr>
-                                <tr>
-                                    <td>Heating</td>
-                                    <td>29</td>
-                                    <td class="text-right">$ 232</td>
-                                </tr>
-                                <tr>
-                                    <td>Tourist tax</td>
-                                    <td>29</td>
-                                    <td class="text-right">$ 31.90</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <table class="table table-responsive table-bordered">
-                                <tbody>
-                                <tr class="text-center">
-                                    <th class="text-right" width="80%">VAT</th>
-                                    <td class="text-right" width="200px">$ 474.55</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-right">Goods and Services Tax (5%)</th>
-                                    <td class="text-right">$ 226.73</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-right">Total (incl. tax)</th>
-                                    <td class="text-right"><b>$ 5,478.63</b></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <p><strong>Payment</strong></p>
-                            <p></p>
-                            <p>Payment method : arrival<br>Status: Pending<br><b>Balance : $ 5,478.63</b><br></p>
+                <!-- Modal Body-->
+                <div class="modal-body"><!-- booking_summary -->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 id="title-booking-modal" class="modal-title">Booking summary #2242</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="printThis">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <table  id="information-booking-modal" class="table table-responsive table-bordered">
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                    <table id="information-room-booking-modal" class="table table-responsive table-bordered">
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                    <table id="table-servicos-booking-modal" class="table table-responsive table-bordered">
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                    <table id="table-values-booking-modal" class="table table-responsive table-bordered">
+                                        <tbody>
+                                        <tr class="text-center">
+                                            <th class="text-right" width="80%">DESCONTO</th>
+                                            <td class="text-right" width="200px">R$ 88,99</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Impostos e Taxas (5%)</th>
+                                            <td class="text-right">R$ 226.73</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Pago em ( Cartão VISA )</th>
+                                            <td class="text-right">R$ 1.900,00</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-right">Total (incl. tax)</th>
+                                            <td class="text-right"><b>R$ 5.478,63</b></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <p><strong>Pagamento</strong></p>
+                                    <p></p>
+                                    <p id="payment-booking-modal">
+                                        Metodo de Pagamento : Na chegada<br>
+                                        Status: EM USO <br>
+                                        <b>TOTAL : R$ 5.478,63</b><br>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-lg btn-primary" id="printDetalhesReserva">
+                                <i class="fa fa-print"></i> Print Detalhes
+                            </button>
+                            <a data-fancybox="" data-type="iframe" href="detalhesreserva.php" class="btn btn-primary  btn-lg">
+                                <i class="fa fa-print"></i> Reserva
+                            </a>
+                            <a data-fancybox="" data-type="iframe" href="ficha.php" class="btn btn-primary  btn-lg">
+                                <i class="fa fa-print"></i> FRN
+                            </a>
+                            <!--- Só aparecer os botoes para impressao quando for APENAS CHACARA
+                            ===============================================================================--->
+                            <a data-fancybox="" data-type="iframe" href="regras.php" class="btn btn-success btn-lg">
+                                <i class="fa fa-print"></i> Regras
+                            </a>
+
+                            <a data-fancybox="" data-type="iframe" href="contrato.php" class="btn btn-primary  btn-lg">
+                                <i class="fa fa-print"></i> Contrato
+                            </a>
+
+                            <a data-fancybox="" data-type="iframe" href="regulamento.php" class="btn btn-info  btn-lg">
+                                <i class="fa fa-print"></i> Regulamento
+                            </a>
+
+                            <!--- Só aparecer os botoes para impressao quando for APENAS CHACARA
+                            ===============================================================================--->
+
+                            <a href="#" class="btn btn-primary btn-lg active editBooking" role="button">Edit Booking</a>
+                            <button type="button" class="btn btn-lg btn-secondary" data-dismiss="modal">Fechar</button>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('Fechar')}}</button>
+
+                    <!-- Modal Dinamic From DataBase -->
+                    <div class="modal fade" id="empModal" role="dialog">
+                        <div class="modal-dialog modal-dialog-centered modal-xl">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-body"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+                    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+                    <!-- <script src="printthis.js"></script>
+                      <script src="comummodal.js"></script>-->
+
+                    <script>
+                       /* $('#printDetalhesReserva').click(function(){
+                            $("#printThis").printThis({
+                                debug: false,
+                                importCSS: true,
+                                importStyle: true,
+                                printContainer: true,
+                                loadCSS: "../css/style.css",
+                                pageTitle: "Recanto Hoteis S.A",
+                                removeInline: false,
+                                printDelay: 10,
+                                header: null,
+                                formValues: true
+                            });
+                        });
+
+                        $("[data-fancybox]").fancybox({
+                            iframe : {
+                                css : {
+                                    width : '100%'
+                                }
+                            }
+                        });*/
+                    </script>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <div id="modal_nova_reserva" class="modal fade">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{__("Novo Pagamento : #92")}}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            Abrir modal para nova reserva...
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('Fechar')}}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal_edit_reserva" class="modal fade">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{__("Novo Pagamento : #92")}}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            Abrir modal para nova reserva...
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('Fechar')}}</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div id="context-menu" style="display:none;"></div>
 @endsection
@@ -509,6 +568,10 @@
     <!-- <link rel="stylesheet" href="{{asset('libs/check_availability/css/shortcodes.css')}}"> -->
     <link rel="stylesheet" href="{{asset('libs/check_availability/css/layout.css')}}">
     <link rel="stylesheet" href="{{asset('libs/check_availability/css/pms.css')}}">
+    <link rel="stylesheet" href="{{asset('libs/check_availability/css/circles.css')}}">
+    <link rel="stylesheet" href="{{asset('libs/fullcalendar-4.2.0/core/main.css')}}">
+    <link rel="stylesheet" href="{{asset('libs/fullcalendar-4.2.0/daygrid/main.css')}}">
+    <link rel="stylesheet" href="{{asset('libs/daterange/daterangepicker.css')}}">
 @endsection
 
 @section('script.body')
@@ -517,4 +580,165 @@
     <!-- Tooltip -->
     <script src="{{asset('libs/tippy/popper.min.js')}}"></script>
     <script src="{{asset('libs/tippy/tippy-bundle.umd.min.js')}}"></script>
+    <script src="{{asset('libs/daterange/moment.min.js')}}"></script>
+    <script src="{{asset('libs/daterange/daterangepicker.min.js?_ver='.config('app.version'))}}"></script>
+    <script src="{{asset('libs/fullcalendar-4.2.0/core/main.js')}}"></script>
+    <script src="{{asset('libs/fullcalendar-4.2.0/interaction/main.js')}}"></script>
+    <script src="{{asset('libs/fullcalendar-4.2.0/daygrid/main.js')}}"></script>
+    <script>
+        let start = null;
+        let end = null;
+
+        @if (empty(Request()->checkin) or empty(Request()->checkout))
+            this.start = moment();
+            this.end = moment().add(1, 'month').subtract(1, 'day');
+        @else
+            this.start = moment(new Date("{{Request()->checkin}}"));
+            this.end = moment(new Date("{{Request()->checkout}}"));
+        @endif
+
+        function getFloors() {
+            let data = {
+                building_id: $('#building').val(),
+            };
+
+            let floor_id = {{!empty(Request()->floor_id) ? Request()->floor_id : "null"}};
+            let url = "/admin/module/hotel/building/findFloorByBuildingID";
+            let select = $('#floor');
+            select.empty();
+
+            if (data.building_id != '') {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: data,
+                    success: function (data) {
+                        select.append(
+                            new Option("--Selecione os Andares--", null, null, false));
+                        $.each(data.results, function (index, item) {
+                            if (item.id == floor_id) {
+                                select.append(
+                                    new Option(item.name, item.id, null, true));
+                            } else {
+                                select.append(
+                                    new Option(item.name, item.id, null, false));
+                            }
+                        });
+                        $("#floor").show();
+                    }
+                });
+            } else {
+                $("#floor").hide();
+            }
+        }
+
+        function setDateValue(start, end) {
+            $("#reportrange span").html(start.format("MMMM D, YYYY") + " - " + end.format("MMMM D, YYYY"));
+            $("#startDate").val(start)
+            $("#endDate").val(end)
+        }
+
+        $("#reportrange").daterangepicker({
+            startDate: this.start,
+            endDate: this.end,
+            showCustomRangeLabel: true,
+            alwaysShowCalendars: true,
+            opens: "left",
+            ranges: {
+                "Hoje": [moment(), moment()],
+                "Ontem": [moment().subtract(1, "days"), moment().subtract(1, "days")],
+                "Últimos 7 dias": [moment().subtract(6, "days"), moment()],
+                "Últimos 30 dias": [moment().subtract(29, "days"), moment()],
+                "This Month": [moment().startOf("month"), moment().endOf("month")],
+                "Last Month": [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")],
+                "This Year": [moment().startOf("year"), moment().endOf("year")],
+                "This Week": [moment().startOf("week"), end],
+            },
+        }, function (start, end) {
+            setDateValue(start, end);
+        });
+
+        $("#building").on('change', () => {
+            getFloors();
+        })
+
+        setDateValue(this.start, this.end)
+        getFloors();
+    </script>
+    <script>
+        $("#booking_summary").on("show.bs.modal", function (e) {
+            let data = {
+                booking_id: e.relatedTarget.getAttribute('data-value'),
+            };
+
+            let url = "/admin/module/booking/getBooking/";
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: data,
+                success: function (data) {
+                    loadModalDetailBooking(data.data);
+                }
+            });
+        });
+
+        function loadModalDetailBooking(data) {
+            $("#title-booking-modal").html(`Booking summary #${data.booking_id}`);
+
+            html = `<tr class="text-center">
+                        <th width="500px">Booking details</th>
+                        <th width="50%">Billing address</th>
+                    </tr>
+                     <tr>
+                        <td>
+                            Check-in <strong>${data.booking_detail.checkin}</strong><br>
+                            Check-out <strong>${data.booking_detail.checkout}</strong><br>
+                            Noites : <strong>${data.booking_detail.nights}</strong><br>
+                            Adultos: <strong>${data.booking_detail.adults}</strong> <br>
+                            Crianças: <strong>${data.booking_detail.children}</strong>
+                        </td>
+                        <td>
+                            ${data.billing.name}<br>
+                            ${data.billing.company != '' ?? 'Company: ' + data.billing.company +'<br>'}
+                            ${data.billing.address}<br>
+                            ${data.billing.complement}<br>
+                            Phone: ${data.billing.phone}<br>
+                            E-mail : ${data.billing.email}
+                        </td>
+                     </tr>`;
+
+            $("#information-booking-modal > tbody").html(html);
+
+            html = `<tr class="text-center">
+                        <th width="40%">Room</th>
+                        <th width="40%">Persons</th>
+                        <th width="200px">Total</th>
+                    </tr>
+                    <tr>
+                        <td>${data.room_information.room}</td>
+                        <td>${data.room_information.persons} Pessoas ( x Adultos )</td>
+                        <td class="text-right">R$ ${data.room_information.total}</td>
+                    </tr>`;
+
+            $("#information-room-booking-modal > tbody").html(html);
+
+
+            html = `<tr class="text-center">
+                        <th width="40%">Serviços/Produtos</th>
+                        <th width="40%">Quantidade</th>
+                        <th width="200px">Total</th>
+                    </tr>`;
+
+            for (let i = 0; i < data.itemsSales.length; i++) {
+                let item = data.itemsSales[i];
+                html += ` <tr>
+                            <td>${item.title}</td>
+                            <td>${item.quantity}</td>
+                            <td  class="text-right">R$ ${item.price}</td>
+                         </tr>`;
+            }
+            $("#table-values-booking-modal > tbody").html(html);
+        }
+    </script>
 @endsection

@@ -152,41 +152,75 @@ END BOOKING
 .timeline-cel.closed {
     border-right: 1px solid #db5439!important;
 }
-/*
+/*!*
 START PENDING BOOKING
-*/
+*!
 .timeline-legend.pending,
 .timeline-cel a.pending {
     background: #8AC7C4;
 }
-/*
+!*
 START IN-HOUSE BOOKING
-*/
+*!
 .timeline-legend.in-house,
 .timeline-cel a.in-house {
     background: #A6E0BF;
 }
-/*
+!*
 START CONFIRMED BOOKING
-*/
+*!
 .timeline-legend.confirmed,
 .timeline-cel a.confirmed {
     background: #60C9F2;
 }
-/*
+!*
 START CHECKED-OUT BOOKING
-*/
+*!
 .timeline-legend.checked-out,
 .timeline-cel a.checked-out {
     background: #BBC9D0;
 }
-/*
+!*
 START CLOSING DATE
-*/
+*!
 .timeline-legend.closed,
 .timeline-cel a.closed {
     background-color: #FF5B38;
+}*/
+
+/*NOVAS LEGENDAS*/
+.timeline-legend.blocked,
+.timeline-cel a.blocked {
+    background: #FF5B38;
 }
+
+.timeline-legend.booking,
+.timeline-cel a.booking {
+    background: #A6E0BF;
+}
+
+.timeline-legend.confirmed,
+.timeline-cel a.confirmed {
+    background: #ffc107;
+}
+
+.timeline-legend.checkin,
+.timeline-cel a.checkin {
+    background: #60C9F2;
+}
+
+.timeline-legend.checkout,
+.timeline-cel a.checkout {
+    background: #BBC9D0;
+}
+
+.timeline-legend.default,
+.timeline-cel a.default {
+    background: #554b62;
+}
+
+
+
 .timeline-cel a.booked-ext {
     background-image: repeating-linear-gradient(72deg, transparent, transparent 5px, rgba(60,60,60,.2) 5px, rgba(60,60,60,.2) 10px);
 }
@@ -218,7 +252,7 @@ START CLOSING DATE
 }
 .legend-label {
     font-size: 13px;
-    line-height: 15px;
+    line-height: 21px;
 }
 #availability-legend .timeline-cel {
     border-left: 1px solid #ddd;

@@ -6,7 +6,7 @@
     <label> {{ __('Conta Bancária')}}</label>
     <select class="form-control" required name="bank_account_id">
         @foreach ($bankAccountList as $option)
-            @if ($translation->bank_account_id === $option->id)
+            @if ($translation->bank_account_id == $option->id)
                 <option value="{{$option->id}}" selected>{{$option->bank}}</option>
             @else
                 <option value="{{$option->id}}">{{$option->bank}}</option>
@@ -18,7 +18,7 @@
     <label> {{ __('Forma de Pagamento')}}</label>
     <select class="form-control" required name="payment_method_id">
         @foreach ($paymentMethodList as $option)
-            @if ($translation->payment_method_id === $option->id)
+            @if ($translation->payment_method_id == $option->id)
                 <option value="{{$option->id}}" selected>{{$option->name}}</option>
             @else
                 <option value="{{$option->id}}">{{$option->name}}</option>
