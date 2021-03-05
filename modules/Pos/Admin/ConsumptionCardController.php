@@ -9,10 +9,8 @@ use Modules\AdminController;
 use Modules\Financial\Models\BankAccount;
 use Modules\Financial\Models\CostCenter;
 use Modules\Financial\Models\PaymentMethod;
-use Modules\Financial\Models\Revenue;
 use Modules\Pos\Models\ConsumptionCard;
 use Modules\Pos\Models\ConsumptionCardTranslation;
-use Modules\Pos\Models\HistoricalConsumerCard;
 use Modules\Situation\Models\Situation;
 use Modules\User\Models\User;
 

@@ -9,6 +9,7 @@ use Modules\Financial\Models\BankAccount;
 use Modules\Financial\Models\CostCenter;
 use Modules\Financial\Models\PaymentMethod;
 use Modules\Financial\Models\Revenue;
+use Modules\Room\Models\Room;
 use Modules\Situation\Models\Situation;
 
 class ConsumptionCard extends Model
@@ -33,6 +34,8 @@ class ConsumptionCard extends Model
         'internal_observations',
         'cost_center_id',
         'bank_account_id',
+        'room_id',
+        'day_user',
     ];
 
     protected $dates = [
@@ -44,7 +47,7 @@ class ConsumptionCard extends Model
 
     public function setValueCardAttribute($value)
     {
-        $this->attributes['value_card'] = str_replace(',', '.', str_replace('.','', $value));
+        $this->attributes['value_card'] = str_replace(',', '.', str_replace('.', '', $value));
     }
 
     public function getValueCardFormattedAttribute()
@@ -58,7 +61,7 @@ class ConsumptionCard extends Model
 
     public function setValueAddAttribute($value)
     {
-        $this->attributes['value_add'] = str_replace(',', '.', str_replace('.','', $value));
+        $this->attributes['value_add'] = str_replace(',', '.', str_replace('.', '', $value));
     }
 
     public function getValueAddFormattedAttribute()
@@ -72,7 +75,7 @@ class ConsumptionCard extends Model
 
     public function setValueConsumedAttribute($value)
     {
-        $this->attributes['value_consumed'] = str_replace(',', '.', str_replace('.','', $value));
+        $this->attributes['value_consumed'] = str_replace(',', '.', str_replace('.', '', $value));
     }
 
     public function getValueConsumedFormattedAttribute()
@@ -114,7 +117,13 @@ class ConsumptionCard extends Model
         return $this->belongsTo(Situation::class, 'situation_id');
     }
 
-    public static function getClosedSituation(){
+    public function room()
+    {
+        return $this->hasOne(Room::class, 'id', 'room_id');
+    }
+
+    public static function getClosedSituation()
+    {
         $situation = Situation::query()
             ->where('name', 'like', '%FECHADO%')
             ->whereHas('section', function ($query) {

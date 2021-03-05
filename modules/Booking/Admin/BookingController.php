@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Booking\Models\Booking;
 use Modules\Company\Models\Company;
+use Modules\Hotel\Models\HotelRoom;
 use Modules\Hotel\Models\HotelRoomBooking;
 use Modules\Pos\Models\ConsumptionCard;
 use Modules\Pos\Models\Sale;
@@ -101,4 +102,38 @@ class BookingController extends Controller
             'message' => "Reserva não encontrado"
         ], 200);
     }
+
+
+    public function getHotelRoomByUserID(Request $request)
+    {
+        $user = User::query()->find($request->user_id);
+
+
+        if (isset($user)){
+            $hotel_room_booking = HotelRoomBooking::query()->whereHas('booking', function($query) use ($user){
+                $query->where([
+                    ['first_name', '=', $user->first_name],
+                    ['last_name', '=', $user->last_name],
+                    ['email', '=', $user->email],
+                ]);
+            })->get();
+
+            $room  = [];
+
+            if (!empty($hotel_room_booking)){
+                foreach ($hotel_room_booking as $a) {
+                        array_push($room, $a->room->room);
+                }
+            }
+
+            return response()->json([
+                'room' => $room,
+            ]);
+        }else{
+            return response()->json([
+                'room' => [],
+            ]);
+        }
+    }
+
 }
