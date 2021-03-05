@@ -80,7 +80,7 @@
                                             </td>
                                             <td class="title">
                                                 @if ($row->room)
-                                                    <a href="#">{{$row->room->number}}</a>
+                                                    <span class="badge badge-primary">SIM - {{$row->room->number}}</span>
                                                 @else
                                                     <span class="badge badge-danger">NAO</span>
                                                 @endif
