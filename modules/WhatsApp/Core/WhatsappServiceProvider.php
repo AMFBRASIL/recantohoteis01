@@ -4,7 +4,7 @@ namespace Modules\WhatsApp\Core ;
 
 use Modules\WhatsApp\ModuleProvider;
 
-class WhatsAppServiceProvider extends ModuleProvider
+class WhatsappServiceProvider extends ModuleProvider
 {
     /**
      * Indicates if loading of the provider is deferred.
@@ -28,8 +28,8 @@ class WhatsAppServiceProvider extends ModuleProvider
 	    $this->mergeConfigFrom(
 		    __DIR__.'/Config/whatsapp.php', 'whatsapp'
 	    );
-        $this->app->singleton('WhatsApp', function ($app) {
-            return new WhatsAppManager($app);
+        $this->app->singleton('whatsapp', function ($app) {
+            return new WhatsappManager($app);
         });
 
     }

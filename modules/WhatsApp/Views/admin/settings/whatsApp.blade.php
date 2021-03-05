@@ -1,18 +1,18 @@
 <div class="row mb-3">
     <div class="col-sm-4">
-        <h3 class="form-group-title">{{__('Config WhatsApp')}}</h3>
-        <p class="form-group-desc">{{__('WhatsApp driver')}}</p>
+        <h3 class="form-group-title">{{__('Config Whatsapp')}}</h3>
+        <p class="form-group-desc">{{__('Whatsapp driver')}}</p>
     </div>
     <div class="col-sm-8">
         <div class="panel">
             <div class="panel-body">
                 @if(is_default_lang())
                     <div class="form-group">
-                        <label>{{__('WhatsApp Driver')}}</label>
+                        <label>{{__('Whatsapp Driver')}}</label>
                         <div class="form-controls">
-                            <select name="whatsApp_driver" class="form-control">
+                            <select name="whatsapp_driver" class="form-control">
                                 @foreach(\Modules\WhatsApp\SettingClass::WHATSAPP_DRIVER as $item=>$value)
-                                    <option value="{{$value}}" {{(setting_item('whatsApp_driver') ?? '') == $value ? 'selected' : ''  }}>{{__(strtoupper($value))}}</option>
+                                    <option value="{{$value}}" {{(setting_item('whatsapp_driver') ?? '') == $value ? 'selected' : ''  }}>{{__(strtoupper($value))}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -25,30 +25,30 @@
     </div>
 </div>
 @if(is_default_lang())
-    <div class="row" data-condition="whatsApp_driver:is(twilio)">
+    <div class="row" data-condition="whatsapp_driver:is(twilio)">
         <div class="col-sm-4">
             <h3 class="form-group-title">{{__('Config Twilio Driver')}}</h3>
         </div>
         <div class="col-sm-8">
             <div class="panel">
                 <div class="panel-body">
-                    <div data-condition="whatsApp_driver:is(twilio)">
+                    <div data-condition="whatsapp_driver:is(twilio)">
                         <div class="form-group">
                             <label class="">{{__("Twilio Account Sid")}}</label>
                             <div class="form-controls">
-                                <input type="text" class="form-control" name="whatsApp_twilio_account_sid" value="{{setting_item('whatsApp_twilio_account_sid',config('whatsapp.twilio.sid'))}}">
+                                <input type="text" class="form-control" name="whatsapp_twilio_account_sid" value="{{setting_item('whatsapp_twilio_account_sid',config('whatsapp.twilio.sid'))}}">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="">{{__("Twilio Account Token")}}</label>
                             <div class="form-controls">
-                                <input type="text" class="form-control" name="whatsApp_twilio_account_token" value="{{setting_item('whatsApp_twilio_account_token',config('whatsapp.twilio.token'))}}">
+                                <input type="text" class="form-control" name="whatsapp_twilio_account_token" value="{{setting_item('whatsapp_twilio_account_token',config('whatsapp.twilio.token'))}}">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="">{{__("From")}}</label>
                             <div class="form-controls">
-                                <input type="number" class="form-control" name="whatsApp_twilio_api_from" value="{{setting_item('whatsApp_twilio_api_from',config('whatsapp.twilio.from'))}}">
+                                <input type="number" class="form-control" name="whatsapp_twilio_api_from" value="{{setting_item('whatsapp_twilio_api_from',config('whatsapp.twilio.from'))}}">
                             </div>
                         </div>
                     </div>
@@ -116,13 +116,13 @@
                         <div class="tab-pane active" id="WhatsAppAdminEventCreateBooking">
                             @if(is_default_lang())
                                 <div class="form-group">
-                                    <label> <input type="checkbox" @if(setting_item('enable_whatsApp_admin_has_booking')?? '' == 1) checked @endif name="enable_whatsApp_admin_has_booking" value="1"> {{__("Enable send whatsApp to Administrator when have booking?")}}</label>
+                                    <label> <input type="checkbox" @if(setting_item('enable_whatsapp_admin_has_booking')?? '' == 1) checked @endif name="enable_whatsapp_admin_has_booking" value="1"> {{__("Enable send whatsApp to Administrator when have booking?")}}</label>
                                 </div>
                             @else
                                 <div class="form-group">
-                                    <label> <input type="checkbox" @if(setting_item('enable_whatsApp_admin_has_booking') ?? '' == 1) checked @endif name="enable_whatsApp_admin_has_booking" disabled value="1"> {{__("Enable send whatsApp to Administrator when have booking?")}}</label>
+                                    <label> <input type="checkbox" @if(setting_item('enable_whatsapp_admin_has_booking') ?? '' == 1) checked @endif name="enable_whatsapp_admin_has_booking" disabled value="1"> {{__("Enable send whatsApp to Administrator when have booking?")}}</label>
                                 </div>
-                                @if(setting_item('enable_whatsApp_admin_has_booking')!= 1)
+                                @if(setting_item('enable_whatsapp_admin_has_booking')!= 1)
                                     <p>{{__('You must enable on main lang.')}}</p>
                                 @endif
                             @endif
@@ -130,7 +130,7 @@
                                 <div class="form-group">
                                     <label>{{__("Message to Administrator")}}</label>
                                     <div class="form-controls">
-                                        <textarea name="whatsApp_message_admin_when_booking" rows="8" class="form-control">{{setting_item_with_lang('whatsApp_message_admin_when_booking',request()->query('lang')) ?? '' }}</textarea>
+                                        <textarea name="whatsapp_message_admin_when_booking" rows="8" class="form-control">{{setting_item_with_lang('whatsapp_message_admin_when_booking',request()->query('lang')) ?? '' }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -138,40 +138,40 @@
                         <div class="tab-pane" id="WhatsAppVendorEventCreateBooking">
                             @if(is_default_lang())
                                 <div class="form-group">
-                                    <label> <input type="checkbox" @if(setting_item('enable_whatsApp_vendor_has_booking') ?? '' == 1) checked @endif name="enable_whatsApp_vendor_has_booking" value="1"> {{__("Enable send whatsApp to Vendor when have booking?")}}</label>
+                                    <label> <input type="checkbox" @if(setting_item('enable_whatsapp_vendor_has_booking') ?? '' == 1) checked @endif name="enable_whatsapp_vendor_has_booking" value="1"> {{__("Enable send whatsApp to Vendor when have booking?")}}</label>
                                 </div>
                             @else
                                 <div class="form-group">
-                                    <label> <input type="checkbox" @if(setting_item('enable_whatsApp_vendor_has_booking') ?? '' == 1) checked @endif name="enable_whatsApp_vendor_has_booking" disabled value="1"> {{__("Enable send whatsApp to Vendor when have booking?")}}</label>
+                                    <label> <input type="checkbox" @if(setting_item('enable_whatsapp_vendor_has_booking') ?? '' == 1) checked @endif name="enable_whatsapp_vendor_has_booking" disabled value="1"> {{__("Enable send whatsApp to Vendor when have booking?")}}</label>
                                 </div>
-                                @if(setting_item('enable_whatsApp_vendor_has_booking') != 1)
+                                @if(setting_item('enable_whatsapp_vendor_has_booking') != 1)
                                     <p>{{__('You must enable on main lang.')}}</p>
                                 @endif
                             @endif
                             <div class="form-group" data-condition="enable_whatsApp_vendor_has_booking:is(1)">
                                 <label>{{__("Message to Customer")}}</label>
                                 <div class="form-controls">
-                                    <textarea name="whatsApp_message_vendor_when_booking" rows="8" class="form-control">{{setting_item_with_lang('whatsApp_message_vendor_when_booking',request()->query('lang')) ?? '' }}</textarea>
+                                    <textarea name="whatsapp_message_vendor_when_booking" rows="8" class="form-control">{{setting_item_with_lang('whatsapp_message_vendor_when_booking',request()->query('lang')) ?? '' }}</textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane" id="WhatsAppUserEventCreateBooking">
                             @if(is_default_lang())
                                 <div class="form-group">
-                                    <label> <input type="checkbox" @if(setting_item('enable_whatsApp_user_has_booking') ?? '' == 1) checked @endif name="enable_whatsApp_user_has_booking" value="1"> {{__("Enable send whatsApp to Customer when have booking?")}}</label>
+                                    <label> <input type="checkbox" @if(setting_item('enable_whatsapp_user_has_booking') ?? '' == 1) checked @endif name="enable_whatsapp_user_has_booking" value="1"> {{__("Enable send whatsApp to Customer when have booking?")}}</label>
                                 </div>
                             @else
                                 <div class="form-group">
-                                    <label> <input type="checkbox" @if(setting_item('enable_whatsApp_user_has_booking') ?? '' == 1) checked @endif name="enable_whatsApp_user_has_booking" disabled value="1"> {{__("Enable send whatsApp to Customer when have booking?")}}</label>
+                                    <label> <input type="checkbox" @if(setting_item('enable_whatsapp_user_has_booking') ?? '' == 1) checked @endif name="enable_whatsapp_user_has_booking" disabled value="1"> {{__("Enable send whatsApp to Customer when have booking?")}}</label>
                                 </div>
-                                @if(setting_item('enable_whatsApp_user_has_booking') != 1)
+                                @if(setting_item('enable_whatsapp_user_has_booking') != 1)
                                     <p>{{__('You must enable on main lang.')}}</p>
                                 @endif
                             @endif
                             <div class="form-group" data-condition="enable_whatsApp_user_has_booking:is(1)">
                                 <label>{{__("Message to Customer")}}</label>
                                 <div class="form-controls">
-                                    <textarea name="whatsApp_message_user_when_booking" rows="8" class="form-control">{{setting_item_with_lang('whatsApp_message_user_when_booking',request()->query('lang')) ?? '' }}</textarea>
+                                    <textarea name="whatsapp_message_user_when_booking" rows="8" class="form-control">{{setting_item_with_lang('whatsapp_message_user_when_booking',request()->query('lang')) ?? '' }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -198,62 +198,62 @@
                         <div class="tab-pane active" id="WhatsAppAdminEventUpdateBooking">
                             @if(is_default_lang())
                                 <div class="form-group">
-                                    <label> <input type="checkbox" @if(setting_item('enable_whatsApp_admin_update_booking') ?? '' == 1) checked @endif name="enable_whatsApp_admin_update_booking" value="1"> {{__("Enable send whatsApp to Administrator when update booking?")}}</label>
+                                    <label> <input type="checkbox" @if(setting_item('enable_whatsapp_admin_update_booking') ?? '' == 1) checked @endif name="enable_whatsapp_admin_update_booking" value="1"> {{__("Enable send whatsApp to Administrator when update booking?")}}</label>
                                 </div>
                             @else
                                 <div class="form-group">
-                                    <label> <input type="checkbox" @if(setting_item('enable_whatsApp_admin_update_booking') ?? '' == 1) checked @endif name="enable_whatsApp_admin_update_booking" disabled value="1"> {{__("Enable send whatsApp to Administrator when update booking?")}}</label>
+                                    <label> <input type="checkbox" @if(setting_item('enable_whatsapp_admin_update_booking') ?? '' == 1) checked @endif name="enable_whatsapp_admin_update_booking" disabled value="1"> {{__("Enable send whatsApp to Administrator when update booking?")}}</label>
                                 </div>
-                                @if(@setting_item('enable_whatsApp_admin_update_booking') != 1)
+                                @if(@setting_item('enable_whatsapp_admin_update_booking') != 1)
                                     <p>{{__('You must enable on main lang.')}}</p>
                                 @endif
                             @endif
-                            <div data-condition="enable_whatsApp_admin_update_booking:is(1)">
+                            <div data-condition="enable_whatsapp_admin_update_booking:is(1)">
                                 <div class="form-group">
                                     <label>{{__("Message to Administrator")}}</label>
                                     <div class="form-controls">
-                                        <textarea name="whatsApp_message_admin_update_booking" rows="8" class="form-control">{{setting_item_with_lang('whatsApp_message_admin_update_booking',request()->query('lang')) ?? '' }}</textarea>
+                                        <textarea name="whatsApp_message_admin_update_booking" rows="8" class="form-control">{{setting_item_with_lang('whatsapp_message_admin_update_booking',request()->query('lang')) ?? '' }}</textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane" id="WhatsAppVendorEventUpdateBooking">
+                        <div class="tab-pane" id="WhatsappVendorEventUpdateBooking">
                             @if(is_default_lang())
                                 <div class="form-group">
-                                    <label> <input type="checkbox" @if(setting_item('enable_whatsApp_vendor_update_booking') ?? '' == 1) checked @endif name="enable_whatsApp_vendor_update_booking" value="1"> {{__("Enable send whatsApp to Vendor when update booking?")}}</label>
+                                    <label> <input type="checkbox" @if(setting_item('enable_whatsapp_vendor_update_booking') ?? '' == 1) checked @endif name="enable_whatsapp_vendor_update_booking" value="1"> {{__("Enable send whatsApp to Vendor when update booking?")}}</label>
                                 </div>
                             @else
                                 <div class="form-group">
-                                    <label> <input type="checkbox" @if(@setting_item('enable_whatsApp_vendor_update_booking') ?? '' == 1) checked @endif name="enable_whatsApp_vendor_update_booking" disabled value="1"> {{__("Enable send whatsApp to Vendor when update booking?")}}</label>
+                                    <label> <input type="checkbox" @if(@setting_item('enable_whatsapp_vendor_update_booking') ?? '' == 1) checked @endif name="enable_whatsapp_vendor_update_booking" disabled value="1"> {{__("Enable send whatsApp to Vendor when update booking?")}}</label>
                                 </div>
-                                @if(@setting_item('enable_whatsApp_vendor_update_booking') != 1)
+                                @if(@setting_item('enable_whatsapp_vendor_update_booking') != 1)
                                     <p>{{__('You must enable on main lang.')}}</p>
                                 @endif
                             @endif
                             <div class="form-group" data-condition="enable_whatsApp_vendor_update_booking:is(1)">
                                 <label>{{__("Message to Customer")}}</label>
                                 <div class="form-controls">
-                                    <textarea name="whatsApp_message_vendor_update_booking" rows="8" class="form-control">{{setting_item_with_lang('whatsApp_message_vendor_update_booking',request()->query('lang')) ?? '' }}</textarea>
+                                    <textarea name="whatsapp_message_vendor_update_booking" rows="8" class="form-control">{{setting_item_with_lang('whatsapp_message_vendor_update_booking',request()->query('lang')) ?? '' }}</textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane" id="WhatsAppUserEventUpdateBooking">
                             @if(is_default_lang())
                                 <div class="form-group">
-                                    <label> <input type="checkbox" @if(@setting_item('enable_whatsApp_user_update_booking') ?? '' == 1) checked @endif name="enable_whatsApp_user_update_booking" value="1"> {{__("Enable send whatsApp to Customer when update booking?")}}</label>
+                                    <label> <input type="checkbox" @if(@setting_item('enable_whatsapp_user_update_booking') ?? '' == 1) checked @endif name="enable_whatsapp_user_update_booking" value="1"> {{__("Enable send whatsApp to Customer when update booking?")}}</label>
                                 </div>
                             @else
                                 <div class="form-group">
-                                    <label> <input type="checkbox" @if(setting_item('enable_whatsApp_user_has_booking') ?? '' == 1) checked @endif name="enable_whatsApp_user_has_booking" disabled value="1"> {{__("Enable send whatsApp to Customer when update booking?")}}</label>
+                                    <label> <input type="checkbox" @if(setting_item('enable_whatsapp_user_update_booking') ?? '' == 1) checked @endif name="enable_whatsapp_user_update_booking" disabled value="1"> {{__("Enable send whatsApp to Customer when update booking?")}}</label>
                                 </div>
-                                @if(@setting_item('enable_whatsApp_user_update_booking') != 1)
+                                @if(@setting_item('enable_whatsapp_user_update_booking') != 1)
                                     <p>{{__('You must enable on main lang.')}}</p>
                                 @endif
                             @endif
-                            <div class="form-group" data-condition="enable_whatsApp_user_update_booking:is(1)">
+                            <div class="form-group" data-condition="enable_whatsapp_user_update_booking:is(1)">
                                 <label>{{__("Message to Customer")}}</label>
                                 <div class="form-controls">
-                                    <textarea name="whatsApp_message_user_update_booking" rows="8" class="form-control">{{setting_item_with_lang('whatsApp_message_user_update_booking',request()->query('lang')) ?? '' }}</textarea>
+                                    <textarea name="whatsapp_message_user_update_booking" rows="8" class="form-control">{{setting_item_with_lang('whatsapp_message_user_update_booking',request()->query('lang')) ?? '' }}</textarea>
                                 </div>
                             </div>
                         </div>

@@ -4,7 +4,7 @@ namespace Modules\WhatsApp\Core\Facade;
 
 use Illuminate\Support\Facades\Facade;
 
-class WhatsApp extends Facade
+class Whatsapp extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -15,6 +15,6 @@ class WhatsApp extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'WhatsApp';
+        return 'whatsapp';
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Support\Manager;
 use Modules\Sms\Core\Drivers\NullDriver;
 use Modules\WhatsApp\Core\Drivers\TwilioDriver;
 
-class WhatsAppManager extends Manager
+class WhatsappManager extends Manager
 {
 	public function channel($name = null)
     {
@@ -23,16 +23,10 @@ class WhatsAppManager extends Manager
 		);
 	}
 
-
-    /**
-     * Get the default SMS driver name.
-     *
-     * @return string
-     */
     public function getDefaultDriver()
     {
 	    $channel = setting_item('whatsapp_driver');
-	    Config::set('whatsapp.twilio', $channel);
-	    return $this->app['config']['whatsapp.twilio'] ?? '';
+        Config::set('whatsapp.default', $channel);
+        return $this->app['config']['whatsapp.default'] ?? '';
     }
 }

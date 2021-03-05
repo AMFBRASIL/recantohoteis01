@@ -4,20 +4,20 @@ use Illuminate\Support\Facades\Event;
 use Modules\Booking\Events\BookingCreatedEvent;
 use Modules\Booking\Events\BookingUpdatedEvent;
 use Modules\ModuleServiceProvider;
-use Modules\WhatsApp\Core\WhatsAppServiceProvider;
-use Modules\WhatsApp\Listeners\SendWhatsAppBookingListen;
-use Modules\WhatsApp\Listeners\SendWhatsAppUpdateBookingListen;
+use Modules\WhatsApp\Core\WhatsappServiceProvider;
+use Modules\WhatsApp\Listeners\SendWhatsappBookingListen;
+use Modules\WhatsApp\Listeners\SendWhatsappUpdateBookingListen;
 
 class ModuleProvider extends ModuleServiceProvider
 {
 
 	public function register()
 	{
-		$this->app->register(WhatsAppServiceProvider::class);
+		$this->app->register(WhatsappServiceProvider::class);
 
 	}
 	public function boot(){
-		/*Event::listen(BookingCreatedEvent::class,SendWhatsAppBookingListen::class);
-		Event::listen(BookingUpdatedEvent::class,SendWhatsAppUpdateBookingListen::class);*/
+		Event::listen(BookingCreatedEvent::class,SendWhatsappBookingListen::class);
+		Event::listen(BookingUpdatedEvent::class,SendWhatsappUpdateBookingListen::class);
 	}
 }

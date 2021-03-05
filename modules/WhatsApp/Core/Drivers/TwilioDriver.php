@@ -2,7 +2,7 @@
 
 namespace Modules\WhatsApp\Core\Drivers;
 
-use Modules\WhatsApp\Core\Exceptions\WhatsAppException;
+use Modules\WhatsApp\Core\Exceptions\WhatsappException;
 
 class TwilioDriver extends Driver
 {
@@ -24,10 +24,10 @@ class TwilioDriver extends Driver
         $curl = $this->curl($url, $data);
         $result = json_decode($curl, true);
         if (!empty($result['error_code'])) {
-            throw new WhatsAppException($result['error_message']);
+            throw new WhatsappException($result['error_message']);
         }
         if (!empty($result['code']) and is_numeric($result['code'])) {
-            throw new WhatsAppException($result['message']);
+            throw new WhatsappException($result['message']);
         }
         return $result;
     }
@@ -46,8 +46,5 @@ class TwilioDriver extends Driver
         $data = curl_exec($ch);
         curl_close($ch);
         return $data;
-
     }
-
-
 }

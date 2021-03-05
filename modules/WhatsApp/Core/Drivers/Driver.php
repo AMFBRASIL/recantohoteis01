@@ -2,8 +2,8 @@
 
 namespace Modules\WhatsApp\Core\Drivers;
 
-use Modules\Sms\Core\Contracts\WHATSAPP;
-use Modules\WhatsApp\Core\Exceptions\WhatsAppException;
+use Modules\WhatsApp\Core\Contracts\WHATSAPP;
+use Modules\WhatsApp\Core\Exceptions\WhatsappException;
 
 abstract class Driver implements WHATSAPP
 {
@@ -32,12 +32,12 @@ abstract class Driver implements WHATSAPP
      * @param string $recipient
      *
      * @return $this
-     * @throws \Modules\WhatsApp\Core\Exceptions\WhatsAppException
+     * @throws \Modules\WhatsApp\Core\Exceptions\WhatsappException
      *
      */
     public function to(string $recipient)
     {
-        throw_if(is_null($recipient), WhatsAppException::class, 'Recipients cannot be empty');
+        throw_if(is_null($recipient), WhatsappException::class, 'Recipients cannot be empty');
 
         $this->recipient = $recipient;
 
@@ -46,7 +46,7 @@ abstract class Driver implements WHATSAPP
 
     public function content(string $message)
     {
-        throw_if(empty($message), WhatsAppException::class, 'Message text is required');
+        throw_if(empty($message), WhatsappException::class, 'Message text is required');
 
         $this->message = $message;
 
