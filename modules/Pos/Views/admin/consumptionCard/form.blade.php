@@ -1,7 +1,7 @@
 <div class="form-group">
     <label>{{ __('Número do Cartão')}}</label>
     <div class="input-group">
-        <input type="number" value="{{$row->card_number}}" placeholder="" name="card_number" class="form-control">
+        <input type="number" value="{{$row->card_number}}" placeholder="" name="card_number" class="form-control" required>
     </div>
 </div>
 <div class="form-group">
@@ -16,7 +16,8 @@
                         'dataType' => 'json'
                     ],
                     'allowClear'  => true,
-                    'placeholder' => __('cliente')
+                    'placeholder' => __('cliente'),
+                    'required'  =>true,
                 ]
             ], !empty($user->id) ? [$user->id, $user->getNameAttribute()] : false)
         ?>
@@ -25,6 +26,24 @@
                 <i class="fa fa-plus"></i>
             </button>
         </div>
+    </div>
+</div>
+
+<div class="form-group" id="divUHHospede" style="display:block;">
+    <label> UH do Hospede</label>
+    <div class="input-group">
+        <select id="uhCliente" class="form-control" required name="room_id" disabled>
+            <option value="">-- Selecione a UH --</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group" id="divDayUSE" name="divDayUSE" style="display:block;">
+    <label> Day USE </label>
+    <div class="input-group">
+        <select id="dayUse" class="form-control" required name="day_user" disabled>
+            <option value="0">-- Selecione Day Use Mode --</option>
+        </select>
     </div>
 </div>
 

@@ -4,7 +4,6 @@ namespace Modules\Booking\Admin;
 
 use App\User;
 use Carbon\Carbon;
-use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Booking\Models\Booking;
@@ -15,13 +14,14 @@ use Modules\Pos\Models\Sale;
 
 class BookingController extends Controller
 {
-    public function getBooking(Request $request){
+    public function getBooking(Request $request)
+    {
         $booking_id = $request->booking_id;
 
         if (!is_null($booking_id)) {
 
             $booking = Booking::query()->find($booking_id);
-            $hotel_room_booking = HotelRoomBooking::query()->where('booking_id',$booking->id)->first();
+            $hotel_room_booking = HotelRoomBooking::query()->where('booking_id', $booking->id)->first();
             $hotel_room = $hotel_room_booking->room()->first();
             $room = $hotel_room->room()->first();
 
@@ -33,7 +33,7 @@ class BookingController extends Controller
 
             $company_name = '';
 
-            if ($user->company_id){
+            if ($user->company_id) {
                 $company_name = Company::query()->find($user->company_id)->titile;
             }
 
@@ -55,8 +55,8 @@ class BookingController extends Controller
                 }
             }
 
-                $d1 = new Carbon($hotel_room_booking->start_date);
-                $d2 = new Carbon($hotel_room_booking->end_date);
+            $d1 = new Carbon($hotel_room_booking->start_date);
+            $d2 = new Carbon($hotel_room_booking->end_date);
 
             $diff = $d2->diff($d1);
 
@@ -64,28 +64,28 @@ class BookingController extends Controller
                 return response()->json([
                     'success' => true,
                     'data' => [
-                        'booking_id'    => $booking->id,
+                        'booking_id' => $booking->id,
                         'booking_detail' => [
-                            'checkin'   => (new Carbon($hotel_room_booking->start_date))->format('d/m/y  H:m'),
-                            'checkout'  => (new Carbon($hotel_room_booking->end_date))->format('d/m/y  H:m'),
-                            'nights'    => $diff->days,
-                            'adults'    => '0',
-                            'children'  => '0'
+                            'checkin' => (new Carbon($hotel_room_booking->start_date))->format('d/m/y  H:m'),
+                            'checkout' => (new Carbon($hotel_room_booking->end_date))->format('d/m/y  H:m'),
+                            'nights' => $diff->days,
+                            'adults' => '0',
+                            'children' => '0'
                         ],
-                        'billing'   => [
-                            'name'          => $user->first_name . ' ' . $user->last_name,
-                            'company'       => $company_name,
-                            'address'       => $booking->address . ', ' . $booking->address2,
-                            'complement'    => $booking->city . ' - '. $booking->state . ' - CEP: ' . $booking->zip_code,
-                            'phone'         => $booking->phone,
-                            'email'         => $booking->email,
+                        'billing' => [
+                            'name' => $user->first_name . ' ' . $user->last_name,
+                            'company' => $company_name,
+                            'address' => $booking->address . ', ' . $booking->address2,
+                            'complement' => $booking->city . ' - ' . $booking->state . ' - CEP: ' . $booking->zip_code,
+                            'phone' => $booking->phone,
+                            'email' => $booking->email,
                         ],
                         'room_information' => [
-                            'room'      => $hotel_room->title . ' - Bloco ' . $room->building->name . ' - Apto ' . $room->number,
-                            'persons'   => '0',
-                            'total'     => $hotel_room_booking->price,
+                            'room' => $hotel_room->title . ' - Bloco ' . $room->building->name . ' - Apto ' . $room->number,
+                            'persons' => '0',
+                            'total' => $hotel_room_booking->price,
                         ],
-                        'itemsSales'   => $itemsSales
+                        'itemsSales' => $itemsSales
                     ]
                 ], 200);
             } else {
@@ -101,4 +101,40 @@ class BookingController extends Controller
             'message' => "Reserva não encontrado"
         ], 200);
     }
+
+
+    public function getHotelRoomByUserID(Request $request)
+    {
+        $user = User::query()->find($request->user_id);
+
+        if (isset($user)) {
+            $hotel_room_booking = HotelRoomBooking::query()->whereHas('booking', function ($query) use ($user) {
+                $query->where([
+                    ['first_name', '=', $user->first_name],
+                    ['last_name', '=', $user->last_name],
+                    ['email', '=', $user->email],
+                ])
+                    ->whereHas('situation', function ($query) {
+                        $query->where('name', 'like', '%EM USO%');
+                    });
+            })->get();
+
+            $room = [];
+
+            if (!empty($hotel_room_booking)) {
+                foreach ($hotel_room_booking as $a) {
+                    array_push($room, $a->room->room);
+                }
+            }
+
+            return response()->json([
+                'room' => $room,
+            ]);
+        } else {
+            return response()->json([
+                'room' => [],
+            ]);
+        }
+    }
+
 }

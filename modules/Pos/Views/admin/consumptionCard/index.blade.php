@@ -56,6 +56,8 @@
                                 <tr>
                                     <th width="15%" style="color: #D50000"> {{ __('CARTÃO')}} </th>
                                     <th width="30%" style="color: #D50000"> {{ __('CLIENTE')}} </th>
+                                    <th width="10%" style="color: #D50000"> {{ __('HOSPEDE')}} </th>
+                                    <th width="10%" style="color: #D50000"> {{ __('DAY USE')}} </th>
                                     <th width="10%" style="color: #D50000"> {{  __('VALOR DISPONÍVEL')}} </th>
                                     <th width="10%" style="color: #D50000"> {{  __('EM USO')}} </th>
                                     <th width="10%" style="color: #D50000"> {{  __('SITUAÇÃO')}} </th>
@@ -74,6 +76,20 @@
                                             <td class="title">
                                                 @if ($row->user)
                                                     <a href="#">{{$row->user->getNameAttribute()}}</a>
+                                                @endif
+                                            </td>
+                                            <td class="title">
+                                                @if ($row->room)
+                                                    <span class="badge badge-primary">SIM - {{$row->room->number}}</span>
+                                                @else
+                                                    <span class="badge badge-danger">NAO</span>
+                                                @endif
+                                            </td>
+                                            <td class="title">
+                                                @if ($row->day_user)
+                                                    <span class="badge badge-primary">SIM</span>
+                                                @else
+                                                    <span class="badge badge-danger">NAO</span>
                                                 @endif
                                             </td>
                                             <td class="title">
@@ -359,212 +375,10 @@
         </div>
     </div>
 @endsection
+@section('script.head')
+    <link rel="stylesheet" href="{{asset('libs//consumptionCard/css/index.css')}}">
+@endsection
 @section ('script.body')
-    <script>
-        let sales;
-        let current_page = 1;
-        let rows = 10;
-        let max_page = 1;
-
-        let creditCardPayment = JSON.parse($("#formPayment").attr("data-value"));
-
-        $(function ($) {
-            $("#observacao").on("show.bs.modal", function (e) {
-                let observacao = e.relatedTarget.getAttribute('data-value');
-                $('#internal_observations').html(observacao);
-            });
-
-            $("#product").on("show.bs.modal", function (e) {
-                clearModalEmUso();
-                let id = e.relatedTarget.getAttribute('data-value');
-                let data = {
-                    id: id,
-                };
-
-                let url = "/admin/module/pos/sale/getSalesCard";
-
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: data,
-                    success: function (data) {
-                        sales = data;
-                        loadModalSale();
-                        if(sales.itensSales.length >= 1){
-                            loadTableModalSale(sales.itensSales, rows, current_page);
-                            SetupPagination(sales.itensSales, rows);
-                        }
-                    }
-                });
-            });
-
-            $('#formPayment').on('change', function() {
-                showTransitionNumber()
-            });
-
-            showTransitionNumber();
-        });
-
-        $('.moeda-real').mask('#.##0,00', {reverse: true});
-
-        $('#priceAdd').on('keyup', function () {
-            $("#somaValores").show();
-
-            let priceAdd = $('#priceAdd').val();
-
-            if (priceAdd == '') {
-                $("#somaValores").hide();
-            }
-
-            // Somando valores
-            let totalValores = priceAdd;
-            let totalValoresCobrar = priceAdd;
-
-            $('#somaTotal').html("R$ " + totalValores);
-            $('#somaTotalCobrar').html("R$ " + totalValoresCobrar);
-        })
-
-        $("#pagination-sales").on('click', 'li a', function () {
-            let itens = sales.itensSales;
-
-            let capturedValue = $(this).text();
-
-            switch (capturedValue) {
-                case '<<':
-                    current_page--;
-                    break;
-                case '>>':
-                    current_page++;
-                    break;
-                default:
-                    current_page = capturedValue;
-                    break;
-            }
-
-            if(current_page > 1){
-                $("#anterior").closest('li').removeClass("disabled")
-            }else{
-                $("#anterior").closest('li').addClass("disabled")
-            }
-
-            if(current_page == max_page){
-                $("#proximo").closest('li').addClass("disabled")
-            }else{
-                $("#proximo").closest('li').removeClass("disabled")
-            }
-
-            loadTableModalSale(itens, rows, current_page);
-
-            activePagination();
-        })
-
-        function clearModalEmUso(){
-            $("#tab-sales tr").remove();
-            $("#pagination-sales li").remove();
-            $("#modal-card-title").html(``);
-            $("#card").html(``);
-            $("#value-consumed-modal-em-uso").html(``);
-            $("#value-card-modal-em-uso").html(`<i `);
-        }
-
-        function activePagination(){
-            $("#pagination-sales li").removeClass("active");
-            $(`#pagination-sales li a:contains(${current_page})`).closest('li').addClass("active");
-        }
-
-        function loadModalSale() {
-            $("#modal-card-title").html(`Detalhes Consumo Cartão : #${sales.card.id}`);
-            $("#card").html(`Itens Consumido Cartão (#${sales.card.id})`);
-
-            $("#value-consumed-modal-em-uso").html(`<i class="fa fa-minus"></i> R$ ${sales.card.value_consumed != null
-                    ? sales.card.value_consumed : '0.00'}`);
-            $("#value-card-modal-em-uso").html(`<i class="fa fa-plus"></i> R$ ${sales.card.value_card}`);
-        }
-
-        function loadTableModalSale(items, rows_per_page, page) {
-            page--;
-
-            let html = '';
-            let start = rows_per_page * page;
-            let end = start + rows_per_page;
-            let paginatedItems = items.slice(start, end)
-
-            for (let i = 0; i < paginatedItems.length; i++) {
-                let item = paginatedItems[i];
-
-                html += ` <tr>
-                            <td><i class="fa fa-check-circle fa-2x"></i></td>
-                            <td>#${item.sale_id}</td>
-                            <td>${item.title}</td>
-                            <td>R$ ${item.price}</td>
-                            <td>${item.quantity}</td>
-                            <td>${item.created_at}</td>
-                         </tr>`
-            }
-            $("#tab-sales > tbody:last-child").html(html);
-        }
-
-        function SetupPagination(items, rows_per_page) {
-            let html = '';
-            let page_count = Math.ceil(items.length / rows_per_page);
-
-            max_page = page_count
-
-            html += `<li class="page-item disabled">
-                        <a class="page-link" id="anterior" href="#" aria-label="Previous"><<</a>
-                    </li>`;
-
-            for (let i = 1; i < page_count + 1; i++) {
-                html += PaginationButton(i);
-            }
-
-            html += `<li class="page-item ${max_page == 1 ? 'disabled' : 0}">
-                        <a id="proximo" class="page-link" href="#" aria-label="Next">>></a>
-                    </li>`;
-
-            $("#pagination-sales").html(html);
-        }
-
-        function PaginationButton(page) {
-            let html = '';
-
-            if (current_page == page) {
-                html += `<li class="page-item active" aria-current="page">
-                            <a class="page-link" href="#">${page}</a>
-                        </li>`
-            } else {
-                html += `<li class="page-item">
-                            <a class="page-link" href="#">${page}</a>
-                        </li>`
-            }
-            return html;
-        }
-
-        function showTransitionNumber(){
-            if(creditCardPayment.some(item => item.id == $("#formPayment").val())){
-                $('#divNSU').show();
-                $('#nsuinput').focus();
-            } else {
-                $('#divNSU').hide();
-            }
-        }
-
-        $(".account").css({
-            "margin-bottom": "36px !important",
-            "font-size": "14px",
-            "color": "#1A237E"
-        });
-
-        $(".balance").css({
-            "font-size": "36px",
-            "color": "green"
-        });
-
-        $(".restante").css({
-            "font-size": "36px",
-            "color": "red"
-        });
-
-    </script>
+    <script src="{{asset('libs//consumptionCard/js/index.js')}}"></script>
 @endsection
 
