@@ -115,7 +115,10 @@ class BookingController extends Controller
                     ['first_name', '=', $user->first_name],
                     ['last_name', '=', $user->last_name],
                     ['email', '=', $user->email],
-                ]);
+                ])
+                ->whereHas('situation', function($query) {
+                    $query->where('name', 'like', '%EM USO%');
+                });
             })->get();
 
             $room  = [];
