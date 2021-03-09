@@ -50,25 +50,6 @@ $(function ($) {
         });
     });
 
-    $("#client").on("show.bs.modal", function (e) {
-        $(".user-information").empty();
-        let id = e.relatedTarget.getAttribute('data-value');
-        let data = {
-            id: id,
-        };
-
-        let url = "/admin/module/user/getUser";
-
-        $.ajax({
-            url: url,
-            type: 'GET',
-            data: data,
-            success: function (data) {
-                carregaModalClient(data);
-            }
-        });
-    });
-
     $("#product").on("show.bs.modal", function (e) {
         let id = e.relatedTarget.getAttribute('data-value');
         let data = {
@@ -86,6 +67,27 @@ $(function ($) {
                 loadModalSale();
                 loadTableModalSale(sale.sale.product_composition, rows, current_page);
                 SetupPagination(sale.sale.product_composition, rows);
+            }
+        });
+    });
+
+    $("#productSituation").on("show.bs.modal", function (e) {
+        let id = e.relatedTarget.getAttribute('data-value');
+        let data = {
+            id: id,
+        };
+
+        let url = "/admin/module/pos/sale/getSales";
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: data,
+            success: function (data) {
+                console.log(data);
+                sale = data
+                loadModalSaleSituation();
+                loadTableModalSaleSituation(sale.sale.product_composition);
             }
         });
     });
@@ -317,4 +319,29 @@ function PaginationButton(page) {
                         </li>`
     }
     return html;
+}
+
+function loadModalSaleSituation() {
+    $("#title-sales-situation-modal").html(`Itens do Pedido nro: : #${sale.sale.id}`);
+    $("#value-sales-situation-modal").html(`R$ ${sale.sale.total_value}`);
+}
+
+function loadTableModalSaleSituation(items) {
+    let html = '';
+    for (let i = 0; i < items.length; i++) {
+        let item = items[i];
+
+        html += ` <tr>
+                    <td>${item.title}</td>
+                    <td>R$ ${item.price}</td>
+                    <td>${item.quantity}</td>`;
+        if(item.situation_name != undefined){
+            html += `<td><span class="badge badge-${item.situation_label}">${item.situation_name}</span></td>`;
+        }else{
+            html += `<td><span></span></td>`;
+        }
+        html += `    <td>${sale.created_at}</td>
+                 </tr>`;
+    }
+    $("#table-items-sales-situation-modal > tbody:last-child").html(html);
 }

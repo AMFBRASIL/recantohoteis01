@@ -128,7 +128,8 @@ class BookingController extends Controller
 
             if (!empty($hotel_room_booking)) {
                 foreach ($hotel_room_booking as $a) {
-                    array_push($room, $a->room->room);
+                    $a->room->room;
+                    array_push($room, $a->room);
                 }
             }
 

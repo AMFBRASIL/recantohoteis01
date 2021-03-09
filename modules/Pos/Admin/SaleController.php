@@ -129,6 +129,26 @@ class SaleController extends AdminController
 
         $row->fill($request->input());
 
+
+        $situation = Situation::query()->whereHas('section', function ($query) {
+            $query->where('name', 'like', '%COZINHA%');
+        })->where('name', 'like', '%COZINHA SOLICITADA%')->get()->first();
+
+        $new_product_composition = [];
+
+        foreach ($row->product_composition as $item){
+            array_push($new_product_composition
+                ,array_merge($item,
+                    [
+                        'situation_id' => $situation->id,
+                        'situation_name'=> $situation->name,
+                        'situation_label' => $situation->label
+                    ])
+            );
+        }
+
+        $row->product_composition = $new_product_composition;
+
         $this->updateCarConsumer($row->card_number, $request->input('value_card'),$request->input('value_consumed'));
         $this->updateProduct($row->product_composition);
 

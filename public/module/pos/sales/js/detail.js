@@ -276,7 +276,7 @@ function setUserInformation(data){
         select.empty();
         $.each(data.room, function (index, item) {
             select.append(
-                new Option(item.number, item.id, null, false));
+                new Option(item.title + ' - '+ item.room.number, item.id, null, false));
         });
         select.prop('disabled',false);
 
@@ -309,7 +309,7 @@ function setUserInformation(data){
         }).attr('disabled', 'disabled')
     }
 
-    if(data.consumptionCard != ''){
+    if(data.consumptionCard != '' && data.consumptionCard != null){
         $('#numberCard').val(data.consumptionCard.card_number);
         if (!searchUserByConsumedCard){
             searchUserByConsumerCard();

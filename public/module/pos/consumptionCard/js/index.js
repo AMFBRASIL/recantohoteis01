@@ -74,7 +74,7 @@ $(".dungdt-select2-field").on('change', (e) => {
                             new Option(item.number, item.id, null, false));
                     }*/
                     select.append(
-                        new Option(item.number, item.id, null, false));
+                        new Option(item.room.number, item.id, null, false));
                 });
                 select.prop('disabled',false);
 
