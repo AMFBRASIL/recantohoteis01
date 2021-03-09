@@ -35,6 +35,8 @@ class Sale extends Model
         'total_value',
         'discounts_value',
         'received_value',
+        'room_id',
+        'day_user',
 
         //products
         'product_composition',
