@@ -106,6 +106,11 @@ class BookingController extends Controller
     public function getHotelRoomByUserID(Request $request)
     {
         $user = User::query()->find($request->user_id);
+        $consumptionCard = ConsumptionCard::query()
+            ->where('user_id',$user->id)
+            ->whereHas('situation', function ($query) {
+                $query->where('name', 'like', '%EM ABERTO%');
+            })->get()->first();
 
         if (isset($user)) {
             $hotel_room_booking = HotelRoomBooking::query()->whereHas('booking', function ($query) use ($user) {
@@ -123,16 +128,19 @@ class BookingController extends Controller
 
             if (!empty($hotel_room_booking)) {
                 foreach ($hotel_room_booking as $a) {
-                    array_push($room, $a->room->room);
+                    $a->room->room;
+                    array_push($room, $a->room);
                 }
             }
 
             return response()->json([
                 'room' => $room,
+                'consumptionCard' => $consumptionCard
             ]);
         } else {
             return response()->json([
                 'room' => [],
+                'consumptionCard' => ''
             ]);
         }
     }

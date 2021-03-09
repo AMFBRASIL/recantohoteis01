@@ -2,14 +2,7 @@
     <div class="panel-title"><strong>{{__("Dados Produto")}}</strong></div>
     <div class="panel-body" data-select2-id="12">
         <div class="row">
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <label> {{__("Número do Cartão Consumo")}}</label>
-                    <input id="numberCard" type="number" value="{{$row->card_number}}" placeholder="" name="card_number"
-                           class="form-control">
-                </div>
-            </div>
-            <div class="col-lg-9">
+            <div class="col-lg-5">
                 <div class="form-group">
                     <label> {{__("Cliente / Hóspede")}}</label>
                     <div id="client_host" class="input-group">
@@ -28,10 +21,48 @@
                         ?>
                         <div class="input-group-append">
                             <button type="button" data-toggle="modal" data-target="#register"
-                                    class="btn btn-info btn-sm btn-add-item">
+                                    class="btn btn-info btn-sm">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label> {{__("Número do Cartão Consumo")}}</label>
+                    <div class="input-group">
+                        <input id="numberCard" type="number" value="{{$row->card_number}}" placeholder=""
+                               name="card_number"
+                               class="form-control">
+                        <div class="input-group-append">
+                            <button id="newCard" type="button" class="btn btn-info btn-sm">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2">
+                <div class="form-group" id="divUHHospede" style="display:block;">
+                    <label> UH do Hospede</label>
+                    <div class="input-group">
+                        <select id="uhCliente" class="form-control" required name="room_id" disabled>
+                            <option value="">- Selecione -</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2">
+                <div class="form-group" id="divDayUSE" name="divDayUSE" style="display:block;">
+                    <label> Day USE </label>
+                    <div class="input-group">
+                        <select id="dayUse" class="form-control" required name="day_user" disabled>
+                            <option value="0">- Selecione -</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -76,7 +107,8 @@
                 <div class="form-group">
                     <label> {{__("Forma de pagamento")}}</label>
                     <div class="input-group">
-                        <select id="formPayment" class="form-control" required name="payment_method_id" data-value="{{$creditCardPayment}}">
+                        <select id="formPayment" class="form-control" required name="payment_method_id"
+                                data-value="{{$creditCardPayment}}">
                             @foreach ($paymentMethodList as $option)
                                 <option value="{{$option->id}}">{{$option->name}}</option>
                             @endforeach

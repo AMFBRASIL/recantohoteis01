@@ -1,0 +1,18 @@
+.account {
+    font-size: 16px;
+    color: #1A237E;
+}
+
+.balance {
+    font-size: 43px;
+    color: green;
+    display: flex;
+    align-items: center;
+}
+
+.restante {
+    font-size: 43px;
+    color: red;
+    display: flex;
+    align-items: center;
+}

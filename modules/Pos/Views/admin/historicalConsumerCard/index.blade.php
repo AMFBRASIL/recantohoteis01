@@ -156,7 +156,7 @@
                                 <tr>
                                     <th width="5%" style="color: #D50000"> {{ __('ID.')}}</th>
                                     <th width="15%" style="color: #D50000"> {{ __('CARTÃO')}}</th>
-                                    <th width="30%" style="color: #D50000"> {{ __('CLIENTE')}}</th>
+                                    <th width="15%" style="color: #D50000"> {{ __('CLIENTE')}}</th>
                                     <th width="15%" style="color: #D50000"> {{  __('VALORES')}}</th>
                                     <th width="10%" style="color: #D50000"> {{  __('SITUAÇÃO')}}</th>
                                     <th width="10%" style="color: #D50000"> {{  __('FORMA DE PGTO')}}</th>
@@ -266,8 +266,8 @@
     </div>
 @endsection
 @section('script.head')
-    <link rel="stylesheet" href="{{asset('libs//historicalConsumerCard/css/index.css')}}">
+    <link rel="stylesheet" href="{{asset('module//pos/historicalConsumerCard/css/index.css')}}">
 @endsection
 @section ('script.body')
-    <script src="{{asset('libs//historicalConsumerCard/js/index.js')}}"></script>
+    <script src="{{asset('module//pos/historicalConsumerCard/js/index.js')}}"></script>
 @endsection

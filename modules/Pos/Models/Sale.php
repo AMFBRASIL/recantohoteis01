@@ -10,6 +10,7 @@ use Modules\Financial\Models\CostCenter;
 use Modules\Financial\Models\PaymentMethod;
 use Modules\PointOfSale\Models\PointOfSale;
 use Modules\Product\Models\Product;
+use Modules\Room\Models\Room;
 use Modules\Situation\Models\Situation;
 
 class Sale extends Model
@@ -35,6 +36,8 @@ class Sale extends Model
         'total_value',
         'discounts_value',
         'received_value',
+        'room_id',
+        'day_user',
 
         //products
         'product_composition',
@@ -126,5 +129,10 @@ class Sale extends Model
 
     public function productName($id){
         return Product::query()->where('id', '=', $id)->get('title')->first()->title;
+    }
+
+    public function room()
+    {
+        return $this->hasOne(Room::class, 'id', 'room_id');
     }
 }
