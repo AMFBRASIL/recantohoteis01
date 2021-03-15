@@ -1,22 +1,19 @@
-<html lang="pt-br" class="fa-events-icons-failed" data-lt-installed="true"><head>
+<html lang="pt-br" class="fa-events-icons-failed" data-lt-installed="true">
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
     <meta http-equiv="Content-Language" content="pt-br">
-
-    <!-- Tell the browser to be responsive to screen width -->
     <meta name="theme-color" content="#1d67bd">
     <meta name="Description" content="Description: Software para Hotel e Motel. Author: Bitz Softwares">
-    <link rel="shortcut icon" type="image/png" href="/layout/temp/icon-bitz-falcon.png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
     <!-- Theme style -->
-{{--    <link rel="stylesheet" href="ficha.css">--}}
-    <script src="https://use.fontawesome.com/1a38f18b78.js"></script><link href="https://use.fontawesome.com/1a38f18b78.css" media="all" rel="stylesheet">
-
-{{--    <link rel="stylesheet" href="appficha.css">--}}
-    <!-- jQuery 3.3.1 -->
-    <script src="jqueryficha.js"></script>
-
+    <link rel="stylesheet" href="{{asset('libs/check_availability/css/ficha.css')}}"/>
+    <link rel="stylesheet" href="{{asset('libs/font-awesome/css/font-awesome.css')}}"/>
+    <link rel="stylesheet" href="{{asset('libs/check_availability/css/appficha.css')}}"/>
+    <link rel="stylesheet" href="{{asset('libs/check_availability/css/appficha.css')}}"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
     <style type="text/css">
         body {
             background-color: #fff;
@@ -30,6 +27,7 @@
             padding: 0 !important;
             margin: 0 !important;
         }
+
         .linhaazul {
             border-bottom-style: solid;
             border-color: #3c8dbc;
@@ -38,12 +36,14 @@
             height: 2px;
             width: 2px;
         }
+
         .nopaddingside {
             padding-left: 0 !important;
             padding-right: 0 !important;
             margin-left: 0 !important;
             margin-right: 0 !important;
         }
+
         /*CSS para impressÃ£o*/
         @media print {
             .error {
@@ -52,7 +52,7 @@
         }
     </style>
 </head>
-<body class="skin-blue-light"><div style="display: none;"></div>
+<body class="skin-blue-light">
 <div class="wrapper" id="block-main">
     <header class="main-header">
         <a href="#" class="logo hidden-xs"> </a>
@@ -61,7 +61,8 @@
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav relatorios_impressao">
                     <li>
-                        <a class="btn btn-lg" href="#" onclick="window.print()"><i class="fa fa-print fa-lg"></i> Imprimir </a>
+                        <a class="btn btn-lg" href="#" onclick="window.print()"><i class="fa fa-print fa-lg"></i>
+                            Imprimir </a>
                     </li>
                 </ul>
             </div>
@@ -78,6 +79,7 @@
                         border-style: solid !important;
                         margin-top: 5px !important;
                     }
+
                     .card1 {
                         border: 1px;
                         border-style: solid !important;
@@ -95,7 +97,8 @@
                         </h4>
 
                         <h5 class="h5 text-center">
-                            Preenchimento Obrigatório - Deliberação Normativa 429 do Ministério do Esporte e Turismo - EMBRATUR
+                            Preenchimento Obrigatório - Deliberação Normativa 429 do Ministério do Esporte e Turismo -
+                            EMBRATUR
                         </h5>
                     </div>
                 </div>
@@ -119,7 +122,9 @@
                         <div class="col-md-4 col-xs-6">
                             <div class="card">
                                 <div class="text-bold col-xs-12" style="padding: 0 5px;">E-mail</div>
-                                <div class="col-xs-12 text-center" style="padding: 0 5px;">dalbertcorreios2011@gmail.com</div>
+                                <div class="col-xs-12 text-center" style="padding: 0 5px;">
+                                    dalbertcorreios2011@gmail.com
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-2 col-xs-3">
@@ -143,7 +148,9 @@
                         </div>
                         <div class="col-md-4 col-xs-6">
                             <div class="card">
-                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Nacionalidade (País) / Citizenship (Country)</div>
+                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Nacionalidade (País) /
+                                    Citizenship (Country)
+                                </div>
                                 <div class="col-xs-12 text-center" style="padding: 0 5px;"></div>
                             </div>
                         </div>
@@ -162,7 +169,9 @@
 
                         <div class="col-xs-8">
                             <div class="card">
-                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Documento de Identidade / Travel Document</div>
+                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Documento de Identidade /
+                                    Travel Document
+                                </div>
                                 <div class="col-xs-2" style="padding: 0 5px;">
                                     Número <br>
                                     Number
@@ -189,7 +198,9 @@
 
                         <div class="col-md-6 col-xs-6">
                             <div class="card">
-                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Residência Permanente / Permanent Address</div>
+                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Residência Permanente /
+                                    Permanent Address
+                                </div>
                                 <div class="col-xs-12 text-center" style="padding: 0 5px;">Rua Emanuel Guedes</div>
                             </div>
                         </div>
@@ -217,7 +228,9 @@
 
                         <div class="col-xs-6">
                             <div class="card">
-                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Ultima Procedência / Arriving From</div>
+                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Ultima Procedência / Arriving
+                                    From
+                                </div>
                                 <div class="col-xs-2" style="padding: 0 5px;">
                                     País <br>
                                     Country
@@ -238,7 +251,9 @@
 
                         <div class="col-xs-6">
                             <div class="card">
-                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Próximo Destino / Next Destination</div>
+                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Próximo Destino / Next
+                                    Destination
+                                </div>
                                 <div class="col-xs-2" style="padding: 0 5px;">
                                     País <br>
                                     Country
@@ -259,7 +274,9 @@
 
                         <div class="col-md-12 col-xs-12">
                             <div class="col-xs-12 card nopadding">
-                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Motivo da Viagem / Purpose of Trip</div>
+                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Motivo da Viagem / Purpose of
+                                    Trip
+                                </div>
                                 <div class="col-xs-3 nopadding" style="margin: 5px 0 0 5px !important;">
                                     ( ) Lazer/Férias<br>
                                      &nbsp;&nbsp;&nbsp;&nbsp;Leisure/Vacation
@@ -301,7 +318,9 @@
 
                         <div class="col-xs-12">
                             <div class="col-xs-12 card nopadding">
-                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Meio de Transporte / Arriving By</div>
+                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Meio de Transporte / Arriving
+                                    By
+                                </div>
                                 <div class="col-md-1 col-xs-1 nopadding" style="margin: 5px 0 0 5px !important;">
                                     ( ) Avião<br>
                                      &nbsp;&nbsp;&nbsp;&nbsp;Plane
@@ -335,7 +354,9 @@
 
                         <div class="col-md-2 col-xs-3">
                             <div class="card">
-                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Número de Hóspedes / Number of Guests</div>
+                                <div class="text-bold col-xs-12" style="padding: 0 5px;">Número de Hóspedes / Number of
+                                    Guests
+                                </div>
                                 <div class="col-xs-12 text-center" style="padding: 0 5px;"></div>
                             </div>
                         </div>
@@ -376,11 +397,15 @@
         </p>
     </section>
 </div>
+<div style="display: none;"></div>
 
-<script src="{{url('landing')}}/js/jquery.min.js"></script>
-<script src="{{url('landing')}}/js/bootstrap.min.js"></script>
-{{--<script src="/layout/temp/adminlte.min.js"></script>--}}
-{{--<script src="/layout/dist/js/vue.min.js"></script>--}}
+<!-- jQuery 3.3.1 -->
+<script src="{{asset('libs/jquery-3.3.1.min.js')}}"></script>
+<!-- BOOTSTRAP -->
+<script src="{{asset('libs/bootstrap/js/bootstrap.js')}}"></script>
+
+<script src="{{asset('libs/check_availability/js/jqueryficha.js')}}"></script>
+
 <script type="text/javascript">
     $(function () {
         $(document).ready(function () {
@@ -432,4 +457,5 @@
     });
 </script>
 
-</body></html>
+</body>
+</html>

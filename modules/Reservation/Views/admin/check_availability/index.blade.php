@@ -486,9 +486,8 @@
                             </div>
                         </div>
                     </div>
-                    <script src="printthis.js"></script>
-                    <script src="comummodal.js"></script>
-
+                    <script src="{{asset('/libs/jquery-3.3.1.min.js')}}"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.25/jquery.fancybox.min.js"></script>
                     <script>
                         $('#printDetalhesReserva').click(function(){
                             $("#printThis").printThis({
@@ -547,6 +546,9 @@
     <script src="{{asset('libs/fullcalendar-4.2.0/interaction/main.js')}}"></script>
     <script src="{{asset('libs/fullcalendar-4.2.0/daygrid/main.js')}}"></script>
     <script src="{{asset('libs/check_availability/js/reservation.js')}}"></script>
+    <script src="{{asset('js/printthis.js')}}"></script>
+    <script src="{{asset('js/comummodal.js')}}"></script>
+
     <script>
         let start = null;
         let end = null;

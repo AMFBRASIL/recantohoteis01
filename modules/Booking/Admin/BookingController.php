@@ -72,8 +72,8 @@ class BookingController extends Controller
                             'checkin' => (new Carbon($hotel_room_booking->start_date))->format('d/m/y  H:m'),
                             'checkout' => (new Carbon($hotel_room_booking->end_date))->format('d/m/y  H:m'),
                             'nights' => $diff->days,
-                            'adults' => '0',
-                            'children' => '0',
+                            'adults' =>  $booking->getMeta('adults'),
+                            'children' =>  $booking->getMeta('children'),
                             'status' => [
                                 'name' => $booking->situation->name,
                                 'label' => $booking->situation->label,
@@ -89,7 +89,8 @@ class BookingController extends Controller
                         ],
                         'room_information' => [
                             'room' => $hotel_room->title . ' - Bloco ' . $room->building->name . ' - Apto ' . $room->number,
-                            'persons' => '0',
+                            'persons' => ($booking->getMeta('adults') + $booking->getMeta('children')),
+                            'adults' =>  $booking->getMeta('adults'),
                             'total' => $hotel_room_booking->price,
                         ],
                         'itemsSales' => $itemsSales

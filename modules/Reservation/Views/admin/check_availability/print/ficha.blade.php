@@ -8,18 +8,11 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="theme-color" content="#1d67bd">
     <meta name="Description" content="Description: Software para Hotel e Motel. Author: Bitz Softwares">
-    <link rel="shortcut icon" type="image/png" href="/layout/temp/icon-bitz-falcon.png">
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="ficha.css">
-    <script src="https://use.fontawesome.com/1a38f18b78.js"></script>
-    <link href="https://use.fontawesome.com/1a38f18b78.css" media="all" rel="stylesheet">
-
-<!--    <link rel="stylesheet" href="appficha.css">
-    &lt;!&ndash; jQuery 3.3.1 &ndash;&gt;
-    <script src="jqueryficha.js"></script>-->
-
+    <link rel="stylesheet" href="{{asset('libs/check_availability/css/ficha.css')}}"/>
+    <link rel="stylesheet" href="{{asset('libs/font-awesome/css/font-awesome.css')}}"/>
+    <link rel="stylesheet" href="{{asset('libs/check_availability/css/appficha.css')}}"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
     <style type="text/css">
         body {
             background-color: #fff;
@@ -405,10 +398,13 @@
     </section>
 </div>
 
-<script src="{{url('landing')}}/js/jquery.min.js"></script>
-<script src="{{url('landing')}}/js/bootstrap.min.js"></script>
-{{--<script src="/layout/temp/adminlte.min.js"></script>--}}
-{{--<script src="/layout/dist/js/vue.min.js"></script>--}}
+<!-- jQuery 3.3.1 -->
+<script src="{{asset('libs/jquery-3.3.1.min.js')}}"></script>
+<!-- BOOTSTRAP -->
+<script src="{{asset('libs/bootstrap/js/bootstrap.js')}}"></script>
+
+<script src="{{asset('libs/check_availability/js/jqueryficha.js')}}"></script>
+
 <script type="text/javascript">
     $(function () {
         $(document).ready(function () {

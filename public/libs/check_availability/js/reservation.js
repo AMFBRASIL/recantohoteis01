@@ -57,7 +57,7 @@ function loadModalDetailBooking(data) {
                     </tr>
                     <tr>
                         <td>${data.room_information.room}</td>
-                        <td>${data.room_information.persons} Pessoas ( x Adultos )</td>
+                        <td>${data.room_information.persons} Pessoas (${data.room_information.adults} x Adultos )</td>
                         <td class="text-right">R$ ${data.room_information.total}</td>
                     </tr>`;
 
