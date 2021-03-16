@@ -9,31 +9,10 @@ $(function ($) {
         $('#internal_observations').html(observacao);
     });
 
-    $("#card").on("show.bs.modal", function (e) {
-        $(".card-modal-body").empty();
-        let card_number = e.relatedTarget.getAttribute('data-value');
-        let data = {
-            card_number: card_number,
-        };
 
-        let url = "/admin/module/pos/consumptionCard/findCard";
-
-        $.ajax({
-            url: url,
-            type: 'GET',
-            data: data,
-            success: function (data) {
-                console.log(data);
-                $(".card-title").html("Detalhes do Uso do Cartao #" + data.cardData.card.card_number);
-
-                loadModalDetailsConsumer(data);
-            }
-        });
-    });
-
-    $("#client").on("show.bs.modal", function (e) {
+    $(".client > a").on('click', (e) => {
         $(".user-information").empty();
-        let id = e.relatedTarget.getAttribute('data-value');
+        let id = e.target.getAttribute("data-value");
         let data = {
             id: id,
         };
@@ -45,34 +24,36 @@ $(function ($) {
             type: 'GET',
             data: data,
             success: function (data) {
+                $("#client").modal('show');
                 loadModalClient(data);
             }
         });
     });
 
-    $("#product").on("show.bs.modal", function (e) {
-        let id = e.relatedTarget.getAttribute('data-value');
+
+    $(".card-modal-open > a").on('click', (e) => {
+        $(".card-modal-body").empty();
+        let card_number = e.target.getAttribute("data-value");
         let data = {
-            id: id,
+            card_number: card_number,
         };
 
-        let url = "/admin/module/pos/sale/getSales";
+        let url = "/admin/module/pos/consumptionCard/findCard";
 
         $.ajax({
             url: url,
             type: 'GET',
             data: data,
             success: function (data) {
-                sale = data
-                loadModalSale();
-                loadTableModalSale(sale.sale.product_composition, rows, current_page);
-                SetupPagination(sale.sale.product_composition, rows);
+                $("#card").modal('show');
+                $(".card-title").html("Detalhes do Uso do Cartao #" + data.cardData.card.card_number);
+                loadModalDetailsConsumer(data);
             }
         });
     });
 
-    $("#productSituation").on("show.bs.modal", function (e) {
-        let id = e.relatedTarget.getAttribute('data-value');
+    $(".productSituation > a").on('click', (e) => {
+        let id = e.target.getAttribute('data-value');
         let data = {
             id: id,
         };
@@ -84,10 +65,33 @@ $(function ($) {
             type: 'GET',
             data: data,
             success: function (data) {
-                console.log(data);
+                $("#productSituation").modal('show');
                 sale = data
                 loadModalSaleSituation();
                 loadTableModalSaleSituation(sale.sale.product_composition);
+            }
+        });
+    });
+
+
+    $(".product > a").on('click', (e) => {
+        let id = e.target.getAttribute('data-value');
+        let data = {
+            id: id,
+        };
+
+        let url = "/admin/module/pos/sale/getSales";
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: data,
+            success: function (data) {
+                $("#product").modal('show');
+                sale = data
+                loadModalSale();
+                loadTableModalSale(sale.sale.product_composition, rows, current_page);
+                SetupPagination(sale.sale.product_composition, rows);
             }
         });
     });
@@ -110,15 +114,15 @@ $("#pagination-sales").on('click', 'li a', function () {
             break;
     }
 
-    if(current_page > 1){
+    if (current_page > 1) {
         $("#anterior").closest('li').removeClass("disabled")
-    }else{
+    } else {
         $("#anterior").closest('li').addClass("disabled")
     }
 
-    if(current_page == max_page){
+    if (current_page == max_page) {
         $("#proximo").closest('li').addClass("disabled")
-    }else{
+    } else {
         $("#proximo").closest('li').removeClass("disabled")
     }
 
@@ -144,7 +148,7 @@ function loadModalDetailsConsumer(data) {
                                                 <td>
                                                     Situação:
                                                     <strong> ${data.cardData.situation}</strong><br>
-                                                    Type Card: <strong> DAY USE </strong><br>
+                                                    Type Card: <strong> ${data.cardData.card.day_user == 1 ? 'DAY USE' : 'HÓSPEDE'} </strong><br>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -249,15 +253,15 @@ function loadModalClient(data) {
     $(".user-information").html(html);
 }
 
-function activePagination(){
+function activePagination() {
     $("#pagination-sales li").removeClass("active");
     $(`#pagination-sales li a:contains(${current_page})`).closest('li').addClass("active");
 }
 
 function loadModalSale() {
     $("#modal-sales-title").html(`Detalhes dos Itens da Venda : #${sale.sale.id}`);
-    $("#sale-total-no-discounts").html(`<i class="fa fa-minus"></i> R$ ${parseFloat(sale.sale.total_value)
-    + parseFloat(sale.sale.discounts_value)}`);
+    $("#sale-total-no-discounts").html(`<i class="fa fa-minus"></i> R$ ${(parseFloat(sale.sale.total_value)
+    + parseFloat(sale.sale.discounts_value)).toFixed(2)}`);
     $("#sale-value-discounts").html(`<i class="fa fa-plus"></i> R$ ${sale.sale.discounts_value}`);
     $("#sale-total-value").html(`<i class="fa fa-minus"></i> R$ ${sale.sale.total_value}`);
     $("#sale-value-card").html(`<i class="fa fa-plus"></i> R$ ${sale.card.value_card}`);
@@ -335,9 +339,9 @@ function loadTableModalSaleSituation(items) {
                     <td>${item.title}</td>
                     <td>R$ ${item.price}</td>
                     <td>${item.quantity}</td>`;
-        if(item.situation_name != undefined){
+        if (item.situation_name != undefined) {
             html += `<td><span class="badge badge-${item.situation_label}">${item.situation_name}</span></td>`;
-        }else{
+        } else {
             html += `<td><span></span></td>`;
         }
         html += `    <td>${sale.created_at}</td>

@@ -46,7 +46,7 @@
             </div>
 
             <div class="col-lg-2">
-                <div class="form-group" id="divUHHospede" style="display:block;">
+                <div class="form-group" style="display:block;">
                     <label> UH do Hospede</label>
                     <div class="input-group">
                         <select id="uhCliente" class="form-control" required name="room_id" disabled>
@@ -57,7 +57,7 @@
             </div>
 
             <div class="col-lg-2">
-                <div class="form-group" id="divDayUSE" name="divDayUSE" style="display:block;">
+                <div class="form-group" name="divDayUSE" style="display:block;">
                     <label> Day USE </label>
                     <div class="input-group">
                         <select id="dayUse" class="form-control" required name="day_user" disabled>

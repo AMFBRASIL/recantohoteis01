@@ -192,6 +192,10 @@ $(function ($) {
     showTransitionNumber();
 });
 
+$("#listSales").click(function () {
+    window.location = "/admin/module/pos/sale/";
+});
+
 $("#newCard").click(function () {
     window.location = "/admin/module/pos/consumptionCard/";
 });
