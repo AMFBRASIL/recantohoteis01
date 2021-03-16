@@ -14,7 +14,7 @@
 .timeline-row {
     clear: both;
     float: left;
-    width: 1736px;
+    width: max-content;
 }
 .rooms-title {
     padding: 102px 0 0 0;
@@ -152,74 +152,51 @@ END BOOKING
 .timeline-cel.closed {
     border-right: 1px solid #db5439!important;
 }
-/*!*
-START PENDING BOOKING
-*!
+
 .timeline-legend.pending,
 .timeline-cel a.pending {
     background: #8AC7C4;
 }
-!*
-START IN-HOUSE BOOKING
-*!
-.timeline-legend.in-house,
-.timeline-cel a.in-house {
-    background: #A6E0BF;
-}
-!*
-START CONFIRMED BOOKING
-*!
-.timeline-legend.confirmed,
-.timeline-cel a.confirmed {
-    background: #60C9F2;
-}
-!*
-START CHECKED-OUT BOOKING
-*!
-.timeline-legend.checked-out,
-.timeline-cel a.checked-out {
-    background: #BBC9D0;
-}
-!*
-START CLOSING DATE
-*!
-.timeline-legend.closed,
-.timeline-cel a.closed {
-    background-color: #FF5B38;
-}*/
 
-/*NOVAS LEGENDAS*/
-.timeline-legend.blocked,
-.timeline-cel a.blocked {
-    background: #FF5B38;
+.timeline-legend.primary,
+.timeline-cel a.primary {
+    background: #007bff;
 }
 
-.timeline-legend.booking,
-.timeline-cel a.booking {
-    background: #A6E0BF;
+.timeline-legend.secondary,
+.timeline-cel a.secondary {
+    background: #6c757d;
 }
 
-.timeline-legend.confirmed,
-.timeline-cel a.confirmed {
+.timeline-legend.success,
+.timeline-cel a.success {
+    background: #28a745;
+}
+
+.timeline-legend.info,
+.timeline-cel a.info {
+    background: #17a2b8;
+}
+
+.timeline-legend.warning,
+.timeline-cel a.warning {
     background: #ffc107;
 }
 
-.timeline-legend.checkin,
-.timeline-cel a.checkin {
-    background: #60C9F2;
+.timeline-legend.danger,
+.timeline-cel a.danger {
+    background: #dc3545;
 }
 
-.timeline-legend.checkout,
-.timeline-cel a.checkout {
-    background: #BBC9D0;
+.timeline-legend.light,
+.timeline-cel a.light {
+    background: #dae0e5;
 }
 
-.timeline-legend.default,
-.timeline-cel a.default {
-    background: #554b62;
+.timeline-legend.dark,
+.timeline-cel a.dark {
+    background: #343a40;
 }
-
-
 
 .timeline-cel a.booked-ext {
     background-image: repeating-linear-gradient(72deg, transparent, transparent 5px, rgba(60,60,60,.2) 5px, rgba(60,60,60,.2) 10px);
@@ -257,6 +234,11 @@ START CLOSING DATE
 #availability-legend .timeline-cel {
     border-left: 1px solid #ddd;
     margin-right: 5px;
+}
+
+th {
+    font-size: 14px;
+    color: #D50000;
 }
 
 .badge {

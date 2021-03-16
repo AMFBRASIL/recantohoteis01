@@ -92,7 +92,7 @@
                             @endforeach
                         </div>
                         <div class="col-lg-8 col-md-9 col-sm-8 timeline-wrapper">
-                            <div class="timeline-row" style="width: 1736px;">
+                            <div class="timeline-row">
                                 @foreach($data['interval'] as $interval)
                                     @if($interval['date']->format('Y-m-d') == $data['now']->format('Y-m-d'))
                                         <div class="timeline-cel timeline-d today">
@@ -134,7 +134,7 @@
                             </div>
                             @foreach ($data['hotels'] as $kh => $hotel_option)
                                 <div class="room-row">
-                                    <div class="timeline-row" style="width: 1736px;">
+                                    <div class="timeline-row">
                                         @foreach($data['interval'] as $interval)
                                             @if($interval['date']->format('Y-m-d') == $data['now']->format('Y-m-d'))
                                                 <div class="timeline-cel timeline-price today">
@@ -158,18 +158,18 @@
                                         @endforeach
                                     </div>
                                     @foreach ($hotel_option['rooms'] as $kr => $rooms_option)
-                                        <div class="timeline-row" style="width: 1736px;">
+                                        <div class="timeline-row">
                                             @foreach($data['interval'] as $interval)
                                                 @php $hasBooking = false;  $period = '';@endphp
                                                 @foreach($rooms_option['hotel_bookings'] as $hotel_booking)
-                                                    @if($interval['date']->format('d/m/y') > (new DateTime($hotel_booking->start_date))->format('d/m/y')
-                                                        and $interval['date']->format('d/m/y') < (new DateTime($hotel_booking->end_date))->format('d/m/y'))
+                                                    @if($interval['date']->format('Y-m-d') > (new DateTime($hotel_booking->start_date))->format('Y-m-d')
+                                                    and $interval['date']->format('Y-m-d') < (new DateTime($hotel_booking->end_date))->format('Y-m-d'))
                                                         @php $hasBooking = true;  $period = 'full';@endphp
                                                         @break
-                                                    @elseif($interval['date']->format('d/m/y') == (new DateTime($hotel_booking->start_date))->format('d/m/y'))
+                                                    @elseif($interval['date']->format('Y-m-d') == (new DateTime($hotel_booking->start_date))->format('Y-m-d'))
                                                         @php $hasBooking = true;  $period = 'start-d';@endphp
                                                         @break
-                                                    @elseif($interval['date']->format('d/m/y') == (new DateTime($hotel_booking->end_date))->format('d/m/y'))
+                                                    @elseif($interval['date']->format('Y-m-d') == (new DateTime($hotel_booking->end_date))->format('Y-m-d'))
                                                         @php $hasBooking = true;  $period = 'end-d';@endphp
                                                         @break
                                                     @endif
@@ -177,12 +177,12 @@
                                                 @if($hasBooking)
                                                     <div
                                                         id="cel-{{$kh}}-1-{{$kr}}-{{$interval['date']->getTimestamp()}}"
-                                                        class="timeline-cel timeline-default {{$period}} {{situationClass($hotel_booking->booking->situation)}}">
+                                                        class="booking_summary timeline-cel timeline-default {{$period}}">
                                                         <a data-html="true" data-container="body"
-                                                           class="tips ajax-popup-link {{situationClass($hotel_booking->booking->situation)}}" href="#"
+                                                           class="tips ajax-popup-link {{$hotel_booking->booking->situation->label}}" href="#"
                                                            onclick="return false" data-toggle="modal"
                                                            data-value="{{$hotel_booking->booking_id}}"
-                                                           data-target="#booking_summary" title=""
+                                                           title=""
                                                            data-params="id={{$rooms_option['room']->id}}"
                                                            data-tippy-content="<b>{{$hotel_booking->booking->first_name . ' ' . $hotel_booking->booking->last_name}}</b>
                                                                <br><b> Status : {{$hotel_booking->booking->situation ? $hotel_booking->booking->situation->name : ''}} </b>
@@ -210,18 +210,7 @@
             <div class="panel-title"><strong>{{__('Legenda')}}</strong></div>
             <div class="panel-body no-padding">
                 <div class="row">
-                    <div class="col-md-2">
-                        <div class="timeline-legend blocked"></div>
-                        <div class="legend-label mb5">BLOQUEADA</div>
-                        <div class="timeline-legend booking"></div>
-                        <div class="legend-label mb5">PRE RESERVA</div>
-                        <div class="timeline-legend confirmed"></div>
-                        <div class="legend-label mb5">CONFIRMADA</div>
-                        <div class="timeline-legend checkin"></div>
-                        <div class="legend-label mb5">CHECK-IN</div>
-                        <div class="timeline-legend checkout"></div>
-                        <div class="legend-label mb5">CHECK-OUT</div>
-
+                    <div class="col-md-2" id="subtitles">
                     </div>
                     <div class="col-md-10">
                         <div class="timeline-cel timeline-d">
@@ -297,9 +286,7 @@
                 </div>
             </div>
         </div><!-- end panel -->
-
     </div><!-- container-fluid -->
-
 
     <!-- Modals -->
     <!-- new_reservation -->
@@ -431,7 +418,7 @@
                 <div class="modal-body"><!-- booking_summary -->
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 id="title-booking-modal" class="modal-title">Booking summary #2242</h5>
+                            <h5 id="title-booking-modal" class="modal-title"></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
@@ -439,47 +426,22 @@
                         <div class="modal-body" id="printThis">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <table  id="information-booking-modal" class="table table-responsive table-bordered">
+                                    <table  id="information-booking-modal" class="table table-bordered">
                                         <tbody>
                                         </tbody>
                                     </table>
-                                    <table id="information-room-booking-modal" class="table table-responsive table-bordered">
+                                    <table id="information-room-booking-modal" class="table table-bordered">
                                         <tbody>
-
                                         </tbody>
                                     </table>
-                                    <table id="table-servicos-booking-modal" class="table table-responsive table-bordered">
+                                    <table id="table-services-booking-modal" class="table table-bordered">
                                         <tbody>
-
                                         </tbody>
                                     </table>
-                                    <table id="table-values-booking-modal" class="table table-responsive table-bordered">
+                                    <table id="table-values-booking-modal" class="table table-bordered">
                                         <tbody>
-                                        <tr class="text-center">
-                                            <th class="text-right" width="80%">DESCONTO</th>
-                                            <td class="text-right" width="200px">R$ 88,99</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-right">Impostos e Taxas (5%)</th>
-                                            <td class="text-right">R$ 226.73</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-right">Pago em ( Cartão VISA )</th>
-                                            <td class="text-right">R$ 1.900,00</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-right">Total (incl. tax)</th>
-                                            <td class="text-right"><b>R$ 5.478,63</b></td>
-                                        </tr>
                                         </tbody>
                                     </table>
-                                    <p><strong>Pagamento</strong></p>
-                                    <p></p>
-                                    <p id="payment-booking-modal">
-                                        Metodo de Pagamento : Na chegada<br>
-                                        Status: EM USO <br>
-                                        <b>TOTAL : R$ 5.478,63</b><br>
-                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -487,23 +449,23 @@
                             <button type="button" class="btn btn-lg btn-primary" id="printDetalhesReserva">
                                 <i class="fa fa-print"></i> Print Detalhes
                             </button>
-                            <a data-fancybox="" data-type="iframe" href="detalhesreserva.php" class="btn btn-primary  btn-lg">
+                            <a data-fancybox="" data-type="iframe" href="{{ route('checkAvailability.print.detalhesreserva') }}" class="btn btn-primary  btn-lg">
                                 <i class="fa fa-print"></i> Reserva
                             </a>
-                            <a data-fancybox="" data-type="iframe" href="ficha.php" class="btn btn-primary  btn-lg">
+                            <a data-fancybox="" data-type="iframe" href="{{ route('checkAvailability.print.ficha')}}" class="btn btn-primary  btn-lg">
                                 <i class="fa fa-print"></i> FRN
                             </a>
                             <!--- Só aparecer os botoes para impressao quando for APENAS CHACARA
                             ===============================================================================--->
-                            <a data-fancybox="" data-type="iframe" href="regras.php" class="btn btn-success btn-lg">
+                            <a data-fancybox="" data-type="iframe" href="{{ route('checkAvailability.print.regras') }}" class="btn btn-success btn-lg">
                                 <i class="fa fa-print"></i> Regras
                             </a>
 
-                            <a data-fancybox="" data-type="iframe" href="contrato.php" class="btn btn-primary  btn-lg">
+                            <a data-fancybox="" data-type="iframe" href="{{ route('checkAvailability.print.contrato') }}" class="btn btn-primary  btn-lg">
                                 <i class="fa fa-print"></i> Contrato
                             </a>
 
-                            <a data-fancybox="" data-type="iframe" href="regulamento.php" class="btn btn-info  btn-lg">
+                            <a data-fancybox="" data-type="iframe" href="{{ route('checkAvailability.print.regulamento') }}" class="btn btn-info  btn-lg">
                                 <i class="fa fa-print"></i> Regulamento
                             </a>
 
@@ -524,14 +486,10 @@
                             </div>
                         </div>
                     </div>
-
-                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
-                    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
-                    <!-- <script src="printthis.js"></script>
-                      <script src="comummodal.js"></script>-->
-
+                    <script src="{{asset('/libs/jquery-3.3.1.min.js')}}"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.25/jquery.fancybox.min.js"></script>
                     <script>
-                       /* $('#printDetalhesReserva').click(function(){
+                        $('#printDetalhesReserva').click(function(){
                             $("#printThis").printThis({
                                 debug: false,
                                 importCSS: true,
@@ -552,7 +510,7 @@
                                     width : '100%'
                                 }
                             }
-                        });*/
+                        });
                     </script>
                 </div>
             </div>
@@ -572,9 +530,11 @@
     <link rel="stylesheet" href="{{asset('libs/fullcalendar-4.2.0/core/main.css')}}">
     <link rel="stylesheet" href="{{asset('libs/fullcalendar-4.2.0/daygrid/main.css')}}">
     <link rel="stylesheet" href="{{asset('libs/daterange/daterangepicker.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.25/jquery.fancybox.min.css" />
 @endsection
 
 @section('script.body')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.25/jquery.fancybox.min.js"></script>
     <!-- <script src="{{asset('libs/jquery-ui/jquery-ui.js')}}"></script> -->
     <script src="{{asset('libs/check_availability/js/custom.js')}}"></script>
     <!-- Tooltip -->
@@ -585,6 +545,10 @@
     <script src="{{asset('libs/fullcalendar-4.2.0/core/main.js')}}"></script>
     <script src="{{asset('libs/fullcalendar-4.2.0/interaction/main.js')}}"></script>
     <script src="{{asset('libs/fullcalendar-4.2.0/daygrid/main.js')}}"></script>
+    <script src="{{asset('libs/check_availability/js/reservation.js')}}"></script>
+    <script src="{{asset('js/printthis.js')}}"></script>
+    <script src="{{asset('js/comummodal.js')}}"></script>
+
     <script>
         let start = null;
         let end = null;
@@ -638,6 +602,26 @@
             $("#endDate").val(end)
         }
 
+        function getLegends(){
+            let url = "/admin/module/booking/getAllSituationBooking/";
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: [],
+                success: function (data) {
+                    html = ``;
+                    for (let i = 0; i < data.situationList.length; i++) {
+                        let item = data.situationList[i];
+                        html += `<div class="timeline-legend ${item.label}"></div>
+                                 <div class="legend-label mb5">${item.name}</div>`;
+                    }
+
+                    $("#subtitles").html(html);
+                }
+            });
+        }
+
         $("#reportrange").daterangepicker({
             startDate: this.start,
             endDate: this.end,
@@ -664,81 +648,6 @@
 
         setDateValue(this.start, this.end)
         getFloors();
-    </script>
-    <script>
-        $("#booking_summary").on("show.bs.modal", function (e) {
-            let data = {
-                booking_id: e.relatedTarget.getAttribute('data-value'),
-            };
-
-            let url = "/admin/module/booking/getBooking/";
-
-            $.ajax({
-                url: url,
-                type: 'GET',
-                data: data,
-                success: function (data) {
-                    loadModalDetailBooking(data.data);
-                }
-            });
-        });
-
-        function loadModalDetailBooking(data) {
-            $("#title-booking-modal").html(`Booking summary #${data.booking_id}`);
-
-            html = `<tr class="text-center">
-                        <th width="500px">Booking details</th>
-                        <th width="50%">Billing address</th>
-                    </tr>
-                     <tr>
-                        <td>
-                            Check-in <strong>${data.booking_detail.checkin}</strong><br>
-                            Check-out <strong>${data.booking_detail.checkout}</strong><br>
-                            Noites : <strong>${data.booking_detail.nights}</strong><br>
-                            Adultos: <strong>${data.booking_detail.adults}</strong> <br>
-                            Crianças: <strong>${data.booking_detail.children}</strong>
-                        </td>
-                        <td>
-                            ${data.billing.name}<br>
-                            ${data.billing.company != '' ?? 'Company: ' + data.billing.company +'<br>'}
-                            ${data.billing.address}<br>
-                            ${data.billing.complement}<br>
-                            Phone: ${data.billing.phone}<br>
-                            E-mail : ${data.billing.email}
-                        </td>
-                     </tr>`;
-
-            $("#information-booking-modal > tbody").html(html);
-
-            html = `<tr class="text-center">
-                        <th width="40%">Room</th>
-                        <th width="40%">Persons</th>
-                        <th width="200px">Total</th>
-                    </tr>
-                    <tr>
-                        <td>${data.room_information.room}</td>
-                        <td>${data.room_information.persons} Pessoas ( x Adultos )</td>
-                        <td class="text-right">R$ ${data.room_information.total}</td>
-                    </tr>`;
-
-            $("#information-room-booking-modal > tbody").html(html);
-
-
-            html = `<tr class="text-center">
-                        <th width="40%">Serviços/Produtos</th>
-                        <th width="40%">Quantidade</th>
-                        <th width="200px">Total</th>
-                    </tr>`;
-
-            for (let i = 0; i < data.itemsSales.length; i++) {
-                let item = data.itemsSales[i];
-                html += ` <tr>
-                            <td>${item.title}</td>
-                            <td>${item.quantity}</td>
-                            <td  class="text-right">R$ ${item.price}</td>
-                         </tr>`;
-            }
-            $("#table-values-booking-modal > tbody").html(html);
-        }
+        getLegends();
     </script>
 @endsection
