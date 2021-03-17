@@ -10,7 +10,7 @@
                 <div>
                     <h1 class="title-bar">{{$row->id ? __('Edit: ').$row->title : __('Nova Venda')}}</h1>
                 </div>
-                <button type="button" class="btn btn-info btn-sm btn-add-item listSales"><i class="fa fa-list"></i>
+                <button id="listSales" type="button" class="btn btn-info btn-sm btn-add-item"><i class="fa fa-list"></i>
                     LISTAR TODAS VENDAS
                 </button>
             </div>
