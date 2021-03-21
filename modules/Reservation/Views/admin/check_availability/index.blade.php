@@ -487,7 +487,7 @@
                         </div>
                     </div>
                     <script src="{{asset('/libs/jquery-3.3.1.min.js')}}"></script>
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.25/jquery.fancybox.min.js"></script>
+                    <script src="{{asset('libs/fancybox/js/jquery.fancybox.js')}}"></script>
                     <script>
                         $('#printDetalhesReserva').click(function(){
                             $("#printThis").printThis({
@@ -530,11 +530,11 @@
     <link rel="stylesheet" href="{{asset('libs/fullcalendar-4.2.0/core/main.css')}}">
     <link rel="stylesheet" href="{{asset('libs/fullcalendar-4.2.0/daygrid/main.css')}}">
     <link rel="stylesheet" href="{{asset('libs/daterange/daterangepicker.css')}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.25/jquery.fancybox.min.css" />
+    <link rel="stylesheet" href="{{asset('libs/fancybox/css/jquery.fancybox.css')}}" />
 @endsection
 
 @section('script.body')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.1.25/jquery.fancybox.min.js"></script>
+    <script src="{{asset('libs/fancybox/js/jquery.fancybox.js')}}"></script>
     <!-- <script src="{{asset('libs/jquery-ui/jquery-ui.js')}}"></script> -->
     <script src="{{asset('libs/check_availability/js/custom.js')}}"></script>
     <!-- Tooltip -->
@@ -548,7 +548,6 @@
     <script src="{{asset('libs/check_availability/js/reservation.js')}}"></script>
     <script src="{{asset('js/printthis.js')}}"></script>
     <script src="{{asset('js/comummodal.js')}}"></script>
-
     <script>
         let start = null;
         let end = null;

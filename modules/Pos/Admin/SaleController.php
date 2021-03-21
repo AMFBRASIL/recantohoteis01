@@ -37,6 +37,10 @@ class SaleController extends AdminController
             })->get();
         }
 
+        if ($search = $request->query('situation_id')) {
+            $modelList->where('situation_id', $search)->get();
+        }
+
         $modelList = $modelList->orderby('id', 'asc');
 
         $data = [

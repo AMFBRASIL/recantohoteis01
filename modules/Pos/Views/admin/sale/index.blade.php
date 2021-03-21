@@ -36,7 +36,11 @@
                            placeholder="Cliente">
                     <select class="form-control" required name="situation_id">
                         @foreach ($situationList as $option)
-                            <option value="{{$option->id}}">{{$option->name}}</option>
+                            @if (Request()->situation_id == $option->id)
+                                <option value="{{$option->id}}" selected>{{$option->name}}</option>
+                            @else
+                                <option value="{{$option->id}}">{{$option->name}}</option>
+                            @endif
                         @endforeach
                     </select>
                     <button class="btn-info btn btn-icon btn_search" id="search-submit"
@@ -465,9 +469,7 @@
                         </button>
                         <span class="btn btn-secondary" data-dismiss="modal">FECHAR</span>
                     </div>
-
-                    <script src="printthis.js"></script>
-
+                    <script src="{{asset('/libs/jquery-3.3.1.min.js')}}"></script>
                     <script>
                         $('#printDetalhesReserva').click(function(){
                             $("#printThis").printThis({
@@ -678,6 +680,7 @@
 @endsection
 @section ('script.body')
     <script src="{{asset('module//pos/sales/js/index.js')}}"></script>
+    <script src="{{asset('js/printthis.js')}}"></script>
 @endsection
 
 

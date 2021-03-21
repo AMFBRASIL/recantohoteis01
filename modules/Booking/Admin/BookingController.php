@@ -25,8 +25,20 @@ class BookingController extends Controller
             if (!empty($booking)) {
 
                 $hotel_room_booking = HotelRoomBooking::query()->where('booking_id', $booking->id)->first();
-                $hotel_room = $hotel_room_booking->room()->first();
-                $room = $hotel_room->room()->first();
+                $room_description = '';
+
+                if (!empty($hotel_room_booking)){
+                    $hotel_room = $hotel_room_booking->room()->first();
+                    $room = $hotel_room->room()->first();
+                    $room_description = $hotel_room->title . ' - Bloco ' . $room->building->name . ' - Apto ' . $room->number;
+                }
+
+                $room_information = [
+                    'room' => $room_description,
+                    'persons' => ($booking->getMeta('adults') + $booking->getMeta('children')),
+                    'adults' =>  $booking->getMeta('adults'),
+                    'total' => $booking->total,
+                ];
 
                 $user = User::query()->where([
                     ['first_name', '=', $booking->first_name],
@@ -60,8 +72,8 @@ class BookingController extends Controller
                     }
                 }
 
-                $d1 = new Carbon($hotel_room_booking->start_date);
-                $d2 = new Carbon($hotel_room_booking->end_date);
+                $d1 = new Carbon($booking->start_date);
+                $d2 = new Carbon($booking->end_date);
 
                 $diff = $d2->diff($d1);
                 return response()->json([
@@ -69,14 +81,14 @@ class BookingController extends Controller
                     'data' => [
                         'booking_id' => $booking->id,
                         'booking_detail' => [
-                            'checkin' => (new Carbon($hotel_room_booking->start_date))->format('d/m/y  H:m'),
-                            'checkout' => (new Carbon($hotel_room_booking->end_date))->format('d/m/y  H:m'),
+                            'checkin' => (new Carbon($booking->start_date))->format('d/m/y  H:m'),
+                            'checkout' => (new Carbon($booking->end_date))->format('d/m/y  H:m'),
                             'nights' => $diff->days,
                             'adults' =>  $booking->getMeta('adults'),
                             'children' =>  $booking->getMeta('children'),
                             'status' => [
-                                'name' => $booking->situation->name,
-                                'label' => $booking->situation->label,
+                                'name' => empty($booking->situation) ? '' : $booking->situation->name,
+                                'label' => empty($booking->situation) ? '' : $booking->situation->label,
                             ]
                         ],
                         'billing' => [
@@ -87,13 +99,8 @@ class BookingController extends Controller
                             'phone' => $booking->phone,
                             'email' => $booking->email,
                         ],
-                        'room_information' => [
-                            'room' => $hotel_room->title . ' - Bloco ' . $room->building->name . ' - Apto ' . $room->number,
-                            'persons' => ($booking->getMeta('adults') + $booking->getMeta('children')),
-                            'adults' =>  $booking->getMeta('adults'),
-                            'total' => $hotel_room_booking->price,
-                        ],
-                        'itemsSales' => $itemsSales
+                        'room_information' => $room_information,
+                        'itemsSales' => $itemsSales,
                     ]
                 ], 200);
             } else {
@@ -163,4 +170,24 @@ class BookingController extends Controller
         ]);
     }
 
+    public function getUserBooking(Request $request){
+
+        $booking_id = $request->booking_id;
+
+        if (!is_null($booking_id)) {
+            $booking = Booking::query()->find($booking_id);
+
+            if (!empty($booking)) {
+
+                return response()->json([
+                    'error' => false,
+                    'booking' => $booking,
+                ]);
+            }
+        }
+        return response()->json([
+            'error' => true,
+            'message' => "Falha ao localizar usuario",
+        ]);
+    }
 }

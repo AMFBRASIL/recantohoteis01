@@ -9,6 +9,7 @@ use Modules\Booking\Events\BookingUpdatedEvent;
 use Modules\Booking\Models\Booking;
 use Modules\Core\Models\Settings;
 use Modules\Report\Service\BookingService;
+use Modules\Situation\Models\Situation;
 
 class BookingController extends AdminController
 {
@@ -42,6 +43,11 @@ class BookingController extends AdminController
                 });
             }
         }
+
+        if ($search = $request->query('situation_id')) {
+            $query->where('situation_id', $search)->get();
+        }
+
         if ($this->hasPermission('booking_manage_others')) {
             if (!empty($request->vendor_id)) {
                 $query->where('vendor_id', $request->vendor_id);
@@ -56,7 +62,10 @@ class BookingController extends AdminController
             'page_title'            => __("All Bookings"),
             'booking_manage_others' => $this->hasPermission('booking_manage_others'),
             'booking_update'        => $this->hasPermission('booking_update'),
-            'statues'               => config('booking.statuses')
+            'statues'               => config('booking.statuses'),
+            'situationList' => Situation::query()->whereHas('section', function ($query) {
+                $query->where('name', 'like', '%Reservas%');
+            })->get()
         ];
         return view('Report::admin.booking.index', $data);
     }
