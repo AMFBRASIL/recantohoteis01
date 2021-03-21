@@ -46,6 +46,7 @@ $(function ($) {
             success: function (data) {
                 if(!data.error){
                     $("#guest").modal('show');
+                    loadModalGuest(data);
                 }else{
                     alert(data.message);
                 }
@@ -68,7 +69,52 @@ $(function ($) {
             success: function (data) {
                 if(!data.error){
                     $("#value").modal('show');
+                    loadModalValue(data);
                 }else{
+                    alert(data.message);
+                }
+            }
+        });
+    });
+
+    $(".action-validation").on('click', (e)=>{
+        let data = {
+            booking_id: e.target.getAttribute("data-value"),
+        };
+
+        let url = "/admin/module/booking/getBooking/";
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: data,
+            success: function (data) {
+                if (data.success) {
+                    $("#validation").modal('show');
+                    loadModalValidation(data.data);
+                } else {
+                    alert(data.message);
+                }
+            }
+        });
+    });
+
+    $(".action-payment").on('click', (e)=>{
+        let data = {
+            booking_id: e.target.getAttribute("data-value"),
+        };
+
+        let url = "/admin/module/booking/getBooking/";
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: data,
+            success: function (data) {
+                if (data.success) {
+                    $("#payment").modal('show');
+                    loadModalPayment(data.data);
+                } else {
                     alert(data.message);
                 }
             }
@@ -228,4 +274,20 @@ function loadModalClient(data) {
                             </li>
                        </ul>`;
     $(".user-information").html(html);
+}
+
+function loadModalGuest(data){
+    console.log(data);
+}
+
+function loadModalValue(data){
+    console.log(data)
+}
+
+function loadModalValidation(data){
+    console.log(data)
+}
+
+function loadModalPayment(data){
+    console.log(data);
 }

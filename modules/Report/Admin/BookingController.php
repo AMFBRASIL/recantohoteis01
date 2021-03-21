@@ -8,6 +8,7 @@ use Modules\Booking\Emails\NewBookingEmail;
 use Modules\Booking\Events\BookingUpdatedEvent;
 use Modules\Booking\Models\Booking;
 use Modules\Core\Models\Settings;
+use Modules\Financial\Models\PaymentMethod;
 use Modules\Report\Service\BookingService;
 use Modules\Situation\Models\Situation;
 
@@ -62,10 +63,10 @@ class BookingController extends AdminController
             'page_title'            => __("All Bookings"),
             'booking_manage_others' => $this->hasPermission('booking_manage_others'),
             'booking_update'        => $this->hasPermission('booking_update'),
-            'statues'               => config('booking.statuses'),
             'situationList' => Situation::query()->whereHas('section', function ($query) {
                 $query->where('name', 'like', '%Reservas%');
-            })->get()
+            })->get(),
+            'paymentMethodList' => PaymentMethod::all(),
         ];
         return view('Report::admin.booking.index', $data);
     }
@@ -110,6 +111,42 @@ class BookingController extends AdminController
                 }
             }
         }
+        return redirect()->back()->with('success', __('Update success'));
+    }
+
+    public function bulkSituation(Request $request)
+    {
+        $ids = $request->input('ids');
+        $action = $request->input('action');
+        if (empty($ids) or !is_array($ids)) {
+            return redirect()->back()->with('error', __('No items selected'));
+        }
+        if (empty($action)) {
+            return redirect()->back()->with('error', __('Please select action'));
+        }
+
+        foreach ($ids as $id) {
+            $query = Booking::query()->where("id", $id);
+            if (!$this->hasPermission('booking_manage_others')) {
+                $query->where("vendor_id", Auth::id());
+                $this->checkPermission('booking_update');
+            }
+            $item = $query->first();
+            if(!empty($item)){
+                $item->situation_id = $action;
+                $item->save();
+
+                $cancelled =  Situation::query()
+                    ->whereHas('section', function ($query) {
+                        $query->where('name', 'like', '%Reservas%');
+                    })
+                    ->where('name','like','%Cancelada%')->get()->first();
+
+                if($action == $cancelled->id) $item->tryRefundToWallet();
+                event(new BookingUpdatedEvent($item));
+            }
+        }
+
         return redirect()->back()->with('success', __('Update success'));
     }
 

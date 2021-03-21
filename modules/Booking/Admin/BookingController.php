@@ -116,7 +116,6 @@ class BookingController extends Controller
         ], 200);
     }
 
-
     public function getHotelRoomByUserID(Request $request)
     {
         $user = User::query()->find($request->user_id);
