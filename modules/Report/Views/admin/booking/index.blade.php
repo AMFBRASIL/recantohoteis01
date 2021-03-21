@@ -115,16 +115,33 @@
                                     {{--                                    {{__("Remain")}} : {{format_money_main($booking->total - $booking->paid)}}<br/>--}}
                                     {{--                                </td>--}}
                                     <td>
-                                        <span class="badge badge-success" data-toggle="tooltip" data-placement="top"
-                                              data-html="true" data-original-title=" <h6> Entregue </h6> ">S</span>
-                                        <span class="badge badge-success" data-toggle="tooltip" data-placement="top"
-                                              data-html="true" data-original-title=" <h6> Assinado </h6> ">S</span>
-                                        <span class="badge badge-success" data-toggle="tooltip" data-placement="top"
-                                              data-html="true" data-original-title=" <h6> Comissao Paga </h6> ">S</span>
+                                        @if($row->is_contract)
+                                            <span class="badge badge-success" data-toggle="tooltip" data-placement="top"
+                                                  data-html="true" data-original-title=" <h6> Entregue </h6> ">S</span>
+                                        @else
+                                            <span class="badge badge-danger" data-toggle="tooltip" data-placement="top"
+                                                  data-html="true" title=""
+                                                  data-original-title=" <h6> Nao Entregue </h6> ">N</span>
+                                        @endif
 
-                                        <!--<span class="badge badge-danger" data-toggle="tooltip" data-placement="top" data-html="true" title="" data-original-title=" <h6> Nao Entregue </h6> ">N</span>
-                                            <span class="badge badge-danger" data-toggle="tooltip" data-placement="top" data-html="true" title="" data-original-title=" <h6> Não Assinado </h6> ">N</span>
-                                            <span class="badge badge-danger" data-toggle="tooltip" data-placement="top" data-html="true" title="" data-original-title=" <h6> NAO Pago  </h6> ">N</span>-->
+                                        @if($row->is_signature)
+                                            <span class="badge badge-success" data-toggle="tooltip" data-placement="top"
+                                                  data-html="true" data-original-title=" <h6> Assinado </h6> ">S</span>
+                                        @else
+                                            <span class="badge badge-danger" data-toggle="tooltip" data-placement="top"
+                                                  data-html="true" title=""
+                                                  data-original-title=" <h6> Não Assinado </h6> ">N</span>
+                                        @endif
+
+                                        @if($row->is_commission)
+                                            <span class="badge badge-success" data-toggle="tooltip" data-placement="top"
+                                                  data-html="true"
+                                                  data-original-title=" <h6> Comissao Paga </h6> ">S</span>
+                                        @else
+                                            <span class="badge badge-danger" data-toggle="tooltip" data-placement="top"
+                                                  data-html="true" title=""
+                                                  data-original-title=" <h6> NAO Pago  </h6> ">N</span>
+                                        @endif
                                     </td>
 
                                     <td>
@@ -143,13 +160,6 @@
                                             R{{format_money_main($row->paid)}}
                                         </a>
                                     </td>
-                                    {{--                                <td>--}}
-                                    {{--                                    <span class="label label-{{$row->status}}">{{$row->statusName}}</span>--}}
-                                    {{--                                </td>--}}
-                                    {{--                                <td>--}}
-                                    {{--                                    {{$row->gatewayObj ? $row->gatewayObj->getDisplayName() : ''}}--}}
-                                    {{--                                </td>--}}
-                                    {{--                                <td>{{display_datetime($row->updated_at)}}</td>--}}
                                     <td>
                                         <div class="btn-group dropleft">
                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
@@ -160,16 +170,14 @@
                                                 <a class="dropdown-item action-detail" href="#" idreserva="100"
                                                    data-value="{{$row->id}}"> Detalhes
                                                     da Reserva</a>
-                                                <!---<a class="dropdown-item cancelamento" href="#" >Cancelar Reserva</a>
-                                                <a class="dropdown-item" href="detalhesConta.php">Cancelar Reserva</a> --->
-                                                <!---<a class="dropdown-item" href="detalhesConta.php">Add Hospedes</a>--->
                                                 <a class="dropdown-item" href="#">Acessar a
                                                     conta</a>
-                                                <a class="dropdown-item action-validation" href="#" data-value="{{$row->id}}">Validações</a>
-                                                <a class="dropdown-item action-payment" href="#" data-value="{{$row->id}}"> <i
+                                                <a class="dropdown-item action-validation" href="#"
+                                                   data-value="{{$row->id}}">Validações</a>
+                                                <a class="dropdown-item action-payment" href="#"
+                                                   data-value="{{$row->id}}"> <i
                                                         class="fa fa-dollar"></i>
                                                     Receber Valor</a>
-
                                                 <!--parte antiga-->
                                                 <a class="dropdown-item" target="_blank"
                                                    href="{{url('admin/module/report/booking/contract/'.$row->id)}}">{{__('Contract')}}</a>
@@ -578,18 +586,22 @@
                                 <div class="p-1 bg-white">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h6 class="heading1">Itens Consumido Cartão</h6>
-                                        <div class="d-flex flex-row align-items-center text-muted"><span class="days mr-2">Ultimos 10 itens</span> <i class="fa fa-angle-down"></i></div>
+                                        <div class="d-flex flex-row align-items-center text-muted"><span
+                                                class="days mr-2">Ultimos 10 itens</span> <i
+                                                class="fa fa-angle-down"></i></div>
                                     </div>
                                     <div class="table-responsive">
                                         <table class="table table-borderless">
                                             <thead>
-                                            <tr><th></th>
+                                            <tr>
+                                                <th></th>
                                                 <th>Tipo Taxa</th>
                                                 <th>valor</th>
                                                 <th>Forma Pgto</th>
                                                 <th>Data</th>
                                                 <th></th>
-                                            </tr></thead>
+                                            </tr>
+                                            </thead>
                                             <tbody>
                                             <tr>
                                                 <td><i class="fa fa-dollar fa-2x"></i></td>
@@ -611,7 +623,8 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="bg-white border-top p-3"><span class="solditems"> Valores Hospede </span></div>
+                                <div class="bg-white border-top p-3"><span class="solditems"> Valores Hospede </span>
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="p-2 py-2 bg-white">
@@ -640,7 +653,7 @@
                         <span class="btn btn-secondary" data-dismiss="modal">FECHAR</span>
                     </div>
                     <script>
-                        $('#printDetailValue').click(function(){
+                        $('#printDetailValue').click(function () {
                             $("#printValueThis").printThis({
                                 debug: false,
                                 importCSS: true,
@@ -658,7 +671,8 @@
         </div>
     </div>
 
-    <div id="validation" class="modal fade" role="dialog" data-backdrop="static" style="display: none;" aria-hidden="true">
+    <div id="validation" class="modal fade" role="dialog" data-backdrop="static" style="display: none;"
+         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <!-- Modal content-->
             <div class="modal-content">
@@ -669,41 +683,45 @@
                 </div>
 
                 <!-- Modal Body-->
-                <div class="modal-body"><div class="tab-content">
+                <div class="modal-body">
+                    <div class="tab-content">
                         <div class="row">
                             <div class="col-sm-4 col-md-4 ">
                                 <div class="dashboard-report-card card purple link-container">
-                                    <div class="card-content" dataid="111222" idstatus="1" style="cursor:pointer">
+                                    <div class="card-content" style="cursor:pointer">
                                         <span class="card-title">LIBERAÇÃO</span>
                                         <span class="card-amount">CONTRATO</span>
                                         <span class="card-desc">ENTREGUE AO CLIENTE?</span>
                                     </div>
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" id="checkEntregue" data-toggle="toggle" data-on="S" data-off="N" data-onstyle="success" data-offstyle="danger">
+                                        <input type="checkbox" id="checkEntregue" data-toggle="toggle" data-on="S"
+                                               data-off="N" data-onstyle="success" data-offstyle="danger">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-4 ">
                                 <div class="dashboard-report-card card purple link-container">
-                                    <div class="card-content" dataid="111222" idstatus="1" style="cursor:pointer">
+                                    <div class="card-content" style="cursor:pointer">
                                         <span class="card-title">LIBERAÇÃO</span>
                                         <span class="card-amount">ASSINATURA</span>
                                         <span class="card-desc">ASSINADO PELO CLIENTE?</span>
                                     </div>
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" id="checkAssinado" data-toggle="toggle" data-on="S" data-off="N" data-onstyle="success" data-offstyle="danger">
+                                        <input type="checkbox" id="checkAssinado" data-toggle="toggle" data-on="1"
+                                               data-off="0" data-onstyle="success" data-offstyle="danger">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-md-4 ">
                                 <div class="dashboard-report-card card purple link-container">
-                                    <div class="card-content" dataid="111222" idstatus="1" style="cursor:pointer">
+                                    <div class="card-content" style="cursor:pointer">
                                         <span class="card-title">LIBERAÇÃO</span>
                                         <span class="card-amount">COMISSÃO</span>
                                         <span class="card-desc">COMISSAO PAGA?</span>
                                     </div>
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" id="checkComissao" data-toggle="toggle" data-on="S" data-off="N" data-onstyle="success" data-offstyle="danger">
+                                        <input type="checkbox" id="checkComissao" data-toggle="toggle" data-on="S"
+                                               data-off="N" data-onstyle="success" data-offstyle="danger">
                                     </div>
                                 </div>
                             </div>
@@ -722,12 +740,16 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group-lg">
-                                                    <label for="reserva_situacao">Valor Pago Comissao Vendedor</label><br>
+                                                    <label for="reserva_situacao">Valor Pago Comissao
+                                                        Vendedor</label><br>
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="basic-addon1">R$</span>
                                                         </div>
-                                                        <input type="text" name="vlrPago" id="vlrPago" placeholder="99,99" class="form-control moeda-real" value="" style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                        <input type="text" name="vlrPagoCommission"
+                                                               id="vlrPagoCommission" placeholder="99,99"
+                                                               class="form-control moeda-real" value=""
+                                                               style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
                                                     </div>
                                                 </div>
                                             </div>
@@ -737,7 +759,7 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="row" style="display:none;" id="AssinadoContrato">
+                        <div class="row" style="display:none;" id="assinadoContrato">
                             <div class="col-sm-12 col-md-12 ">
                                 <div class="panel" style="background-color: #ecf0f5;">
                                     <div class="panel-body">
@@ -751,7 +773,9 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group-lg">
                                                     <label for="reserva_situacao">Assinado por</label><br>
-                                                    <input type="text" name="assinadpor" id="assinadpor" placeholder="" class="form-control" value="" style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                    <input type="text" name="assinadoPor" id="assinador" placeholder=""
+                                                           class="form-control" value=""
+                                                           style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
                                                 </div>
                                             </div>
                                         </div>
@@ -760,7 +784,7 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="row" style="display:none;" id="ContratoEntregue">
+                        <div class="row" style="display:none;" id="contratoEntregue">
                             <div class="col-sm-12 col-md-12 ">
                                 <div class="panel" style="background-color: #ecf0f5;">
                                     <div class="panel-body">
@@ -774,7 +798,9 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group-lg">
                                                     <label for="reserva_situacao">Entregue para</label><br>
-                                                    <input type="text" name="entreguepara" id="entreguepara" placeholder="" class="form-control" value="" style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                    <input type="text" id="entreguePara" placeholder=""
+                                                           class="form-control" value=""
+                                                           style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
                                                 </div>
                                             </div>
                                         </div>
@@ -789,32 +815,31 @@
                         </div>
                     </div>
                     <script>
-                        $('#checkComissao').change(function() {
-                            if($('#checkComissao').prop('checked')){
+                        $('#checkComissao').change(function () {
+                            if ($('#checkComissao').prop('checked')) {
                                 $("#paymentCampos").show();
                             } else {
                                 $("#paymentCampos").hide();
                             }
                         });
 
-                        $('#checkAssinado').change(function() {
-                            if($('#checkAssinado').prop('checked')){
-                                $("#AssinadoContrato").show();
+                        $('#checkAssinado').change(function () {
+                            if ($('#checkAssinado').prop('checked')) {
+                                $("#assinadoContrato").show();
                             } else {
-                                $("#AssinadoContrato").hide();
+                                $("#assinadoContrato").hide();
                             }
                         });
 
-                        $('#checkEntregue').change(function() {
-                            if($('#checkEntregue').prop('checked')){
-                                $("#ContratoEntregue").show();
+                        $('#checkEntregue').change(function () {
+                            if ($('#checkEntregue').prop('checked')) {
+                                $("#contratoEntregue").show();
                             } else {
-                                $("#ContratoEntregue").hide();
+                                $("#contratoEntregue").hide();
                             }
                         });
                     </script>
                 </div>
-
             </div>
         </div>
     </div>
@@ -985,7 +1010,9 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" id="basic-addon1">R$</span>
                                                     </div>
-                                                    <input type="text" name="vlrPago" id="vlrPago" placeholder="99,99" class="form-control moeda-real" value="" style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                    <input type="text" name="vlrPago" id="vlrPago" placeholder="99,99"
+                                                           class="form-control moeda-real" value=""
+                                                           style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
                                                 </div>
 
                                             </div>
@@ -994,12 +1021,15 @@
                                             <div class="form-group-lg">
                                                 <label> Forma de pagamento (base) </label>
                                                 <div class="input-group">
-                                                    <select name="bank" id="formPayment" class="select_bank form-control" required="" style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
-                                                        <option value="" selected="">--Selecione forma de Pagamento--</option>
-                                                        <option value="1">Cartão de Credito ... </option>
-                                                        <option value="2">Dinheiro </option>
-                                                        <option value="3">Vale </option>
-                                                        <option value="4">Outros </option>
+                                                    <select name="bank" id="formPayment"
+                                                            class="select_bank form-control" required=""
+                                                            style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                        <option value="" selected="">--Selecione forma de Pagamento--
+                                                        </option>
+                                                        <option value="1">Cartão de Credito ...</option>
+                                                        <option value="2">Dinheiro</option>
+                                                        <option value="3">Vale</option>
+                                                        <option value="4">Outros</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -1007,7 +1037,9 @@
                                         <div class="col-lg-4">
                                             <div class="form-group-lg">
                                                 <label> Tipo de Taxas </label>
-                                                <select data-placeholder=" " name="taxas" id="taxas" class="form-control" style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                <select data-placeholder=" " name="taxas" id="taxas"
+                                                        class="form-control"
+                                                        style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
                                                     <option value="1">DIARIAS</option>
                                                     <option value="2">TAXA LIMPEZA</option>
                                                     <option value="3">OUTRAS TAXAS</option>
@@ -1021,7 +1053,9 @@
                                         <div class="col-lg-6">
                                             <div class="form-group-lg" id="divNSU" name="divNSU" style="display:none;">
                                                 <label> Número da Transação Cartão </label>
-                                                <input type="text" value="" placeholder="AUHDEUY804837943" name="nsuinput" id="nsuinput" class="form-control" style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                <input type="text" value="" placeholder="AUHDEUY804837943"
+                                                       name="nsuinput" id="nsuinput" class="form-control"
+                                                       style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
                                             </div>
                                         </div>
                                     </div>
@@ -1035,18 +1069,22 @@
                                     <div class="p-1 bg-white">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <h6 class="heading1">Valores Pagos pelo Hospede</h6>
-                                            <div class="d-flex flex-row align-items-center text-muted"><span class="days mr-2">Ultimos 10 </span> <i class="fa fa-angle-down"></i></div>
+                                            <div class="d-flex flex-row align-items-center text-muted"><span
+                                                    class="days mr-2">Ultimos 10 </span> <i
+                                                    class="fa fa-angle-down"></i></div>
                                         </div>
                                         <div class="table-responsive">
                                             <table class="table table-borderless">
                                                 <thead>
-                                                <tr><th></th>
+                                                <tr>
+                                                    <th></th>
                                                     <th>Tipo Taxa</th>
                                                     <th>Valor</th>
                                                     <th>Forma Pagamento</th>
-                                                    <th>Pago em </th>
+                                                    <th>Pago em</th>
                                                     <th></th>
-                                                </tr></thead>
+                                                </tr>
+                                                </thead>
                                                 <tbody>
                                                 <tr>
                                                     <td><i class="fa fa-dollar fa-2x"></i></td>
@@ -1073,7 +1111,8 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="bg-white border-top p-3"><span class="solditems"> Valores Pagos </span></div>
+                                    <div class="bg-white border-top p-3"><span class="solditems"> Valores Pagos </span>
+                                    </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="p-2 py-2 bg-white">
@@ -1085,12 +1124,15 @@
                                     <div class="p-2 py-2 bg-white">
                                         <div class="p-2 bg-white">
                                             <h6 class="account">Valor Total Pago</h6>
-                                            <span class="mt-5 balance">  <div id="somaValoresPago" name="somaValoresPago"> <i class="fa fa-plus"></i> R$ 1.690,00 </div> </span>
+                                            <span class="mt-5 balance">  <div id="somaValoresPago"
+                                                                              name="somaValoresPago"> <i
+                                                        class="fa fa-plus"></i> R$ 1.690,00 </div> </span>
                                         </div>
                                     </div>
                                     <div class="p-3 bg-white">
                                         <h6 class="account">Valor Total Restante</h6>
-                                        <div id="somaTotal" name="somaTotal"> <span class="mt-5 restante"><i class="fa fa-minus"></i> R$ 2.190,00 </span></div>
+                                        <div id="somaTotal" name="somaTotal"><span class="mt-5 restante"><i
+                                                    class="fa fa-minus"></i> R$ 2.190,00 </span></div>
                                     </div>
                                 </div>
                             </div>
@@ -1118,9 +1160,9 @@
                     </div>
                     <script>
 
-                        $('#formPayment').on('change', function() {
+                        $('#formPayment').on('change', function () {
 
-                            if(this.value == "1"){
+                            if (this.value == "1") {
                                 $('#divNSU').show();
                                 $('#nsuinput').focus();
                             } else {
@@ -1128,7 +1170,7 @@
                             }
                         });
 
-                        $('#printPayment').click(function(){
+                        $('#printPayment').click(function () {
                             $("#printThisPayment").printThis({
                                 debug: false,
                                 importCSS: true,
@@ -1141,37 +1183,37 @@
                             });
                         });
 
-                        jQuery('#vlrPago').on('keyup',function(){
+                        jQuery('#vlrPago').on('keyup', function () {
 
                             var valorRestante = parseFloat("2190.00");
                             var ValorPago = parseFloat("1690.00");
 
-                            var getpriceAdd = jQuery('#vlrPago').val().replace(/[.]/g,'').replace(',','.');
-                            var priceAdd = parseFloat( getpriceAdd != '' ? getpriceAdd : 0);
+                            var getpriceAdd = jQuery('#vlrPago').val().replace(/[.]/g, '').replace(',', '.');
+                            var priceAdd = parseFloat(getpriceAdd != '' ? getpriceAdd : 0);
 
                             // Somando valores
-                            var totalValores = parseFloat( priceAdd - valorRestante ).toFixed(2);
-                            var totalPagoAtualizado = parseFloat( priceAdd + ValorPago ).toFixed(2);
+                            var totalValores = parseFloat(priceAdd - valorRestante).toFixed(2);
+                            var totalPagoAtualizado = parseFloat(priceAdd + ValorPago).toFixed(2);
 
                             totalValores = Intl.NumberFormat('pt-BR').format(totalValores);
                             totalPagoSistema = Intl.NumberFormat('pt-BR').format(totalPagoAtualizado);
 
                             jQuery('#somaValoresPago').html("<i class='fa fa-plus'></i> R$ " + totalPagoSistema);
 
-                            if(totalValores < 0){
+                            if (totalValores < 0) {
                                 jQuery('#somaTotal').html(" <span class='mt-5 restante'> <i class='fa fa-minus'></i> R$ " + totalValores);
                             } else {
                                 jQuery('#somaTotal').html(" <span class='mt-5 balance'> <i class='fa fa-plus'></i> R$ " + totalValores);
                             }
 
-                            if(valorRestante < priceAdd){
+                            if (valorRestante < priceAdd) {
                                 alert("O Valor a pagar nao poderá ser maior que valor restante.");
                                 jQuery('#vlrPago').val("");
                                 jQuery('#somaTotal').html(" <span class='mt-5 restante'> <i class='fa fa-minus'></i> R$ " + valorRestante);
                                 jQuery('#somaValoresPago').html(" <span class='mt-5 balance'> <i class='fa fa-plus'></i> R$ " + ValorPago);
                             }
 
-                            if(totalValores == 0){
+                            if (totalValores == 0) {
                                 jQuery('#somaTotal').html(" <span class='mt-5 restante'> R$ 0,00");
                             }
 
@@ -1191,6 +1233,7 @@
     <script src="{{asset('js/printthis.js')}}"></script>
     <script src="{{asset('libs/fancybox/js/jquery.fancybox.js')}}"></script>
     <script src="{{asset('module/reports/booking/js/reservation.js')}}"></script>
+    <script src="{{asset('libs/daterange/moment.min.js')}}"></script>
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()

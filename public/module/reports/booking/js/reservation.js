@@ -1,4 +1,12 @@
+let bookingSelect = null;
+
 $(function ($) {
+    $('.moeda-real').on('blur', function () {
+        $(this).each(function () {
+            $(this).mask('#.##0,00', {reverse: true});
+        });
+    });
+
     $(".modal-booking-summary").on('click',(e)=>{
         openDetailBooking(e);
     });
@@ -82,18 +90,21 @@ $(function ($) {
             booking_id: e.target.getAttribute("data-value"),
         };
 
-        let url = "/admin/module/booking/getBooking/";
+        let url = "/admin/module/booking/getUserBooking/";
+
+        bookingSelect = null;
 
         $.ajax({
             url: url,
             type: 'GET',
             data: data,
             success: function (data) {
-                if (data.success) {
-                    $("#validation").modal('show');
-                    loadModalValidation(data.data);
-                } else {
+                if (data.error) {
                     alert(data.message);
+                } else {
+                    bookingSelect = data.booking;
+                    $("#validation").modal('show');
+                    loadModalValidation();
                 }
             }
         });
@@ -104,18 +115,19 @@ $(function ($) {
             booking_id: e.target.getAttribute("data-value"),
         };
 
-        let url = "/admin/module/booking/getBooking/";
+        let url = "/admin/module/booking/getUserBooking/";
 
         $.ajax({
             url: url,
             type: 'GET',
             data: data,
             success: function (data) {
-                if (data.success) {
-                    $("#payment").modal('show');
-                    loadModalPayment(data.data);
-                } else {
+                if (data.error) {
                     alert(data.message);
+                } else {
+                    bookingSelect = data.booking;
+                    $("#payment").modal('show');
+                    loadModalPayment();
                 }
             }
         });
@@ -284,10 +296,34 @@ function loadModalValue(data){
     console.log(data)
 }
 
-function loadModalValidation(data){
-    console.log(data)
+function loadModalValidation(){
+    console.log(bookingSelect)
+
+    if(bookingSelect.is_contract == 1){
+        $("#checkEntregue").prop( "checked", true );
+        $("#contratoEntregue").show();
+
+        $("#contratoEntregue h3").html(new moment(bookingSelect.contract_date).format('DD/MM/YYYY HH:mm:ss'));
+        $("#entreguePara").val(bookingSelect.contract_name);
+    }
+
+    if(bookingSelect.is_signature == 1){
+        $("#checkAssinado").prop( "checked", true );
+        $("#assinadoContrato").show();
+
+        $("#assinadoContrato h3").html(new moment(bookingSelect.signature_date).format('DD/MM/YYYY HH:mm:ss'));
+        $("#assinadoPor").val(bookingSelect.signature_name);
+    }
+
+    if(bookingSelect.is_commission == 1){
+        $("#checkComissao").prop( "checked", true );
+        $("#paymentCampos").show();
+
+        $("#paymentCampos h3").html(new moment(bookingSelect.commission_date).format('DD/MM/YYYY HH:mm:ss'));
+        $("#vlrPagoCommission").val(parseFloat(bookingSelect.commission).toFixed(2)).mask('#.##0,00', {reverse: true});
+    }
 }
 
-function loadModalPayment(data){
-    console.log(data);
+function loadModalPayment(){
+    console.log(bookingSelect);
 }
