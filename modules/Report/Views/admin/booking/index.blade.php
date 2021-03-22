@@ -110,10 +110,6 @@
                                     </td>
                                     <td><b>{{(new DateTime($row->start_date))->format('d/m/y h:m:s')}}</b></td>
                                     <td><b>{{( new DateTime($row->end_date))->format('d/m/y h:m:s')}}</b></td>
-                                    {{--                                <td>{{__("Total")}} : {{format_money_main($row->total)}}<br/>--}}
-                                    {{--                                    {{__("Paid")}} : {{format_money_main($row->paid)}}<br/>--}}
-                                    {{--                                    {{__("Remain")}} : {{format_money_main($booking->total - $booking->paid)}}<br/>--}}
-                                    {{--                                </td>--}}
                                     <td>
                                         @if($row->is_contract)
                                             <span class="badge badge-success" data-toggle="tooltip" data-placement="top"
@@ -178,9 +174,6 @@
                                                    data-value="{{$row->id}}"> <i
                                                         class="fa fa-dollar"></i>
                                                     Receber Valor</a>
-                                                <!--parte antiga-->
-                                                <a class="dropdown-item" target="_blank"
-                                                   href="{{url('admin/module/report/booking/contract/'.$row->id)}}">{{__('Contract')}}</a>
                                             </div>
                                         </div>
                                     </td>
@@ -243,34 +236,34 @@
                                 <i class="fa fa-print"></i> Print Detalhes
                             </button>
                             <a data-fancybox="" data-type="iframe"
-                               href="{{ route('checkAvailability.print.detalhesreserva') }}"
+                               href="{{ route('print.detalhesreserva') }}"
                                class="btn btn-primary  btn-lg">
                                 <i class="fa fa-print"></i> Reserva
                             </a>
-                            <a data-fancybox="" data-type="iframe" href="{{ route('checkAvailability.print.ficha')}}"
+                            <a data-fancybox="" data-type="iframe" href="{{ route('print.ficha')}}"
                                class="btn btn-primary  btn-lg">
                                 <i class="fa fa-print"></i> FRN
                             </a>
                             <!--- Só aparecer os botoes para impressao quando for APENAS CHACARA
                             ===============================================================================--->
-                            <a data-fancybox="" data-type="iframe" href="{{ route('checkAvailability.print.regras') }}"
-                               class="btn btn-success btn-lg">
+                            <a data-fancybox="" data-type="iframe" href="{{ route('print.regras') }}"
+                               class="btn btn-success btn-lg is_hotel booking_summary_regras">
                                 <i class="fa fa-print"></i> Regras
                             </a>
 
                             <a data-fancybox="" data-type="iframe"
-                               href="{{ route('checkAvailability.print.contrato') }}" class="btn btn-primary  btn-lg">
+                               href=""
+                               class="btn btn-primary  btn-lg is_hotel booking_summary_contract">
                                 <i class="fa fa-print"></i> Contrato
                             </a>
 
                             <a data-fancybox="" data-type="iframe"
-                               href="{{ route('checkAvailability.print.regulamento') }}" class="btn btn-info  btn-lg">
+                               href="{{ route('print.regulamento') }}"
+                               class="btn btn-info  btn-lg is_hotel booking_summary_regulamento">
                                 <i class="fa fa-print"></i> Regulamento
                             </a>
-
                             <!--- Só aparecer os botoes para impressao quando for APENAS CHACARA
                             ===============================================================================--->
-
                             <a href="#" class="btn btn-primary btn-lg active editBooking" role="button">Edit Booking</a>
                             <button type="button" class="btn btn-lg btn-secondary" data-dismiss="modal">Fechar</button>
                         </div>
@@ -399,7 +392,7 @@
                                                 <td>
                                                     <div class="dropdown">
                                                         <button class="btn btn-sm btn-info dropdown-toggle"
-                                                                type="button" id="dropdownMenuButton"
+                                                                type="button"
                                                                 data-toggle="dropdown" aria-haspopup="true"
                                                                 aria-expanded="false">
                                                             Action
@@ -427,7 +420,7 @@
                                                 <td>
                                                     <div class="dropdown">
                                                         <button class="btn btn-sm btn-info dropdown-toggle"
-                                                                type="button" id="dropdownMenuButton"
+                                                                type="button"
                                                                 data-toggle="dropdown" aria-haspopup="true"
                                                                 aria-expanded="false">
                                                             Action
@@ -455,7 +448,7 @@
                                                 <td>
                                                     <div class="dropdown">
                                                         <button class="btn btn-sm btn-info dropdown-toggle"
-                                                                type="button" id="dropdownMenuButton"
+                                                                type="button"
                                                                 data-toggle="dropdown" aria-haspopup="true"
                                                                 aria-expanded="false">
                                                             Action
@@ -512,12 +505,12 @@
                             color: #9fa8da;
                         }
 
-                        th {
+                        .th-custom {
                             font-size: 14px;
                             color: #d50000;
                         }
 
-                        tr {
+                        tr-custom {
                             font-size: 13px;
                         }
 
@@ -591,34 +584,18 @@
                                                 class="fa fa-angle-down"></i></div>
                                     </div>
                                     <div class="table-responsive">
-                                        <table class="table table-borderless">
+                                        <table class="table table-borderless table-items-payment-modal">
                                             <thead>
                                             <tr>
-                                                <th></th>
-                                                <th>Tipo Taxa</th>
-                                                <th>valor</th>
-                                                <th>Forma Pgto</th>
-                                                <th>Data</th>
+                                                <th class="th-custom"></th>
+                                                <th class="th-custom">Tipo Taxa</th>
+                                                <th class="th-custom">valor</th>
+                                                <th class="th-custom">Forma Pgto</th>
+                                                <th class="th-custom">Data</th>
                                                 <th></th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td><i class="fa fa-dollar fa-2x"></i></td>
-                                                <td><span class="badge badge-primary">DIÁRIA</span></td>
-                                                <td><span class="badge badge-primary">R$ 1.900,00</span></td>
-                                                <td>CARTAO DE CREDITO</td>
-                                                <td>11/12/2020 13:32:11</td>
-                                                <td><i class="fa fa-ellipsis-v"></i></td>
-                                            </tr>
-                                            <tr>
-                                                <td><i class="fa fa-dollar fa-2x"></i></td>
-                                                <td><span class="badge badge-primary">LIMPEZA</span></td>
-                                                <td><span class="badge badge-primary">R$ 250,00</span></td>
-                                                <td>CARTAO DE CREDITO</td>
-                                                <td>11/12/2020 13:38:11</td>
-                                                <td><i class="fa fa-ellipsis-v"></i></td>
-                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -630,18 +607,18 @@
                                 <div class="p-2 py-2 bg-white">
                                     <div class="p-2 bg-white">
                                         <h6 class="account">Valor Total Contratado</h6>
-                                        <span class="mt-5 balance"> R$ 4.120,00 </span>
+                                        <span class="mt-5 balance value_booking"></span>
                                     </div>
                                 </div>
                                 <div class="p-2 py-2 bg-white">
                                     <div class="p-2 bg-white">
                                         <h6 class="account">Valor Total Pago</h6>
-                                        <span class="mt-5 balance"> <i class="fa fa-plus"></i> R$ 2.900,00 </span>
+                                        <span class="mt-5 balance value_pay_s"></span>
                                     </div>
                                 </div>
                                 <div class="p-3 bg-white">
                                     <h6 class="account">Valor Total a Pagar</h6>
-                                    <span class="mt-5 restante"> <i class="fa fa-minus"></i> R$ 1.150,00 </span>
+                                    <span class="mt-5 restante value_paid_s"></span>
                                 </div>
                             </div>
                         </div>
@@ -694,8 +671,8 @@
                                         <span class="card-desc">ENTREGUE AO CLIENTE?</span>
                                     </div>
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" id="checkEntregue" data-toggle="toggle" data-on="S"
-                                               data-off="N" data-onstyle="success" data-offstyle="danger">
+                                        <input type="checkbox" id="checkEntregue" data-toggle="toggle" data-on="1"
+                                               data-off="0" data-onstyle="success" data-offstyle="danger">
                                     </div>
                                 </div>
                             </div>
@@ -810,7 +787,7 @@
                         </div>
                         <!-- Modal footer -->
                         <div class="modal-footer">
-                            <span class="btn btn-success">Salvar Dados</span>
+                            <span class="btn btn-success salveValidation">Salvar Dados</span>
                             <span class="btn btn-secondary" data-dismiss="modal">Close</span>
                         </div>
                     </div>
@@ -867,12 +844,12 @@
                             color: #9fa8da;
                         }
 
-                        th {
+                        .th-custom-payment {
                             font-size: 14px;
                             color: #d50000;
                         }
 
-                        tr {
+                        .tr-custom-payment {
                             font-size: 13px;
                         }
 
@@ -897,44 +874,6 @@
                             color: #1a237e;
                         }
 
-                        .transaction {
-                            font-size: 13px;
-                        }
-
-                        .progress {
-                            height: 3px !important;
-                        }
-
-                        .money {
-                            color: #9fa8da;
-                        }
-
-                        .goal {
-                            font-size: 17px;
-                            color: #d50000;
-                            font-weight: 400;
-                        }
-
-                        .revenue {
-                            font-size: 14px;
-                            color: #311b92;
-                            font-weight: 500;
-                        }
-
-                        .orders {
-                            font-size: 14px;
-                            color: #311b92;
-                            font-weight: 500;
-                        }
-
-                        .customer {
-                            font-size: 14px;
-                            color: #311b92;
-                            font-weight: 500;
-                        }
-                    </style>
-
-                    <style>
                         .solditems {
                             font-size: 13px;
                             color: #9fa8da;
@@ -954,96 +893,48 @@
                             font-size: 45px;
                             color: red;
                         }
-
-                        .transaction {
-                            font-size: 13px;
-                        }
-
-                        .progress {
-                            height: 3px !important;
-                        }
-
-                        .money {
-                            color: #9fa8da;
-                        }
-
-                        .goal {
-                            font-size: 17px;
-                            color: #d50000;
-                            font-weight: 400;
-                        }
-
-                        .revenue {
-                            font-size: 14px;
-                            color: #311b92;
-                            font-weight: 500;
-                        }
-
-                        .orders {
-                            font-size: 14px;
-                            color: #311b92;
-                            font-weight: 500;
-                        }
-
-                        .customer {
-                            font-size: 14px;
-                            color: #311b92;
-                            font-weight: 500;
-                        }
                     </style>
-
                     <!-- booking_summary -->
                     <div class="modal-content">
                         <div class="modal-body">
                             <div class="col-md-12" style="background-color: #ecf0f5;">
                                 <div class="form-group" style="background-color: #ecf0f5;">
-
                                     <br>
-
                                     <div class="row ">
-
                                         <div class="col-lg-4">
-
                                             <div class="form-group-lg">
                                                 <label for="reserva_situacao">Valor Pago</label><br>
                                                 <div class="input-group mb-5">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" id="basic-addon1">R$</span>
                                                     </div>
-                                                    <input type="text" name="vlrPago" id="vlrPago" placeholder="99,99"
+                                                    <input type="text" name="payment_value" id="payment_value" placeholder="99,99"
                                                            class="form-control moeda-real" value=""
                                                            style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
                                                 </div>
-
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group-lg">
-                                                <label> Forma de pagamento (base) </label>
+                                                <label> Forma de pagamento </label>
                                                 <div class="input-group">
-                                                    <select name="bank" id="formPayment"
-                                                            class="select_bank form-control" required=""
+                                                    <select id="payment_method" class="select_bank form-control" name="payment_method_id"
                                                             style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
-                                                        <option value="" selected="">--Selecione forma de Pagamento--
-                                                        </option>
-                                                        <option value="1">Cartão de Credito ...</option>
-                                                        <option value="2">Dinheiro</option>
-                                                        <option value="3">Vale</option>
-                                                        <option value="4">Outros</option>
+                                                        @foreach ($paymentMethodList as $option)
+                                                            <option value="{{$option->id}}">{{$option->name}}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group-lg">
-                                                <label> Tipo de Taxas </label>
-                                                <select data-placeholder=" " name="taxas" id="taxas"
-                                                        class="form-control"
+                                                <label> Tipo de Pagamentos/Taxas </label>
+                                                <select id="payment_type_rate" class="select_bank form-control" name="payment_type_rate"
                                                         style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
-                                                    <option value="1">DIARIAS</option>
-                                                    <option value="2">TAXA LIMPEZA</option>
-                                                    <option value="3">OUTRAS TAXAS</option>
-                                                    <option value="4">CONSUMOS</option>
+                                                    @foreach ($paymentTypeRateList as $option)
+                                                        <option value="{{$option->id}}">{{$option->name}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -1054,7 +945,7 @@
                                             <div class="form-group-lg" id="divNSU" name="divNSU" style="display:none;">
                                                 <label> Número da Transação Cartão </label>
                                                 <input type="text" value="" placeholder="AUHDEUY804837943"
-                                                       name="nsuinput" id="nsuinput" class="form-control"
+                                                       name="transaction_number" id="transaction_number" class="form-control"
                                                        style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
                                             </div>
                                         </div>
@@ -1074,39 +965,18 @@
                                                     class="fa fa-angle-down"></i></div>
                                         </div>
                                         <div class="table-responsive">
-                                            <table class="table table-borderless">
+                                            <table class="table table-borderless table-items-payment-modal">
                                                 <thead>
                                                 <tr>
-                                                    <th></th>
-                                                    <th>Tipo Taxa</th>
-                                                    <th>Valor</th>
-                                                    <th>Forma Pagamento</th>
-                                                    <th>Pago em</th>
-                                                    <th></th>
+                                                    <th class="th-custom-payment"></th>
+                                                    <th class="th-custom-payment">Tipo Taxa</th>
+                                                    <th class="th-custom-payment">Valor</th>
+                                                    <th class="th-custom-payment">Forma Pagamento</th>
+                                                    <th class="th-custom-payment">Pago em</th>
+                                                    <th class="th-custom-payment"></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr>
-                                                    <td><i class="fa fa-dollar fa-2x"></i></td>
-                                                    <td>Diária</td>
-                                                    <td><b>R$ 1.000,00</b></td>
-                                                    <td>Dinheiro</td>
-                                                    <td>11/12/2020 13:32:11</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><i class="fa fa-dollar fa-2x"></i></td>
-                                                    <td>Diária</td>
-                                                    <td><b>R$ 590,00</b></td>
-                                                    <td>Cartao de Credito VISA</td>
-                                                    <td>11/12/2020 13:42:11</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><i class="fa fa-dollar fa-2x"></i></td>
-                                                    <td>Taxa Limpeza</td>
-                                                    <td><b>R$ 100,00</b></td>
-                                                    <td>Cartao de Credito VISA</td>
-                                                    <td>11/12/2020 13:45:11</td>
-                                                </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -1118,27 +988,27 @@
                                     <div class="p-2 py-2 bg-white">
                                         <div class="p-2 bg-white">
                                             <h6 class="account">Valor Total Reserva</h6>
-                                            <span class="mt-5 faltando"> R$ 4.190,00 </span>
+                                            <span class="mt-5 faltando value_booking"></span>
                                         </div>
                                     </div>
                                     <div class="p-2 py-2 bg-white">
                                         <div class="p-2 bg-white">
                                             <h6 class="account">Valor Total Pago</h6>
-                                            <span class="mt-5 balance">  <div id="somaValoresPago"
-                                                                              name="somaValoresPago"> <i
-                                                        class="fa fa-plus"></i> R$ 1.690,00 </div> </span>
+                                            <span class="mt-5 balance value_pay_s"></span>
                                         </div>
                                     </div>
                                     <div class="p-3 bg-white">
                                         <h6 class="account">Valor Total Restante</h6>
-                                        <div id="somaTotal" name="somaTotal"><span class="mt-5 restante"><i
-                                                    class="fa fa-minus"></i> R$ 2.190,00 </span></div>
+                                        <div>
+                                            <span class="mt-5 restante value_paid_s">
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-lg btn-success">
+                            <button type="button" class="btn btn-lg btn-success salvePayment">
                                 <i class="fa fa-plus"></i> ADD PAYMENT
                             </button>
                             <button type="button" class="btn btn-lg btn-primary" id="printPayment">
@@ -1159,10 +1029,10 @@
                         </div>
                     </div>
                     <script>
+                        $('#payment_method').on('change', function () {
+                            let string = $('#payment_method option:selected' ).text();
 
-                        $('#formPayment').on('change', function () {
-
-                            if (this.value == "1") {
+                            if (string.toUpperCase().includes('CARTAO DE CREDITO')) {
                                 $('#divNSU').show();
                                 $('#nsuinput').focus();
                             } else {
@@ -1183,42 +1053,44 @@
                             });
                         });
 
-                        jQuery('#vlrPago').on('keyup', function () {
-
-                            var valorRestante = parseFloat("2190.00");
-                            var ValorPago = parseFloat("1690.00");
-
-                            var getpriceAdd = jQuery('#vlrPago').val().replace(/[.]/g, '').replace(',', '.');
-                            var priceAdd = parseFloat(getpriceAdd != '' ? getpriceAdd : 0);
+                        let valorRestanteO = null;
+                        let valorPagoO = null;
+                        $('#payment_value').on('blur', function () {
+                            if(valorRestanteO == null && valorPagoO == null){
+                                valorRestanteO = parseFloat($(".value_paid").text().replace(/[.]/g, '').replace(',', '.'));
+                                valorPagoO = parseFloat($(".value_pay").text().replace(/[.]/g, '').replace(',', '.'));
+                            }
+                            let valorRestante = parseFloat($(".value_paid").text().replace(/[.]/g, '').replace(',', '.'));
+                            let valorPago = parseFloat($(".value_pay").text().replace(/[.]/g, '').replace(',', '.'));
+                            let getPriceAdd = $('#payment_value').val().replace(/[.]/g, '').replace(',', '.');
+                            let priceAdd = parseFloat(getPriceAdd != '' ? getPriceAdd : 0);
 
                             // Somando valores
-                            var totalValores = parseFloat(priceAdd - valorRestante).toFixed(2);
-                            var totalPagoAtualizado = parseFloat(priceAdd + ValorPago).toFixed(2);
+                            let totalValores = (valorRestante - priceAdd);
+                            let totalPagoAtualizado = (priceAdd + valorPago);
 
+                            totalPagoAtualizado = Intl.NumberFormat('pt-BR').format(totalPagoAtualizado);
                             totalValores = Intl.NumberFormat('pt-BR').format(totalValores);
-                            totalPagoSistema = Intl.NumberFormat('pt-BR').format(totalPagoAtualizado);
 
-                            jQuery('#somaValoresPago').html("<i class='fa fa-plus'></i> R$ " + totalPagoSistema);
+                            $('.value_pay_s').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_pay">${totalPagoAtualizado}</span>`);
 
                             if (totalValores < 0) {
-                                jQuery('#somaTotal').html(" <span class='mt-5 restante'> <i class='fa fa-minus'></i> R$ " + totalValores);
+                                $('.value_paid_s').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid">${totalValores}</span>`);
                             } else {
-                                jQuery('#somaTotal').html(" <span class='mt-5 balance'> <i class='fa fa-plus'></i> R$ " + totalValores);
+                                if (totalValores == 0) {
+                                    $('.value_paid_s').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid">0,00</span>`);
+                                }else{
+                                    $('.value_paid_s').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_paid">${totalValores}</span>`);
+                                }
                             }
 
                             if (valorRestante < priceAdd) {
                                 alert("O Valor a pagar nao poderá ser maior que valor restante.");
-                                jQuery('#vlrPago').val("");
-                                jQuery('#somaTotal').html(" <span class='mt-5 restante'> <i class='fa fa-minus'></i> R$ " + valorRestante);
-                                jQuery('#somaValoresPago').html(" <span class='mt-5 balance'> <i class='fa fa-plus'></i> R$ " + ValorPago);
+                                $('#payment_value').val("");
+                                $('.value_paid_s').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid">${valorRestanteO}</span>`);
+                                $('.value_pay_s').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_pay">${valorPagoO}</span>`);
                             }
-
-                            if (totalValores == 0) {
-                                jQuery('#somaTotal').html(" <span class='mt-5 restante'> R$ 0,00");
-                            }
-
                         });
-
                     </script>
                 </div>
             </div>
@@ -1236,24 +1108,9 @@
     <script src="{{asset('libs/daterange/moment.min.js')}}"></script>
     <script>
         $(function () {
+            $('.moeda-real').mask('#.##0,00', {reverse: true});
+
             $('[data-toggle="tooltip"]').tooltip()
         })
-
-        $(document).on('click', '#set_paid_btn', function (e) {
-            var id = $(this).data('id');
-            $.ajax({
-                url: bookingCore.url + '/booking/setPaidAmount',
-                data: {
-                    id: id,
-                    remain: $('#modal-paid-' + id + ' #set_paid_input').val(),
-                },
-                dataType: 'json',
-                type: 'post',
-                success: function (res) {
-                    alert(res.message);
-                    window.location.reload();
-                }
-            });
-        });
     </script>
 @endsection

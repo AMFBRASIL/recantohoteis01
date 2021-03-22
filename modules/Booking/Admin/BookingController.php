@@ -80,6 +80,7 @@ class BookingController extends Controller
                     'success' => true,
                     'data' => [
                         'booking_id' => $booking->id,
+                        'booking_type' => $booking->object_model,
                         'booking_detail' => [
                             'checkin' => (new Carbon($booking->start_date))->format('d/m/y  H:m'),
                             'checkout' => (new Carbon($booking->end_date))->format('d/m/y  H:m'),

@@ -75,11 +75,12 @@ $(function ($) {
             type: 'GET',
             data: data,
             success: function (data) {
-                if(!data.error){
-                    $("#value").modal('show');
-                    loadModalValue(data);
-                }else{
+                if (data.error) {
                     alert(data.message);
+                }else{
+                    bookingSelect = data.booking;
+                    openModalPayment();
+                    $("#value").modal('show');
                 }
             }
         });
@@ -110,6 +111,34 @@ $(function ($) {
         });
     });
 
+    $(".salveValidation").on('click', ()=>{
+        let data = {
+            is_contract: $("#checkEntregue").is(":checked") ? 1 : 0,
+            contract_name: $("#entreguePara").val(),
+            is_signature: $("#checkAssinado").is(":checked") ? 1 : 0,
+            signature_name: $("#assinador").val(),
+            is_commission: $("#checkComissao").is(":checked") ? 1 : 0,
+            commission: $("#vlrPagoCommission").val(),
+            booking_id: bookingSelect.id
+        };
+
+        let url = "/admin/module/report/booking/saveValidation";
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            success: function (data) {
+                if (!data.success) {
+                    alert(data.message);
+                }else{
+                    $("#validation").modal('hide');
+                    window.location.href = "/admin/module/report/booking/saveValidationIndex";
+                }
+            }
+        });
+    })
+
     $(".action-payment").on('click', (e)=>{
         let data = {
             booking_id: e.target.getAttribute("data-value"),
@@ -124,14 +153,40 @@ $(function ($) {
             success: function (data) {
                 if (data.error) {
                     alert(data.message);
-                } else {
+                }else{
                     bookingSelect = data.booking;
+                    openModalPayment();
                     $("#payment").modal('show');
-                    loadModalPayment();
                 }
             }
         });
     });
+
+    $(".salvePayment").on('click', ()=>{
+        let data = {
+            payment_value: $("#payment_value").val(),
+            payment_method: $("#payment_method").val(),
+            payment_type_rate: $("#payment_type_rate").val(),
+            transaction_number: $("#transaction_number").val(),
+            booking_id: bookingSelect.id
+        };
+
+        let url = "/admin/module/report/booking/savePaymentHistory";
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            success: function (data) {
+                if (!data.success) {
+                    alert(data.message);
+                }else{
+                    $("#validation").modal('hide');
+                    window.location.href = "/admin/module/report/booking/savePaymentHistoryIndex";
+                }
+            }
+        });
+    })
 });
 
 function openDetailBooking(e){
@@ -158,6 +213,14 @@ function openDetailBooking(e){
 
 function loadModalDetailBooking(data) {
     $("#title-booking-modal").html(`Detalhes da Reserva Nro: #${data.booking_id}`);
+
+    if (data.booking_type == 'hotel'){
+        $('.is_hotel').hide();
+    }else{
+        $('.is_hotel').show();
+
+        $(".booking_summary_contract").attr("href", `/admin/module/booking/print/contrato/${data.booking_id}`);
+    }
 
     html = `<tr class="text-center">
                         <th width="500px">Booking details</th>
@@ -229,7 +292,7 @@ function loadModalDetailBooking(data) {
                     </tr>
                     <tr>
                         <th class="text-right">Total (incl. tax)</th>
-                        <td class="text-right"><b>R$ 5.478,63</b></td>
+                        <td class="text-right"><b><span class="mt-5 restante"> R$ 5.984,00  </span></b></td>
                     </tr>`;
 
     $("#table-values-booking-modal > tbody").html(html);
@@ -297,14 +360,17 @@ function loadModalValue(data){
 }
 
 function loadModalValidation(){
-    console.log(bookingSelect)
-
     if(bookingSelect.is_contract == 1){
         $("#checkEntregue").prop( "checked", true );
         $("#contratoEntregue").show();
 
         $("#contratoEntregue h3").html(new moment(bookingSelect.contract_date).format('DD/MM/YYYY HH:mm:ss'));
         $("#entreguePara").val(bookingSelect.contract_name);
+    }else{
+        $("#checkEntregue").prop( "checked", false );
+        $("#contratoEntregue").hide();
+        $("#entreguePara").val('');
+        $("#contratoEntregue h3").html(new moment().format('DD/MM/YYYY HH:mm:ss'));
     }
 
     if(bookingSelect.is_signature == 1){
@@ -312,7 +378,12 @@ function loadModalValidation(){
         $("#assinadoContrato").show();
 
         $("#assinadoContrato h3").html(new moment(bookingSelect.signature_date).format('DD/MM/YYYY HH:mm:ss'));
-        $("#assinadoPor").val(bookingSelect.signature_name);
+        $("#assinador").val(bookingSelect.signature_name);
+    }else{
+        $("#checkAssinado").prop( "checked", false );
+        $("#assinadoContrato").hide();
+        $("#assinador").val('');
+        $("#assinadoContrato h3").html(new moment().format('DD/MM/YYYY HH:mm:ss'));
     }
 
     if(bookingSelect.is_commission == 1){
@@ -321,9 +392,74 @@ function loadModalValidation(){
 
         $("#paymentCampos h3").html(new moment(bookingSelect.commission_date).format('DD/MM/YYYY HH:mm:ss'));
         $("#vlrPagoCommission").val(parseFloat(bookingSelect.commission).toFixed(2)).mask('#.##0,00', {reverse: true});
+    }else{
+        $("#checkComissao").prop( "checked", false );
+        $("#paymentCampos").hide();
+        $("#vlrPagoCommission").val('');
+        $("#paymentCampos h3").html(new moment().format('DD/MM/YYYY HH:mm:ss'));
     }
 }
 
-function loadModalPayment(){
-    console.log(bookingSelect);
+function openModalPayment(){
+    let data = {
+        booking_id: bookingSelect.id,
+    };
+
+    let url = "/admin/module/booking/getBookingHistory";
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        data: data,
+        success: function (data) {
+            if(!data.error){
+                loadModalPaymentInformation();
+                loadTableModalPayment(data.bookingPaymentHistory);
+            }else{
+                alert(data.message);
+            }
+        }
+    });
+}
+
+function loadModalPaymentInformation() {
+    let valorTotal = parseFloat(bookingSelect.total).toFixed(2);
+    valorTotal = Intl.NumberFormat('pt-BR').format(valorTotal);
+
+    let valorRestante = parseFloat(bookingSelect.paid).toFixed(2);
+    valorRestante = Intl.NumberFormat('pt-BR').format(valorRestante);
+
+    let valorPago = parseFloat(bookingSelect.total).toFixed(2) - parseFloat(bookingSelect.paid).toFixed(2);
+    valorPago = Intl.NumberFormat('pt-BR').format(valorPago);
+
+    $(".value_booking").html(`R$ ${valorTotal}`);
+
+    $(".value_pay_s").html(`<i class="fa fa-plus"> </i>R$ <span class="mt-5 value_pay">0,00</span>`);
+    if (valorPago != null && valorPago > 0) {
+        $(".value_pay_s").html(`<i class="fa fa-plus"> </i> R$ <span class="mt-5 value_pay">${valorPago}</span>`);
+    }
+
+    $('.value_paid_s').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid">0,00</span>`);
+    if (valorRestante != null && valorRestante > 0) {
+        $('.value_paid_s').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid">${valorRestante}</span>`);
+    }
+}
+
+function loadTableModalPayment(items) {
+    let html = '';
+    for (let i = 0; i < items.length; i++) {
+        let item = items[i];
+
+        let value = parseFloat(item.payment_value).toFixed(2);
+        value = Intl.NumberFormat('pt-BR').format(value);
+
+        html += `<tr>
+                    <td><i class="fa fa-dollar fa-2x"></i></td>
+                    <td>${item.payment_type_rate.name}</td>
+                    <td><b>R$ <span class="moeda-real">${value}</span></b></td>
+                    <td>${item.payment_method.name}</td>
+                    <td>${new moment(item.created_at).format('DD/MM/YYYY')}</td>
+                </tr>`;
+    }
+    $(".table-items-payment-modal > tbody:last-child").html(html);
 }
