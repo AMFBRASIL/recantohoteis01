@@ -224,7 +224,7 @@
                         <b>Tipo :</b> ${item.classification.name} <br>
                         <b>Caracteristica :</b>  ${item.characteristic.name}  <br>
                         <hr>
-                        <img src='https://dev.recantohoteis.com.br/quartoresort.jpg' width='550' height='300'>
+                        <img src='${item.imageFeaturePath}' width='550' height='300'>
                     `;
                     break;
                 case "BLOQUEADO":
@@ -234,7 +234,7 @@
                         <b>Andar :</b> ${item.room.building_floor.name} <br>
                         <b>Tipo :</b> ${item.classification.name} <br>
                         <b>Caracteristica :</b>  ${item.characteristic.name}  <br>
-                        <hr>  <img src='https://dev.recantohoteis.com.br/quartoresort.jpg' width='550' height='300'>
+                        <hr>  <img src='${item.imageFeaturePath}' width='550' height='300'>
                     `
                     break
                 case "MANUTENÇÃO":
@@ -245,7 +245,7 @@
                         <b>Andar :</b> ${item.room.building_floor.name} <br>
                         <b>Tipo :</b> ${item.classification.name} <br>
                         <b>Caracteristica :</b>  ${item.characteristic.name}  <br>
-                        <hr>  <img src='https://dev.recantohoteis.com.br/quartoresort.jpg' width='550' height='300'>
+                        <hr>  <img src='${item.imageFeaturePath}' width='550' height='300'>
                     `;
                     break
                 case "LIMPEZA/USO":
@@ -257,7 +257,7 @@
                         <b>Tipo :</b> ${item.classification.name} <br>
                         <b>Caracteristica :</b> ${item.characteristic.name} <br>
                         <hr>
-                        <img src='https://dev.recantohoteis.com.br/quartoresort.jpg' width='550' height='300'>
+                        <img src='${item.imageFeaturePath}' width='550' height='300'>
                     `
                     break
                 case "OCUPADO":
@@ -271,7 +271,7 @@
                         <b>Tipo :</b> ${item.classification.name} <br>
                         <b>Caracteristica :</b> ${item.characteristic.name} <br>
                         <hr>
-                        <img src='https://dev.recantohoteis.com.br/quartoresort.jpg' width='550' height='300'>
+                        <img src='${item.imageFeaturePath}' width='550' height='300'>
                     `
                     break;
             }

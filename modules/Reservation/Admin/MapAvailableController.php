@@ -9,6 +9,7 @@ use Modules\Classification\Models\Classification;
 use Modules\Hotel\Models\Building;
 use Modules\Hotel\Models\BuildingFloor;
 use Modules\Hotel\Models\HotelRoom;
+use Modules\Media\Helpers\FileHelper;
 use Modules\Room\Models\Room;
 use Modules\Situation\Models\Situation;
 
@@ -104,6 +105,11 @@ class MapAvailableController extends AdminController
                 $h->characteristic;
                 $h->classification;
                 $h->situation;
+                if(!empty($h->image_id)){
+                    $h->imageFeaturePath = (FileHelper::url($h->image_id, 'medium'));
+                }else{
+                    $h->imageFeaturePath = "";
+                }
                 if(!empty($room) && $room->building_id == $b->id){
                     $h->room->building;
                     $h->room->buildingFloor;

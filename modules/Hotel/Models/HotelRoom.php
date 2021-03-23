@@ -27,6 +27,7 @@ class HotelRoom extends Bookable
         'classification_id',
         'characteristic_id',
         'room_id',
+        'imageFeaturePath'
     ];
 
     protected $seo_type = 'hotel_room';
