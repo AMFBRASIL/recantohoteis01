@@ -49,5 +49,7 @@ Route::group(['prefix' => 'sale'], function () {
     Route::get('getSales/', 'SaleController@getSales')->name('pos.admin.sale.getSales');
 
     Route::get('getSalesCard/', 'SaleController@getSalesCard')->name('pos.admin.sale.getSalesCard');
+
+    Route::post('/bulkSituation/{id}', 'SaleController@bulkSituation')->name('pos.admin.sale.bulkSituation');
 });
 

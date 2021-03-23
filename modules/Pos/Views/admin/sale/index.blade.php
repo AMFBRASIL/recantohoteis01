@@ -15,12 +15,14 @@
         <div class="filter-div d-flex justify-content-between">
             <div class="col-left">
                 @if(!empty($rows))
-                    <form method="post" action="{{url('admin/module/pos/sale/bulkEdit')}}"
+                    <form method="post" action="{{url('admin/module/pos/sale/bulkSituation')}}"
                           class="filter-form filter-form-left d-flex justify-content-start">
-                        {{csrf_field()}}
+                        @csrf
                         <select name="action" class="form-control">
-                            <option value="">{{__(" Ação em Massa ")}}</option>
-                            <option value="delete">{{__(" Delete ")}}</option>
+                            <option value="">Ação em Massa</option>
+                            @foreach ($situationList as $option)
+                                <option value="{{$option->id}}">{{$option->name}}</option>
+                            @endforeach
                         </select>
                         <button data-confirm="{{__("Do you want to delete?")}}"
                                 class="btn-info btn btn-icon dungdt-apply-form-btn"
@@ -48,6 +50,9 @@
                 </form>
             </div>
         </div>
+        <div class="text-right">
+            <p><i>{{__('Found :total items',['total'=>$rows->total()])}}</i></p>
+        </div>
         <div class="panel">
             <div class="panel-body">
                 <form action="" class="bravo-form-item">
@@ -67,7 +72,7 @@
                                 <th width="60px">Situação Itens</th>
                                 <th width="50px">Form Pgto</th>
                                 <th width="50px">NSU</th>
-                                <th width="50px">Itens </th>
+                                <th width="50px">Itens</th>
                                 <th width="100px">Total</th>
                                 <th width="100px">Observação</th>
                             </tr>
@@ -78,39 +83,43 @@
                                     <tr>
                                         <td><input type="checkbox" name="ids[]" class="check-item" value="{{$row->id}}">
                                         <td class="title">
-                                            <a href="#">#{{$row->id}}</a>
+                                            #{{$row->id}}
                                         </td>
                                         <td class="title client">
                                             @if ($row->user)
-                                                <a href="#" class="review-count-approved" data-value="{{$row->user_id}}">
+                                                <a href="#" class="review-count-approved"
+                                                   data-value="{{$row->user_id}}">
                                                     {{$row->user->getNameAttribute()}}
                                                 </a>
                                             @endif
                                         </td>
                                         <td class="title">
                                             @if ($row->room)
-                                                <span class="badge badge-primary">SIM - {{$row->room->number}}</span>
+                                                <span class="badge badge-success">{{$row->room->number}}</span>
                                             @else
                                                 <span class="badge badge-danger">NAO</span>
                                             @endif
                                         </td>
                                         <td class="title">
                                             @if ($row->day_user == 1)
-                                                <span class="badge badge-primary">SIM</span>
+                                                <span class="badge badge-success">SIM</span>
                                             @else
                                                 <span class="badge badge-danger">NAO</span>
                                             @endif
                                         </td>
                                         <td class="title card-modal-open">
-                                            <a href="#" class="review-count-approved" data-value="{{$row->card_number}}">
+                                            <a href="#" class="review-count-approved"
+                                               data-value="{{$row->card_number}}">
                                                 {{$row->card_number}}
                                             </a>
                                         </td>
                                         <td class="title">
-                                            <a href="#">{{$row->sales_date->format('d/m/y H:m')}}</a>
+                                            <b>{{$row->sales_date->format('d/m/y H:m:s')}}</b>
                                         </td>
                                         <td class="title">
-                                            <a>PDV</a>
+                                            @if ($row->pointSales)
+                                                {{$row->pointSales->name}}
+                                            @endif
                                         </td>
                                         <td class="title">
                                             @if ($row->situation)
@@ -132,7 +141,12 @@
                                         </td>
 
                                         <td class="title">
-                                            <a href="#">NSU</a>
+                                            @if (empty($row->card_transaction_number))
+                                                <span class="badge  badge-primary">...</span>
+                                            @else
+                                                <span
+                                                    class="badge  badge-primary">{{$row->card_transaction_number}}</span>
+                                            @endif
                                         </td>
 
                                         <td class="title product">
@@ -142,7 +156,8 @@
                                         </td>
 
                                         <td class="title product">
-                                            <a href="#" class="review-count-pendente moeda-real" data-value="{{$row->id}}">
+                                            <a href="#" class="review-count-pendente moeda-real"
+                                               data-value="{{$row->id}}">
                                                 R$ {{$row->total_value}}
                                             </a>
                                         </td>
@@ -258,7 +273,7 @@
                             color: #9FA8DA
                         }
 
-                        th {
+                        th-card {
                             font-size: 14px;
                             color: #D50000
                         }
@@ -287,43 +302,6 @@
                             font-size: 16px;
                             color: #1A237E
                         }
-
-                        .transaction {
-                            font-size: 13px
-                        }
-
-                        .progress {
-                            height: 3px !important
-                        }
-
-                        .money {
-                            color: #9FA8DA
-                        }
-
-                        .goal {
-                            font-size: 17px;
-                            color: #D50000;
-                            font-weight: 400
-                        }
-
-                        .revenue {
-                            font-size: 14px;
-                            color: #311B92;
-                            font-weight: 500
-                        }
-
-                        .orders {
-                            font-size: 14px;
-                            color: #311B92;
-                            font-weight: 500
-                        }
-
-                        .customer {
-                            font-size: 14px;
-                            color: #311B92;
-                            font-weight: 500
-                        }
-
                     </style>
 
                     <!-- Modal body -->
@@ -334,7 +312,7 @@
         </div>
     </div>
 
-    <div id="productSituation" class="modal fade"  role="dialog" aria-hidden="true">
+    <div id="productSituation" class="modal fade" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
 
             <!-- Modal content-->
@@ -346,7 +324,8 @@
                 </div>
 
                 <!-- Modal body-->
-                <div class="modal-body"><style>
+                <div class="modal-body">
+                    <style>
                         .heading1 {
                             font-size: 16px;
                             color: #1a237e;
@@ -357,7 +336,7 @@
                             color: #9fa8da;
                         }
 
-                        th {
+                        .th-productStituation {
                             font-size: 14px;
                             color: #d50000;
                         }
@@ -386,42 +365,6 @@
                             font-size: 16px;
                             color: #1a237e;
                         }
-
-                        .transaction {
-                            font-size: 13px;
-                        }
-
-                        .progress {
-                            height: 3px !important;
-                        }
-
-                        .money {
-                            color: #9fa8da;
-                        }
-
-                        .goal {
-                            font-size: 17px;
-                            color: #d50000;
-                            font-weight: 400;
-                        }
-
-                        .revenue {
-                            font-size: 14px;
-                            color: #311b92;
-                            font-weight: 500;
-                        }
-
-                        .orders {
-                            font-size: 14px;
-                            color: #311b92;
-                            font-weight: 500;
-                        }
-
-                        .customer {
-                            font-size: 14px;
-                            color: #311b92;
-                            font-weight: 500;
-                        }
                     </style>
 
                     <!-- Modal body -->
@@ -432,30 +375,34 @@
                                     <div class="p-1 bg-white">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <h6 id="title-sales-situation-modal" class="heading1"></h6>
-                                            <div class="d-flex flex-row align-items-center text-muted"><span class="days mr-2">Lista dos Itens</span> <i class="fa fa-angle-down"></i></div>
+                                            <div class="d-flex flex-row align-items-center text-muted"><span
+                                                    class="days mr-2">Lista dos Itens</span> <i
+                                                    class="fa fa-angle-down"></i></div>
                                         </div>
                                         <hr>
                                         <div class="table-responsive">
-                                            <table id="table-items-sales-situation-modal" class="table table-borderless">
+                                            <table id="table-items-sales-situation-modal"
+                                                   class="table table-borderless">
                                                 <thead>
-                                                    <tr>
-                                                        <th>Item</th>
-                                                        <th>Valor</th>
-                                                        <th>Qtde</th>
-                                                        <th>Situação</th>
-                                                        <th>Data</th>
-                                                    </tr>
+                                                <tr>
+                                                    <th class="th-productStituation">Item</th>
+                                                    <th class="th-productStituation">Valor</th>
+                                                    <th class="th-productStituation">Qtde</th>
+                                                    <th class="th-productStituation">Situação</th>
+                                                    <th class="th-productStituation">Data</th>
+                                                </tr>
                                                 </thead>
                                                 <tbody>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="bg-white border-top p-3"><span class="solditems"> ASSINADO POR : <b> ANDERSON MAUTONE </b> </span></div>
+                                    <div class="bg-white border-top p-3"><span class="solditems"> ASSINADO POR : <b> ANDERSON MAUTONE </b> </span>
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="p-3 bg-white">
-                                        <h6 class="account">Valor Total Pedido</h6>
+                                        <h6 class="account"><b>Valor Total Pedido</b></h6>
                                         <span id="value-sales-situation-modal" class="mt-5 restante"></span>
                                     </div>
                                 </div>
@@ -471,7 +418,7 @@
                     </div>
                     <script src="{{asset('/libs/jquery-3.3.1.min.js')}}"></script>
                     <script>
-                        $('#printDetalhesReserva').click(function(){
+                        $('#printDetalhesReserva').click(function () {
                             $("#printThis").printThis({
                                 debug: false,
                                 importCSS: true,
@@ -516,7 +463,7 @@
                             color: #9FA8DA
                         }
 
-                        th {
+                        .th-product {
                             font-size: 14px;
                             color: #D50000
                         }
@@ -555,43 +502,6 @@
                             font-size: 16px;
                             color: #1A237E
                         }
-
-                        .transaction {
-                            font-size: 13px
-                        }
-
-                        .progress {
-                            height: 3px !important
-                        }
-
-                        .money {
-                            color: #9FA8DA
-                        }
-
-                        .goal {
-                            font-size: 17px;
-                            color: #D50000;
-                            font-weight: 400
-                        }
-
-                        .revenue {
-                            font-size: 14px;
-                            color: #311B92;
-                            font-weight: 500
-                        }
-
-                        .orders {
-                            font-size: 14px;
-                            color: #311B92;
-                            font-weight: 500
-                        }
-
-                        .customer {
-                            font-size: 14px;
-                            color: #311B92;
-                            font-weight: 500
-                        }
-
                     </style>
                     <!-- Modal body -->
                     <div class="modal-body sale-information">
@@ -612,11 +522,11 @@
                                             <table id="tab-sales" class="table table-borderless">
                                                 <thead>
                                                 <tr>
-                                                    <th></th>
-                                                    <th>Item</th>
-                                                    <th>valor</th>
-                                                    <th>Qtde</th>
-                                                    <th>Data</th>
+                                                    <th class="th-product"></th>
+                                                    <th class="th-product">Item</th>
+                                                    <th class="th-product">valor</th>
+                                                    <th class="th-product">Qtde</th>
+                                                    <th class="th-product">Data</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
