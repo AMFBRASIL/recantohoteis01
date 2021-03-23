@@ -9,7 +9,6 @@ $(function ($) {
         $('#internal_observations').html(observacao);
     });
 
-
     $(".client > a").on('click', (e) => {
         $(".user-information").empty();
         let id = e.target.getAttribute("data-value");
@@ -29,7 +28,6 @@ $(function ($) {
             }
         });
     });
-
 
     $(".card-modal-open > a").on('click', (e) => {
         $(".card-modal-body").empty();
@@ -72,7 +70,6 @@ $(function ($) {
             }
         });
     });
-
 
     $(".product > a").on('click', (e) => {
         let id = e.target.getAttribute('data-value');

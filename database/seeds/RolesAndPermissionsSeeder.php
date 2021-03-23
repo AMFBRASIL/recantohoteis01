@@ -67,6 +67,13 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('budget_delete');
         Permission::findOrCreate('budget_manage_others');
 
+        //paymentTypeRate
+        Permission::findOrCreate('paymentTypeRate_view');
+        Permission::findOrCreate('paymentTypeRate_create');
+        Permission::findOrCreate('paymentTypeRate_update');
+        Permission::findOrCreate('paymentTypeRate_delete');
+        Permission::findOrCreate('paymentTypeRate_manage_others');
+
         // Reservation
         Permission::findOrCreate('reservation_view');
 

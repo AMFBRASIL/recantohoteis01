@@ -2,22 +2,19 @@
 namespace Modules\Booking\Models;
 
 use App\BaseModel;
+use App\User;
 use Eluceo\iCal\Component\Calendar;
 use Eluceo\iCal\Component\Event;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Mockery\Exception;
 use Modules\Booking\Emails\NewBookingEmail;
 use Modules\Booking\Emails\StatusUpdatedEmail;
 use Modules\Booking\Events\BookingUpdatedEvent;
 use Modules\Hotel\Models\HotelRoomBooking;
 use Modules\Situation\Models\Situation;
-use Modules\Space\Models\Space;
-use Modules\Tour\Models\Tour;
-use App\User;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\User\Models\Wallet\Transaction;
 
 class Booking extends BaseModel
@@ -81,6 +78,7 @@ class Booking extends BaseModel
     public function service()
     {
         $all = get_bookable_services();
+
         if ($this->object_model and !empty($all[$this->object_model])) {
             return $this->hasOne($all[$this->object_model], 'id', 'object_id');
         }

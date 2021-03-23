@@ -1,5 +1,5 @@
-@extends('Layout::empty')
-@section('head')
+<html data-lt-installed="true">
+<head>
     <style type="text/css">
         html, body {
             background: #f0f0f0;
@@ -12,16 +12,18 @@
             max-width: 1025px;
         }
     </style>
-    <script>
-        window.print();
-    </script>
-
-    <div class="print-zone">
-        <div class="container">
-            {!! $contract !!}
-        </div>
+</head>
+<body>
+<div class="print-zone">
+    <div class="container">
+        {!! $contract !!}
     </div>
-@endsection
-@section('footer')
+</div>
+<script>
+    window.print();
+</script>
+</body>
+</html>
 
-@endsection
+
+

@@ -37,6 +37,10 @@ class SaleController extends AdminController
             })->get();
         }
 
+        if ($search = $request->query('situation_id')) {
+            $modelList->where('situation_id', $search)->get();
+        }
+
         $modelList = $modelList->orderby('id', 'asc');
 
         $data = [
@@ -149,7 +153,7 @@ class SaleController extends AdminController
 
         $row->product_composition = $new_product_composition;
 
-        $this->updateCarConsumer($row->card_number, $request->input('value_card'),$request->input('value_consumed'));
+        $this->updateCardConsumer($row->card_number, $request->input('value_card'),$request->input('value_consumed'));
         $this->updateProduct($row->product_composition);
 
         $row->sales_date = new Carbon();
@@ -168,7 +172,7 @@ class SaleController extends AdminController
         }
     }
 
-    function updateCarConsumer($card_number, $value_card, $value_consumed){
+    function updateCardConsumer($card_number, $value_card, $value_consumed){
         $card = ConsumptionCard::query()->where('card_number', '=', $card_number)->first();
 
         $card->value_card = str_replace('.', ',',$value_card);

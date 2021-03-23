@@ -1,7 +1,6 @@
 <?php
 
-
-namespace Modules\Report\Service;
+namespace Modules\Booking\Service;
 
 
 use App\User;
