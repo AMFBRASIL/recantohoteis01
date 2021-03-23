@@ -79,7 +79,7 @@ $(function ($) {
                     alert(data.message);
                 }else{
                     bookingSelect = data.booking;
-                    openModalPayment();
+                    openModalPayment(false);
                     $("#value").modal('show');
                 }
             }
@@ -122,7 +122,7 @@ $(function ($) {
             booking_id: bookingSelect.id
         };
 
-        let url = "/admin/module/report/booking/saveValidation";
+        let url = "/admin/module/reservation/booking/saveValidation";
 
         $.ajax({
             url: url,
@@ -133,7 +133,7 @@ $(function ($) {
                     alert(data.message);
                 }else{
                     $("#validation").modal('hide');
-                    window.location.href = "/admin/module/report/booking/saveValidationIndex";
+                    window.location.href = "/admin/module/reservation/booking/saveValidationIndex";
                 }
             }
         });
@@ -155,7 +155,7 @@ $(function ($) {
                     alert(data.message);
                 }else{
                     bookingSelect = data.booking;
-                    openModalPayment();
+                    openModalPayment(true);
                     $("#payment").modal('show');
                 }
             }
@@ -171,7 +171,7 @@ $(function ($) {
             booking_id: bookingSelect.id
         };
 
-        let url = "/admin/module/report/booking/savePaymentHistory";
+        let url = "/admin/module/reservation/booking/savePaymentHistory";
 
         $.ajax({
             url: url,
@@ -182,7 +182,7 @@ $(function ($) {
                     alert(data.message);
                 }else{
                     $("#validation").modal('hide');
-                    window.location.href = "/admin/module/report/booking/savePaymentHistoryIndex";
+                    window.location.href = "/admin/module/reservation/booking/savePaymentHistoryIndex";
                 }
             }
         });
@@ -362,12 +362,13 @@ function loadModalValue(data){
 function loadModalValidation(){
     if(bookingSelect.is_contract == 1){
         $("#checkEntregue").prop( "checked", true );
+        $('#checkEntregue').bootstrapToggle('on')
         $("#contratoEntregue").show();
-
         $("#contratoEntregue h3").html(new moment(bookingSelect.contract_date).format('DD/MM/YYYY HH:mm:ss'));
         $("#entreguePara").val(bookingSelect.contract_name);
     }else{
         $("#checkEntregue").prop( "checked", false );
+        $('#checkEntregue').bootstrapToggle('off')
         $("#contratoEntregue").hide();
         $("#entreguePara").val('');
         $("#contratoEntregue h3").html(new moment().format('DD/MM/YYYY HH:mm:ss'));
@@ -375,12 +376,13 @@ function loadModalValidation(){
 
     if(bookingSelect.is_signature == 1){
         $("#checkAssinado").prop( "checked", true );
+        $('#checkAssinado').bootstrapToggle('on')
         $("#assinadoContrato").show();
-
         $("#assinadoContrato h3").html(new moment(bookingSelect.signature_date).format('DD/MM/YYYY HH:mm:ss'));
         $("#assinador").val(bookingSelect.signature_name);
     }else{
         $("#checkAssinado").prop( "checked", false );
+        $('#checkAssinado').bootstrapToggle('off')
         $("#assinadoContrato").hide();
         $("#assinador").val('');
         $("#assinadoContrato h3").html(new moment().format('DD/MM/YYYY HH:mm:ss'));
@@ -388,19 +390,20 @@ function loadModalValidation(){
 
     if(bookingSelect.is_commission == 1){
         $("#checkComissao").prop( "checked", true );
+        $('#checkComissao').bootstrapToggle('on')
         $("#paymentCampos").show();
-
         $("#paymentCampos h3").html(new moment(bookingSelect.commission_date).format('DD/MM/YYYY HH:mm:ss'));
         $("#vlrPagoCommission").val(parseFloat(bookingSelect.commission).toFixed(2)).mask('#.##0,00', {reverse: true});
     }else{
         $("#checkComissao").prop( "checked", false );
+        $('#checkComissao').bootstrapToggle('off')
         $("#paymentCampos").hide();
         $("#vlrPagoCommission").val('');
         $("#paymentCampos h3").html(new moment().format('DD/MM/YYYY HH:mm:ss'));
     }
 }
 
-function openModalPayment(){
+function openModalPayment(addValue){
     let data = {
         booking_id: bookingSelect.id,
     };
@@ -413,7 +416,7 @@ function openModalPayment(){
         data: data,
         success: function (data) {
             if(!data.error){
-                loadModalPaymentInformation();
+                loadModalPaymentInformation(addValue);
                 loadTableModalPayment(data.bookingPaymentHistory);
             }else{
                 alert(data.message);
@@ -422,7 +425,10 @@ function openModalPayment(){
     });
 }
 
-function loadModalPaymentInformation() {
+function loadModalPaymentInformation(addValue) {
+
+    let addValueIndent = addValue ? '_add' : '';
+
     let valorTotal = parseFloat(bookingSelect.total).toFixed(2);
     valorTotal = Intl.NumberFormat('pt-BR').format(valorTotal);
 
@@ -434,14 +440,14 @@ function loadModalPaymentInformation() {
 
     $(".value_booking").html(`R$ ${valorTotal}`);
 
-    $(".value_pay_s").html(`<i class="fa fa-plus"> </i>R$ <span class="mt-5 value_pay">0,00</span>`);
+    $(`.value_pay_s${addValueIndent}`).html(`<i class="fa fa-plus"> </i>R$ <span class="mt-5 value_pay${addValueIndent}">0,00</span>`);
     if (valorPago != null && valorPago > 0) {
-        $(".value_pay_s").html(`<i class="fa fa-plus"> </i> R$ <span class="mt-5 value_pay">${valorPago}</span>`);
+        $(`.value_pay_s${addValueIndent}`).html(`<i class="fa fa-plus"> </i> R$ <span class="mt-5 value_pay${addValueIndent}">${valorPago}</span>`);
     }
 
-    $('.value_paid_s').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid">0,00</span>`);
+    $(`.value_paid_s${addValueIndent}`).html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid${addValueIndent}">0,00</span>`);
     if (valorRestante != null && valorRestante > 0) {
-        $('.value_paid_s').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid">${valorRestante}</span>`);
+        $(`.value_paid_s${addValueIndent}`).html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid${addValueIndent}">${valorRestante}</span>`);
     }
 }
 

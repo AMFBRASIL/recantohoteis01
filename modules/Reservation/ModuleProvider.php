@@ -31,6 +31,11 @@ class ModuleProvider extends ModuleServiceProvider
                 'icon'       => 'icon ion-ios-bed',
                 'permission' => 'reservation_view',
                 'children'   => [
+                    'booking'=>[
+                        'url'        => 'admin/module/reservation/booking',
+                        'title'      => __('Reservas'),
+                        'permission' => 'report_view',
+                    ],
                     'pension_type'=>[
                         'url'        => route('pension_type.admin.index'),
                         'title'      => __('Tipo de Pensão'),
