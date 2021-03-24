@@ -134,23 +134,8 @@
         <input type="hidden" class="form-control moeda-real" id="sumTotalCardConsumer" name="value_consumed"
                value="0,00">
     </form>
-    <div class="modal fade login" id="register" tabindex="-1" role="dialog" aria-hidden="true" style="display: none">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content relative">
-                <div class="modal-header">
-                    <h4 class="modal-title">{{__('Cadastre-ser')}}</h4>
-                    <span class="c-pointer" data-dismiss="modal" aria-label="Close">
-                    <i class="input-icon field-icon fa">
-                        <img src="{{url('images/ico_close.svg')}}" alt="close">
-                    </i>
-                </span>
-                </div>
-                <div class="modal-body">
-                    @include('Pos::admin/sale/form-register/index')
-                </div>
-            </div>
-        </div>
-    </div>
+
+    @include('User::admin/form-register/index')
 @endsection
 @section('script.head')
     <link rel="stylesheet" href="{{asset('module//pos/sales/css/detail.css')}}">

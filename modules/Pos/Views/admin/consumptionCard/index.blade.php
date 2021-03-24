@@ -187,23 +187,7 @@
         </div>
     </div>
 
-    <div class="modal fade login" id="register" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content relative">
-                <div class="modal-header">
-                    <h4 class="modal-title">{{__('Cadastre-ser')}}</h4>
-                    <span class="c-pointer" data-dismiss="modal" aria-label="Close">
-                    <i class="input-icon field-icon fa">
-                        <img src="{{url('images/ico_close.svg')}}" alt="close">
-                    </i>
-                </span>
-                </div>
-                <div class="modal-body">
-                    @include('Pos::admin/consumptionCard/form-register/index')
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('User::admin/form-register/index')
 
     <div id="product" class="modal fade" role="dialog" aria-modal="true">
         <div class="modal-dialog modal-dialog-centered modal-xl">
