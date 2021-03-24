@@ -32,7 +32,9 @@ class BookingController extends Controller
                     if (!empty($hotel_room_booking)) {
                         $hotel_room = $hotel_room_booking->room()->first();
                         $room = $hotel_room->room()->first();
-                        $room_description = $hotel_room->title . ' - Bloco ' . $room->building->name . ' - Apto ' . $room->number;
+                        if (!empty($room->building)) {
+                            $room_description = $hotel_room->title . ' - Bloco ' . $room->building->name . ' - Apto ' . $room->number;
+                        }
                     }
 
                     $room_information = [
@@ -120,7 +122,8 @@ class BookingController extends Controller
         }catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage(),
+                'message' => "Reserva não encontrado",
+                'error' => $e->getMessage(),
             ], 200);
         }
     }
