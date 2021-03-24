@@ -62,6 +62,11 @@ $menus = [
                 'title'      => __('Numeracao UH'),
                 'permission' => 'room_view',
             ],
+            'garage'     => [
+                'url'        => route('garage.admin.index'),
+                'title'      => __('Garagem Hotel'),
+                'permission' => 'garage_view',
+            ],
             'paymentTypeRate'     => [
                 'url'        => route('paymentTypeRate.admin.index'),
                 'title'      => __('Tipo de Pagamentos'),
