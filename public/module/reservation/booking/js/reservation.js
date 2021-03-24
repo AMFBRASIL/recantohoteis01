@@ -460,13 +460,12 @@ function loadTableModalPayment(items) {
     for (let i = 0; i < items.length; i++) {
         let item = items[i];
 
-        let value = parseFloat(item.payment_value).toFixed(2);
-        value = Intl.NumberFormat('pt-BR').format(value);
+        let value = parseFloat(item.payment_value)
 
         html += `<tr>
                     <td><i class="fa fa-dollar fa-2x"></i></td>
                     <td>${item.payment_type_rate.name}</td>
-                    <td><b>R$ <span class="moeda-real">${value}</span></b></td>
+                    <td><b>R$ <span class="moeda-real">${formatNumber(value)}</span></b></td>
                     <td>${item.payment_method.name}</td>
                     <td>${new moment(item.created_at).format('DD/MM/YYYY')}</td>
                 </tr>`;
