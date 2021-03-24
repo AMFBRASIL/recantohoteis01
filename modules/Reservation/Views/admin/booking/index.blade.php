@@ -1064,7 +1064,7 @@
 
                         let valorRestanteO = null;
                         let valorPagoO = null;
-                        $('#payment_value').on('blur', function () {
+                        $('#payment_value').on('keyup', function () {
                             if(valorRestanteO == null && valorPagoO == null){
                                 valorRestanteO = parseFloat($(".value_paid_add").text().replace(/[.]/g, '').replace(',', '.'));
                                 valorPagoO = parseFloat($(".value_pay_add").text().replace(/[.]/g, '').replace(',', '.'));

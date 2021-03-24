@@ -13,7 +13,7 @@ class EnquiryController extends AdminController
 
     public function __construct()
     {
-        $this->setActiveMenu('admin/module/report/booking');
+        $this->setActiveMenu('admin/module/report/enquiry');
         parent::__construct();
         $this->enquiryClass = Enquiry::class;
 
