@@ -80,7 +80,9 @@ $(function ($) {
                 }else{
                     bookingSelect = data.booking;
                     openModalPayment(false);
-                    $("#value").modal('show');
+                    setTimeout(()=>{
+                        $("#value").modal('show');
+                    },1650);
                 }
             }
         });
@@ -156,7 +158,9 @@ $(function ($) {
                 }else{
                     bookingSelect = data.booking;
                     openModalPayment(true);
-                    $("#payment").modal('show');
+                    setTimeout(()=>{
+                        $("#payment").modal('show');
+                    },1650);
                 }
             }
         });
@@ -426,6 +430,7 @@ function openModalPayment(addValue){
 }
 
 function loadModalPaymentInformation(addValue) {
+    $('#payment_value').val('');
 
     let addValueIndent = addValue ? '_add' : '';
 
