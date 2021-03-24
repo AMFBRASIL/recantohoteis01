@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Report\Admin;
+namespace Modules\Reservation\Admin;
 
 use DateTime;
 use Illuminate\Http\Request;
@@ -19,7 +19,7 @@ class BookingController extends AdminController
     public function __construct()
     {
         parent::__construct();
-        $this->setActiveMenu('admin/module/report/booking');
+        $this->setActiveMenu('admin/module/reservation/booking');
     }
 
     public function index(Request $request)
@@ -65,12 +65,11 @@ class BookingController extends AdminController
             'paymentMethodList' => PaymentMethod::all(),
             'paymentTypeRateList' => PaymentTypeRate::all(),
         ];
-        return view('Report::admin.booking.index', $data);
+        return view('Reservation::admin.booking.index', $data);
     }
 
     public function saveValidation(Request $request)
     {
-
         $booking = Booking::query()->find($request->booking_id);
 
         if (!empty($booking)) {
@@ -110,7 +109,7 @@ class BookingController extends AdminController
 
     public function saveValidationIndex()
     {
-        return redirect(route('report.admin.booking'))->with('success', __('Validação Atualizada'));
+        return redirect(route('reservation.admin.booking'))->with('success', __('Validação Atualizada'));
     }
 
     public function savePaymentHistory(Request $request)
@@ -183,7 +182,7 @@ class BookingController extends AdminController
 
     public function savePaymentHistoryIndex()
     {
-        return redirect(route('report.admin.booking'))->with('success', __('Pagamento Atualizado'));
+        return redirect(route('reservation.admin.booking'))->with('success', __('Pagamento Atualizado'));
     }
 
     public function bulkEdit(Request $request)

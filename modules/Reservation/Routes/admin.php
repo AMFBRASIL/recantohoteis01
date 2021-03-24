@@ -36,3 +36,13 @@ Route::group(['prefix' => 'mapAvailable'],function () {
     Route::get('findFloorByBuildingID','MapAvailableController@findFloorByBuildingID')->name('mapAvailable.admin.findFloorByBuildingID');
     Route::get('findByFilter','MapAvailableController@findByFilter')->name('mapAvailable.admin.findByFilter');
 });
+
+Route::group(['prefix' => 'booking'], function () {
+    Route::get('/', 'BookingController@index')->name('reservation.admin.booking');
+    Route::get('/email_preview/{id}', 'BookingController@email_preview')->name('reservation.booking.admin.email_preview');
+    Route::post('/bulkSituation/{id}', 'BookingController@bulkSituation')->name('reservation.booking.admin.bulkSituation');
+    Route::post('/saveValidation', 'BookingController@saveValidation')->name('reservation.booking.admin.saveValidation');
+    Route::get('/saveValidationIndex', 'BookingController@saveValidationIndex')->name('reservation.booking.admin.saveValidationIndex');
+    Route::post('/savePaymentHistory', 'BookingController@savePaymentHistory')->name('reservation.booking.admin.savePaymentHistory');
+    Route::get('/savePaymentHistoryIndex', 'BookingController@savePaymentHistoryIndex')->name('reservation.booking.admin.savePaymentHistoryIndex');
+});

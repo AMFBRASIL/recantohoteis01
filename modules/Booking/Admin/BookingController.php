@@ -19,102 +19,110 @@ class BookingController extends Controller
     {
         $booking_id = $request->booking_id;
 
-        if (!is_null($booking_id)) {
-            $booking = Booking::query()->find($booking_id);
+        try {
 
-            if (!empty($booking)) {
+            if (!is_null($booking_id)) {
+                $booking = Booking::query()->find($booking_id);
 
-                $hotel_room_booking = HotelRoomBooking::query()->where('booking_id', $booking->id)->first();
-                $room_description = '';
+                if (!empty($booking)) {
 
-                if (!empty($hotel_room_booking)){
-                    $hotel_room = $hotel_room_booking->room()->first();
-                    $room = $hotel_room->room()->first();
-                    $room_description = $hotel_room->title . ' - Bloco ' . $room->building->name . ' - Apto ' . $room->number;
-                }
+                    $hotel_room_booking = HotelRoomBooking::query()->where('booking_id', $booking->id)->first();
+                    $room_description = '';
 
-                $room_information = [
-                    'room' => $room_description,
-                    'persons' => ($booking->getMeta('adults') + $booking->getMeta('children')),
-                    'adults' =>  $booking->getMeta('adults'),
-                    'total' => $booking->total,
-                ];
+                    if (!empty($hotel_room_booking)) {
+                        $hotel_room = $hotel_room_booking->room()->first();
+                        $room = $hotel_room->room()->first();
+                        $room_description = $hotel_room->title . ' - Bloco ' . $room->building->name . ' - Apto ' . $room->number;
+                    }
 
-                $user = User::query()->where([
-                    ['first_name', '=', $booking->first_name],
-                    ['last_name', '=', $booking->last_name],
-                    ['email', '=', $booking->email],
-                ])->first();
+                    $room_information = [
+                        'room' => $room_description,
+                        'persons' => ($booking->getMeta('adults') + $booking->getMeta('children')),
+                        'adults' => $booking->getMeta('adults'),
+                        'total' => $booking->total,
+                    ];
 
-                $company_name = '';
+                    $user = User::query()->where([
+                        ['first_name', '=', $booking->first_name],
+                        ['last_name', '=', $booking->last_name],
+                        ['email', '=', $booking->email],
+                    ])->first();
 
-                if ($user->company_id) {
-                    $company_name = Company::query()->find($user->company_id)->titile;
-                }
+                    $company_name = '';
 
-                $card = ConsumptionCard::query()->where('user_id', $user->id)->first();
-                $itemsSales = [];
-                if (!empty($card)) {
-                    $sales = Sale::query()->where('card_number', '=', $card->card_number)->get();
+                    if ($user->company_id) {
+                        $company_name = Company::query()->find($user->company_id)->titile;
+                    }
 
-                    foreach ($sales as $s) {
-                        foreach ($s->product_composition as $product) {
-                            $item = [
-                                'sale_id' => $s->id,
-                                'title' => $product['title'],
-                                'price' => $product['price'],
-                                'quantity' => $product['quantity'],
-                                'created_at' => $s->created_at->format('d/m/y h:m:s'),
-                            ];
+                    $card = ConsumptionCard::query()->where('user_id', $user->id)->first();
+                    $itemsSales = [];
+                    if (!empty($card)) {
+                        $sales = Sale::query()->where('card_number', '=', $card->card_number)->get();
 
-                            array_push($itemsSales, $item);
+                        foreach ($sales as $s) {
+                            foreach ($s->product_composition as $product) {
+                                $item = [
+                                    'sale_id' => $s->id,
+                                    'title' => $product['title'],
+                                    'price' => $product['price'],
+                                    'quantity' => $product['quantity'],
+                                    'created_at' => $s->created_at->format('d/m/y h:m:s'),
+                                ];
+
+                                array_push($itemsSales, $item);
+                            }
                         }
                     }
+
+                    $d1 = new Carbon($booking->start_date);
+                    $d2 = new Carbon($booking->end_date);
+
+                    $diff = $d2->diff($d1);
+                    return response()->json([
+                        'success' => true,
+                        'data' => [
+                            'booking_id' => $booking->id,
+                            'booking_type' => $booking->object_model,
+                            'booking_detail' => [
+                                'checkin' => (new Carbon($booking->start_date))->format('d/m/y  H:m'),
+                                'checkout' => (new Carbon($booking->end_date))->format('d/m/y  H:m'),
+                                'nights' => $diff->days,
+                                'adults' => $booking->getMeta('adults'),
+                                'children' => $booking->getMeta('children'),
+                                'status' => [
+                                    'name' => empty($booking->situation) ? '' : $booking->situation->name,
+                                    'label' => empty($booking->situation) ? '' : $booking->situation->label,
+                                ]
+                            ],
+                            'billing' => [
+                                'name' => $user->first_name . ' ' . $user->last_name,
+                                'company' => $company_name,
+                                'address' => $booking->address . ', ' . $booking->address2,
+                                'complement' => $booking->city . ' - ' . $booking->state . ' - CEP: ' . $booking->zip_code,
+                                'phone' => $booking->phone,
+                                'email' => $booking->email,
+                            ],
+                            'room_information' => $room_information,
+                            'itemsSales' => $itemsSales,
+                        ]
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => "Reserva não encontrado"
+                    ], 200);
                 }
-
-                $d1 = new Carbon($booking->start_date);
-                $d2 = new Carbon($booking->end_date);
-
-                $diff = $d2->diff($d1);
-                return response()->json([
-                    'success' => true,
-                    'data' => [
-                        'booking_id' => $booking->id,
-                        'booking_type' => $booking->object_model,
-                        'booking_detail' => [
-                            'checkin' => (new Carbon($booking->start_date))->format('d/m/y  H:m'),
-                            'checkout' => (new Carbon($booking->end_date))->format('d/m/y  H:m'),
-                            'nights' => $diff->days,
-                            'adults' =>  $booking->getMeta('adults'),
-                            'children' =>  $booking->getMeta('children'),
-                            'status' => [
-                                'name' => empty($booking->situation) ? '' : $booking->situation->name,
-                                'label' => empty($booking->situation) ? '' : $booking->situation->label,
-                            ]
-                        ],
-                        'billing' => [
-                            'name' => $user->first_name . ' ' . $user->last_name,
-                            'company' => $company_name,
-                            'address' => $booking->address . ', ' . $booking->address2,
-                            'complement' => $booking->city . ' - ' . $booking->state . ' - CEP: ' . $booking->zip_code,
-                            'phone' => $booking->phone,
-                            'email' => $booking->email,
-                        ],
-                        'room_information' => $room_information,
-                        'itemsSales' => $itemsSales,
-                    ]
-                ], 200);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => "Reserva não encontrado"
-                ], 200);
             }
+            return response()->json([
+                'success' => false,
+                'message' => "Reserva não encontrado"
+            ], 200);
+        }catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 200);
         }
-        return response()->json([
-            'success' => false,
-            'message' => "Reserva não encontrado"
-        ], 200);
     }
 
     public function getHotelRoomByUserID(Request $request)

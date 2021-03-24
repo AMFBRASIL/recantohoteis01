@@ -11,7 +11,7 @@
         <div class="filter-div d-flex justify-content-between">
             <div class="col-left">
                 @if(!empty($booking_update))
-                    <form method="post" action="{{url('admin/module/report/booking/bulkSituation')}}"
+                    <form method="post" action="{{url('admin/module/reservation/booking/bulkSituation')}}"
                           class="filter-form filter-form-left d-flex justify-content-start">
                         @csrf
                         <select name="action" class="form-control">
@@ -164,16 +164,19 @@
                                             </button>
                                             <div class="dropdown-menu" style="">
                                                 <a class="dropdown-item action-detail" href="#" idreserva="100"
-                                                   data-value="{{$row->id}}"> Detalhes
-                                                    da Reserva</a>
-                                                <a class="dropdown-item" href="#">Acessar a
-                                                    conta</a>
+                                                   data-value="{{$row->id}}">
+                                                    <i class="fa fa-info-circle"></i> Detalhes da Reserva
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <i class="fa fa-list"></i> Acessar a conta
+                                                </a>
                                                 <a class="dropdown-item action-validation" href="#"
-                                                   data-value="{{$row->id}}">Validações</a>
+                                                   data-value="{{$row->id}}">
+                                                    <i class="fa fa-check"></i> Validações
+                                                </a>
                                                 <a class="dropdown-item action-payment" href="#"
-                                                   data-value="{{$row->id}}"> <i
-                                                        class="fa fa-dollar"></i>
-                                                    Receber Valor</a>
+                                                   data-value="{{$row->id}}">
+                                                    <i class="fa fa-dollar"></i> Receber Valor</a>
                                             </div>
                                         </div>
                                     </td>
@@ -279,29 +282,30 @@
                         </div>
                     </div>
                     <script src="{{asset('/libs/jquery-3.3.1.min.js')}}"></script>
-                    <script src="{{asset('libs/fancybox/js/jquery.fancybox.js')}}"></script>
                     <script>
-                        $('#printDetailBooking').click(function () {
-                            $("#printThis").printThis({
-                                debug: false,
-                                importCSS: true,
-                                importStyle: true,
-                                printContainer: true,
-                                pageTitle: "Recanto Hoteis S.A",
-                                removeInline: false,
-                                printDelay: 10,
-                                header: null,
-                                formValues: true
+                        $(function () {
+                            $('#printDetailBooking').click(function () {
+                                $("#printThis").printThis({
+                                    debug: false,
+                                    importCSS: true,
+                                    importStyle: true,
+                                    printContainer: true,
+                                    pageTitle: "Recanto Hoteis S.A",
+                                    removeInline: false,
+                                    printDelay: 10,
+                                    header: null,
+                                    formValues: true
+                                });
                             });
-                        });
 
-                        $("[data-fancybox]").fancybox({
-                            iframe: {
-                                css: {
-                                    width: '100%'
+                            $("[data-fancybox]").fancybox({
+                                iframe: {
+                                    css: {
+                                        width: '100%'
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        })
                     </script>
                 </div>
             </div>
@@ -665,14 +669,15 @@
                         <div class="row">
                             <div class="col-sm-4 col-md-4 ">
                                 <div class="dashboard-report-card card purple link-container">
-                                    <div class="card-content" style="cursor:pointer">
+                                    <div class="card-content" dataid="111222" idstatus="1" style="cursor:pointer">
                                         <span class="card-title">LIBERAÇÃO</span>
                                         <span class="card-amount">CONTRATO</span>
                                         <span class="card-desc">ENTREGUE AO CLIENTE?</span>
                                     </div>
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" id="checkEntregue" data-toggle="toggle" data-on="1"
-                                               data-off="0" data-onstyle="success" data-offstyle="danger">
+                                        <input id="checkEntregue" type="checkbox"
+                                               data-toggle="toggle" data-on="S" data-off="N"
+                                               data-onstyle="success" data-offstyle="danger">
                                     </div>
                                 </div>
                             </div>
@@ -684,8 +689,9 @@
                                         <span class="card-desc">ASSINADO PELO CLIENTE?</span>
                                     </div>
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" id="checkAssinado" data-toggle="toggle" data-on="1"
-                                               data-off="0" data-onstyle="success" data-offstyle="danger">
+                                        <input id="checkAssinado" type="checkbox"
+                                               data-toggle="toggle" data-on="S" data-off="N"
+                                               data-onstyle="success" data-offstyle="danger">
                                     </div>
                                 </div>
                             </div>
@@ -697,8 +703,9 @@
                                         <span class="card-desc">COMISSAO PAGA?</span>
                                     </div>
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" id="checkComissao" data-toggle="toggle" data-on="S"
-                                               data-off="N" data-onstyle="success" data-offstyle="danger">
+                                        <input id="checkComissao" type="checkbox"
+                                               data-toggle="toggle" data-on="S" data-off="N"
+                                               data-onstyle="success" data-offstyle="danger">
                                     </div>
                                 </div>
                             </div>
@@ -792,29 +799,31 @@
                         </div>
                     </div>
                     <script>
-                        $('#checkComissao').change(function () {
-                            if ($('#checkComissao').prop('checked')) {
-                                $("#paymentCampos").show();
-                            } else {
-                                $("#paymentCampos").hide();
-                            }
-                        });
+                        $(function () {
+                            $('#checkComissao').change(function () {
+                                if ($('#checkComissao').prop('checked')) {
+                                    $("#paymentCampos").show();
+                                } else {
+                                    $("#paymentCampos").hide();
+                                }
+                            });
 
-                        $('#checkAssinado').change(function () {
-                            if ($('#checkAssinado').prop('checked')) {
-                                $("#assinadoContrato").show();
-                            } else {
-                                $("#assinadoContrato").hide();
-                            }
-                        });
+                            $('#checkAssinado').change(function () {
+                                if ($('#checkAssinado').prop('checked')) {
+                                    $("#assinadoContrato").show();
+                                } else {
+                                    $("#assinadoContrato").hide();
+                                }
+                            });
 
-                        $('#checkEntregue').change(function () {
-                            if ($('#checkEntregue').prop('checked')) {
-                                $("#contratoEntregue").show();
-                            } else {
-                                $("#contratoEntregue").hide();
-                            }
-                        });
+                            $('#checkEntregue').change(function() {
+                                if ($('#checkEntregue').prop('checked')) {
+                                    $("#contratoEntregue").show();
+                                } else {
+                                    $("#contratoEntregue").hide();
+                                }
+                            })
+                        })
                     </script>
                 </div>
             </div>
@@ -994,13 +1003,13 @@
                                     <div class="p-2 py-2 bg-white">
                                         <div class="p-2 bg-white">
                                             <h6 class="account">Valor Total Pago</h6>
-                                            <span class="mt-5 balance value_pay_s"></span>
+                                            <span class="mt-5 balance value_pay_s_add"></span>
                                         </div>
                                     </div>
                                     <div class="p-3 bg-white">
                                         <h6 class="account">Valor Total Restante</h6>
                                         <div>
-                                            <span class="mt-5 restante value_paid_s">
+                                            <span class="mt-5 restante value_paid_s_add">
                                             </span>
                                         </div>
                                     </div>
@@ -1057,11 +1066,11 @@
                         let valorPagoO = null;
                         $('#payment_value').on('blur', function () {
                             if(valorRestanteO == null && valorPagoO == null){
-                                valorRestanteO = parseFloat($(".value_paid").text().replace(/[.]/g, '').replace(',', '.'));
-                                valorPagoO = parseFloat($(".value_pay").text().replace(/[.]/g, '').replace(',', '.'));
+                                valorRestanteO = parseFloat($(".value_paid_add").text().replace(/[.]/g, '').replace(',', '.'));
+                                valorPagoO = parseFloat($(".value_pay_add").text().replace(/[.]/g, '').replace(',', '.'));
                             }
-                            let valorRestante = parseFloat($(".value_paid").text().replace(/[.]/g, '').replace(',', '.'));
-                            let valorPago = parseFloat($(".value_pay").text().replace(/[.]/g, '').replace(',', '.'));
+                            let valorRestante = valorRestanteO
+                            let valorPago = valorPagoO
                             let getPriceAdd = $('#payment_value').val().replace(/[.]/g, '').replace(',', '.');
                             let priceAdd = parseFloat(getPriceAdd != '' ? getPriceAdd : 0);
 
@@ -1069,26 +1078,38 @@
                             let totalValores = (valorRestante - priceAdd);
                             let totalPagoAtualizado = (priceAdd + valorPago);
 
+                            console.log({
+                                valorRestanteO:valorRestanteO,
+                                valorPagoO:valorPagoO,
+                                valorRestante:valorRestante,
+                                valorPago:valorPago,
+                                getPriceAdd:getPriceAdd,
+                                priceAdd:priceAdd,
+                                totalPagoAtualizado : totalPagoAtualizado,
+                                totalValores : totalValores
+                            })
+
                             totalPagoAtualizado = Intl.NumberFormat('pt-BR').format(totalPagoAtualizado);
                             totalValores = Intl.NumberFormat('pt-BR').format(totalValores);
 
-                            $('.value_pay_s').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_pay">${totalPagoAtualizado}</span>`);
+
+                            $('.value_pay_s_add').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_pay_add">${totalPagoAtualizado}</span>`);
 
                             if (totalValores < 0) {
-                                $('.value_paid_s').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid">${totalValores}</span>`);
+                                $('.value_paid_s_add').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid_add">${totalValores}</span>`);
                             } else {
                                 if (totalValores == 0) {
-                                    $('.value_paid_s').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid">0,00</span>`);
+                                    $('.value_paid_s_add').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid_add">0,00</span>`);
                                 }else{
-                                    $('.value_paid_s').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_paid">${totalValores}</span>`);
+                                    $('.value_paid_s_add').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_paid_add">${totalValores}</span>`);
                                 }
                             }
 
                             if (valorRestante < priceAdd) {
                                 alert("O Valor a pagar nao poderá ser maior que valor restante.");
                                 $('#payment_value').val("");
-                                $('.value_paid_s').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid">${valorRestanteO}</span>`);
-                                $('.value_pay_s').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_pay">${valorPagoO}</span>`);
+                                $('.value_paid_s_add').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid_add">${valorRestanteO}</span>`);
+                                $('.value_pay_s_add').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_pay_add">${valorPagoO}</span>`);
                             }
                         });
                     </script>
@@ -1100,11 +1121,13 @@
 @endsection
 @section('script.head')
     <link rel="stylesheet" href="{{asset('libs/fancybox/css/jquery.fancybox.css')}}"/>
+    <link rel="stylesheet" href="{{asset('libs/bootstrap4-toggle-3.6.1/css/bootstrap4-toggle.css')}}"/>
 @endsection
 @section('script.body')
     <script src="{{asset('js/printthis.js')}}"></script>
+    <script src="{{asset('libs/bootstrap4-toggle-3.6.1/js/bootstrap4-toggle.js')}}"></script>
     <script src="{{asset('libs/fancybox/js/jquery.fancybox.js')}}"></script>
-    <script src="{{asset('module/reports/booking/js/reservation.js')}}"></script>
+    <script src="{{asset('module/reservation/booking/js/reservation.js')}}"></script>
     <script src="{{asset('libs/daterange/moment.min.js')}}"></script>
     <script>
         $(function () {

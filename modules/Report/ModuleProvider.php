@@ -20,7 +20,7 @@ class ModuleProvider extends \Modules\ModuleServiceProvider
         return [
             'report'=>[
                 "position"=>110,
-                'url'        => 'admin/module/report/booking',
+                'url'        => 'admin/module/report/enquiry',
                 'title'      =>  __('Reports :count',['count'=>$count ? sprintf('<span class="badge badge-warning">%d</span>',$count) : '']),
                 'icon'       => 'icon ion-ios-pie',
                 'permission' => 'report_view',
@@ -28,12 +28,6 @@ class ModuleProvider extends \Modules\ModuleServiceProvider
                     'enquiry'=>[
                         'url'        => 'admin/module/report/enquiry',
                         'title'      => __('Enquiry Reports'),
-                        'icon'       => 'icon ion-ios-pricetags',
-                        'permission' => 'report_view',
-                    ],
-                    'booking'=>[
-                        'url'        => 'admin/module/report/booking',
-                        'title'      => __('Booking Reports'),
                         'icon'       => 'icon ion-ios-pricetags',
                         'permission' => 'report_view',
                     ],
