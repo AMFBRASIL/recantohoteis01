@@ -322,6 +322,13 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('room_delete');
         Permission::findOrCreate('room_manage_others');
 
+        // Age
+        Permission::findOrCreate('age_view');
+        Permission::findOrCreate('age_create');
+        Permission::findOrCreate('age_update');
+        Permission::findOrCreate('age_delete');
+        Permission::findOrCreate('age_manage_others');
+
         // Room Number
         Permission::findOrCreate('classification_view');
         Permission::findOrCreate('classification_create');
