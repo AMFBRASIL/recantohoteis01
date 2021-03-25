@@ -6,15 +6,15 @@
             <div class="panel-body">
                 <div class="form-group">
                     <label class="control-label document-label">{{__("Descrição:")}}</label>
-                    <input type="text" name="number" class="form-control document-value" value="{{$row->number}}">
+                    <input type="text" name="description" class="form-control document-value" value="{{strtoupper($row->description)}}" style="text-transform: uppercase">
                 </div>
                 <div class="form-group">
                     <label class="control-label document-label">{{__("Idade Inicial")}}</label>
-                    <input type="number" value="" placeholder="" name="initial_age" class="form-control">
+                    <input type="number" value="{{$row->initial_age}}" placeholder="" name="initial_age" class="form-control">
                 </div>
                 <div class="form-group">
                     <label class="control-label document-label">{{__("Idade Final")}}</label>
-                    <input type="number" value="" placeholder="" name="final_age" class="form-control">
+                    <input type="number" value="{{$row->final_age}}" placeholder="" name="final_age" class="form-control">
                 </div>
             </div>
         </div>

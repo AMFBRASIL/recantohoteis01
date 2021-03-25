@@ -2,12 +2,12 @@
 
 namespace Modules\Age\Admin;
 
+use Modules\Age\Models\Age;
 use Modules\Base\Admin\CrudController;
-use Modules\Room\Models\Room;
 
 class AgeController extends CrudController
 {
-    protected $modelName = Room::class;
+    protected $modelName = Age::class;
 
     public function __construct()
     {

@@ -2,7 +2,7 @@
 @section('admin-form-content')
     <div class="form-group">
         <label>{{__("Descrição")}}</label>
-        <input type="text" value="{{isset($row) ? $row->description : ''}}" placeholder="{{__("")}}" name="description" class="form-control">
+        <input type="text" value="{{isset($row) ? $row->description : ''}}" placeholder="{{__("")}}" name="description" class="form-control" style="text-transform: uppercase">
     </div>
     <div class="form-group">
         <label>{{__("Idade Inicial")}}</label>
@@ -36,7 +36,8 @@
         @foreach($rows as $row)
             <tr class="{{$row->status}}">
                 <td><input type="checkbox" name="ids[]" class="check-item" value="{{$row->id}}"></td>
-                <td class="title"> <a href="{{route($route_list['edit'],['id'=>$row->id])}}">{{$row->description}}</a></td>
+                <td class="title"> <a href="{{route($route_list['edit'],['id'=>$row->id])}}">{{strtoupper($row->description)}}</a></td>
+                <td class="title"> {{$row->initial_age}} <i class="fa fa-arrows-h" aria-hidden="true"></i> {{$row->final_age}} Anos </td>
                 <td><span class="badge badge-{{$row->status}}">{{$row->status}}</span></td>
                 <td>
                     <a href="{{route($route_list['edit'],['id'=>$row->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> {{__('Editar')}}

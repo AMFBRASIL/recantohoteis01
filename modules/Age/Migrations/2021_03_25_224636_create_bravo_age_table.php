@@ -26,7 +26,7 @@ class CreateBravoAgeTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('bravo_age_table_translations', function (Blueprint $table) {
+        Schema::create('bravo_age_translations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('description')->nullable();
             $table->integer('initial_age')->nullable();
@@ -47,6 +47,6 @@ class CreateBravoAgeTable extends Migration
     public function down()
     {
         Schema::dropIfExists('bravo_age');
-        Schema::dropIfExists('bravo_age_table_translations');
+        Schema::dropIfExists('bravo_age_translations');
     }
 }
