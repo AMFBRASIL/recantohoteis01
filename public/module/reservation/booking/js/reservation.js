@@ -467,7 +467,7 @@ function loadTableModalPayment(items) {
                     <td>${item.payment_type_rate.name}</td>
                     <td><b>R$ <span class="moeda-real">${formatNumber(value)}</span></b></td>
                     <td>${item.payment_method.name}</td>
-                    <td>${new moment(item.created_at).format('DD/MM/YYYY')}</td>
+                    <td>${new moment(item.created_at).format('DD/MM/YYYY HH:mm:ss')}</td>
                 </tr>`;
     }
     $(".table-items-payment-modal > tbody:last-child").html(html);
