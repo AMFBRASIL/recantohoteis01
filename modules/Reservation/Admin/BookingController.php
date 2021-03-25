@@ -138,10 +138,10 @@ class BookingController extends AdminController
         }
 
         if (!empty($booking)) {
-            $valueTotal = floatval($booking->total);
-            $payment_value = floatval(str_replace('.', ',', $request->input('payment_value')));
+            $payment_value = floatval( $request->input('payment_value'));
+            $valuePaid = floatval($booking->paid);
 
-            $booking->paid = $valueTotal - $payment_value;
+            $booking->paid = $valuePaid - $payment_value;
 
             $res = $booking->saveOriginOrTranslation();
 

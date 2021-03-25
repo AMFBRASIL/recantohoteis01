@@ -120,7 +120,7 @@ $(function ($) {
             is_signature: $("#checkAssinado").is(":checked") ? 1 : 0,
             signature_name: $("#assinador").val(),
             is_commission: $("#checkComissao").is(":checked") ? 1 : 0,
-            commission: $("#vlrPagoCommission").val(),
+            commission: parseFloat($("#vlrPagoCommission").val().replace(/[.]/g, '').replace(',', '.')).toFixed(2),
             booking_id: bookingSelect.id
         };
 
@@ -168,7 +168,7 @@ $(function ($) {
 
     $(".salvePayment").on('click', ()=>{
         let data = {
-            payment_value: $("#payment_value").val(),
+            payment_value: parseFloat($('#payment_value').val().replace(/[.]/g, '').replace(',', '.')).toFixed(2),
             payment_method: $("#payment_method").val(),
             payment_type_rate: $("#payment_type_rate").val(),
             transaction_number: $("#transaction_number").val(),
@@ -185,7 +185,7 @@ $(function ($) {
                 if (!data.success) {
                     alert(data.message);
                 }else{
-                    $("#validation").modal('hide');
+                    $("#payment").modal('hide');
                     window.location.href = "/admin/module/reservation/booking/savePaymentHistoryIndex";
                 }
             }
@@ -397,7 +397,7 @@ function loadModalValidation(){
         $('#checkComissao').bootstrapToggle('on')
         $("#paymentCampos").show();
         $("#paymentCampos h3").html(new moment(bookingSelect.commission_date).format('DD/MM/YYYY HH:mm:ss'));
-        $("#vlrPagoCommission").val(parseFloat(bookingSelect.commission).toFixed(2)).mask('#.##0,00', {reverse: true});
+        $("#vlrPagoCommission").val(formatNumber(parseFloat(bookingSelect.commission)));
     }else{
         $("#checkComissao").prop( "checked", false );
         $('#checkComissao').bootstrapToggle('off')
@@ -434,24 +434,23 @@ function loadModalPaymentInformation(addValue) {
 
     let addValueIndent = addValue ? '_add' : '';
 
-    let valorTotal = parseFloat(bookingSelect.total).toFixed(2);
-    valorTotal = Intl.NumberFormat('pt-BR').format(valorTotal);
+    let valorTotal = parseFloat(bookingSelect.total);
+    valorTotal = formatNumber(valorTotal);
 
-    let valorRestante = parseFloat(bookingSelect.paid).toFixed(2);
-    valorRestante = Intl.NumberFormat('pt-BR').format(valorRestante);
-
-    let valorPago = parseFloat(bookingSelect.total).toFixed(2) - parseFloat(bookingSelect.paid).toFixed(2);
-    valorPago = Intl.NumberFormat('pt-BR').format(valorPago);
+    let valorRestante = parseFloat(bookingSelect.paid);
+    let valorPago = parseFloat(bookingSelect.total) - parseFloat(bookingSelect.paid);
 
     $(".value_booking").html(`R$ ${valorTotal}`);
 
     $(`.value_pay_s${addValueIndent}`).html(`<i class="fa fa-plus"> </i>R$ <span class="mt-5 value_pay${addValueIndent}">0,00</span>`);
     if (valorPago != null && valorPago > 0) {
+        valorPago = formatNumber(valorPago);
         $(`.value_pay_s${addValueIndent}`).html(`<i class="fa fa-plus"> </i> R$ <span class="mt-5 value_pay${addValueIndent}">${valorPago}</span>`);
     }
 
     $(`.value_paid_s${addValueIndent}`).html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid${addValueIndent}">0,00</span>`);
     if (valorRestante != null && valorRestante > 0) {
+        valorRestante = formatNumber(valorRestante);
         $(`.value_paid_s${addValueIndent}`).html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid${addValueIndent}">${valorRestante}</span>`);
     }
 }
@@ -461,16 +460,22 @@ function loadTableModalPayment(items) {
     for (let i = 0; i < items.length; i++) {
         let item = items[i];
 
-        let value = parseFloat(item.payment_value).toFixed(2);
-        value = Intl.NumberFormat('pt-BR').format(value);
+        let value = parseFloat(item.payment_value)
 
         html += `<tr>
                     <td><i class="fa fa-dollar fa-2x"></i></td>
                     <td>${item.payment_type_rate.name}</td>
-                    <td><b>R$ <span class="moeda-real">${value}</span></b></td>
+                    <td><b>R$ <span class="moeda-real">${formatNumber(value)}</span></b></td>
                     <td>${item.payment_method.name}</td>
                     <td>${new moment(item.created_at).format('DD/MM/YYYY')}</td>
                 </tr>`;
     }
     $(".table-items-payment-modal > tbody:last-child").html(html);
+}
+
+function formatNumber(value) {
+    if (value != null) {
+        return value.toFixed(2).replace('.', ',')
+            .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    }
 }

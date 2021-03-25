@@ -148,12 +148,12 @@
                                     </td>
                                     <td class="modal-value">
                                         <a href="#" class="review-count-approved" data-value="{{$row->id}}">
-                                            R{{format_money_main($row->total)}}
+                                            R${{number_format($row->total,2)}}
                                         </a>
                                     </td>
                                     <td class="modal-value">
                                         <a href="#" class="review-count-pendente" data-value="{{$row->id}}">
-                                            R{{format_money_main($row->paid)}}
+                                            R${{number_format($row->paid,2)}}
                                         </a>
                                     </td>
                                     <td>
@@ -1078,7 +1078,7 @@
                             let totalValores = (valorRestante - priceAdd);
                             let totalPagoAtualizado = (priceAdd + valorPago);
 
-                            console.log({
+                            /*console.log({
                                 valorRestanteO:valorRestanteO,
                                 valorPagoO:valorPagoO,
                                 valorRestante:valorRestante,
@@ -1087,10 +1087,10 @@
                                 priceAdd:priceAdd,
                                 totalPagoAtualizado : totalPagoAtualizado,
                                 totalValores : totalValores
-                            })
+                            })*/
 
-                            totalPagoAtualizado = Intl.NumberFormat('pt-BR').format(totalPagoAtualizado);
-                            totalValores = Intl.NumberFormat('pt-BR').format(totalValores);
+                            totalPagoAtualizado = formatNumber(totalPagoAtualizado);
+                            totalValores = formatNumber(totalValores);
 
 
                             $('.value_pay_s_add').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_pay_add">${totalPagoAtualizado}</span>`);
@@ -1112,6 +1112,13 @@
                                 $('.value_pay_s_add').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_pay_add">${valorPagoO}</span>`);
                             }
                         });
+
+                        function formatNumber(value) {
+                            if (value != null) {
+                                return value.toFixed(2).replace('.', ',')
+                                    .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                            }
+                        }
                     </script>
                 </div>
             </div>
