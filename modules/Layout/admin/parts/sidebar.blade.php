@@ -66,6 +66,11 @@ $menus = [
                 'url'        => route('paymentTypeRate.admin.index'),
                 'title'      => __('Tipo de Pagamentos'),
                 'permission' => 'room_view',
+            ],
+            'age'     => [
+                'url'        => route('age.admin.index'),
+                'title'      => __('Idades'),
+                'permission' => 'age_view',
             ]
         ]
     ],
