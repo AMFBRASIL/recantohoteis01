@@ -179,13 +179,13 @@ function loadModalDetailsConsumer(data) {
                         </div>
                     <div class="col-md-4">
                 <div class="p-3 bg-white">
-                <h6 class="account">Valor Total Consumido</h6>
+                <h6 class="account"><b>Valor Total Consumido</b></h6>
                     <span class="mt-5 restante moeda-real">
                          <i class="fa fa-minus "></i> R$ ${data.cardData.card.value_consumed == null ? '0.00' : data.cardData.card.value_consumed} </span>
                                     </div>
                                     <div class="p-2 py-2 bg-white">
                                         <div class="p-2 bg-white">
-                                            <h6 class="account">Valor Total Disponível</h6> <span class="mt-5 balance"> <i
+                                            <h6 class="account"><b>Valor Total Disponível</b></h6> <span class="mt-5 balance"> <i
                                                     class="fa fa-plus"></i> R$ ${data.cardData.card.value_card} </span>
                                         </div>
                                     </div>

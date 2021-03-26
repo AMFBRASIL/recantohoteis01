@@ -266,4 +266,31 @@ class SaleController extends AdminController
         ]);
     }
 
+
+    public function bulkSituation(Request $request)
+    {
+        $ids = $request->input('ids');
+        $action = $request->input('action');
+        if (empty($ids) or !is_array($ids)) {
+            return redirect()->back()->with('error', __('No items selected'));
+        }
+        if (empty($action)) {
+            return redirect()->back()->with('error', __('Please select action'));
+        }
+
+        foreach ($ids as $id) {
+            $query = Sale::query()->where("id", $id);
+            if (!$this->hasPermission('newSale_others')) {
+                $query->where("vendor_id", Auth::id());
+                $this->checkPermission('newSale_update');
+            }
+            $item = $query->first();
+            if (!empty($item)) {
+                $item->situation_id = $action;
+                $item->save();
+            }
+        }
+
+        return redirect()->back()->with('success', __('Update success'));
+    }
 }

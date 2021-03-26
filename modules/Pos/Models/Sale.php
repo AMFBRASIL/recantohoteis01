@@ -109,10 +109,6 @@ class Sale extends Model
         return $this->belongsTo(PointOfSale::class, 'point_sales_id');
     }
 
-/*    public function Apartment(){
-        return $this->belongsTo(::class, 'apartment_id');
-    }*/
-
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
