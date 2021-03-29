@@ -156,9 +156,9 @@
                                         </td>
 
                                         <td class="title product">
-                                            <a href="#" class="review-count-pendente moeda-real"
+                                            <a href="#" class="review-count-pendente"
                                                data-value="{{$row->id}}">
-                                                R$ {{$row->total_value}}
+                                                R$ {{$row->getTotalValueFormattedAttribute()}}
                                             </a>
                                         </td>
 

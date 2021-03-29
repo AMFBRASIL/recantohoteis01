@@ -84,7 +84,7 @@
 <div class="form-group">
     <label>{{ __('Forma de pagamento')}}</label>
     <div class="input-group" data-select2-id="25">
-        <select id="formPayment" class="form-control" required name="payment_method_id" data-value="{{$creditCardPayment}}">
+        <select id="formPayment" class="form-control" required name="payment_method_id"">
             @foreach ($paymentMethodList as $option)
                 @if ($row->payment_method_id == $option->id)
                     <option value="{{$option->id}}" selected>{{$option->name}}</option>

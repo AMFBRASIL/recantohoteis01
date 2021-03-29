@@ -3,8 +3,6 @@ let current_page = 1;
 let rows = 10;
 let max_page = 1;
 
-let creditCardPayment = JSON.parse($("#formPayment").attr("data-value"));
-
 $(function ($) {
     $(".dungdt-select2-field").prop('required',true);
 
@@ -13,9 +11,8 @@ $(function ($) {
         $('#internal_observations').html(observacao);
     });
 
-    $("#product").on("show.bs.modal", function (e) {
-        clearModalEmUso();
-        let id = e.relatedTarget.getAttribute('data-value');
+    $(".card-modal-open > a").on('click', (e) => {
+        let id = e.target.getAttribute('data-value');
         let data = {
             id: id,
         };
@@ -27,6 +24,7 @@ $(function ($) {
             type: 'GET',
             data: data,
             success: function (data) {
+                $("#product").modal('show');
                 sales = data;
                 loadModalSale();
                 if(sales.itensSales.length >= 1){
@@ -36,6 +34,7 @@ $(function ($) {
             }
         });
     });
+
 
     $('#formPayment').on('change', function() {
         showTransitionNumber()
@@ -180,8 +179,8 @@ function loadModalSale() {
     $("#card").html(`Itens Consumido Cartão (#${sales.card.id})`);
 
     $("#value-consumed-modal-em-uso").html(`<i class="fa fa-minus"></i> R$ ${sales.card.value_consumed != null
-        ? sales.card.value_consumed : '0.00'}`);
-    $("#value-card-modal-em-uso").html(`<i class="fa fa-plus"></i> R$ ${sales.card.value_card}`);
+        ? formatNumber(parseFloat(sales.card.value_consumed)) : '0,00'}`);
+    $("#value-card-modal-em-uso").html(`<i class="fa fa-plus"></i> R$ ${formatNumber(parseFloat(sales.card.value_card))}`);
 }
 
 function loadTableModalSale(items, rows_per_page, page) {
@@ -199,7 +198,7 @@ function loadTableModalSale(items, rows_per_page, page) {
                             <td><i class="fa fa-check-circle fa-2x"></i></td>
                             <td>#${item.sale_id}</td>
                             <td>${item.title}</td>
-                            <td>R$ ${item.price}</td>
+                            <td>R$ ${formatNumber(parseFloat(item.price))}</td>
                             <td>${item.quantity}</td>
                             <td>${item.created_at}</td>
                          </tr>`
@@ -244,10 +243,19 @@ function PaginationButton(page) {
 }
 
 function showTransitionNumber(){
-    if(creditCardPayment.some(item => item.id == $("#formPayment").val())){
+    let string = $('#formPayment option:selected').text();
+
+    if (string.toUpperCase().includes('CARTAO DE CREDITO')) {
         $('#divNSU').show();
         $('#nsuinput').focus();
     } else {
         $('#divNSU').hide();
+    }
+}
+
+function formatNumber(value) {
+    if (value != null) {
+        return value.toFixed(2).replace('.', ',')
+            .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
     }
 }
