@@ -8,6 +8,38 @@
                     <label class="control-label document-label">{{__("Nome:")}}</label>
                     <input type="text" name="name" class="form-control document-value" value="{{$row->name}}">
                 </div>
+                <div class="form-group">
+                    <label> Tarifa Diaria / Pessoa ( De 1 a 6 )  </label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">R$</span>
+                        </div>
+                        <input type="text" name="daily_rate_40" placeholder="99,99" class="form-control moeda-real" value="{{$row->daily_rate_40}}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label> Tarifa Diaria / Pessoa ( De 6 + )  </label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">R$</span>
+                        </div>
+                        <input type="text" name="daily_rate_100" placeholder="99,99" class="form-control moeda-real" value="{{$row->daily_rate_100}}">
+                    </div>
+                </div>
+                <div class="row form-group">
+                <div class="col-12 col-md-6" id="dataLiberacao">
+                        <div class="form-group">
+                            <label class="control-label">Intervalo Inicial</label>
+                            <input type="time" name="start_time" placeholder="00:00" class="form-control" value="{{$row->start_time}}">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6" id="dataLiberacao">
+                        <div class="form-group">
+                            <label class="control-label">Intervalo Final</label>
+                            <input type="time" name="end_date" placeholder="00:0-" class="form-control" value="{{$row->end_date}}">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -54,4 +86,11 @@
         </div>
         @endif
     </div>
+@endsection
+@section('script.body')
+    <script>
+        $(function (){
+            $('.moeda-real').mask('#.##0,00', {reverse: true});;
+        });
+    </script>
 @endsection
