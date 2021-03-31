@@ -44,7 +44,7 @@
                             </div>
                         </div>
 
-                        <!--<div class="col-lg-2 col-md-12">
+                        <div class="col-lg-2 col-md-12">
                              <div class="form-group">
                                  <label class="control-label">Idade:</label>
                                  <input type="text" readonly class="form-control age" name="" autocomplete="off" placeholder="">
@@ -63,7 +63,7 @@
                                  <i class="input-icon field-icon icofont-waiter-alt"></i>
                                  <span class="invalid-feedback error error-last_name"></span>
                              </div>
-                         </div>-->
+                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label">Email:</label>
@@ -100,11 +100,10 @@
             <script src="{{asset('/libs/jquery-3.3.1.min.js')}}"></script>]
             <script src="{{asset('libs/daterange/moment.min.js')}}"></script>
             <script>
-               /* $(function() {
+               $(function() {
                     $('.birthday').on('change',function(){
 
                         let years = getAgeFromBirthday($('.birthday').val())
-                        console.log(years)
                         $('.age').val(years);
 
                         if(years <= 5){
@@ -118,15 +117,16 @@
                 function getAgeFromBirthday(birthday) {
                     if(birthday){
                         let totalMonths = moment().diff(birthday, 'months');
-                        let years = parseInt(totalMonths / 12);
-                        /!*let months = totalMonths % 12;
+                        let years;
+                        years = parseInt(totalMonths / 12);
+                        /*let months = totalMonths % 12;
                         if(months !== 0){
                             return parseFloat(years + '.' + months);
-                        }*!/
+                        }*/
                         return years;
                     }
                     return null;
-                }*/
+                }
             </script>
         </div>
     </div>
