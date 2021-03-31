@@ -190,6 +190,12 @@ class BookingController extends Controller
 
             if (!empty($booking)) {
 
+                if (empty($booking->paid)){
+                    $booking->paid = $booking->total;
+                    $booking->save();
+                    $booking = Booking::query()->find($booking_id);
+                }
+
                 return response()->json([
                     'error' => false,
                     'booking' => $booking,
