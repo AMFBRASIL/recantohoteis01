@@ -22,7 +22,7 @@
                 'id'      => $booking->id,
                 'name'    => Auth::user()->display_name,
                 'avatar'  => Auth::user()->avatar_url,
-                'link'    => route('report.admin.booking'),
+                'link'    => route('reservation.admin.booking'),
                 'type'    => $booking->object_model,
                 'message' => __(':name has updated the PAID amount on :title', ['name' => $vendor->display_name, 'title' => $booking->service->title]),
             ];

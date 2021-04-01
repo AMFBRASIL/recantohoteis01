@@ -21,7 +21,7 @@
                 'to'      => 'admin',
                 'name'    => Auth::user()->display_name,
                 'avatar'  => Auth::user()->avatar_url,
-                'link'    => route('report.admin.booking'),
+                'link'    => route('reservation.admin.booking'),
                 'type'    => $booking->object_model,
                 'message' => __(':name has created new Booking', ['name' => Auth::user()->display_name])
             ];
