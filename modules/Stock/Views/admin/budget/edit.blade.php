@@ -123,7 +123,7 @@
                             @foreach($row->product_composition as $key => $composition)
                                 <div class="item" data-number="{{$key}}">
                                     <div class="row">
-                                        <div class="col-md-5">
+                                        <div class="col-md-5 product-detail">
                                             <?php
                                             $product = isset($composition['product_id']) ? Modules\Product\Models\Product::find($composition['product_id']) : false;
                                             \App\Helpers\AdminForm::select2("product_composition[" . $key . "][product_id]", [
@@ -180,7 +180,7 @@
                     <div class="g-more hide">
                         <div class="item" data-number="__number__">
                             <div class="row">
-                                <div class="col-md-5">
+                                <div class="col-md-5 product-detail">
                                     <select
                                         class="form-control dungdt-select2-field-lazy"
                                         data-options='{"ajax":{"url":"/admin/module/product/get-select","dataType":"json"},"allowClear":true,"placeholder":"-- Digite para pesquisar --"}'

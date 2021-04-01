@@ -23,7 +23,7 @@ $(function ($) {
         $(this).trigger('select.select2');
     })
 
-    $(document).on('select2:select', '.product-composition .dungdt-select2-field-lazy', function (e) {
+    $(document).on('select2:select', '.product-composition .product-detail .dungdt-select2-field-lazy', function (e) {
         console.log(e.params.data)
         let index = $(this).closest('.item').attr('data-number');
         let product_id = e.params.data.id;
