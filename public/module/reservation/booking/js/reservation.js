@@ -223,7 +223,9 @@ function loadModalDetailBooking(data) {
     }else{
         $('.is_hotel').show();
 
-        $(".booking_summary_contract").attr("href", `/admin/module/booking/print/contrato/${data.booking_id}`);
+        $(".booking_summary_contract").attr("href", `/admin/module/booking/print/contract/${data.booking_id}`);
+        $(".booking_summary_term").attr("href", `/admin/module/booking/print/term/${data.booking_id}`);
+        $(".booking_summary_regulation").attr("href", `/admin/module/booking/print/regulation/${data.booking_id}`);
     }
 
     html = `<tr class="text-center">

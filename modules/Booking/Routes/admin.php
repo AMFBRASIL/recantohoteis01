@@ -12,8 +12,8 @@ Route::get('getBookingHistory/', 'BookingPaymentHistoryController@getBookingHist
 Route::group(['prefix' => 'print'], function () {
     Route::get('detalhesreserva/', 'PrintController@detalhesreserva')->name('print.detalhesreserva');
     Route::get('ficha/', 'PrintController@ficha')->name('print.ficha');
-    Route::get('regras/', 'PrintController@regras')->name('print.regras');
-    Route::get('contrato/{id}', 'PrintController@contrato')->name('print.contrato');
-    Route::get('regulamento/', 'PrintController@regulamento')->name('print.regulamento');
+    Route::get('contract/{id}', 'PrintController@contract')->name('print.contract');
+    Route::get('term/{id}', 'PrintController@term')->name('print.term');
+    Route::get('regulation/{id}', 'PrintController@regulation')->name('print.regulation');
 });
 

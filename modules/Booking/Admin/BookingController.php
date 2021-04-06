@@ -119,7 +119,7 @@ class BookingController extends Controller
                 'success' => false,
                 'message' => "Reserva não encontrado"
             ], 200);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => "Reserva não encontrado",
@@ -181,7 +181,8 @@ class BookingController extends Controller
         ]);
     }
 
-    public function getUserBooking(Request $request){
+    public function getUserBooking(Request $request)
+    {
 
         $booking_id = $request->booking_id;
 
@@ -190,7 +191,7 @@ class BookingController extends Controller
 
             if (!empty($booking)) {
 
-                if (empty($booking->paid)){
+                if (empty($booking->paid)) {
                     $booking->paid = $booking->total;
                     $booking->save();
                     $booking = Booking::query()->find($booking_id);

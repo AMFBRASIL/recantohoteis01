@@ -249,20 +249,18 @@
                             </a>
                             <!--- Só aparecer os botoes para impressao quando for APENAS CHACARA
                             ===============================================================================--->
-                            <a data-fancybox="" data-type="iframe" href="{{ route('print.regras') }}"
-                               class="btn btn-success btn-lg is_hotel booking_summary_regras">
+                            <a data-fancybox="" data-type="iframe" href=""
+                               class="btn btn-success btn-lg is_hotel booking_summary_term">
                                 <i class="fa fa-print"></i> Regras
                             </a>
 
-                            <a data-fancybox="" data-type="iframe"
-                               href=""
+                            <a data-fancybox="" data-type="iframe" href=""
                                class="btn btn-primary  btn-lg is_hotel booking_summary_contract">
                                 <i class="fa fa-print"></i> Contrato
                             </a>
 
-                            <a data-fancybox="" data-type="iframe"
-                               href="{{ route('print.regulamento') }}"
-                               class="btn btn-info  btn-lg is_hotel booking_summary_regulamento">
+                            <a data-fancybox="" data-type="iframe" href=""
+                               class="btn btn-info  btn-lg is_hotel booking_summary_regulation">
                                 <i class="fa fa-print"></i> Regulamento
                             </a>
                             <!--- Só aparecer os botoes para impressao quando for APENAS CHACARA
@@ -820,7 +818,7 @@
                                 }
                             });
 
-                            $('#checkEntregue').change(function() {
+                            $('#checkEntregue').change(function () {
                                 if ($('#checkEntregue').prop('checked')) {
                                     $("#contratoEntregue").show();
                                 } else {
@@ -921,7 +919,8 @@
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text" id="basic-addon1">R$</span>
                                                     </div>
-                                                    <input type="text" name="payment_value" id="payment_value" placeholder="99,99"
+                                                    <input type="text" name="payment_value" id="payment_value"
+                                                           placeholder="99,99"
                                                            class="form-control moeda-real" value=""
                                                            style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
                                                 </div>
@@ -931,7 +930,8 @@
                                             <div class="form-group-lg">
                                                 <label> Forma de pagamento </label>
                                                 <div class="input-group">
-                                                    <select id="payment_method" class="select_bank form-control" name="payment_method_id"
+                                                    <select id="payment_method" class="select_bank form-control"
+                                                            name="payment_method_id"
                                                             style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
                                                         @foreach ($paymentMethodList as $option)
                                                             <option value="{{$option->id}}">{{$option->name}}</option>
@@ -943,7 +943,8 @@
                                         <div class="col-lg-4">
                                             <div class="form-group-lg">
                                                 <label> Tipo de Pagamentos/Taxas </label>
-                                                <select id="payment_type_rate" class="select_bank form-control" name="payment_type_rate"
+                                                <select id="payment_type_rate" class="select_bank form-control"
+                                                        name="payment_type_rate"
                                                         style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
                                                     @foreach ($paymentTypeRateList as $option)
                                                         <option value="{{$option->id}}">{{$option->name}}</option>
@@ -958,7 +959,8 @@
                                             <div class="form-group-lg" id="divNSU" name="divNSU" style="display:none;">
                                                 <label> Número da Transação Cartão </label>
                                                 <input type="text" value="" placeholder="AUHDEUY804837943"
-                                                       name="transaction_number" id="transaction_number" class="form-control"
+                                                       name="transaction_number" id="transaction_number"
+                                                       class="form-control"
                                                        style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
                                             </div>
                                         </div>
@@ -1043,7 +1045,7 @@
                     </div>
                     <script>
                         $('#payment_method').on('change', function () {
-                            let string = $('#payment_method option:selected' ).text();
+                            let string = $('#payment_method option:selected').text();
 
                             if (string.toUpperCase().includes('CARTAO DE CREDITO')) {
                                 $('#divNSU').show();
@@ -1071,7 +1073,7 @@
                         let valorRestanteO = null;
                         let valorPagoO = null;
                         $('#payment_value').on('keyup', function () {
-                            if(valorRestanteO == null && valorPagoO == null){
+                            if (valorRestanteO == null && valorPagoO == null) {
                                 valorRestanteO = parseFloat($(".value_paid_add").text().replace(/[.]/g, '').replace(',', '.'));
                                 valorPagoO = parseFloat($(".value_pay_add").text().replace(/[.]/g, '').replace(',', '.'));
                             }
@@ -1106,7 +1108,7 @@
                             } else {
                                 if (totalValores == 0) {
                                     $('.value_paid_s_add').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid_add">0,00</span>`);
-                                }else{
+                                } else {
                                     $('.value_paid_s_add').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_paid_add">${totalValores}</span>`);
                                 }
                             }
