@@ -30,25 +30,46 @@ class PrintController extends Controller
         return view('Booking::admin.print.ficha');
     }
 
-    public function regras()
+    public function contract($id)
     {
-        return view('Booking::admin.print.regras');
-    }
-    public function contrato($id)
-    {
-        $booking = Booking::query()->find($id)->first();
+        $booking = Booking::query()->find($id);
         $settings = Settings::query()->where("name", "space_contract")->first();
 
-        $contract = $this->bookingService->getContract($settings->val, $booking);
+        $contract = $this->bookingService->replaceFile($settings->val, $booking);
 
         $data = [
             'contract' => $contract,
         ];
 
-        return view('Booking::admin.print.contrato',$data);
+        return view('Booking::admin.print.contract',$data);
     }
-    public function regulamento()
+
+
+    public function term($id)
     {
-        return view('Booking::admin.print.regulamento');
+        $booking = Booking::query()->find($id);
+        $settings = Settings::query()->where("name", "space_inspection_term")->first();
+
+        $term = $this->bookingService->replaceFile($settings->val, $booking);
+
+        $data = [
+            'term' => $term,
+        ];
+
+        return view('Booking::admin.print.term', $data);
+    }
+
+    public function regulation($id)
+    {
+        $booking = Booking::query()->find($id);
+        $settings = Settings::query()->where("name", "space_internal_regime")->first();
+
+        $regulation = $this->bookingService->replaceFile($settings->val, $booking);
+
+        $data = [
+            'regulation' => $regulation,
+        ];
+
+        return view('Booking::admin.print.regulation', $data);
     }
 }
