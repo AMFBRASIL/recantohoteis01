@@ -107,7 +107,7 @@ class AvailabilityController extends FrontendController{
         $query->where('start_date','>=',date('Y-m-d H:i:s',strtotime($request->query('start'))));
         $query->where('end_date','<=',date('Y-m-d H:i:s',strtotime($request->query('end'))));
 
-        $rows =  $query->take(40)->get();
+        $rows =  $query->take(90)->get();
         $allDates = [];
 
 //        for($i = strtotime($request->query('start')); $i <= strtotime($request->query('end')); $i+= DAY_IN_SECONDS)
