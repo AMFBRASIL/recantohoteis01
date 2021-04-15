@@ -80,7 +80,6 @@ class SaleController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'creditCardPayment' => PaymentMethod::query()->where('name','like', '%Cartao de credito%')->get('id'),
             'pointSalesList' => PointOfSale::all(),
             'paymentMethodList' => PaymentMethod::all(),
             'situationList' => Situation::query()->whereHas('section', function ($query) {
@@ -157,9 +156,6 @@ class SaleController extends AdminController
         $this->updateProduct($row->product_composition);
 
         $row->sales_date = new Carbon();
-        $row->discounts_value = str_replace('.', ',',$row->discounts_value);
-        $row->received_value = str_replace('.', ',',$row->received_value);
-        $row->total_value = str_replace('.', ',',$row->total_value);
 
         $res = $row->saveOriginOrTranslation($request->input('lang'));
 
@@ -174,10 +170,8 @@ class SaleController extends AdminController
 
     function updateCardConsumer($card_number, $value_card, $value_consumed){
         $card = ConsumptionCard::query()->where('card_number', '=', $card_number)->first();
-
-        $card->value_card = str_replace('.', ',',$value_card);
-        $card-> value_consumed = str_replace('.', ',',$value_consumed);
-
+        $card->value_card = $value_card;
+        $card-> value_consumed = $value_consumed;
         $card->saveOriginOrTranslation();
     }
 

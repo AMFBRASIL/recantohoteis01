@@ -95,6 +95,9 @@
                         <select class="form-control" name="situation_id">
                             @foreach ($situationList as $option)
                                 <option value="{{$option->id}}">{{$option->name}}</option>
+                                @if(strtoupper($option->name) == "EM ABERTO")
+                                    <option value="{{$option->id}}" selected>{{$option->name}}</option>
+                                @endif
                             @endforeach
                         </select>
                     </div>
@@ -107,8 +110,7 @@
                 <div class="form-group">
                     <label> {{__("Forma de pagamento")}}</label>
                     <div class="input-group">
-                        <select id="formPayment" class="form-control" required name="payment_method_id"
-                                data-value="{{$creditCardPayment}}">
+                        <select id="formPayment" class="form-control" required name="payment_method_id">
                             @foreach ($paymentMethodList as $option)
                                 <option value="{{$option->id}}">{{$option->name}}</option>
                             @endforeach

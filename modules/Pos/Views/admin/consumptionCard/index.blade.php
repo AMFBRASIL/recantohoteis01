@@ -99,9 +99,8 @@
                                                     </span>
                                                  </span>
                                             </td>
-                                            <td class="title">
-                                                <a href="#" class="review-count-approved  detalhesConsumo"
-                                                   data-toggle="modal" data-target="#product" data-value="{{$row->id}}">
+                                            <td class="title card-modal-open">
+                                                <a href="#" class="review-count-approved  detalhesConsumo" data-value="{{$row->id}}">
                                                     R$ <span>
                                                         {{$row->value_consumed_formatted}}
                                                     </span>

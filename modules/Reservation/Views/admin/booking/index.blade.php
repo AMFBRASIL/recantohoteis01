@@ -148,12 +148,12 @@
                                     </td>
                                     <td class="modal-value">
                                         <a href="#" class="review-count-approved" data-value="{{$row->id}}">
-                                            R${{number_format($row->total,2)}}
+                                            R${{ number_format($row->total, 2, ',', '.')}}
                                         </a>
                                     </td>
                                     <td class="modal-value">
                                         <a href="#" class="review-count-pendente" data-value="{{$row->id}}">
-                                            R${{number_format($row->paid,2)}}
+                                            R${{number_format($row->paid, 2, ',', '.')}}
                                         </a>
                                     </td>
                                     <td>

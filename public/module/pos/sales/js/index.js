@@ -181,12 +181,12 @@ function loadModalDetailsConsumer(data) {
                 <div class="p-3 bg-white">
                 <h6 class="account"><b>Valor Total Consumido</b></h6>
                     <span class="mt-5 restante moeda-real">
-                         <i class="fa fa-minus "></i> R$ ${data.cardData.card.value_consumed == null ? '0.00' : data.cardData.card.value_consumed} </span>
+                         <i class="fa fa-minus "></i> R$ ${data.cardData.card.value_consumed == null ? '0,00' : formatNumber(parseFloat(data.cardData.card.value_consumed))} </span>
                                     </div>
                                     <div class="p-2 py-2 bg-white">
                                         <div class="p-2 bg-white">
                                             <h6 class="account"><b>Valor Total Disponível</b></h6> <span class="mt-5 balance"> <i
-                                                    class="fa fa-plus"></i> R$ ${data.cardData.card.value_card} </span>
+                                                    class="fa fa-plus"></i> R$ ${formatNumber(parseFloat(data.cardData.card.value_card))} </span>
                                         </div>
                                     </div>
                                 </div>
@@ -257,11 +257,11 @@ function activePagination() {
 
 function loadModalSale() {
     $("#modal-sales-title").html(`Detalhes dos Itens da Venda : #${sale.sale.id}`);
-    $("#sale-total-no-discounts").html(`<i class="fa fa-minus"></i> R$ ${(parseFloat(sale.sale.total_value)
-    + parseFloat(sale.sale.discounts_value)).toFixed(2)}`);
-    $("#sale-value-discounts").html(`<i class="fa fa-plus"></i> R$ ${sale.sale.discounts_value}`);
-    $("#sale-total-value").html(`<i class="fa fa-minus"></i> R$ ${sale.sale.total_value}`);
-    $("#sale-value-card").html(`<i class="fa fa-plus"></i> R$ ${sale.card.value_card}`);
+    $("#sale-total-no-discounts").html(`<i class="fa fa-minus"></i> R$ ${formatNumber(parseFloat(sale.sale.total_value)
+    + parseFloat(sale.sale.discounts_value))}`);
+    $("#sale-value-discounts").html(`<i class="fa fa-plus"></i> R$ ${formatNumber(parseFloat(sale.sale.discounts_value))}`);
+    $("#sale-total-value").html(`<i class="fa fa-minus"></i> R$ ${formatNumber(parseFloat(sale.sale.total_value))}`);
+    $("#sale-value-card").html(`<i class="fa fa-plus"></i> R$ ${formatNumber(parseFloat(sale.card.value_card))}`);
 }
 
 function loadTableModalSale(items, rows_per_page, page) {
@@ -278,7 +278,7 @@ function loadTableModalSale(items, rows_per_page, page) {
         html += ` <tr>
                             <td><i class="fa fa-check-circle fa-2x"></i></td>
                             <td>${item.title}</td>
-                            <td>R$ ${item.price}</td>
+                            <td>R$ ${formatNumber(parseFloat(item.price))}</td>
                             <td>${item.quantity}</td>
                             <td>${sale.created_at}</td>
                          </tr>`
@@ -324,7 +324,7 @@ function PaginationButton(page) {
 
 function loadModalSaleSituation() {
     $("#title-sales-situation-modal").html(`Itens do Pedido nro: : #${sale.sale.id}`);
-    $("#value-sales-situation-modal").html(`R$ ${sale.sale.total_value}`);
+    $("#value-sales-situation-modal").html(`R$ ${formatNumber(parseFloat(sale.sale.total_value))}`);
 }
 
 function loadTableModalSaleSituation(items) {
@@ -334,7 +334,7 @@ function loadTableModalSaleSituation(items) {
 
         html += ` <tr>
                     <td>${item.title}</td>
-                    <td>R$ ${item.price}</td>
+                    <td>R$ ${formatNumber(parseFloat(item.price))}</td>
                     <td>${item.quantity}</td>`;
         if (item.situation_name != undefined) {
             html += `<td><span class="badge badge-${item.situation_label}">${item.situation_name}</span></td>`;
@@ -345,4 +345,11 @@ function loadTableModalSaleSituation(items) {
                  </tr>`;
     }
     $("#table-items-sales-situation-modal > tbody:last-child").html(html);
+}
+
+function formatNumber(value) {
+    if (value != null) {
+        return value.toFixed(2).replace('.', ',')
+            .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    }
 }

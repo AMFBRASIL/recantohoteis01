@@ -44,7 +44,7 @@
                                     <div class="col-md-12">
                                         <h6 class="account">Valor a devolver</h6>
                                         <span class="mt-5 restante">
-                                            <div id="valueAmopunt">{{$parent->value_card}}</div>
+                                            <div id="valueAmopunt">{{$parent->getValueCardFormattedAttribute()}}</div>
                                         </span>
                                     </div>
                                 </div>

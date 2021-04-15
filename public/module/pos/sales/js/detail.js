@@ -4,8 +4,6 @@ let total_value_available = 0.0;
 let total_consumed_value = 0.0;
 let qtd_Item = 0;
 
-let creditCardPayment = JSON.parse($("#formPayment").attr("data-value"));
-
 let searchUserByName = false;
 let searchUserByConsumedCard = false;
 
@@ -95,7 +93,7 @@ $(function ($) {
                 alert("Seu limite de orçamento esgostou. Favor adicionar mais creditos no cartao.");
                 check(index)
                 removeInvalidItem(index)
-            }else{
+            } else {
                 let product = JSON.parse(sessionStorage.getItem('product-' + product_id));
 
                 removeItems(price, parseInt(product.qtd));
@@ -125,7 +123,7 @@ $(function ($) {
                 alert("Seu limite de orçamento esgostou. Favor adicionar mais creditos no cartao.");
                 check(index)
                 removeInvalidItem(index)
-            }else{
+            } else {
                 removeItems(product.price, qtd_quantity);
                 product.qtd = qtd_quantity;
                 product.price = price;
@@ -185,7 +183,7 @@ $(function ($) {
         });
     });
 
-    $('#formPayment').on('change', function() {
+    $('#formPayment').on('change', function () {
         showTransitionNumber()
     });
 
@@ -255,7 +253,7 @@ select.on('change', (e) => {
     searchUserInformation();
 });
 
-function searchUserInformation(){
+function searchUserInformation() {
     let user_id = select.val()
     let data = {
         user_id: user_id,
@@ -274,61 +272,71 @@ function searchUserInformation(){
     });
 }
 
-function setUserInformation(data){
-    if (data.room.length > 0){
+function setUserInformation(data) {
+    if (data.room.length > 0) {
         let select = $('#uhCliente');
         select.empty();
         $.each(data.room, function (index, item) {
             select.append(
-                new Option(item.title + ' - '+ item.room.number, item.id, null, false));
+                new Option(item.title + ' - ' + item.room.number, item.id, null, false));
         });
-        select.prop('disabled',false);
+        select.prop('disabled', false);
 
         let select2 = $('#dayUse');
         select2.empty();
-        select2.prop('disabled',true);
+        select2.prop('disabled', true);
         select2.append(
             new Option('- Selecione -', 0, null, true));
 
-        $("#formPayment option").filter(function() {
+        $("#formPayment option").filter(function () {
             let text = $(this).text().trim().toLowerCase();
             return text.indexOf('hospede checkout') != -1;
         }).removeAttr('disabled');
-    }else{
+    } else {
         let select = $('#dayUse');
         select.empty();
-        select.prop('disabled',false);
+        select.prop('disabled', false);
         select.append(
             new Option('DAY USE', 1, null, true));
 
         let select2 = $('#uhCliente');
         select2.empty();
-        select2.prop('disabled',true);
+        select2.prop('disabled', true);
         select2.append(
             new Option('- Selecione -', 0, null, true));
 
-        $("#formPayment option").filter(function() {
+        $("#formPayment option").filter(function () {
             let text = $(this).text().trim().toLowerCase();
             return text.indexOf('hospede checkout') != -1;
         }).attr('disabled', 'disabled')
     }
 
-    if(data.consumptionCard != '' && data.consumptionCard != null){
+    if (data.consumptionCard != '' && data.consumptionCard != null) {
         $('#numberCard').val(data.consumptionCard.card_number);
-        if (!searchUserByConsumedCard){
+        if (!searchUserByConsumedCard) {
             searchUserByConsumerCard();
         }
-    }else{
+    } else {
         alert("Cliente nao possui cartão consumo. É necessário cadastrar um para continuar.");
     }
 }
 
-function showTransitionNumber(){
-    if(creditCardPayment.some(item => item.id == $("#formPayment").val())){
+function showTransitionNumber() {
+    let string = $('#formPayment option:selected').text();
+
+    if (string.toUpperCase().includes('CARTAO DE CREDITO')) {
         $('#divNSU').show();
         $('#nsuinput').focus();
     } else {
         $('#divNSU').hide();
+    }
+
+    if (string.toUpperCase().includes('DINHEIRO')) {
+        $('#divMoneyReceived').show();
+        $('#divChangeCustomer').show();
+    } else {
+        $('#divMoneyReceived').hide();
+        $('#divChangeCustomer').hide();
     }
 }
 
@@ -370,7 +378,7 @@ function searchUserByConsumerCard() {
 
                 $('#passwordAuthorization').modal('show');
 
-                if (!searchUserByName){
+                if (!searchUserByName) {
                     searchUserInformation();
                 }
             } else {
@@ -380,7 +388,7 @@ function searchUserByConsumerCard() {
     });
 }
 
-function calculateReceivedValue(){
+function calculateReceivedValue() {
     let amountReceived = parseFloat(($('#amountReceived').val()).replace('.', '').replace(',', '.'));
     let valuesAdded = parseFloat(($('#internalSum').val()).replace('.', '').replace(',', '.'));
 
@@ -414,7 +422,7 @@ function sumItems(index, valueItem, qtdItem) {
             valorTotalConsumido: valor_total_consumido,
             valorTotalDisponivel: valor_total_disponivel
         })*/
-    }else {
+    } else {
         total_consumed_value += valueCalculatedItem;
         total_value_available -= valueCalculatedItem;
 
@@ -495,7 +503,7 @@ function showValues(valoresSomados) {
     $('#sumTotalCardConsumer').val(formatNumber(total_consumed_value));
 }
 
-function deleteTableItem(index){
+function deleteTableItem(index) {
     check(index);
 
     if (qtd_Item == 0) {

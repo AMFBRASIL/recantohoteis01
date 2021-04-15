@@ -55,7 +55,6 @@ class ConsumptionCardController extends AdminController
             'bankAccountList' => BankAccount::all(),
             'paymentMethodList' => PaymentMethod::all(),
             'costCenterList' => CostCenter::all(),
-            'creditCardPayment' => PaymentMethod::query()->where('name','like', '%Cartao de credito%')->get('id'),
             'situationList' => Situation::query()->whereHas('section', function ($query) {
                 $query->where('name', 'like', '%CARTAO CONSUMO%');
             })->get(),
@@ -108,8 +107,10 @@ class ConsumptionCardController extends AdminController
                 $historical->saveOriginOrTranslation($request->input('lang'));
 
                 if ($situationClosed->id != $row->situation_id) {
-                    $row->value_card = floatval($row->value_card) + floatval($request->input('priceAdd'));
 
+                    $valueCard = $row->value_card + floatval($request->input('priceAdd'));
+
+                    $row->value_card = number_format($valueCard, 2, ',', '.');
                     $row->saveOriginOrTranslation();
 
                     $row->createHistory($row);

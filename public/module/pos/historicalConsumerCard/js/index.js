@@ -23,7 +23,7 @@ function showTransitionNumber(){
 }
 
 $('.novo-cartao-consumo').click(function () {
-    window.location.href = "{{route('pos.admin.consumption.card.index')}}";
+    window.location.href = "/admin/module/pos/consumptionCard/";
 });
 
 $('.moeda-real').mask('#.##0,00', {reverse: true});
@@ -31,7 +31,6 @@ $('.moeda-real').mask('#.##0,00', {reverse: true});
 $('#priceAdd').on('keyup', function () {
 
     $("#somaValores").show();
-
     let getpriceRestante = $('#priceRestante').val().replace(/[.]/g, '').replace(',', '.');
     let getpriceAdd = $('#priceAdd').val().replace(/[.]/g, '').replace(',', '.');
 
