@@ -57,6 +57,11 @@ $menus = [
                 'title'      => __('Característica UH'),
                 'permission' => 'characteristic_view',
             ],
+            'tariff'     => [
+                'url'        => route('tariff.admin.index'),
+                'title'      => __('Tarifas Lotação UH'),
+                'permission' => 'tariff_view',
+            ],
             'room_number'     => [
                 'url'        => route('room.admin.index'),
                 'title'      => __('Numeracao UH'),

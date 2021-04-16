@@ -343,6 +343,13 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::findOrCreate('characteristic_delete');
         Permission::findOrCreate('characteristic_manage_others');
 
+        // Tariff Number
+        Permission::findOrCreate('tariff_view');
+        Permission::findOrCreate('tariff_create');
+        Permission::findOrCreate('tariff_update');
+        Permission::findOrCreate('tariff_delete');
+        Permission::findOrCreate('tariff_manage_others');
+
         // Room Number
         Permission::findOrCreate('garage_view');
         Permission::findOrCreate('garage_create');
