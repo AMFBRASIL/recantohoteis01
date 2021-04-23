@@ -59,7 +59,7 @@
             <div class="col-md-12 col-lg-6 mb-3">
                 <div class="panel">
                     <div class="panel-title d-flex justify-content-between align-items-center">
-                        <strong>{{__('Earning statistics')}}</strong>
+                        <strong>{{__('Resumo Hoteis Resort')}}</strong>
                         <div id="reportrange"
                              style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
                             <i class="fa fa-calendar"></i>&nbsp;
@@ -228,7 +228,7 @@
     <script src="{{url('libs/daterange/moment.min.js')}}"></script>
     <script src="{{url('libs/daterange/daterangepicker.min.js?_ver='.config('app.version'))}}"></script>
     <script>
-        var ctx = document.getElementById('earning_chart').getContext('2d');
+        let ctx = document.getElementById('earning_chart').getContext('2d');
         window.myMixedChart = new Chart(ctx, {
             type: 'bar',
             data: earning_chart_data,
@@ -262,7 +262,7 @@
                 tooltips: {
                     callbacks: {
                         label: function (tooltipItem, data) {
-                            var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                            let label = data.datasets[tooltipItem.datasetIndex].label || '';
                             if (label) {
                                 label += ': ';
                             }
@@ -302,7 +302,6 @@
             $.ajax({
                 url: '{{url('admin/module/dashboard/reloadChart')}}',
                 data: {
-                    chart: 'earning',
                     from: picker.startDate.format('YYYY-MM-DD'),
                     to: picker.endDate.format('YYYY-MM-DD'),
                 },

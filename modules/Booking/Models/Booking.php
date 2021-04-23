@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use Modules\Booking\Emails\NewBookingEmail;
 use Modules\Booking\Emails\StatusUpdatedEmail;
 use Modules\Booking\Events\BookingUpdatedEvent;
+use Modules\Hotel\Models\Building;
 use Modules\Hotel\Models\HotelRoomBooking;
 use Modules\Situation\Models\Situation;
 use Modules\User\Models\Wallet\Transaction;
@@ -318,7 +319,8 @@ class Booking extends BaseModel
             'class'  => 'purple',
             'icon'   => 'fa fa-dollar fa-2x'
         ];
-        $res[] = [
+
+       /* $res[] = [
             'size'   => 6,
             'size_md'=>3,
             'title'  => __("Earning"),
@@ -346,6 +348,82 @@ class Booking extends BaseModel
             'desc'   => __("Total bookable services"),
             'class'  => 'success',
             'icon'   => 'icon ion-ios-flash'
+        ];*/
+
+        $res[] = [
+
+            'size'   => 6,
+            'size_md'=>3,
+            'title'  => __("GASTOS MENSAL"),
+            'amount' => $total_service,
+            'desc'   => __("Total de Gastos do Mes Bruto"),
+            'class'  => 'pink',
+            'icon'   => 'icon ion-ios-flash'
+        ];
+
+        $res[] = [
+
+            'size'   => 6,
+            'size_md'=>3,
+            'title'  => __("RESERVAS HOTEIS"),
+            'amount' => $total_service,
+            'desc'   => __("Total bookable services"),
+            'class'  => 'success',
+            'icon'   => 'icon ion-ios-flash'
+        ];
+
+        $res[] = [
+
+            'size'   => 6,
+            'size_md'=>3,
+            'title'  => __("QUARTOS HOTEIS"),
+            'amount' => $total_service,
+            'desc'   => __("Total de Quartos do Hotel"),
+            'class'  => 'pink',
+            'icon'   => 'fa fa-bed fa-2x'
+        ];
+
+        $res[] = [
+
+            'size'   => 6,
+            'size_md'=>3,
+            'title'  => __("LUCRO LIQUIDO"),
+            'amount' => $total_service,
+            'desc'   => __("Total Lucro Liquido"),
+            'class'  => 'success',
+            'icon'   => 'fa fa-dollar fa-2x'
+        ];
+        $res[] = [
+
+            'size'   => 6,
+            'size_md'=>3,
+            'title'  => __("ESTOQUE"),
+            'amount' => $total_service,
+            'desc'   => __("Total de Produtos Fora do Estoque"),
+            'class'  => 'pink',
+            'icon'   => 'fa fa-cubes fa-2x'
+        ];
+
+        $res[] = [
+
+            'size'   => 6,
+            'size_md'=>3,
+            'title'  => __("RESERVAS CHACARAS"),
+            'amount' => $total_service,
+            'desc'   => __("Total de Reservas ( ". (now()->format('d/m/y'))." )"),
+            'class'  => 'success',
+            'icon'   => 'fa fa-sign-in fa-2x'
+        ];
+
+        $res[] = [
+
+            'size'   => 6,
+            'size_md'=>3,
+            'title'  => __("CLIENTES"),
+            'amount' => $total_service,
+            'desc'   => __("Total de Clientes Cadastrados"),
+            'class'  => 'purple',
+            'icon'   => 'fa fa-users fa-2x'
         ];
         return $res;
     }
@@ -356,80 +434,60 @@ class Booking extends BaseModel
             'labels'   => [],
             'datasets' => [
                 [
-                    'label'           => __("Total Revenue"),
+                    'label'           => __("Total Locações"),
                     'data'            => [],
                     'backgroundColor' => '#8892d6',
                     'stack'           => 'group-total',
                 ],
                 [
-                    'label'           => __("Total Earning"),
+                    'label'           => __("Total Financeiro"),
                     'data'            => [],
-                    'backgroundColor' => '#F06292',
+                    'backgroundColor' => '#8892d6',
                     'stack'           => 'group-extra',
-                ]
+                ],
+                [
+                    'label'           => __("Apartamento em Limpeza"),
+                    'data'            => [],
+                    'backgroundColor' => '#FFA500',
+                    'stack'           => 'group-extra',
+                ],
+                [
+                    'label'           => __("Apartamento Livres"),
+                    'data'            => [],
+                    'backgroundColor' => '#228B22',
+                    'stack'           => 'group-extra',
+                ],
+                [
+                    'label'           => __("Previsão de Saidas"),
+                    'data'            => [],
+                    'backgroundColor' => '#8892d6',
+                    'stack'           => 'group-extra',
+                ],
             ]
         ];
+
+        $buildings = Building::query()->orderby('name', 'asc')->get();
+
         $sql_raw[] = 'sum(`total`) as total_price';
         $sql_raw[] = 'sum( `total` - `total_before_fees` + `commission` - `vendor_service_fee_amount` ) AS total_earning';
-        if (($to - $from) / DAY_IN_SECONDS > 90) {
-            $year = date("Y", $from);
-            // Report By Month
-            for ($month = 1; $month <= 12; $month++) {
-                $day_last_month = date("t", strtotime($year . "-" . $month . "-01"));
-                $dataBooking = parent::selectRaw(implode(",", $sql_raw))->whereBetween('created_at', [
-                    $year . '-' . $month . '-01 00:00:00',
-                    $year . '-' . $month . '-' . $day_last_month . ' 23:59:59'
-                ])->whereNotIn('status',static::$notAcceptedStatus);
-                if (!empty($customer_id)) {
-                    $dataBooking = $dataBooking->where('customer_id', $customer_id);
-                }
-                if (!empty($vendor_id)) {
-                    $dataBooking = $dataBooking->where('vendor_id', $vendor_id);
-                }
-                $dataBooking = $dataBooking->first();
-                $data['labels'][] = date("F", strtotime($year . "-" . $month . "-01"));
-                $data['datasets'][0]['data'][] = $dataBooking->total_price ?? 0;
-                $data['datasets'][1]['data'][] = $dataBooking->total_earning ?? 0;
-            }
-        } elseif (($to - $from) <= DAY_IN_SECONDS) {
-            // Report By Hours
 
-            for ($i = strtotime(date('Y-m-d', $from)); $i <= strtotime(date('Y-m-d 23:59:59', $to)); $i += HOUR_IN_SECONDS) {
-                $dataBooking = parent::selectRaw(implode(",", $sql_raw))->whereBetween('created_at', [
-                    date('Y-m-d H:i:s', $i),
-                    date('Y-m-d H:i:s', $i + HOUR_IN_SECONDS - 1),
-                ])->whereNotIn('status',static::$notAcceptedStatus);
-                if (!empty($customer_id)) {
-                    $dataBooking = $dataBooking->where('customer_id', $customer_id);
-                }
-                if (!empty($vendor_id)) {
-                    $dataBooking = $dataBooking->where('vendor_id', $vendor_id);
-                }
-                $dataBooking = $dataBooking->first();
-                $data['labels'][] = date('H:i', $i);
-                $data['datasets'][0]['data'][] = $dataBooking->total_price ?? 0;
-                $data['datasets'][1]['data'][] = $dataBooking->total_earning ?? 0;
+        foreach ($buildings as $b) {
+            $dataBooking = parent::selectRaw(implode(",", $sql_raw))
+                ->whereBetween('created_at', [$from,$to])
+                ->whereNotIn('status',static::$notAcceptedStatus);
+/*            if (!empty($customer_id)) {
+                $dataBooking = $dataBooking->where('customer_id', $customer_id);
             }
-        } else {
-            // Report By Day
-            $period = periodDate(date('Y-m-d', $from),date('Y-m-d 23:59:59', $to));
-            foreach ($period as $dt){
-                $dataBooking = parent::selectRaw(implode(",", $sql_raw))->whereBetween('created_at', [
-                    $dt->format('Y-m-d 00:00:00'),
-                    $dt->format('Y-m-d 23:59:59'),
-                ])->whereNotIn('status',static::$notAcceptedStatus);
-                if (!empty($customer_id)) {
-                    $dataBooking = $dataBooking->where('customer_id', $customer_id);
-                }
-                if (!empty($vendor_id)) {
-                    $dataBooking = $dataBooking->where('vendor_id', $vendor_id);
-                }
-                $dataBooking = $dataBooking->first();
-                $data['labels'][] = display_date($dt->getTimestamp());
-                $data['datasets'][0]['data'][] = $dataBooking->total_price ?? 0;
-                $data['datasets'][1]['data'][] = $dataBooking->total_earning ?? 0;
-            }
+            if (!empty($vendor_id)) {
+                $dataBooking = $dataBooking->where('vendor_id', $vendor_id);
+            }*/
+
+            $dataBooking = $dataBooking->first();
+            $data['labels'][] = $b->name;
+            $data['datasets'][0]['data'][] = $dataBooking->total_price ?? 0;
+            $data['datasets'][1]['data'][] = $dataBooking->total_earning ?? 0;
         }
+
         return $data;
     }
 

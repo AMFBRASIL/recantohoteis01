@@ -26,15 +26,12 @@ class DashboardController extends AdminController
 
     public function reloadChart(Request $request)
     {
-        $chart = $request->input('chart');
-        switch ($chart) {
-            case "earning":
-                $from = $request->input('from');
-                $to = $request->input('to');
-                return $this->sendSuccess([
-                    'data' => Booking::getDashboardChartData(strtotime($from), strtotime($to))
-                ]);
-        }
+        $from = $request->input('from');
+        $to = $request->input('to');
+
+        return $this->sendSuccess([
+            'data' => Booking::getDashboardChartData($from, $to)
+        ]);
     }
 
     public function situations(Request $request)
@@ -122,7 +119,7 @@ class DashboardController extends AdminController
         array_push($statistics, [
             'situation' => ["name" => "Day Use"],
             'percentage' => 100,
-            'label' => 'red',
+            'label' => 'orange',
             'total' => $dayUser,
             'id' => 'situation_day_user'
         ]);
