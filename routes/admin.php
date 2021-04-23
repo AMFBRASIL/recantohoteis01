@@ -15,6 +15,7 @@ Route::group(['prefix'=>'admin','middleware' => ['auth','dashboard']], function(
         $module = ucfirst(htmlspecialchars($module));
         $controller = ucfirst(htmlspecialchars($controller));
         $class = "\\Modules\\$module\\Admin\\";
+
         if(!class_exists($class.$controller.'Controller')){
             $param3 = $param2;
             $param2 = $param1;

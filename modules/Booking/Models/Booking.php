@@ -299,20 +299,24 @@ class Booking extends BaseModel
         $total_booking = parent::whereNotIn('status',static::$notAcceptedStatus)->count('id');
         $total_service = 0;
         $services = get_bookable_services();
+
         if(!empty($services))
         {
+            $P_Dia = date("Y-m-01");
+            $U_Dia = date("Y-m-t");
+
             foreach ($services as $service){
-                $total_service += $service::where('status', 'publish')->count('id');
+                $total_service += $service::where('status', 'publish')->whereBetween('created_at', [$P_Dia, $U_Dia])->count('id');
             }
         }
         $res[] = [
             'size'   => 6,
             'size_md'=>3,
-            'title'  => __("Revenue"),
+            'title'  => __("FATURAMENTO"),
             'amount' => format_money_main($total_data->total_price),
-            'desc'   => __("Total revenue"),
+            'desc'   => __("Total faturado Bruto do Mês"),
             'class'  => 'purple',
-            'icon'   => 'icon ion-ios-cart'
+            'icon'   => 'fa fa-dollar fa-2x'
         ];
         $res[] = [
             'size'   => 6,

@@ -316,7 +316,6 @@ class Space extends Bookable
         $booking->vendor_id = $this->create_user;
         $booking->customer_id = Auth::id();
         $booking->total = $total;
-        $booking->paid = $total;
         $booking->total_guests = $total_guests;
         $booking->start_date = $start_date->format('Y-m-d H:i:s');
         $booking->end_date = $end_date->format('Y-m-d H:i:s');
