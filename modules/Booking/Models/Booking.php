@@ -17,6 +17,7 @@ use Modules\Hotel\Models\Building;
 use Modules\Hotel\Models\HotelRoomBooking;
 use Modules\Situation\Models\Situation;
 use Modules\User\Models\Wallet\Transaction;
+use phpDocumentor\Reflection\Types\This;
 
 class Booking extends BaseModel
 {
@@ -468,13 +469,19 @@ class Booking extends BaseModel
 
         $buildings = Building::query()->orderby('name', 'asc')->get();
 
-        $sql_raw[] = 'sum(`total`) as total_price';
-        $sql_raw[] = 'sum( `total` - `total_before_fees` + `commission` - `vendor_service_fee_amount` ) AS total_earning';
+        $canceled = Booking::situationCanceled()->id;
+
+//        /*$sql_raw[] = 'sum(`total`) as total_price';
+//        $sql_raw[] = 'sum( `total` - `total_before_fees` + `commission` - `vendor_service_fee_amount` ) AS total_earning';*/
 
         foreach ($buildings as $b) {
-            $dataBooking = parent::selectRaw(implode(",", $sql_raw))
+/*            $dataBooking = parent::selectRaw(implode(",", $sql_raw))
                 ->whereBetween('created_at', [$from,$to])
-                ->whereNotIn('status',static::$notAcceptedStatus);
+                ->whereNotIn('status',static::$notAcceptedStatus)
+                ->where([
+                    ['id', $b->id],
+                    ['situation_id','!=', Booking::situationCanceled()->id]
+                ]);
 /*            if (!empty($customer_id)) {
                 $dataBooking = $dataBooking->where('customer_id', $customer_id);
             }
@@ -482,10 +489,31 @@ class Booking extends BaseModel
                 $dataBooking = $dataBooking->where('vendor_id', $vendor_id);
             }*/
 
-            $dataBooking = $dataBooking->first();
+            $bookings = DB::select('select * from bravo_bookings b
+	                    inner join bravo_hotel_room_bookings bhrb on b.id = bhrb.booking_id
+	                    inner join bravo_hotel_rooms bhr on bhrb.room_id = bhr.room_id
+	                    inner join bravo_room br on bhr.room_id = br.id
+	                    inner join bravo_building bb on br.building_id = bb.id
+	                    where b.created_at between ? and ?
+		                    and b.deleted_at is null
+		                    and b.situation_id != ?
+		                    and b.status not in (?)
+		                    and bb.id  = ?', [$from,$to,$canceled,json_encode(static::$notAcceptedStatus),$b->id]);
+
+//            $dataBooking = $dataBooking->first();
+
+            $totalFaturamento = 0;
+
+            if(!empty($bookings)){
+                foreach ($bookings as $booking){
+                    $totalFaturamento += floatval($booking->total);
+                }
+            }
+
             $data['labels'][] = $b->name;
-            $data['datasets'][0]['data'][] = $dataBooking->total_price ?? 0;
-            $data['datasets'][1]['data'][] = $dataBooking->total_earning ?? 0;
+            $data['datasets'][0]['data'][] = count($bookings);
+            $data['datasets'][1]['data'][] = $totalFaturamento;
+//            $data['datasets'][1]['data'][] = $dataBooking->total_earning ?? 0;
         }
 
         return $data;
@@ -1018,5 +1046,13 @@ class Booking extends BaseModel
                 }
             }
         }
+    }
+
+    public static function situationCanceled(){
+       return  Situation::query()
+            ->whereHas('section', function ($query) {
+                $query->where('name', 'like', '%Reservas%');
+            })
+            ->where('name', 'like', '%Cancelada%')->get()->first();
     }
 }
