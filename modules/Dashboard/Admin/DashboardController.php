@@ -51,13 +51,32 @@ class DashboardController extends AdminController
         $released = HotelRoom::query()
             ->where('situation_id', $releasedSituation->id)
             ->whereBetween('updated_at', [$start, $end]);
-        $released = empty($released) ? 0 : $released->count();
+        $value_released = empty($released) ? 0 : $released->count();
+
+        $released = $released->get();
+
+        $data_released = [];
+
+        if(!empty($released)){
+            foreach($released as $i){
+                $room = $i->room;
+                array_push($data_released,[
+                    'room_name'         => $i->title,
+                    'room_information'  => $room->building->name . "/". $room->buildingFloor->name . "/". $room->number,
+                    'room_value'        => "R$". number_format(($i->price), 2, ',', '.'),
+                    'room_guest'        => '('.$i->adults.') Ad. ' . '('.$i->children.') Cri.',
+                    'room_status'       => $i->situation->name,
+                    'room_status_label' => $i->situation->label,
+                ]);
+            }
+        }
 
         array_push($statistics, [
             'situation' => ["name" => "Livres"],
-            'percentage' => intval(($released * 100) / $totalHotelRoom),
+            'percentage' => intval(($value_released * 100) / $totalHotelRoom),
             'label' => 'green',
-            'total' => $released,
+            'total' => $value_released,
+            'release' => $data_released,
             'id' => 'situation_liberado'
         ]);
 
@@ -69,14 +88,32 @@ class DashboardController extends AdminController
 
         $busy = HotelRoom::query()
             ->where('situation_id', $busySituation->id)
-            ->whereBetween('updated_at', [$start, $end]);;
-        $busy = empty($busy) ? 0 : $busy->count();
+            ->whereBetween('updated_at', [$start, $end]);
+        $value_busy = empty($busy) ? 0 : $busy->count();
+
+        $busy = $busy->get();
+
+        $data_busy = [];
+
+        if(!empty($busy)){
+            foreach($busy as $i){
+                $room = $i->room;
+                array_push($data_busy,[
+                    'room_name'         => $i->title,
+                    'room_information'  => $room->building->name . "/". $room->buildingFloor->name . "/". $room->number,
+                    'room_guest'        => '0 Hóspedes',
+                    'room_status'       => $i->situation->name,
+                    'room_status_label' => $i->situation->label,
+                ]);
+            }
+        }
 
         array_push($statistics, [
             'situation' => ["name" => "Ocupados"],
-            'percentage' => intval(($busy * 100) / $totalHotelRoom),
+            'percentage' => intval(($value_busy * 100) / $totalHotelRoom),
             'label' => 'red',
-            'total' => $busy,
+            'total' => $value_busy,
+            'busy' => $data_busy,
             'id' => 'situation_ocupado'
         ]);
 
@@ -118,7 +155,7 @@ class DashboardController extends AdminController
 
         array_push($statistics, [
             'situation' => ["name" => "Day Use"],
-            'percentage' => 100,
+            'percentage' => $dayUser > 0 ? 100 : 0,
             'label' => 'orange',
             'total' => $dayUser,
             'id' => 'situation_day_user'
@@ -162,19 +199,6 @@ class DashboardController extends AdminController
         return $statistics;
     }
 
-
-    public function popoverSituation(Request $request)
-    {
-//        dd($request->all());
-//        switch ($request->input('name')) {
-//            case 'Livres' :
-//                $data = [
-//                    'recent_bookings' => "kjkjd"
-//                ];
-//                return view('Dashboard::Situation.livres', $data);
-//        }
-    }
-
     function restaurantOrders()
     {
         $sales = Sale::query()->orderBy('id', 'desc')->limit(8)->get();;
@@ -199,4 +223,21 @@ class DashboardController extends AdminController
         return $orders;
     }
 
+    function popoverSituationFree(Request $request)
+    {
+        $data = [
+            'data'  => $request->all(),
+        ];
+        return view('Dashboard::popover.free', $data);
+
+    }
+
+    function popoverSituationBusy(Request $request)
+    {
+        $data = [
+            'data'  => $request->all(),
+        ];
+        return view('Dashboard::popover.busy', $data);
+
+    }
 }

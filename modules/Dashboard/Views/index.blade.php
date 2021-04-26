@@ -215,14 +215,12 @@
     </div>
 @endsection
 @section('script.head')
-    <link rel="stylesheet" href="{{asset('libs/bootstrap4.0/bootstrap.css')}}">
     <link rel="stylesheet" href="{{asset('libs/circles/css/circles.css')}}">
     <link rel="stylesheet" href="{{asset('libs/fullcalendar-4.2.0/core/main.css')}}">
     <link rel="stylesheet" href="{{asset('libs/fullcalendar-4.2.0/daygrid/main.css')}}">
     <link rel="stylesheet" href="{{asset('libs/daterange/daterangepicker.css')}}">
 @endsection
 @section('script.body')
-    <script src="{{url('libs/bootstrap4/bootstrap.js')}}"></script>
     <script src="{{asset('libs/tippy/tippy-bundle.umd.min.js')}}"></script>
     <script src="{{url('libs/chart_js/Chart.min.js')}}"></script>
     <script src="{{url('libs/daterange/moment.min.js')}}"></script>
@@ -317,38 +315,43 @@
         });
         cb(start, end);
     </script>
-
     <script>
         let start_situation = null;
         let end_situation = null;
+        let free = null;
+        let busy = null;
 
         $(function ($) {
+            $(document).on('mouseenter mouseleave','.situation_liberado', function(){
+                $('.situation_liberado').removeAttr('data-content')
+                $('.situation_liberado').removeAttr('data-loaded')
 
-            $('#situation_liberado').popover({
-                "html": true,
-                "content": function () {
-                    var div_id = "tmp-id-" + $.now();
-                    return details_in_popup($(this).attr('href'), div_id);
-                }
-            });
-
-            $('*[data-poload]').hover(function () {
-                var e = $(this);
-                e.off('hover');
-                $.get(e.data('poload'), function (d) {
-                    e.popover({
-                        content: d
-                    }).popover('show');
+                console.log(("render free"))
+                $('.situation_liberado').popover({
+                    html: true,
+                    trigger: 'click',
+                    content: function() {
+                        return popoverRemoteContentsFree(this);
+                    }
                 });
             });
 
-            $('.popover-dismiss').popover({
-                trigger: 'focus'
-            })
+            $(document).on('mouseenter mouseleave','.situation_ocupado', function(){
+                $('.situation_ocupado').removeAttr('data-content')
+                $('.situation_ocupado').removeAttr('data-loaded')
+
+                console.log(("render busy"))
+                $('.situation_ocupado').popover({
+                    html: true,
+                    trigger: 'click',
+                    content: function() {
+                        return popoverRemoteContentsBuzy(this);
+                    }
+                });
+            });
 
             $(".mapaQuartosDisponivel").click(function () {
                 window.location = "/admin/module/reservation/mapAvailable";
-                console.log("kjshsdfuiysg")
             });
 
             this.start_situation = moment();
@@ -377,12 +380,10 @@
             setDateValue(this.start_situation, this.end_situation)
         });
 
-
         function setDateValue(start, end) {
             $("#reportRangeSituation span").html(start.format("MMMM D, YYYY") + " - " + end.format("MMMM D, YYYY"));
             setSituation(start, end)
         }
-
 
         function setSituation(start, end) {
             let data = {
@@ -391,16 +392,13 @@
             };
 
             let url = "admin/module/dashboard/situations";
-            console.log(data)
 
             $.ajax({
                 url: url,
                 type: 'GET',
                 data: data,
                 success: function (data) {
-                    console.log("Mudou")
                     implementsSituantion(data)
-                    console.log(data)
                 }
             });
         }
@@ -408,13 +406,21 @@
         function implementsSituantion(data) {
             let html = '';
             $.each(data, function (index, item) {
+
+                if (item['id'] == 'situation_liberado'){
+                    free = item['release'];
+                }
+
+                if (item['id'] == 'situation_ocupado'){
+                    busy = item['busy'];
+                }
+
                 html +=
                     `<div class="px-5 pb-5 pb-md-0 text-center">
                         <div class="c100 p${item['percentage']} ${item['label']} small">
                                     <span>
-                                        <a id="${item['id']}" href="#" data-toggle="popover" data-trigger="focus"
-                                             data-placement="bottom" data-poload="/livres"
-                                             data-popover-remote="/livres/">
+                                        <a class="${item['id']}" href="#" data-toggle="popover"
+                                             data-placement="bottom" data-original-title=''>
                                             ${item['total']}
                                         </a>
                                     </span>
@@ -429,15 +435,64 @@
             $(".detail-situations").html(html);
         }
 
-        function details_in_popup(link, div_id) {
-            $.ajax({
-                url: link,
-                success: function (response) {
-                    $('#' + div_id).html(response);
-                }
-            });
-            return '<div id="' + div_id + '">Loading...</div>';
+        function popoverRemoteContentsFree(element) {
+            if ($(element).data('loaded') !== true) {
+                let div_id = 'tmp-id-' + $.now();
+
+                let data = {
+                    free: free,
+                };
+
+                let url = "admin/module/dashboard/popoverSituationFree";
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: data,
+                    success: function(response) {
+                        $('#' + div_id).html(response);
+                        $(element).attr("data-loaded", true);
+                        $(element).attr("data-content", response);
+                        return $(element).popover('update');
+                    }
+                });
+
+                return '<div id="' + div_id + '">Loading...</div>';
+
+            } else {
+                return $(element).data('content');
+            }
         }
+
+        function popoverRemoteContentsBuzy(element) {
+            if ($(element).data('loaded') !== true) {
+                let div_id = 'tmp-id-' + $.now();
+
+                let data = {
+                    busy: busy,
+                };
+
+                let url = "admin/module/dashboard/popoverSituationBusy";
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: data,
+                    success: function(response) {
+                        $('#' + div_id).html(response);
+                        $(element).attr("data-loaded", true);
+                        $(element).attr("data-content", response);
+                        return $(element).popover('update');
+                    }
+                });
+
+                return '<div id="' + div_id + '">Loading...</div>';
+
+            } else {
+                return $(element).data('content');
+            }
+        }
+
     </script>
 @endsection
 
