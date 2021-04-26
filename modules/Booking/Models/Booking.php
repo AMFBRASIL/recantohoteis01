@@ -14,10 +14,12 @@ use Modules\Booking\Emails\NewBookingEmail;
 use Modules\Booking\Emails\StatusUpdatedEmail;
 use Modules\Booking\Events\BookingUpdatedEvent;
 use Modules\Hotel\Models\Building;
+use Modules\Hotel\Models\HotelRoom;
 use Modules\Hotel\Models\HotelRoomBooking;
+use Modules\Product\Models\Product;
 use Modules\Situation\Models\Situation;
 use Modules\User\Models\Wallet\Transaction;
-use phpDocumentor\Reflection\Types\This;
+use function Symfony\Component\String\b;
 
 class Booking extends BaseModel
 {
@@ -295,136 +297,128 @@ class Booking extends BaseModel
 
     public static function getTopCardsReport()
     {
+        $P_Dia = date("Y-m-01");
+        $U_Dia = date("Y-m-t");
+        $canceled = Booking::situationCanceled()->id;
 
         $res = [];
-        $total_data = parent::selectRaw('sum(`total`) as total_price , sum( `total` - `total_before_fees` + `commission` - `vendor_service_fee_amount` ) AS total_earning ')->whereNotIn('status',static::$notAcceptedStatus)->first();
-        $total_booking = parent::whereNotIn('status',static::$notAcceptedStatus)->count('id');
-        $total_service = 0;
+
+        $total_data = parent::selectRaw('sum(`total`) as total_price , sum( `total` - `total_before_fees` + `commission` - `vendor_service_fee_amount` ) AS total_earning ')
+            ->whereNotIn('status', static::$notAcceptedStatus)
+            ->whereBetween('created_at', [$P_Dia, $U_Dia])
+            ->where('situation_id', '!=', $canceled)->first();
+
+        $total_revenues = floatval($total_data->total_price);
+        $total_spending = floatval($total_data->total_earning);
+        $total_profit = $total_revenues - $total_spending;
+        $total_hotel_room = HotelRoom::all()->count('id');
+
+
+        $total_bookings_hotels = 0;
+        $total_bookings_spaces = 0;
+        $total_hotel_clientes = 0;
+
+
+        $total_noStock = Product::query()->where('available_stock', 0)->count('id');
+
+
+        $total_booking = parent::whereNotIn('status', static::$notAcceptedStatus)->count('id');
+
+
+        /*$total_service = 0;
         $services = get_bookable_services();
 
         if(!empty($services))
         {
-            $P_Dia = date("Y-m-01");
-            $U_Dia = date("Y-m-t");
-
             foreach ($services as $service){
                 $total_service += $service::where('status', 'publish')->whereBetween('created_at', [$P_Dia, $U_Dia])->count('id');
             }
-        }
-        $res[] = [
-            'size'   => 6,
-            'size_md'=>3,
-            'title'  => __("FATURAMENTO"),
-            'amount' => format_money_main($total_data->total_price),
-            'desc'   => __("Total faturado Bruto do Mês"),
-            'class'  => 'purple',
-            'icon'   => 'fa fa-dollar fa-2x'
-        ];
-
-       /* $res[] = [
-            'size'   => 6,
-            'size_md'=>3,
-            'title'  => __("Earning"),
-            'amount' => format_money_main($total_data->total_earning),
-            'desc'   => __("Total Earning"),
-            'class'  => 'pink',
-            'icon'   => 'icon ion-ios-gift'
-        ];
-        $res[] = [
-
-            'size'   => 6,
-            'size_md'=>3,
-            'title'  => __("Bookings"),
-            'amount' => $total_booking,
-            'desc'   => __("Total bookings"),
-            'class'  => 'info',
-            'icon'   => 'icon ion-ios-pricetags'
-        ];
-        $res[] = [
-
-            'size'   => 6,
-            'size_md'=>3,
-            'title'  => __("Services"),
-            'amount' => $total_service,
-            'desc'   => __("Total bookable services"),
-            'class'  => 'success',
-            'icon'   => 'icon ion-ios-flash'
-        ];*/
+        }*/
 
         $res[] = [
-
-            'size'   => 6,
-            'size_md'=>3,
-            'title'  => __("GASTOS MENSAL"),
-            'amount' => $total_service,
-            'desc'   => __("Total de Gastos do Mes Bruto"),
-            'class'  => 'pink',
-            'icon'   => 'icon ion-ios-flash'
+            'size' => 6,
+            'size_md' => 3,
+            'title' => __("FATURAMENTO"),
+            'amount' => format_money_main($total_revenues),
+            'desc' => __("Total faturado Bruto do Mês"),
+            'class' => 'purple',
+            'icon' => 'fa fa-dollar fa-2x'
         ];
 
         $res[] = [
 
-            'size'   => 6,
-            'size_md'=>3,
-            'title'  => __("RESERVAS HOTEIS"),
-            'amount' => $total_service,
-            'desc'   => __("Total bookable services"),
-            'class'  => 'success',
-            'icon'   => 'icon ion-ios-flash'
+            'size' => 6,
+            'size_md' => 3,
+            'title' => __("GASTOS MENSAL"),
+            'amount' => format_money_main($total_spending),
+            'desc' => __("Total de Gastos do Mes Bruto"),
+            'class' => 'pink',
+            'icon' => 'icon ion-ios-flash'
         ];
 
         $res[] = [
 
-            'size'   => 6,
-            'size_md'=>3,
-            'title'  => __("QUARTOS HOTEIS"),
-            'amount' => $total_service,
-            'desc'   => __("Total de Quartos do Hotel"),
-            'class'  => 'pink',
-            'icon'   => 'fa fa-bed fa-2x'
+            'size' => 6,
+            'size_md' => 3,
+            'title' => __("RESERVAS HOTEIS"),
+            'amount' => $total_bookings_hotels,
+            'desc' => __("Total de Reservas Previsto ( " . (now()->format('d/m/y')) . " )"),
+            'class' => 'success',
+            'icon' => 'icon ion-ios-flash'
         ];
 
         $res[] = [
 
-            'size'   => 6,
-            'size_md'=>3,
-            'title'  => __("LUCRO LIQUIDO"),
-            'amount' => $total_service,
-            'desc'   => __("Total Lucro Liquido"),
-            'class'  => 'success',
-            'icon'   => 'fa fa-dollar fa-2x'
-        ];
-        $res[] = [
-
-            'size'   => 6,
-            'size_md'=>3,
-            'title'  => __("ESTOQUE"),
-            'amount' => $total_service,
-            'desc'   => __("Total de Produtos Fora do Estoque"),
-            'class'  => 'pink',
-            'icon'   => 'fa fa-cubes fa-2x'
+            'size' => 6,
+            'size_md' => 3,
+            'title' => __("QUARTOS HOTEIS"),
+            'amount' => $total_hotel_room,
+            'desc' => __("Total de Quartos do Hotel"),
+            'class' => 'pink',
+            'icon' => 'fa fa-bed fa-2x'
         ];
 
         $res[] = [
 
-            'size'   => 6,
-            'size_md'=>3,
-            'title'  => __("RESERVAS CHACARAS"),
-            'amount' => $total_service,
-            'desc'   => __("Total de Reservas ( ". (now()->format('d/m/y'))." )"),
-            'class'  => 'success',
-            'icon'   => 'fa fa-sign-in fa-2x'
+            'size' => 6,
+            'size_md' => 3,
+            'title' => __("LUCRO LIQUIDO"),
+            'amount' => format_money_main($total_profit),
+            'desc' => __("Total Lucro Liquido"),
+            'class' => 'success',
+            'icon' => 'fa fa-dollar fa-2x'
+        ];
+        $res[] = [
+
+            'size' => 6,
+            'size_md' => 3,
+            'title' => __("ESTOQUE"),
+            'amount' => $total_noStock,
+            'desc' => __("Total de Produtos Fora do Estoque"),
+            'class' => 'pink',
+            'icon' => 'fa fa-cubes fa-2x'
         ];
 
         $res[] = [
 
-            'size'   => 6,
-            'size_md'=>3,
-            'title'  => __("CLIENTES"),
-            'amount' => $total_service,
-            'desc'   => __("Total de Clientes Cadastrados"),
-            'class'  => 'purple',
-            'icon'   => 'fa fa-users fa-2x'
+            'size' => 6,
+            'size_md' => 3,
+            'title' => __("RESERVAS CHACARAS"),
+            'amount' => $total_bookings_spaces,
+            'desc' => __("Total de Reservas ( " . (now()->format('d/m/y')) . " )"),
+            'class' => 'success',
+            'icon' => 'fa fa-sign-in fa-2x'
+        ];
+
+        $res[] = [
+
+            'size' => 6,
+            'size_md' => 3,
+            'title' => __("CLIENTES"),
+            'amount' => $total_hotel_clientes,
+            'desc' => __("Total de Clientes Cadastrados"),
+            'class' => 'purple',
+            'icon' => 'fa fa-users fa-2x'
         ];
         return $res;
     }
@@ -468,27 +462,27 @@ class Booking extends BaseModel
         ];
 
         $buildings = Building::query()->orderby('name', 'asc')->get();
-
         $canceled = Booking::situationCanceled()->id;
 
-//        /*$sql_raw[] = 'sum(`total`) as total_price';
-//        $sql_raw[] = 'sum( `total` - `total_before_fees` + `commission` - `vendor_service_fee_amount` ) AS total_earning';*/
+        $hotel_room_clear = Situation::query()
+            ->whereHas('section', function ($query) {
+                $query->where('name', 'like', '%Quarto%');
+            })
+            ->where('name', 'like', '%EM LIMPEZA%')->get('id')->first();
+
+        $hotel_room_free = Situation::query()
+            ->whereHas('section', function ($query) {
+                $query->where('name', 'like', '%Quarto%');
+            })
+            ->where('name', 'like', '%LIBERADO%')->get('id')->first();
+
+        $situation_checkout = Situation::query()
+            ->whereHas('section', function ($query) {
+                $query->where('name', 'like', '%RESERVAS%');
+            })
+            ->where('name', 'like', '%CHECK-OUT%')->get('id')->first();
 
         foreach ($buildings as $b) {
-/*            $dataBooking = parent::selectRaw(implode(",", $sql_raw))
-                ->whereBetween('created_at', [$from,$to])
-                ->whereNotIn('status',static::$notAcceptedStatus)
-                ->where([
-                    ['id', $b->id],
-                    ['situation_id','!=', Booking::situationCanceled()->id]
-                ]);
-/*            if (!empty($customer_id)) {
-                $dataBooking = $dataBooking->where('customer_id', $customer_id);
-            }
-            if (!empty($vendor_id)) {
-                $dataBooking = $dataBooking->where('vendor_id', $vendor_id);
-            }*/
-
             $bookings = DB::select('select * from bravo_bookings b
 	                    inner join bravo_hotel_room_bookings bhrb on b.id = bhrb.booking_id
 	                    inner join bravo_hotel_rooms bhr on bhrb.room_id = bhr.room_id
@@ -500,20 +494,41 @@ class Booking extends BaseModel
 		                    and b.status not in (?)
 		                    and bb.id  = ?', [$from,$to,$canceled,json_encode(static::$notAcceptedStatus),$b->id]);
 
-//            $dataBooking = $dataBooking->first();
+            $total_free  = HotelRoom::query()
+                ->whereHas('room', function ($query) use ($b) {
+                    $query->whereHas('building', function ($query) use ($b) {
+                        $query->where('id', $b->id);
+                    });
+                })
+                ->where('situation_id', $hotel_room_free->id);
+
+            $total_clean = HotelRoom::query()
+                ->whereHas('room', function ($query) use ($b) {
+                    $query->whereHas('building', function ($query) use ($b) {
+                        $query->where('id', $b->id);
+                    });
+                })
+                ->where('situation_id', $hotel_room_clear->id);
 
             $totalFaturamento = 0;
+            $total_checkout = 0;
 
             if(!empty($bookings)){
                 foreach ($bookings as $booking){
                     $totalFaturamento += floatval($booking->total);
+
+                    if($booking->situation_id == $situation_checkout->id){
+                        ++$total_checkout;
+                    }
                 }
             }
 
             $data['labels'][] = $b->name;
             $data['datasets'][0]['data'][] = count($bookings);
             $data['datasets'][1]['data'][] = $totalFaturamento;
-//            $data['datasets'][1]['data'][] = $dataBooking->total_earning ?? 0;
+            $data['datasets'][2]['data'][] = $total_clean;
+            $data['datasets'][3]['data'][] = $total_free;
+            $data['datasets'][4]['data'][] = $total_checkout;
         }
 
         return $data;
