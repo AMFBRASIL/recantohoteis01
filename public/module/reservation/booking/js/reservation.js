@@ -439,21 +439,21 @@ function loadModalPaymentInformation(addValue) {
     let valorTotal = parseFloat(bookingSelect.total);
     valorTotal = formatNumber(valorTotal);
 
-    let valorPago = parseFloat(bookingSelect.paid);
-    let valorRestante = parseFloat(bookingSelect.total) - parseFloat(bookingSelect.paid);
+    let valorRestante = parseFloat(bookingSelect.paid);
+    let valorPago = parseFloat(bookingSelect.total) - parseFloat(bookingSelect.paid);
 
     $(".value_booking").html(`R$ ${valorTotal}`);
 
-    $(`.value_paid_s${addValueIndent}`).html(`<i class="fa fa-plus"> </i>R$ <span class="mt-5 value_paid${addValueIndent}">0,00</span>`);
+    $(`.value_pay_s${addValueIndent}`).html(`<i class="fa fa-plus"> </i>R$ <span class="mt-5 value_pay${addValueIndent}">0,00</span>`);
     if (valorPago != null && valorPago > 0) {
         valorPago = formatNumber(valorPago);
-        $(`.value_paid_s${addValueIndent}`).html(`<i class="fa fa-plus"> </i> R$ <span class="mt-5 value_paid${addValueIndent}">${valorPago}</span>`);
+        $(`.value_pay_s${addValueIndent}`).html(`<i class="fa fa-plus"> </i> R$ <span class="mt-5 value_pay${addValueIndent}">${valorPago}</span>`);
     }
 
-    $(`.value_pend_s${addValueIndent}`).html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_pend${addValueIndent}">0,00</span>`);
+    $(`.value_paid_s${addValueIndent}`).html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid${addValueIndent}">0,00</span>`);
     if (valorRestante != null && valorRestante > 0) {
         valorRestante = formatNumber(valorRestante);
-        $(`.value_pend_s${addValueIndent}`).html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_pend${addValueIndent}">${valorRestante}</span>`);
+        $(`.value_paid_s${addValueIndent}`).html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid${addValueIndent}">${valorRestante}</span>`);
     }
 }
 
