@@ -183,20 +183,12 @@ class BookingController extends Controller
 
     public function getUserBooking(Request $request)
     {
-
         $booking_id = $request->booking_id;
 
         if (!is_null($booking_id)) {
             $booking = Booking::query()->find($booking_id);
 
             if (!empty($booking)) {
-
-                if (empty($booking->paid)) {
-                    $booking->paid = $booking->total;
-                    $booking->save();
-                    $booking = Booking::query()->find($booking_id);
-                }
-
                 return response()->json([
                     'error' => false,
                     'booking' => $booking,

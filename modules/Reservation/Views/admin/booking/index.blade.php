@@ -105,7 +105,7 @@
                                     </td>
                                     <td class="modal-guest">
                                         <a href="#" class="review-count-approved" data-value="{{$row->id}}">
-                                            {{($row->getMeta('adults') + $row->getMeta('children'))}}
+                                            {{intval($row->getMeta('adults')) + intval($row->getMeta('children'))}}
                                         </a>
                                     </td>
                                     <td><b>{{(new DateTime($row->start_date))->format('d/m/y h:m:s')}}</b></td>
@@ -153,7 +153,7 @@
                                     </td>
                                     <td class="modal-value">
                                         <a href="#" class="review-count-pendente" data-value="{{$row->id}}">
-                                            R${{number_format($row->paid, 2, ',', '.')}}
+                                            R${{number_format(($row->total - $row->paid), 2, ',', '.')}}
                                         </a>
                                     </td>
                                     <td>
@@ -1074,8 +1074,8 @@
                         let valorPagoO = null;
                         $('#payment_value').on('keyup', function () {
                             if (valorRestanteO == null && valorPagoO == null) {
-                                valorRestanteO = parseFloat($(".value_paid_add").text().replace(/[.]/g, '').replace(',', '.'));
-                                valorPagoO = parseFloat($(".value_pay_add").text().replace(/[.]/g, '').replace(',', '.'));
+                                valorRestanteO = parseFloat($(".value_pend_add").text().replace(/[.]/g, '').replace(',', '.'));
+                                valorPagoO = parseFloat($(".value_paid_add").text().replace(/[.]/g, '').replace(',', '.'));
                             }
                             let valorRestante = valorRestanteO
                             let valorPago = valorPagoO
@@ -1101,23 +1101,23 @@
                             totalValores = formatNumber(totalValores);
 
 
-                            $('.value_pay_s_add').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_pay_add">${totalPagoAtualizado}</span>`);
+                            $('.value_paid_add').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_paid_add">${totalPagoAtualizado}</span>`);
 
                             if (totalValores < 0) {
-                                $('.value_paid_s_add').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid_add">${totalValores}</span>`);
+                                $('.value_pend_s_add').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_pend_add">${totalValores}</span>`);
                             } else {
                                 if (totalValores == 0) {
-                                    $('.value_paid_s_add').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid_add">0,00</span>`);
+                                    $('.value_pend_s_add').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_pend_add">0,00</span>`);
                                 } else {
-                                    $('.value_paid_s_add').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_paid_add">${totalValores}</span>`);
+                                    $('.value_pend_s_add').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_pend_add">${totalValores}</span>`);
                                 }
                             }
 
                             if (valorRestante < priceAdd) {
                                 alert("O Valor a pagar nao poderá ser maior que valor restante.");
                                 $('#payment_value').val("");
-                                $('.value_paid_s_add').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_paid_add">${valorRestanteO}</span>`);
-                                $('.value_pay_s_add').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_pay_add">${valorPagoO}</span>`);
+                                $('.value_paid_s_add').html(`<i class='fa fa-plus'></i> R$ <span class="mt-5 value_paid_add">${valorPagoO}</span>`);
+                                $('.value_pend_s_add').html(`<i class='fa fa-minus'></i> R$ <span class="mt-5 value_pend_add">${valorRestanteO}</span>`);
                             }
                         });
 

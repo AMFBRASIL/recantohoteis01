@@ -141,7 +141,7 @@ class BookingController extends AdminController
             $payment_value = floatval( $request->input('payment_value'));
             $valuePaid = floatval($booking->paid);
 
-            $booking->paid = $valuePaid - $payment_value;
+            $booking->paid = $valuePaid + $payment_value;
 
             $res = $booking->saveOriginOrTranslation();
 
