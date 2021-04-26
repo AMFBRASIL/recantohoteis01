@@ -12,7 +12,7 @@ class UpdateValuePendingBookingCron extends Command
      *
      * @var string
      */
-    protected $signature = 'updateValuePendingBooking:cron';
+    protected $signature = 'updateValuePendingBooking:run';
 
     /**
      * The console command description.
@@ -45,7 +45,6 @@ class UpdateValuePendingBookingCron extends Command
         foreach ($bookings as $b){
             $totalPending = floatval($b->total) - floatval($b->paid);
             $b->total_pending = $totalPending;
-
             $b->save();
         }
 

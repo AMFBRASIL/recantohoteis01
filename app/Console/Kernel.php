@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
 
-        $schedule->command('updateValuePendingBooking:cron')
+        $schedule->command('updateValuePendingBooking:run')
             ->daily();
     }
 
