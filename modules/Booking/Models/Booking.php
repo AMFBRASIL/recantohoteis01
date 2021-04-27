@@ -311,8 +311,10 @@ class Booking extends BaseModel
         $total_revenues = floatval($total_data->total_price);
         $total_spending = floatval($total_data->total_earning);
         $total_profit = $total_revenues - $total_spending;
-        $total_hotel_room = HotelRoom::all()->count('id');
 
+        $hotel_room = HotelRoom::query()->get();
+
+        $total_hotel_room = count($hotel_room);
 
         $total_bookings_hotels = 0;
         $total_bookings_spaces = 0;
@@ -320,9 +322,6 @@ class Booking extends BaseModel
 
 
         $total_noStock = Product::query()->where('available_stock', 0)->count('id');
-
-
-        $total_booking = parent::whereNotIn('status', static::$notAcceptedStatus)->count('id');
 
 
         /*$total_service = 0;

@@ -320,14 +320,19 @@
         let end_situation = null;
         let free = null;
         let busy = null;
+        let cleaning = null;
+        let maintenance = null;
+        let dayUser = null;
+        let checkin = null;
+        let checkout = null;
 
         $(function ($) {
-            $(document).on('mouseenter mouseleave','.situation_liberado', function(){
-                $('.situation_liberado').removeAttr('data-content')
-                $('.situation_liberado').removeAttr('data-loaded')
+            $(document).on('mouseenter mouseleave','.situation_free', function(){
+                $('.situation_free').removeAttr('data-content')
+                $('.situation_free').removeAttr('data-loaded')
 
                 console.log(("render free"))
-                $('.situation_liberado').popover({
+                $('.situation_free').popover({
                     html: true,
                     trigger: 'click',
                     content: function() {
@@ -336,16 +341,72 @@
                 });
             });
 
-            $(document).on('mouseenter mouseleave','.situation_ocupado', function(){
-                $('.situation_ocupado').removeAttr('data-content')
-                $('.situation_ocupado').removeAttr('data-loaded')
+            $(document).on('mouseenter mouseleave','.situation_busy', function(){
+                $('.situation_busy').removeAttr('data-content')
+                $('.situation_busy').removeAttr('data-loaded')
 
                 console.log(("render busy"))
-                $('.situation_ocupado').popover({
+                $('.situation_busy').popover({
                     html: true,
                     trigger: 'click',
                     content: function() {
-                        return popoverRemoteContentsBuzy(this);
+                        return popoverRemoteContentsBusy(this);
+                    }
+                });
+            });
+
+            $(document).on('mouseenter mouseleave','.situation_maintenance_cleaning', function(){
+                $('.situation_maintenance_cleaning').removeAttr('data-content')
+                $('.situation_maintenance_cleaning').removeAttr('data-loaded')
+
+                console.log(("render maintenance_cleaning"))
+                $('.situation_maintenance_cleaning').popover({
+                    html: true,
+                    trigger: 'click',
+                    content: function() {
+                        return popoverRemoteContentsMaintenanceCleaning(this);
+                    }
+                });
+            });
+
+            $(document).on('mouseenter mouseleave','.situation_day_user', function(){
+                $('.situation_day_user').removeAttr('data-content')
+                $('.situation_day_user').removeAttr('data-loaded')
+
+                console.log(("render day_user"))
+                $('.situation_day_user').popover({
+                    html: true,
+                    trigger: 'click',
+                    content: function() {
+                        return popoverRemoteContentsDayUser(this);
+                    }
+                });
+            });
+
+            $(document).on('mouseenter mouseleave','.situation_checkin', function(){
+                $('.situation_checkin').removeAttr('data-content')
+                $('.situation_checkin').removeAttr('data-loaded')
+
+                console.log(("render checkin"))
+                $('.situation_checkin').popover({
+                    html: true,
+                    trigger: 'click',
+                    content: function() {
+                        return popoverRemoteContentsCheckin(this);
+                    }
+                });
+            });
+
+            $(document).on('mouseenter mouseleave','.situation_checkout', function(){
+                $('.situation_checkout').removeAttr('data-content')
+                $('.situation_checkout').removeAttr('data-loaded')
+
+                console.log(("render checkout"))
+                $('.situation_checkout').popover({
+                    html: true,
+                    trigger: 'click',
+                    content: function() {
+                        return popoverRemoteContentsCheckout(this);
                     }
                 });
             });
@@ -407,12 +468,29 @@
             let html = '';
             $.each(data, function (index, item) {
 
-                if (item['id'] == 'situation_liberado'){
+                if (item['id'] == 'situation_free'){
                     free = item['release'];
                 }
 
-                if (item['id'] == 'situation_ocupado'){
+                if (item['id'] == 'situation_busy'){
                     busy = item['busy'];
+                }
+
+                if (item['id'] == 'situation_maintenance_cleaning'){
+                    cleaning = item['cleaning'];
+                    maintenance = item['maintenance'];
+                }
+
+                if (item['id'] == 'situation_day_user'){
+                    dayUser = item['dayUser'];
+                }
+
+                if (item['id'] == 'situation_checkin'){
+                    checkin = item['checkin'];
+                }
+
+                if (item['id'] == 'situation_checkout'){
+                    checkout = item['checkout'];
                 }
 
                 html +=
@@ -464,7 +542,7 @@
             }
         }
 
-        function popoverRemoteContentsBuzy(element) {
+        function popoverRemoteContentsBusy(element) {
             if ($(element).data('loaded') !== true) {
                 let div_id = 'tmp-id-' + $.now();
 
@@ -473,6 +551,123 @@
                 };
 
                 let url = "admin/module/dashboard/popoverSituationBusy";
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: data,
+                    success: function(response) {
+                        $('#' + div_id).html(response);
+                        $(element).attr("data-loaded", true);
+                        $(element).attr("data-content", response);
+                        return $(element).popover('update');
+                    }
+                });
+
+                return '<div id="' + div_id + '">Loading...</div>';
+
+            } else {
+                return $(element).data('content');
+            }
+        }
+
+        function popoverRemoteContentsMaintenanceCleaning(element) {
+            if ($(element).data('loaded') !== true) {
+                let div_id = 'tmp-id-' + $.now();
+
+                let data = {
+                    maintenance: maintenance,
+                    cleaning: cleaning,
+                };
+
+                let url = "admin/module/dashboard/popoverSituationCleaningMaintenance";
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: data,
+                    success: function(response) {
+                        $('#' + div_id).html(response);
+                        $(element).attr("data-loaded", true);
+                        $(element).attr("data-content", response);
+                        return $(element).popover('update');
+                    }
+                });
+
+                return '<div id="' + div_id + '">Loading...</div>';
+
+            } else {
+                return $(element).data('content');
+            }
+        }
+
+        function popoverRemoteContentsDayUser(element) {
+            if ($(element).data('loaded') !== true) {
+                let div_id = 'tmp-id-' + $.now();
+
+                let data = {
+                    dayUser: dayUser,
+                };
+
+                let url = "admin/module/dashboard/popoverSituationDayUser";
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: data,
+                    success: function(response) {
+                        $('#' + div_id).html(response);
+                        $(element).attr("data-loaded", true);
+                        $(element).attr("data-content", response);
+                        return $(element).popover('update');
+                    }
+                });
+
+                return '<div id="' + div_id + '">Loading...</div>';
+
+            } else {
+                return $(element).data('content');
+            }
+        }
+
+        function popoverRemoteContentsCheckin(element) {
+            if ($(element).data('loaded') !== true) {
+                let div_id = 'tmp-id-' + $.now();
+
+                let data = {
+                    checkin: checkin,
+                };
+
+                let url = "admin/module/dashboard/popoverSituationCheckin";
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: data,
+                    success: function(response) {
+                        $('#' + div_id).html(response);
+                        $(element).attr("data-loaded", true);
+                        $(element).attr("data-content", response);
+                        return $(element).popover('update');
+                    }
+                });
+
+                return '<div id="' + div_id + '">Loading...</div>';
+
+            } else {
+                return $(element).data('content');
+            }
+        }
+
+        function popoverRemoteContentsCheckout(element) {
+            if ($(element).data('loaded') !== true) {
+                let div_id = 'tmp-id-' + $.now();
+
+                let data = {
+                    checkout: checkout,
+                };
+
+                let url = "admin/module/dashboard/popoverSituationCheckout";
 
                 $.ajax({
                     url: url,
