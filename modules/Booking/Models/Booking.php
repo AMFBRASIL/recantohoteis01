@@ -318,7 +318,7 @@ class Booking extends BaseModel
 
         $total_bookings_hotels = 0;
         $total_bookings_spaces = 0;
-        $total_hotel_clientes = 0;
+        $total_hotel_clientes = User::query()->where('active_status' ,'1')->count('id');
 
 
         $total_noStock = Product::query()->where('available_stock', 0)->count('id');
