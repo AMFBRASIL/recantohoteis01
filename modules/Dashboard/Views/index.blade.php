@@ -72,6 +72,12 @@
                             var earning_chart_data = {!! json_encode($earning_chart_data) !!};
                         </script>
                     </div>
+                    <div class="panel-body">
+                        <canvas id="earning_chart_payment_data"></canvas>
+                        <script>
+                            var earning_chart_payment_data = {!! json_encode($earning_chart_payment_data) !!};
+                        </script>
+                    </div>
                 </div>
             </div>
             <div class="col-md-12 col-lg-6 ">
@@ -264,7 +270,53 @@
                             if (label) {
                                 label += ': ';
                             }
-                            label += tooltipItem.yLabel + " ({{setting_item('currency_main')}})";
+                            label += tooltipItem.yLabel;
+                            return label;
+                        }
+                    }
+                }
+            }
+        });
+
+        let ctx2 = document.getElementById('earning_chart_payment_data').getContext('2d');
+        window.myMixedChartPayment = new Chart(ctx2, {
+            type: 'bar',
+            data: earning_chart_payment_data,
+            options: {
+                responsive: true,
+                tooltips: {
+                    mode: 'index',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        stacked: true,
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: '{{__("Timeline")}}'
+                        }
+                    }],
+                    yAxes: [{
+                        stacked: true,
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: '{{__("Currency: :currency_main",['currency_main'=>setting_item('currency_main')])}}'
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                        }
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            let label = data.datasets[tooltipItem.datasetIndex].label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += 'R$ ' + tooltipItem.yLabel.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                             return label;
                         }
                     }
@@ -307,8 +359,11 @@
                 type: 'post',
                 success: function (res) {
                     if (res.status) {
-                        window.myMixedChart.data = res.data;
+                        window.myMixedChart.data = res.data.earning_chart_data;
                         window.myMixedChart.update();
+
+                        window.myMixedChartPayment.data = res.data.earning_chart_payment_data;
+                        window.myMixedChartPayment.update();
                     }
                 }
             })

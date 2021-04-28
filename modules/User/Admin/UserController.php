@@ -446,12 +446,12 @@ class UserController extends AdminController
         $this->checkPermission('user_create');
 
         $check = Validator::make($request->input(), [
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'phone' => 'required',
-            'birthday' => 'required',
-            'password' => 'required',
-            'email' => [
+            'first_name'    => 'required|max:255',
+            'last_name'     => 'required|max:255',
+            'phone'         => 'required',
+            'birthday'      => 'required',
+            'password'      => 'required',
+            'email'         => [
                 'required',
                 'email',
                 'max:255',
@@ -464,14 +464,15 @@ class UserController extends AdminController
         }
 
         $user = User::query()->create([
-            'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-            'status' => $request->input('publish', 'publish'),
-            'phone' => $request->input('phone'),
-            'birthday' => $request->input('birthday'),
+            'name'          => $request->input('first_name') . ' ' . $request->input('last_name'),
+            'first_name'    => $request->input('first_name'),
+            'last_name'     => $request->input('last_name'),
+            'email'         => $request->input('email'),
+            'password'      => Hash::make($request->input('password')),
+            'status'        => $request->input('publish', 'publish'),
+            'phone'         => $request->input('phone'),
+            'birthday'      => $request->input('birthday'),
+            'active_status' => 1,
         ]);
 
         try {

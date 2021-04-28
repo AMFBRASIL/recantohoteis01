@@ -17,10 +17,11 @@ class DashboardController extends AdminController
         $f = strtotime('monday this week');
 
         $data = [
-            'recent_bookings'       => Booking::getRecentBookings(8),
-            'restaurant_orders'     => $this->restaurantOrders(),
-            'top_cards'             => Booking::getTopCardsReport(),
-            'earning_chart_data'    => Booking::getDashboardChartData($f, time())
+            'recent_bookings'               => Booking::getRecentBookings(8),
+            'restaurant_orders'             => $this->restaurantOrders(),
+            'top_cards'                     => Booking::getTopCardsReport(),
+            'earning_chart_data'            => Booking::getDashboardChartData($f, time()),
+            'earning_chart_payment_data'    => Booking::getDashboardChartPaymentData($f, time())
         ];
         return view('Dashboard::index', $data);
     }
@@ -31,7 +32,10 @@ class DashboardController extends AdminController
         $to = $request->input('to');
 
         return $this->sendSuccess([
-            'data' => Booking::getDashboardChartData($from, $to)
+            'data' => [
+                'earning_chart_data'            => Booking::getDashboardChartData($from, $to),
+                'earning_chart_payment_data'    => Booking::getDashboardChartPaymentData($from, $to)
+            ]
         ]);
     }
 

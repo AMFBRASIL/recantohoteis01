@@ -18,8 +18,8 @@ use Modules\Hotel\Models\HotelRoom;
 use Modules\Hotel\Models\HotelRoomBooking;
 use Modules\Product\Models\Product;
 use Modules\Situation\Models\Situation;
+use Modules\Space\Models\Space;
 use Modules\User\Models\Wallet\Transaction;
-use function Symfony\Component\String\b;
 
 class Booking extends BaseModel
 {
@@ -312,27 +312,47 @@ class Booking extends BaseModel
         $total_spending = floatval($total_data->total_earning);
         $total_profit = $total_revenues - $total_spending;
 
-        $hotel_room = HotelRoom::query()->get();
-
+        $hotel_room = HotelRoom::all();
         $total_hotel_room = count($hotel_room);
+        $total_hotel_room_booking = 0;
 
-        $total_bookings_hotels = 0;
-        $total_bookings_spaces = 0;
-        $total_hotel_clientes = User::query()->where('active_status' ,'1')->count('id');
-
-
-        $total_noStock = Product::query()->where('available_stock', 0)->count('id');
-
-
-        /*$total_service = 0;
-        $services = get_bookable_services();
-
-        if(!empty($services))
-        {
-            foreach ($services as $service){
-                $total_service += $service::where('status', 'publish')->whereBetween('created_at', [$P_Dia, $U_Dia])->count('id');
+        foreach ($hotel_room as $hr){
+            if (strtoupper($hr->situation->name) == 'LIBERADO'){
+                $hotel_room_booking = $hr->getBookingsInRange($P_Dia,$U_Dia);
+                if(!empty($hotel_room_booking)){
+                    foreach($hotel_room_booking as  $hrb){
+                        if(strtoupper($hrb->booking->situation->name) == "CHECK-IN"){
+                            ++$total_hotel_room_booking;
+                            break;
+                        }
+                    }
+                }
             }
-        }*/
+        }
+
+        $total_hotel_room_booking_percent = ($total_hotel_room_booking * 100) / $total_hotel_room;
+
+
+        $spaces = Space::all();
+        $total_spaces = count($spaces);
+        $total_space_booking = 0;
+
+        foreach ($spaces as $s){
+            $s_booking = $s->getBookingsInRange($P_Dia,$U_Dia);
+            if(!empty($s_booking)){
+                foreach($s_booking as  $sb){
+                    if(strtoupper($sb->situation->name) == "CHECK-IN"){
+                        ++$total_space_booking;
+                        break;
+                    }
+                }
+            }
+        }
+
+        $total_space_booking_percent = ($total_space_booking * 100) / $total_spaces;
+
+        $total_hotel_clientes = User::query()->where('active_status' ,'1')->count('id');
+        $total_noStock = Product::query()->where('available_stock', 0)->count('id');
 
         $res[] = [
             'size' => 6,
@@ -360,7 +380,7 @@ class Booking extends BaseModel
             'size' => 6,
             'size_md' => 3,
             'title' => __("RESERVAS HOTEIS"),
-            'amount' => $total_bookings_hotels,
+            'amount' => number_format($total_hotel_room_booking_percent) . '%',
             'desc' => __("Total de Reservas Previsto ( " . (now()->format('d/m/y')) . " )"),
             'class' => 'success',
             'icon' => 'icon ion-ios-flash'
@@ -403,7 +423,7 @@ class Booking extends BaseModel
             'size' => 6,
             'size_md' => 3,
             'title' => __("RESERVAS CHACARAS"),
-            'amount' => $total_bookings_spaces,
+            'amount' => number_format($total_space_booking_percent) . '%',
             'desc' => __("Total de Reservas ( " . (now()->format('d/m/y')) . " )"),
             'class' => 'success',
             'icon' => 'fa fa-sign-in fa-2x'
@@ -434,12 +454,6 @@ class Booking extends BaseModel
                     'stack'           => 'group-total',
                 ],
                 [
-                    'label'           => __("Total Financeiro"),
-                    'data'            => [],
-                    'backgroundColor' => '#8892d6',
-                    'stack'           => 'group-extra',
-                ],
-                [
                     'label'           => __("Apartamento em Limpeza"),
                     'data'            => [],
                     'backgroundColor' => '#FFA500',
@@ -454,7 +468,7 @@ class Booking extends BaseModel
                 [
                     'label'           => __("Previsão de Saidas"),
                     'data'            => [],
-                    'backgroundColor' => '#8892d6',
+                    'backgroundColor' => '#FA5858',
                     'stack'           => 'group-extra',
                 ],
             ]
@@ -514,8 +528,6 @@ class Booking extends BaseModel
 
             if(!empty($bookings)){
                 foreach ($bookings as $booking){
-                    $totalFaturamento += floatval($booking->total);
-
                     if($booking->situation_id == $situation_checkout->id){
                         ++$total_checkout;
                     }
@@ -524,10 +536,55 @@ class Booking extends BaseModel
 
             $data['labels'][] = $b->name;
             $data['datasets'][0]['data'][] = count($bookings);
-            $data['datasets'][1]['data'][] = $totalFaturamento;
-            $data['datasets'][2]['data'][] = $total_clean;
-            $data['datasets'][3]['data'][] = $total_free;
-            $data['datasets'][4]['data'][] = $total_checkout;
+            $data['datasets'][1]['data'][] = $total_clean;
+            $data['datasets'][2]['data'][] = $total_free;
+            $data['datasets'][3]['data'][] = $total_checkout;
+        }
+
+        return $data;
+    }
+
+    public static function getDashboardChartPaymentData($from, $to)
+    {
+        $data = [
+            'labels'   => [],
+            'datasets' => [
+                [
+                    'label'           => __("Total Financeiro"),
+                    'data'            => [],
+                    'backgroundColor' => '#8892d6',
+                    'stack'           => 'group-extra',
+                ],
+            ]
+        ];
+
+        $buildings = Building::query()->orderby('name', 'asc')->get();
+        $canceled = Booking::situationCanceled()->id;
+
+
+        foreach ($buildings as $b) {
+            $bookings = DB::select('select * from bravo_bookings b
+	                    inner join bravo_hotel_room_bookings bhrb on b.id = bhrb.booking_id
+	                    inner join bravo_hotel_rooms bhr on bhrb.room_id = bhr.room_id
+	                    inner join bravo_room br on bhr.room_id = br.id
+	                    inner join bravo_building bb on br.building_id = bb.id
+	                    where b.created_at between ? and ?
+		                    and b.deleted_at is null
+		                    and b.situation_id != ?
+		                    and b.status not in (?)
+		                    and bb.id  = ?', [$from,$to,$canceled,json_encode(static::$notAcceptedStatus),$b->id]);
+
+
+            $totalFaturamento = 0;
+
+            if(!empty($bookings)){
+                foreach ($bookings as $booking){
+                    $totalFaturamento +=  floatval($booking->total);
+                }
+            }
+
+            $data['labels'][] = $b->name;
+            $data['datasets'][0]['data'][] = $totalFaturamento;
         }
 
         return $data;
