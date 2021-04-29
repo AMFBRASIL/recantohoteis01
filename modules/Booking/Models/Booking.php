@@ -317,7 +317,7 @@ class Booking extends BaseModel
         $total_hotel_room_booking = 0;
 
         foreach ($hotel_room as $hr){
-            if (strtoupper($hr->situation->name) == 'LIBERADO'){
+            if (!empty($hr->situation) && strtoupper($hr->situation->name) == 'LIBERADO'){
                 $hotel_room_booking = $hr->getBookingsInRange($P_Dia,$U_Dia);
                 if(!empty($hotel_room_booking)){
                     foreach($hotel_room_booking as  $hrb){
@@ -341,7 +341,7 @@ class Booking extends BaseModel
             $s_booking = $s->getBookingsInRange($P_Dia,$U_Dia);
             if(!empty($s_booking)){
                 foreach($s_booking as  $sb){
-                    if(strtoupper($sb->situation->name) == "CHECK-IN"){
+                    if(!empty($hr->situation) && strtoupper($sb->situation->name) == "CHECK-IN"){
                         ++$total_space_booking;
                         break;
                     }
