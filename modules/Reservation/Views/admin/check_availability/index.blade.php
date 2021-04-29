@@ -38,7 +38,8 @@
                                  style="background: #fff; cursor: pointer; padding: 10px 20px; border: 2px solid #ccc;">
                                 <i class="fa fa-calendar"></i>&nbsp;
                                 <span></span>
-                                <i class="fa fa-caret-down"></i></div>
+                                <i class="fa fa-caret-down"></i>
+                            </div>
                         </div>
                         <input type="hidden" class="form-control" id="startDate" name="checkin" value="">
                         <input type="hidden" class="form-control" id="endDate" name="checkout" value="">
@@ -526,7 +527,7 @@
     <!-- <link rel="stylesheet" href="{{asset('libs/check_availability/css/shortcodes.css')}}"> -->
     <link rel="stylesheet" href="{{asset('libs/check_availability/css/layout.css')}}">
     <link rel="stylesheet" href="{{asset('css/pms.css')}}">
-    <link rel="stylesheet" href="{{asset('libs/check_availability/css/circles.css')}}">
+    <link rel="stylesheet" href="{{asset('libs/circles/css/circles.css')}}">
     <link rel="stylesheet" href="{{asset('libs/fullcalendar-4.2.0/core/main.css')}}">
     <link rel="stylesheet" href="{{asset('libs/fullcalendar-4.2.0/daygrid/main.css')}}">
     <link rel="stylesheet" href="{{asset('libs/daterange/daterangepicker.css')}}">
