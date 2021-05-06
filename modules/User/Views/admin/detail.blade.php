@@ -29,7 +29,7 @@
                                     <div class="form-group">
                                         <label>{{__('Type')}}</label>
                                         <div class="form-controls">
-                                            <select name="user_type" class="form-control person_type" required>
+                                            <select name="user_type" class="form-control person_type">
                                                 <option value="">{{__("--Select--")}}</option>
                                                 <option
                                                     value="PESSOA JURIDICA" {{($row->user_type ?? '') == 'PESSOA JURIDICA' ? 'selected' : ''  }}>{{__('PESSOA JURIDICA')}}</option>
@@ -150,7 +150,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="">{{__("Country")}}</label>
-                                        <select name="country" class="form-control" id="country-sms-testing" required>
+                                        <select name="country" class="form-control" id="country-sms-testing">
                                             <option value="">{{__('-- Select --')}}</option>
                                             @foreach(get_country_lists() as $id=>$name)
                                                 <option @if($row->country==$id) selected
@@ -306,7 +306,7 @@
                                     <div class="form-group">
                                         <label>{{__('Bank')}}</label>
                                         <div class="form-controls">
-                                            <select name="bank" class="select_bank form-control" required>
+                                            <select id="select_bank" name="bank" class="form-control">
                                                 <option value="">{{__("--Select--")}}</option>
                                                 @foreach ($bankList as $option)
                                                     @if ($row->bank == $option->nome_reduzido)
@@ -323,7 +323,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>{{__('Agency')}}</label>
-                                        <input type="text" value="{{old('',$row->agency)}}" required
+                                        <input type="text" value="{{old('',$row->agency)}}"
                                                name="agency" maxlength="5" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                                placeholder="{{__("2500-0")}}" class="form-control">
                                     </div>
@@ -331,7 +331,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>{{__('Account')}}</label>
-                                        <input type="text" value="{{old('',$row->account)}}" required
+                                        <input type="text" value="{{old('',$row->account)}}"
                                                name="account" maxlength="6" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                                                placeholder="{{__("25000-0")}}" class="form-control">
                                     </div>
@@ -354,7 +354,7 @@
                         <div class="panel-body">
                             <div class="form-group">
                                 <label>{{__('Status')}}</label>
-                                <select required class="custom-select" name="status">
+                                <select class="custom-select" name="status">
                                     <option value="">{{ __('-- Select --')}}</option>
                                     <option @if(old('status',$row->status) =='publish') selected
                                             @endif value="publish">{{ __('Publish')}}</option>
@@ -364,7 +364,7 @@
                             </div>
                             <div class="form-group">
                                 <label>{{__('Role')}}</label>
-                                <select required class="custom-select" name="role_id">
+                                <select class="custom-select" name="role_id">
                                     <option value="">{{ __('-- Select --')}}</option>
                                     @foreach($roles as $role)
                                         <option value="{{$role->id}}"
@@ -490,7 +490,7 @@
     {!! App\Helpers\MapEngine::scripts() !!}
     <script>
         $(document).ready(function () {
-            $('.select_bank').select2();
+            $('#select_bank').select2();
         });
 
         jQuery(function ($) {
