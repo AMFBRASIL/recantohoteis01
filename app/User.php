@@ -448,5 +448,14 @@
 
             return $query;
         }
+
+        public static function getForSelect2BusinessName($q)
+        {
+            $query =  static::query()->select(
+                'id', DB::raw('business_name as text'))
+                ->Where("business_name", 'like', '%' . $q . '%');
+
+            return $query;
+        }
     }
 

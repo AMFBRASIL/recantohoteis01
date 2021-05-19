@@ -494,6 +494,17 @@ class UserController extends AdminController
         ]);
     }
 
+    public function getForSelect2BusinessName(Request $request)
+    {
+        $q = $request->query('q');
+        $query = User::getForSelect2BusinessName($q);
+        $res = $query->orderBy('id', 'desc')->limit(20)->get();
+
+        return response()->json([
+            'results' => $res
+        ]);
+    }
+
     public function getUser(Request $request)
     {
         $user = [];

@@ -26,3 +26,10 @@
 .ui-front {
     z-index: 1500 !important;
 }
+
+.input-style {
+    background: #fff;
+    cursor: pointer;
+    padding: 10px 10px !important;;
+    border: 2px solid #ccc !important;;
+}

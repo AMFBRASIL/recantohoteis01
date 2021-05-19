@@ -4,6 +4,7 @@ namespace Modules\Hotel\Models;
 
 use ICal\ICal;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Modules\Booking\Models\Bookable;
 use Modules\Booking\Models\Booking;
 use Modules\Characteristic\Models\Characteristic;
@@ -216,5 +217,24 @@ class HotelRoom extends Bookable
             ];
         }
         return $list_item;
+    }
+
+    public function getFreeRoomInRange($from, $to)
+    {
+        $hotelRoomBookings = $this->getBookingsInRange($from,$to);
+
+        $ids = [];
+
+        if (empty($hotelRoomBookings)){
+            foreach($hotelRoomBookings as $hrb){
+                array_push($ids,$hrb->room->id);
+            }
+        }
+
+        return HotelRoom::query()
+            ->whereHas('situation', function ($query){
+                $query->where('name','like','%LIBERADO%');
+            })->whereNotIn('id',$ids)
+            ->get();
     }
 }

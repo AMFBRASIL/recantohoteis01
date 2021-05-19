@@ -53,4 +53,7 @@ class ReservationTypeController extends CrudController
     }
 
 
+    public function reservationType(){
+        return ReservationType::all();
+    }
 }

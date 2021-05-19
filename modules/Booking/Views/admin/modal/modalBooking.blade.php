@@ -1,9 +1,9 @@
-<div id="modal-new-booking" class="modal fade show" class="modal fade" role="dialog" data-backdrop="static" style="display: none;"
+<div id="modal-new-booking" class="modal fade show" class="modal fade" role="dialog" data-backdrop="static"
+     style="display: none;"
      aria-modal="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <!-- Modal content-->
         <div class="modal-content">
-
             <!-- Modal Title-->
             <div class="modal-header">
                 <h4 class="modal-title">NOVA RESERVA</h4>
@@ -13,21 +13,21 @@
             <div class="modal-body">
                 <ul class="nav nav-tabs" id="tabsRecanto" style="background-color: #ecf0f5;">
                     <li class="nav-item">
-                        <a class="nav-link tab active" id="a1" data-toggle="tab" href="#booking-detalhes">
+                        <a class="nav-link tab active" data-toggle="tab" href="#booking-detalhes">
                             <i class="fa fa-list fa-4x" data-toggle="tooltip" data-placement="top" data-html="true"
                                title="" data-original-title=" <h4> Solicitante </h4> "></i>
                         </a>
                     </li>
 
                     <li class="nav-item tab">
-                        <a class="nav-link" data-toggle="tab" id="c3" href="#booking-consumo">
+                        <a class="nav-link" data-toggle="tab"href="#booking-consumo">
                             <i class="fa fa-calendar fa-4x" data-toggle="tooltip" data-placement="top" data-html="true"
                                title="" data-original-title="<h4> CheckIN </h4>"></i>
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="uhsdisponiveis.php" class="nav-link" id="uhTabCheck" name="uhTabCheck"
+                        <a class="nav-link" data-toggle="tab" href="#booking-uhs-disponiveis"
                            data-target="#booking-uhs-disponiveis" data-toggle="tabajax">
                             <i class="fa fa-bed fa-4x" data-toggle="tooltip" data-placement="top" data-html="true"
                                title="" data-original-title="<h4> UHs Disponíveis </h4>"></i>
@@ -35,7 +35,7 @@
                     </li>
 
                     <li class="nav-item tab">
-                        <a class="nav-link" data-toggle="tab" id="b2" href="#booking-acompanhantes">
+                        <a class="nav-link" data-toggle="tab" href="#booking-acompanhantes">
                             <i class="fa fa-users fa-4x" data-toggle="tooltip" data-placement="top" data-html="true"
                                title="" data-original-title="<h4> Hóspedes </h4>"></i>
                         </a>
@@ -102,13 +102,13 @@
                                                         <input type="hidden" id="client-id" name="client_id" value="">
                                                         <input id="client-name" type="text" value="" name="clent_name"
                                                                placeholder="Nome do Cliente"
-                                                               class="form-control"
-                                                               style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                               class="form-control input-style">
 
                                                         <div class="input-group-append">
                                                             <button type="button"
-                                                                    class="btn btn-info fa fa-edit fa-1x"></button>
-                                                            <button type="button" data-toggle="modal" data-target="#register"
+                                                                    class="btn btn-info fa fa-edit fa-1x edit-client"></button>
+                                                            <button type="button" data-toggle="modal"
+                                                                    data-target="#register"
                                                                     class="btn btn-success fa fa-plus fa-1x"></button>
                                                         </div>
                                                     </div>
@@ -116,9 +116,9 @@
                                                 <div class="col-md-3">
                                                     <label> Rg Cliente </label>
                                                     <div class="input-group">
-                                                        <input id="client-rg" type="text" value="" name="client_rg" placeholder="RG"
-                                                               class="form-control"
-                                                               style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                        <input id="client-rg" type="text" value="" name="client_rg"
+                                                               placeholder="RG"
+                                                               class="form-control input-style">
                                                         <div class="input-group-append">
                                                             <button id="bt-client-rg" type="button"
                                                                     class="btn btn-info fa fa-check fa-1x"></button>
@@ -128,9 +128,9 @@
                                                 <div class="col-md-3">
                                                     <label> CPF Cliente </label>
                                                     <div class="input-group">
-                                                        <input id="client-cpf" type="text" value="" name="client_cpf" placeholder="CPF"
-                                                               class="form-control"
-                                                               style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                        <input id="client-cpf" type="text" value="" name="client_cpf"
+                                                               placeholder="CPF"
+                                                               class="form-control input-style">
                                                         <div class="input-group-append">
                                                             <button id="bt-client-cpf" type="button"
                                                                     class="btn btn-info fa fa-check fa-1x"></button>
@@ -144,17 +144,17 @@
                                                     <div class="form-group">
                                                         <label>Celular Solicitante</label>
                                                         <input id="client-cellphone" type="text" value="" name="celular"
-                                                               placeholder="9292938844" class="form-control" disabled=""
-                                                               style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                               placeholder="9292938844" class="form-control input-style"
+                                                               disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Email Solicitante</label>
                                                         <input id="client-email" type="text" value="" name="email"
-                                                               placeholder="promautone@gmail.com" class="form-control"
-                                                               disabled=""
-                                                               style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                               placeholder="promautone@gmail.com"
+                                                               class="form-control input-style"
+                                                               disabled>
                                                     </div>
                                                 </div>
                                             </div>
@@ -162,14 +162,15 @@
                                                 <div class="col-md-6">
                                                     <label> Empresa de faturamento </label>
                                                     <div class="input-group">
-                                                        <input id="billing-company" type="text" value="" name="business_name"
+                                                        <input id="billing-company" type="text" value=""
+                                                               name="business_name"
                                                                placeholder="Digite o nome da empresa de faturamento"
-                                                               class="form-control"
-                                                               style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                               class="form-control input-style">
                                                         <div class="input-group-append">
                                                             <button type="button"
-                                                                    class="btn btn-info fa fa-edit fa-1x"></button>
-                                                            <button type="button"
+                                                                    class="btn btn-info fa fa-edit fa-1x edit-client"></button>
+                                                            <button type="button" data-toggle="modal"
+                                                                    data-target="#register"
                                                                     class="btn btn-success fa fa-plus fa-1x"></button>
                                                         </div>
                                                     </div>
@@ -177,15 +178,16 @@
                                                 <div class="col-md-6">
                                                     <label> Empresa do Cliente </label>
                                                     <div class="input-group">
-                                                        <input id="client-company" type="text" value="" name="business_name"
+                                                        <input id="client-company" type="text" value=""
+                                                               name="business_name"
                                                                placeholder="Digite o nome da empresa do cliente"
-                                                               class="form-control"
-                                                               style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                               class="form-control input-style">
                                                         <div class="input-group-append">
                                                             <button type="button"
-                                                                    class="btn btn-info fa fa-edit fa-1x editEmpresa"></button>
-                                                            <button type="button"
-                                                                    class="btn btn-success fa fa-plus fa-1x newEmpresa"></button>
+                                                                    class="btn btn-info fa fa-edit fa-1x edit-client"></button>
+                                                            <button type="button" data-toggle="modal"
+                                                                    data-target="#register"
+                                                                    class="btn btn-success fa fa-plus fa-1x"></button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -198,7 +200,8 @@
                                                             <label class="control-label"><b>Observações Internas ( nao
                                                                     vai no Voucher )</b></label>
                                                             <div class="">
-                                                                <textarea name="internal-observations" class="d-none has-ckeditor" cols="30"
+                                                                <textarea name="internal-observations"
+                                                                          class="d-none has-ckeditor" cols="30"
                                                                           rows="10">
                                                                 </textarea>
                                                             </div>
@@ -207,7 +210,8 @@
                                                             <label class="control-label"><b>Observações do
                                                                     Hospede</b></label>
                                                             <div class="">
-                                                                <textarea name="client-objservations" class="d-none has-ckeditor"
+                                                                <textarea name="client-observations"
+                                                                          class="d-none has-ckeditor"
                                                                           cols="30" rows="10"
                                                                           aria-hidden="true">
                                                                 </textarea>
@@ -226,7 +230,6 @@
                     <!--- TAB Consumo --->
                     <div id="booking-consumo" class="tab-pane fade">
                         <br>
-
                         <label><h4> Reserva :: Check-In </h4></label>
 
                         <div class="booking-review">
@@ -239,24 +242,29 @@
                                                 <div class="form-group">
                                                     <label for="reserva_situacao">TIPO</label><br>
                                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                        <label class="btn btn-success btn-lg active"> <input
-                                                                type="radio" name="tipoPropriedade" id="hotel" value="1"
+                                                        <label class="btn btn-success btn-lg active">
+                                                            <input
+                                                                type="radio" name="property_type" id="hotel" value="1"
                                                                 checked="" data-onstyle="success"
-                                                                data-offstyle="danger"> HOTEL </label>
-                                                        <label class="btn btn-success btn-lg"> <input type="radio"
-                                                                                                      name="tipoPropriedade"
-                                                                                                      id="chacara"
-                                                                                                      value="2"> CHACARA
+                                                                data-offstyle="danger"> HOTEL
                                                         </label>
-                                                        <label class="btn btn-success btn-lg"> <input type="radio"
-                                                                                                      name="tipoPropriedade"
-                                                                                                      id="evento"
-                                                                                                      value="3"> EVENTOS
+                                                        <label class="btn btn-success btn-lg">
+                                                            <input type="radio"
+                                                                   name="property_type"
+                                                                   id="chacara"
+                                                                   value="2"> CHACARA
                                                         </label>
-                                                        <label class="btn btn-success btn-lg"> <input type="radio"
-                                                                                                      name="tipoPropriedade"
-                                                                                                      id="dayuse"
-                                                                                                      value="4"> DAY USE
+                                                        <label class="btn btn-success btn-lg">
+                                                            <input type="radio"
+                                                                   name="property_type"
+                                                                   id="evento"
+                                                                   value="3"> EVENTOS
+                                                        </label>
+                                                        <label class="btn btn-success btn-lg">
+                                                            <input type="radio"
+                                                                   name="property_type"
+                                                                   id="dayuse"
+                                                                   value="4"> DAY USE
                                                         </label>
                                                     </div>
                                                 </div>
@@ -265,12 +273,10 @@
                                                 <div class="form-group">
                                                     <label> Canal de Vendas </label>
                                                     <div class="input-group">
-                                                        <select name="bank" class="select_bank form-control" required=""
-                                                                style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                        <select id="reservationType" name="reservation_type_id"
+                                                                class="select_bank form-control input-style"
+                                                                required="">
                                                             <option value="">--Select--</option>
-                                                            <option value="FACEBOOK"> FACEBOOK</option>
-                                                            <option value="INSTAGRAN"> INSTAGRAN</option>
-                                                            <option value="WHATSAPP"> WHATSAPP</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -284,26 +290,26 @@
                                         <div class="row">
                                             <div class="col-lg-3">
                                                 <div class="form-group-lg">
-                                                    <label for="reserva_situacao">Adultos</label><br>
-                                                    <input type="number" value="" name="qtdeAdult" id="qtdeAdult"
-                                                           placeholder="" class="form-control"
-                                                           style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                    <label for="adult_quantity">Adultos</label><br>
+                                                    <input type="number" value="0" name="adult_quantity"
+                                                           id="adult_quantity"
+                                                           placeholder="" class="form-control input-style">
                                                 </div>
                                             </div>
                                             <div class="col-lg-3">
                                                 <div class="form-group-lg">
-                                                    <label for="reserva_situacao">Crianças 0 a 5</label><br>
-                                                    <input type="number" value="" name="qtdeKids" id="qtdeKids"
-                                                           placeholder="" class="form-control"
-                                                           style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                    <label for="children_quantity_0_5">Crianças 0 a 5</label><br>
+                                                    <input type="number" value="0" name="children_quantity_0_5"
+                                                           id="children_quantity_0_5"
+                                                           placeholder="" class="form-control input-style">
                                                 </div>
                                             </div>
                                             <div class="col-lg-3">
                                                 <div class="form-group-lg">
-                                                    <label for="reserva_situacao">Crianças 6 a 12</label><br>
-                                                    <input type="number" value="" name="qtdeChildren" id="qtdeChildren"
-                                                           placeholder="" class="form-control"
-                                                           style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                    <label for="children_quantity_6_12">Crianças 6 a 12</label><br>
+                                                    <input type="number" value="0" name="children_quantity_6_12"
+                                                           id="children_quantity_6_12"
+                                                           placeholder="" class="input-style form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -316,9 +322,8 @@
                                             <div class="col-lg-3">
                                                 <div class="form-group-lg">
                                                     <label for="reserva_situacao">Qtde de Pessoas</label><br>
-                                                    <input type="number" value="" name="qtdeAdult" id="qtdeAdult"
-                                                           placeholder="" class="form-control"
-                                                           style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                    <input type="number" value="0" name="adult_quantity" id="adult_quantity"
+                                                           placeholder="" class="form-control input-style">
                                                 </div>
                                             </div>
                                         </div>
@@ -352,25 +357,30 @@
                                         <div class="row">
                                             <div class="col-lg-7">
                                                 <div class="form-group">
-                                                    <label for="reserva_situacao">Status Pré Reserva:</label><br>
+                                                    <label for="reserva_situacao">Status</label><br>
                                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                        <label class="btn btn-primary btn-lg "> <input type="radio"
-                                                                                                       name="options"
-                                                                                                       id="option1"
-                                                                                                       autocomplete="off">
+                                                        <label class="btn btn-primary btn-lg ">
+                                                            <input type="radio" value="BLOQUEADA"
+                                                                   name="situation_booking"
+                                                                   id="option1"
+                                                                   autocomplete="off">
                                                             BLOQUEADA </label>
-                                                        <label class="btn btn-primary btn-lg active"> <input
-                                                                type="radio" name="options" id="option2"
+                                                        <label class="btn btn-primary btn-lg active">
+                                                            <input
+                                                                type="radio" name="situation_booking" id="option2"
+                                                                value="PRE RESERVA"
                                                                 autocomplete="off" checked=""> PRE RESERVA </label>
-                                                        <label class="btn btn-primary btn-lg"> <input type="radio"
-                                                                                                      name="options"
-                                                                                                      id="option3"
-                                                                                                      autocomplete="off">
+                                                        <label class="btn btn-primary btn-lg">
+                                                            <input type="radio" value="CONFIRMADA"
+                                                                   name="situation_booking"
+                                                                   id="option3"
+                                                                   autocomplete="off">
                                                             CONFIRMADA </label>
-                                                        <label class="btn btn-primary btn-lg"> <input type="radio"
-                                                                                                      name="options"
-                                                                                                      id="option4"
-                                                                                                      autocomplete="off">
+                                                        <label class="btn btn-primary btn-lg">
+                                                            <input type="radio" value="OVER BOOKING"
+                                                                   name="situation_booking"
+                                                                   id="option4"
+                                                                   autocomplete="off">
                                                             OVER BOOKING </label>
                                                     </div>
                                                 </div>
@@ -379,18 +389,21 @@
                                                 <div class="form-group">
                                                     <label for="reserva_situacao">Faturamento</label><br>
                                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                        <label class="btn btn-primary btn-lg active"> <input
-                                                                type="radio" name="options" id="option1"
+                                                        <label class="btn btn-primary btn-lg active">
+                                                            <input value="ABERTO"
+                                                                type="radio" name="revenues" id="option1"
                                                                 autocomplete="off" checked=""> ABERTO </label>
-                                                        <label class="btn btn-primary btn-lg"> <input type="radio"
-                                                                                                      name="options"
-                                                                                                      id="option2"
-                                                                                                      autocomplete="off">
+                                                        <label class="btn btn-primary btn-lg">
+                                                            <input type="radio" value="FATURADO"
+                                                                   name="revenues"
+                                                                   id="option2"
+                                                                   autocomplete="off">
                                                             FATURADO </label>
-                                                        <label class="btn btn-primary btn-lg"> <input type="radio"
-                                                                                                      name="options"
-                                                                                                      id="option3"
-                                                                                                      autocomplete="off">
+                                                        <label class="btn btn-primary btn-lg">
+                                                            <input type="radio" value="DEPOSITO"
+                                                                   name="revenues"
+                                                                   id="option3"
+                                                                   autocomplete="off">
                                                             DEPOSITO </label>
                                                     </div>
                                                 </div>
