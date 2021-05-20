@@ -30,6 +30,10 @@
 .input-style {
     background: #fff;
     cursor: pointer;
-    padding: 10px 10px !important;;
-    border: 2px solid #ccc !important;;
+    padding: 10px 10px !important;
+    border: 2px solid #ccc !important;
+}
+
+.custom-switch {
+    padding-left: 0.25rem !important;
 }

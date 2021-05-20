@@ -126,4 +126,13 @@ class CardMachineAccountController extends AdminController
 
         return redirect()->back()->with('success', __('Update success!'));
     }
+
+    public function cardMachines(){
+        $cardMachines = CardMachineAccount::all();
+
+        return response()->json([
+            'error' => false,
+            'cardMachines' => $cardMachines,
+        ]);
+    }
 }

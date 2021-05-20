@@ -99,7 +99,7 @@
                                                     <label> Nome do Hospede </label>
                                                     <div id="client_host" class="input-group">
                                                         <input type="hidden" id="client-id" name="client_id" value="">
-                                                        <input id="client-name" type="text" value="" name="clent_name"
+                                                        <input id="client-name" type="text" value="" name="client_name"
                                                                placeholder="Nome do Cliente"
                                                                class="form-control input-style">
 
@@ -436,15 +436,17 @@
                                                 <div class="col-md-12">
                                                     <label> Nome do Hospede </label>
                                                     <div class="input-group">
-                                                        <input type="text" name="hospede_name" id="hospede_name"
-                                                               placeholder="Digite o nome do cliente... Auto Complet"
+                                                        <input type="hidden" id="guest-id" name="guest_id" value="">
+                                                        <input type="text" name="guest_name" id="guest-name"
+                                                               placeholder="Digite o nome do cliente"
                                                                class="form-control input-style">
 
                                                         <div class="input-group-append">
                                                             <button type="button"
-                                                                    class="btn btn-info fa fa-edit fa-1x editHospede"></button>
-                                                            <button type="button"
-                                                                    class="btn btn-success fa fa-plus fa-1x newHospede"></button>
+                                                                    class="btn btn-info fa fa-edit fa-1x edit-client"></button>
+                                                            <button type="button" data-toggle="modal"
+                                                                    data-target="#register"
+                                                                    class="btn btn-success fa fa-plus fa-1x"></button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -662,11 +664,8 @@
                                         <div class="form-group">
                                             <label> Banco </label>
                                             <div class="input-group">
-                                                <select id="" name="bank" class="select_bank form-control input-style"
+                                                <select id="select-banks" name="bank" class="select_bank form-control input-style"
                                                         required="">
-                                                    <option value="">--Select--</option>
-                                                    <option value="BRADESCO"> BRADESCO</option>
-                                                    <option value="ITAU"> ITAU</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -707,12 +706,8 @@
                                         <div class="form-group">
                                             <label> Maquina de Cartao </label>
                                             <div class="input-group">
-                                                <select name="bank" class="select_bank form-control input-style"
+                                                <select id="card_machine" name="card_machine" class="select_bank form-control input-style"
                                                         required="">
-                                                    <option value="">--Select--</option>
-                                                    <option value="1"> PAGSEGURO</option>
-                                                    <option value="2"> SAFRA</option>
-                                                    <option value="3"> SANTANDER</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -867,12 +862,8 @@
                                     <div class="col-lg-3">
                                         <div class="form-group-lg">
                                             <label for="reserva_situacao">Garagem </label><br>
-                                            <select name="bank" class="select_bank form-control input-style"
+                                            <select id="select-garage" name="gerage" class="select_bank form-control input-style"
                                                     required="">
-                                                <option value="">--Select--</option>
-                                                <option value="1"> Garagem 1</option>
-                                                <option value="2"> Garagem 2</option>
-                                                <option value="3"> Garagem 3</option>
                                             </select>
                                         </div>
                                     </div>
@@ -1005,11 +996,6 @@
                                             </span>
                                         </td>
                                         <td class="title">
-                                            <div class="toggle btn btn-success" data-toggle="toggle" role="button" style="width: 0px; height: 0px;"><input type="checkbox" id="checkCafe_1" name="checkCafe_1" data-toggle="toggle" data-on="SIM" data-off="NAO" data-onstyle="success" data-offstyle="danger"><div class="toggle-group"><label for="checkCafe_1" class="btn btn-success toggle-on">SIM</label><label for="checkCafe_1" class="btn btn-danger toggle-off">NAO</label><span class="toggle-handle btn btn-light"></span></div></div>
-                                        </td>
-
-
-<!--                                        <td class="title">
                                             <div class="custom-control custom-switch">
                                                 <input type="checkbox"
                                                        id="checkCafe_1"
@@ -1019,7 +1005,7 @@
                                                        data-onstyle="success"
                                                        data-offstyle="danger">
                                             </div>
-                                        </td>-->
+                                        </td>
                                         <td class="title">
                                             <div class="custom-control custom-switch">
                                                 <input type="checkbox"
@@ -1145,18 +1131,18 @@
                         </div>
                     </div>
 
-                    <!--                    &lt;!&ndash;- TAB Bilhetagem -&ndash;&gt;
-                                        <div id="booking-bilhetagem" class="tab-pane fade">
-                                            <br>
-                                            <div class="booking-review">
-                                                <h4 class="booking-review-title">Informações pessoais</h4>
-                                                <div class="booking-review-content">
-                                                    <div class="review-section">
-                                                        Bilhetagem
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>-->
+                    <!--- TAB Bilhetagem --->
+                    <div id="booking-bilhetagem" class="tab-pane fade">
+                        <br>
+                        <div class="booking-review">
+                            <h4 class="booking-review-title">Informações pessoais</h4>
+                            <div class="booking-review-content">
+                                <div class="review-section">
+                                    Bilhetagem
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Modal footer -->
                     <div class="modal-footer">
@@ -1181,3 +1167,5 @@
 </div>
 
 @include('User::admin/form-register/index')
+
+@include('Pos::admin/authorizationPassword/modal')

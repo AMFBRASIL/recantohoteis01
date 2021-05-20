@@ -265,7 +265,4 @@ class BookingController extends Controller
             'events' => $events,
         ]);
     }
-
-
-
 }

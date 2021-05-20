@@ -51,4 +51,13 @@ class GarageController extends CrudController
     {
         return route($this->routeList['index']);
     }
+
+    public function garages(){
+        $garages = Garage::all();
+
+        return response()->json([
+            'error' => false,
+            'garages' => $garages,
+        ]);
+    }
 }

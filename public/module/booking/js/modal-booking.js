@@ -7,6 +7,12 @@ let start_booking
 let end_booking
 
 $(function () {
+    $(document).ready(function () {
+        $('#select-banks').select2();
+
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+
     $(".previous").click(function () {
         $(".nav-tabs > .nav-item > .active").parent().prev("li").find("a").trigger("click");
     });
@@ -79,6 +85,30 @@ $(function () {
         window.open(`/admin/module/user/edit/${$("#client-id").val()}`);
     });
 
+    $("#guest-name").autocomplete({
+        source: (request, response) => {
+            $.ajax({
+                url: "/admin/module/user/autocomplete",
+                dataType: "json",
+                data: {
+                    q: $('#guest-name').val()
+                },
+                success: function (data) {
+                    response($.map(data.results, function (item) {
+                        return {
+                            id: item.id,
+                            value: item.text
+                        };
+                    }));
+                }
+            });
+        },
+        minLength: 1,
+        select: function (event, ui) {
+            searchUserInformationById(ui.item.id)
+        }
+    });
+
     $('input[type=radio][name=property_type]').on('change', function () {
         switch ($(this).val()) {
             case "1":
@@ -108,6 +138,12 @@ $(function () {
     });
 
     getSalesChannels();
+
+    getMachineCard();
+
+    getBanck();
+
+    getGarage();
 
     this.start_booking = moment().startOf("hour");
     this.end_booking = moment().startOf("hour").add(32, "hour");
@@ -143,15 +179,7 @@ $(function () {
                 $("#formaCartao").hide();
                 $("#formaCartaoNSU").hide();
 
-                //Zerando os dados
-                $('#priceRecebido').val("");
-                $('#somaRecebido').html("");
-                $('#priceDeposito').val("");
-                $('#somaDeposito').html("");
-                $('#priceCartao').val("");
-                $('#somaCartao').html("");
-
-
+                clearsData();
                 break;
             case "2":
                 $("#formaDinheiro").hide();
@@ -159,14 +187,7 @@ $(function () {
                 $("#formaCartao").hide();
                 $("#formaCartaoNSU").hide();
 
-                //Zerando os dados
-                $('#priceRecebido').val("");
-                $('#somaRecebido').html("");
-                $('#priceDeposito').val("");
-                $('#somaDeposito').html("");
-                $('#priceCartao').val("");
-                $('#somaCartao').html("");
-
+                clearsData();
                 break;
             case "3":
                 $("#formaDinheiro").hide();
@@ -174,14 +195,7 @@ $(function () {
                 $("#formaCartao").hide();
                 $("#formaCartaoNSU").hide();
 
-                //Zerando os dados
-                $('#priceRecebido').val("");
-                $('#somaRecebido').html("");
-                $('#priceDeposito').val("");
-                $('#somaDeposito').html("");
-                $('#priceCartao').val("");
-                $('#somaCartao').html("");
-
+                clearsData();
                 break;
             case "4":
                 $("#formaCartao").show();
@@ -189,28 +203,14 @@ $(function () {
                 $("#formaDeposito").hide();
                 $("#formaCartaoNSU").show();
 
-                //Zerando os dados
-                $('#priceRecebido').val("");
-                $('#somaRecebido').html("");
-                $('#priceDeposito').val("");
-                $('#somaDeposito').html("");
-                $('#priceCartao').val("");
-                $('#somaCartao').html("");
-
+                clearsData();
                 break;
             default:
                 $("#formaCartao").hide();
                 $("#formaDinheiro").hide();
                 $("#formaDeposito").hide();
                 $("#formaCartaoNSU").hide();
-
-                //Zerando os dados
-                $('#priceRecebido').val("");
-                $('#somaRecebido').html("");
-                $('#priceDeposito').val("");
-                $('#somaDeposito').html("");
-                $('#priceCartao').val("");
-                $('#somaCartao').html("");
+                clearsData();
         }
     });
 
@@ -273,15 +273,40 @@ $(function () {
     $('#liberarCartaoConsumo').change(function () {
         if ($(this).prop('checked')) {
             if ($("#liberarCartaoConsumo").prop('checked')) {
-                alert("Pedir senha para autorizar cartao... ");
-                $('#NumeroCartaoDiv').show();
-                $('#ValorCartaoDiv').show();
+
+                $('#passwordAuthorization').modal('show');
             }
         } else {
             $('#NumeroCartaoDiv').hide();
             $('#ValorCartaoDiv').hide();
         }
     });
+
+    $(".authorizeValues").on('click', () => {
+        let data = {
+            password: $('#password').val(),
+        };
+
+        let url = "/admin/module/pos/authorizationPassword/check";
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: data,
+            success: function (data) {
+                alert(data.message);
+                if (data.success) {
+                    $('#passwordAuthorization').modal('toggle');
+                    $('#NumeroCartaoDiv').show();
+                    $('#ValorCartaoDiv').show();
+                }else{
+                    $('#passwordAuthorization').modal('hide');
+                    $("#liberarCartaoConsumo").prop( "checked", false );
+                    $('#liberarCartaoConsumo').bootstrapToggle('off')
+                }
+            }
+        });
+    })
 
     $('#liberarAcesso').change(function () {
         if ($(this).prop('checked')) {
@@ -306,10 +331,45 @@ $(function () {
         totalValores = Intl.NumberFormat('pt-BR').format(totalValores);
 
         $('#somaTotal').html("R$ " + totalValores);
-
     })
 
-//$('.moeda-real').mask('#.##0,00', {reverse: true});
+    $('.moeda-real').mask('#.##0,00', {reverse: true});
+
+    $(function () {
+        $('input[name="datetimeDeposito"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            format: "DD/MM/YYYY hh:mm"
+        });
+    });
+
+    $('input[name="datetimeDeposito"]').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('DD/MM/YYYY hh:mm'));
+    });
+
+
+    $(function () {
+        $('input[name="datetimeCartao"]').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            format: "DD/MM/YYYY hh:mm"
+        });
+    });
+
+    $('input[name="datetimeCartao"]').on('apply.daterangepicker', function (ev, picker) {
+        $(this).val(picker.startDate.format('DD/MM/YYYY hh:mm'));
+    });
+
+    $(function () {
+        $('input[name="datetimes"]').daterangepicker({
+            timePicker: true,
+            startDate: moment().startOf("hour"),
+            endDate: moment().startOf("hour").add(32, "hour"),
+            locale: {
+                format: "M/DD/YYYY hh:mm A",
+            },
+        });
+    });
 });
 
 function searchUserInformationByCpf(user_cpf) {
@@ -377,6 +437,57 @@ function getSalesChannels() {
             let select = $('#reservationType');
             select.empty();
             $.each(data, function (index, item) {
+                select.append(
+                    new Option(item.name, item.id, null, false));
+            });
+        }
+    });
+}
+
+function getMachineCard() {
+    let url = "/admin/module/financial/carMachineAccount/cardMachines";
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            let select = $('#card_machine');
+            select.empty();
+            $.each(data.cardMachines, function (index, item) {
+                select.append(
+                    new Option(item.name, item.id, null, false));
+            });
+        }
+    });
+}
+
+function getBanck() {
+    let url = "/admin/module/financial/bankAccount/banks";
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            let select = $('#select-banks');
+            select.empty();
+            $.each(data.banks, function (index, item) {
+                select.append(
+                    new Option(item.numero_codigo + " - " + item.nome_reduzido, item.nome_reduzido, null, false));
+            });
+        }
+    });
+}
+
+function getGarage(){
+    let url = "/admin/module/garage/garages";
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            let select = $('#select-garage');
+            select.empty();
+            $.each(data.garages, function (index, item) {
                 select.append(
                     new Option(item.name, item.id, null, false));
             });
@@ -537,7 +648,7 @@ function foundDayUsers() {
         success: function (res) {
             console.log(res)
             dayUser = res.tours,
-            $("#reportData").html(`EXISTEM ${res.tours.length} VAGAS DISPONIVEIS PARA ESTA DATA DO DAY USE`);
+                $("#reportData").html(`EXISTEM ${res.tours.length} VAGAS DISPONIVEIS PARA ESTA DATA DO DAY USE`);
             $('#booking-uhs-disponiveis').html(res.view);
             $('[data-toggle="popover"]').popover(
                 {
@@ -559,75 +670,12 @@ function formatNumber(value) {
     }
 }
 
-
-/* Mokup*/
-
-/*
-
-function liberarbotao() {
-    alert("Liberar botao quando tudo estiver preenchido e OK ... somente assim pode salvar a reserva.");
+function clearsData(){
+    //Zerando os dados
+    $('#priceRecebido').val("");
+    $('#somaRecebido').html("");
+    $('#priceDeposito').val("");
+    $('#somaDeposito').html("");
+    $('#priceCartao').val("");
+    $('#somaCartao').html("");
 }
-
-// Alterar o codigo para selecionar todos da Linha quando clicar em All ... e vice versa !
-$('input:checkbox').change(function () {
-
-    if ($(this).prop('checked')) {
-
-        //$('#checkCafe_1').prop('checked', true).change();
-        //$('#checkCafe_1').prop('checked', false).change();
-        //$('#checkCafe_1').change();
-
-        if ($("#checkAll_1").prop('checked')) {
-            alert("Quando selecionar CheckAll , Ativar os 3 ( Cafe , almoco e janta ). \n\nSe for selecionado algum separadamente , devemos entao desativar os outros...\n\nDevemos buscar na base os valores de taxa de cada servico e trazer na tela calculado de acordo com a quantidade de hospedes selecionado. ");
-            $('#valordiaria01').html("<b>R$ 80,00</b>");
-            $('#calculado01').html("<b>R$ 240,00</b>");
-        }
-
-        if ($("#checkAll_2").prop('checked')) {
-            alert("Quando selecionar CheckAll , Ativar os 3 ( Cafe , almoco e janta ). \n\nSe for selecionado algum separadamente , devemos entao desativar os outros...\n\nDevemos buscar na base os valores de taxa de cada servico e trazer na tela calculado de acordo com a quantidade de hospedes selecionado.");
-            $('#valordiaria02').html("<b>R$ 80,00</b>");
-            $('#calculado02').html("<b>R$ 240,00</b>");
-        }
-
-    }
-});
-
-
-
-$(function () {
-    $('input[name="datetimeDeposito"]').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        format: "DD/MM/YYYY hh:mm"
-    });
-});
-
-$('input[name="datetimeDeposito"]').on('apply.daterangepicker', function (ev, picker) {
-    $(this).val(picker.startDate.format('DD/MM/YYYY hh:mm'));
-});
-
-
-$(function () {
-    $('input[name="datetimeCartao"]').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        format: "DD/MM/YYYY hh:mm"
-    });
-});
-
-$('input[name="datetimeCartao"]').on('apply.daterangepicker', function (ev, picker) {
-    $(this).val(picker.startDate.format('DD/MM/YYYY hh:mm'));
-});
-
-$(function () {
-    $('input[name="datetimes"]').daterangepicker({
-        timePicker: true,
-        startDate: moment().startOf("hour"),
-        endDate: moment().startOf("hour").add(32, "hour"),
-        locale: {
-            format: "M/DD/YYYY hh:mm A",
-        },
-    });
-});
-
-*/
