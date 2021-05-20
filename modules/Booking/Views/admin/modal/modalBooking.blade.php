@@ -1,5 +1,4 @@
-<div id="modal-new-booking" class="modal fade show" class="modal fade" role="dialog" data-backdrop="static"
-     style="display: none;"
+<div id="modal-new-booking" class="modal fade" role="dialog" data-backdrop="static" style="display: none;"
      aria-modal="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <!-- Modal content-->
@@ -337,9 +336,8 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="control-label"><b>CHECKIN / CHECKOUT :</b></label>
-                                                    <div id="reportrange"
-                                                         style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
-                                                        <i class="fa fa-calendar"></i>&nbsp; <span>11/05/2021 02:00 PM - 12/05/2021 10:00 PM</span>
+                                                    <div id="reportrange" class="input-style">
+                                                        <i class="fa fa-calendar"></i>&nbsp; <span></span>
                                                         <i class="fa fa-caret-down"></i>
                                                     </div>
                                                 </div>
@@ -440,8 +438,7 @@
                                                     <div class="input-group">
                                                         <input type="text" name="hospede_name" id="hospede_name"
                                                                placeholder="Digite o nome do cliente... Auto Complet"
-                                                               class="form-control"
-                                                               style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                               class="form-control input-style">
 
                                                         <div class="input-group-append">
                                                             <button type="button"
@@ -568,30 +565,34 @@
                                         <div class="form-group">
                                             <label for="reserva_situacao"> Pagamento da Reserva</label><br>
                                             <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                <label class="btn btn-primary btn-lg active"> <input type="radio"
-                                                                                                     name="pagamentoReserva"
-                                                                                                     id="dinheiro"
-                                                                                                     autocomplete="off"
-                                                                                                     checked=""
-                                                                                                     value="1"> DINHEIRO
+                                                <label class="btn btn-primary btn-lg active">
+                                                    <input type="radio"
+                                                           name="pagamentoReserva"
+                                                           id="dinheiro"
+                                                           autocomplete="off"
+                                                           checked=""
+                                                           value="1"> DINHEIRO
                                                 </label>
-                                                <label class="btn btn-primary btn-lg"> <input type="radio"
-                                                                                              name="pagamentoReserva"
-                                                                                              id="faturado"
-                                                                                              autocomplete="off"
-                                                                                              value="2"> FATURADO
+                                                <label class="btn btn-primary btn-lg">
+                                                    <input type="radio"
+                                                           name="pagamentoReserva"
+                                                           id="faturado"
+                                                           autocomplete="off"
+                                                           value="2"> FATURADO
                                                 </label>
-                                                <label class="btn btn-primary btn-lg"> <input type="radio"
-                                                                                              name="pagamentoReserva"
-                                                                                              id="deposito"
-                                                                                              autocomplete="off"
-                                                                                              value="3"> DEPOSITO
+                                                <label class="btn btn-primary btn-lg">
+                                                    <input type="radio"
+                                                           name="pagamentoReserva"
+                                                           id="deposito"
+                                                           autocomplete="off"
+                                                           value="3"> DEPOSITO
                                                 </label>
-                                                <label class="btn btn-primary btn-lg"> <input type="radio"
-                                                                                              name="pagamentoReserva"
-                                                                                              id="cartao"
-                                                                                              autocomplete="off"
-                                                                                              value="4"> CARTAO </label>
+                                                <label class="btn btn-primary btn-lg">
+                                                    <input type="radio"
+                                                           name="pagamentoReserva"
+                                                           id="cartao"
+                                                           autocomplete="off"
+                                                           value="4"> CARTAO </label>
                                             </div>
                                         </div>
                                     </div>
@@ -599,17 +600,9 @@
                                         <div class="form-group-lg">
                                             <label for="reserva_situacao">Desconto?</label><br>
                                             <div class="custom-control custom-switch">
-                                                <div class="toggle btn btn-danger off" data-toggle="toggle"
-                                                     role="button" style="width: 0px; height: 0px;"><input
-                                                        type="checkbox" id="aceitaDesconto" data-toggle="toggle"
-                                                        data-on="S" data-off="N" data-onstyle="success"
-                                                        data-offstyle="danger">
-                                                    <div class="toggle-group"><label for="aceitaDesconto"
-                                                                                     class="btn btn-success toggle-on">S</label><label
-                                                            for="aceitaDesconto"
-                                                            class="btn btn-danger toggle-off">N</label><span
-                                                            class="toggle-handle btn btn-light"></span></div>
-                                                </div>
+                                                <input id="aceitaDesconto" type="checkbox"
+                                                       data-toggle="toggle" data-on="S" data-off="N"
+                                                       data-onstyle="success" data-offstyle="danger">
                                             </div>
                                         </div>
                                     </div>
@@ -617,17 +610,9 @@
                                         <div class="form-group-lg">
                                             <label for="reserva_situacao">Tipo Desconto</label><br>
                                             <div class="custom-control custom-switch">
-                                                <div class="toggle btn btn-danger off" data-toggle="toggle"
-                                                     role="button" style="width: 0px; height: 0px;"><input
-                                                        type="checkbox" id="tipoDesconto" data-toggle="toggle"
-                                                        data-on="%" data-off="R$" data-onstyle="success"
-                                                        data-offstyle="danger">
-                                                    <div class="toggle-group"><label for="tipoDesconto"
-                                                                                     class="btn btn-success toggle-on">%</label><label
-                                                            for="tipoDesconto"
-                                                            class="btn btn-danger toggle-off">R$</label><span
-                                                            class="toggle-handle btn btn-light"></span></div>
-                                                </div>
+                                                <input id="tipoDesconto" type="checkbox"
+                                                       data-toggle="toggle" data-on="%" data-off="R$"
+                                                       data-onstyle="success" data-offstyle="danger">
                                             </div>
                                         </div>
                                     </div>
@@ -638,8 +623,8 @@
                                                 <span class="input-group-text" id="basic-addon1">R$</span>
                                             </div>
                                             <input type="text" name="priceValorConsumo" id="priceValorConsumo"
-                                                   placeholder="99,99" class="form-control moeda-real" value=""
-                                                   style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                   placeholder="99,99" class="form-control moeda-real input-style"
+                                                   value="">
                                         </div>
                                     </div>
                                 </div>
@@ -655,15 +640,17 @@
                                                 <span class="input-group-text" id="basic-addon1">R$</span>
                                             </div>
                                             <input type="text" name="priceRecebido" id="priceRecebido"
-                                                   placeholder="99,99" class="form-control moeda-real" value=""
-                                                   style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                   placeholder="99,99" class="form-control moeda-real input-style"
+                                                   value="">
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4" id="somaDinheiroRecebido" style="display: none;">
                                         <div class="col-md-12">
-                                            <h6 class="account">Valor Recebido em Dinheiro</h6><span
-                                                class="mt-5 balance">  <div id="somaRecebido" name="somaRecebido"></div> </span>
+                                            <h6 class="account">Valor Recebido em Dinheiro</h6>
+                                            <span class="mt-5 balance">
+                                                <div id="somaRecebido" name="somaRecebido"></div>
+                                            </span>
                                         </div>
                                     </div>
 
@@ -675,8 +662,8 @@
                                         <div class="form-group">
                                             <label> Banco </label>
                                             <div class="input-group">
-                                                <select name="bank" class="select_bank form-control" required=""
-                                                        style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                <select id="" name="bank" class="select_bank form-control input-style"
+                                                        required="">
                                                     <option value="">--Select--</option>
                                                     <option value="BRADESCO"> BRADESCO</option>
                                                     <option value="ITAU"> ITAU</option>
@@ -689,8 +676,7 @@
                                         <div class="form-group">
                                             <label class="control-label"><b>Data Pagamento:</b></label>
                                             <input type="text" name="datetimeDeposito" id="datetimeDeposito"
-                                                   format="DD/MM/YYYY"
-                                                   style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                   format="DD/MM/YYYY" class="input-style">
                                         </div>
                                     </div>
 
@@ -701,8 +687,8 @@
                                                 <span class="input-group-text" id="basic-addon1">R$</span>
                                             </div>
                                             <input type="text" name="priceDeposito" id="priceDeposito"
-                                                   placeholder="99,99" class="form-control moeda-real" value=""
-                                                   style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                   placeholder="99,99" class="form-control moeda-real input-style"
+                                                   value="">
                                         </div>
                                     </div>
 
@@ -721,8 +707,8 @@
                                         <div class="form-group">
                                             <label> Maquina de Cartao </label>
                                             <div class="input-group">
-                                                <select name="bank" class="select_bank form-control" required=""
-                                                        style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                <select name="bank" class="select_bank form-control input-style"
+                                                        required="">
                                                     <option value="">--Select--</option>
                                                     <option value="1"> PAGSEGURO</option>
                                                     <option value="2"> SAFRA</option>
@@ -736,8 +722,7 @@
                                         <div class="form-group">
                                             <label class="control-label"><b>Data Pagamento:</b></label>
                                             <input type="text" name="datetimeCartao" id="datetimeCartao"
-                                                   format="DD/MM/YYYY"
-                                                   style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                   format="DD/MM/YYYY" class="input-style">
                                         </div>
                                     </div>
 
@@ -748,8 +733,7 @@
                                                 <span class="input-group-text" id="basic-addon1">R$</span>
                                             </div>
                                             <input type="text" name="priceCartao" id="priceCartao" placeholder="99,99"
-                                                   class="form-control moeda-real" value=""
-                                                   style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                   class="form-control moeda-real input-style" value="">
                                         </div>
                                     </div>
 
@@ -768,8 +752,7 @@
                                         <label for="reserva_situacao">NSU Cartao</label><br>
                                         <div class="input-group mb-3">
                                             <input type="text" name="nsuCartao" id="nsuCartao" placeholder=""
-                                                   class="form-control moeda-real" value=""
-                                                   style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                   class="form-control moeda-real input-style" value="">
                                         </div>
                                     </div>
 
@@ -777,8 +760,7 @@
                                         <label for="reserva_situacao">Autenticação Cartao</label><br>
                                         <div class="input-group mb-3">
                                             <input type="text" name="AuthCartao" id="AuthCartao" placeholder=""
-                                                   class="form-control moeda-real" value=""
-                                                   style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                   class="form-control moeda-real input-style" value="">
                                         </div>
                                     </div>
 
@@ -803,17 +785,9 @@
                                         <div class="form-group-lg">
                                             <label for="reserva_situacao"> Cartão Consumo</label><br>
                                             <div class="custom-control custom-switch">
-                                                <div class="toggle btn btn-danger off" data-toggle="toggle"
-                                                     role="button" style="width: 0px; height: 0px;"><input
-                                                        type="checkbox" id="liberarCartaoConsumo" data-toggle="toggle"
-                                                        data-on="S" data-off="N" data-onstyle="success"
-                                                        data-offstyle="danger">
-                                                    <div class="toggle-group"><label for="liberarCartaoConsumo"
-                                                                                     class="btn btn-success toggle-on">S</label><label
-                                                            for="liberarCartaoConsumo"
-                                                            class="btn btn-danger toggle-off">N</label><span
-                                                            class="toggle-handle btn btn-light"></span></div>
-                                                </div>
+                                                <input type="checkbox" id="liberarCartaoConsumo" data-toggle="toggle"
+                                                       data-on="S" data-off="N" data-onstyle="success"
+                                                       data-offstyle="danger">
                                             </div>
                                         </div>
                                     </div>
@@ -822,8 +796,7 @@
                                         <label for="reserva_situacao">Numero do Cartão</label><br>
                                         <div class="input-group mb-2">
                                             <input type="text" name="numerocartao" id="numerocartao" placeholder=""
-                                                   class="form-control moeda-real" value=""
-                                                   style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                   class="form-control moeda-real input-style" value="">
                                         </div>
                                     </div>
 
@@ -834,21 +807,20 @@
                                                 <span class="input-group-text" id="basic-addon1">R$</span>
                                             </div>
                                             <input type="text" name="AddCartaoConsumoValor" id="AddCartaoConsumoValor"
-                                                   placeholder="99,99" class="form-control moeda-real" value=""
-                                                   style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                   placeholder="99,99" class="form-control moeda-real input-style"
+                                                   value="">
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4" id="somatoriaValor" style="display: none;">
                                         <div class="col-md-12">
-                                            <h6 class="account">Valor do Cartao Adicionado</h6><span
-                                                class="mt-5 balance">  <div id="somaTotal"
-                                                                            name="somaTotal"></div> </span>
+                                            <h6 class="account">Valor do Cartao Adicionado</h6>
+                                            <span class="mt-5 balance">
+                                                <div id="somaTotal" name="somaTotal"></div>
+                                            </span>
                                         </div>
                                     </div>
-
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -861,24 +833,14 @@
 
                         <div class="panel">
                             <div class="panel-body">
-
                                 <div class="row">
-
                                     <div class="col-lg-2">
                                         <div class="form-group-lg">
                                             <label for="reserva_situacao"> Cartão de Acesso </label><br>
                                             <div class="custom-control custom-switch">
-                                                <div class="toggle btn btn-danger off" data-toggle="toggle"
-                                                     role="button" style="width: 0px; height: 0px;"><input
-                                                        type="checkbox" id="liberarAcesso" data-toggle="toggle"
-                                                        data-on="S" data-off="N" data-onstyle="success"
-                                                        data-offstyle="danger">
-                                                    <div class="toggle-group"><label for="liberarAcesso"
-                                                                                     class="btn btn-success toggle-on">S</label><label
-                                                            for="liberarAcesso"
-                                                            class="btn btn-danger toggle-off">N</label><span
-                                                            class="toggle-handle btn btn-light"></span></div>
-                                                </div>
+                                                <input type="checkbox" id="liberarAcesso" data-toggle="toggle"
+                                                       data-on="S" data-off="N" data-onstyle="success"
+                                                       data-offstyle="danger">
                                             </div>
                                         </div>
                                     </div>
@@ -887,14 +849,10 @@
                                         <label for="reserva_situacao">Numero do Cartão</label><br>
                                         <div class="input-group mb-2">
                                             <input type="text" name="numerochave" id="numerochave" placeholder=""
-                                                   class="form-control moeda-real" value=""
-                                                   style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                   class="form-control moeda-real input-style" value="">
                                         </div>
                                     </div>
-
-
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -902,19 +860,15 @@
                     <!--- TAB Veiculos --->
                     <div id="booking-veiculos" class="tab-pane fade">
                         <br>
-
                         <label><h4> Reserva :: Veiculos </h4></label>
-
                         <div class="panel">
                             <div class="panel-body" style="background-color: #ecf0f5;">
-
                                 <div class="row">
-
                                     <div class="col-lg-3">
                                         <div class="form-group-lg">
                                             <label for="reserva_situacao">Garagem </label><br>
-                                            <select name="bank" class="select_bank form-control" required=""
-                                                    style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                            <select name="bank" class="select_bank form-control input-style"
+                                                    required="">
                                                 <option value="">--Select--</option>
                                                 <option value="1"> Garagem 1</option>
                                                 <option value="2"> Garagem 2</option>
@@ -927,16 +881,15 @@
                                         <label for="reserva_situacao">Placa</label><br>
                                         <div class="input-group mb-2">
                                             <input type="text" name="placa" id="placa" placeholder=""
-                                                   class="form-control moeda-real" value=""
-                                                   style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                   class="form-control moeda-real input-style" value="">
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3">
                                         <div class="form-group-lg">
                                             <label for="cor"> Cor Veiculo </label><br>
-                                            <select name="bank" class="select_bank form-control" required=""
-                                                    style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                            <select name="bank" class="select_bank form-control input-style"
+                                                    required="">
                                                 <option value="">--Selecione Cor Veiculo--</option>
                                                 <option value="1"> BRANCO</option>
                                                 <option value="2"> PRETO</option>
@@ -953,8 +906,7 @@
                                         <label for="reserva_situacao">Modelo Veiculo</label><br>
                                         <div class="input-group mb-2">
                                             <input type="text" name="modelo" id="modelo" placeholder=""
-                                                   class="form-control moeda-real" value=""
-                                                   style="background: #fff; cursor: pointer; padding: 10px 10px; border: 2px solid #ccc;">
+                                                   class="form-control moeda-real input-style" value="">
                                         </div>
                                     </div>
 
@@ -997,27 +949,6 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr class="publish">
-                                        <td class="title"><a href="#"> GARAGEM 2 </a></td>
-                                        <td class="title"><a href="#"> DRF-2039 </a></td>
-                                        <td class="title"><a href="#"> BRANCO </a></td>
-                                        <td class="title"><a href="#"> PORSHE </a></td>
-                                        <td>
-                                            <!-- Default dropleft button -->
-                                            <div class="btn-group dropleft">
-                                                <button type="button" class="btn btn-secondary dropdown-toggle"
-                                                        data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
-                                                    Ação
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">Remover</a>
-                                                    <a class="dropdown-item" href="#">Editar Dados</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -1028,7 +959,7 @@
                     <div id="booking-pensao" class="tab-pane fade">
                         <br>
 
-                        <label><h4> Reserva :: Pensão ( Somente quando for HOTEL selecionado ) </h4></label>
+                        <label><h4> Reserva :: Pensão </h4></label>
 
                         <div class="booking-review">
                             <div class="table-responsive">
@@ -1059,501 +990,67 @@
                                         <td class="title">
                                             3
                                         </td>
-
-
                                         <td>
                                             <span class="mt-5 somatotal" data-toggle="tooltip" data-placement="top"
                                                   data-html="true" title=""
-                                                  data-original-title=" <h5> Preço por Pessoa. </h5> ">  <div
-                                                    id="valordiaria01" name="valordiaria01"></div> </span>
+                                                  data-original-title=" <h5> Preço por Pessoa. </h5> ">
+                                                <div id="valordiaria01" name="valordiaria01"></div>
+                                            </span>
                                         </td>
                                         <td>
                                             <span class="mt-5 somatotal" data-toggle="tooltip" data-placement="top"
                                                   data-html="true" title=""
-                                                  data-original-title=" <h5> Preço Calculado. </h5> ">  <div
-                                                    id="calculado01" name="calculado01"></div> </span>
+                                                  data-original-title=" <h5> Preço Calculado. </h5>">
+                                                <div id="calculado01" name="calculado01"></div>
+                                            </span>
                                         </td>
                                         <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checkCafe_1"
-                                                                                         name="checkCafe_1"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkCafe_1"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkCafe_1"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
+                                            <div class="toggle btn btn-success" data-toggle="toggle" role="button" style="width: 0px; height: 0px;"><input type="checkbox" id="checkCafe_1" name="checkCafe_1" data-toggle="toggle" data-on="SIM" data-off="NAO" data-onstyle="success" data-offstyle="danger"><div class="toggle-group"><label for="checkCafe_1" class="btn btn-success toggle-on">SIM</label><label for="checkCafe_1" class="btn btn-danger toggle-off">NAO</label><span class="toggle-handle btn btn-light"></span></div></div>
+                                        </td>
+
+
+<!--                                        <td class="title">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox"
+                                                       id="checkCafe_1"
+                                                       name="checkCafe_1"
+                                                       data-toggle="toggle"
+                                                       data-on="SIM" data-off="NAO"
+                                                       data-onstyle="success"
+                                                       data-offstyle="danger">
+                                            </div>
+                                        </td>-->
+                                        <td class="title">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox"
+                                                       id="checkAlmoco_1"
+                                                       data-toggle="toggle"
+                                                       data-on="SIM" data-off="NAO"
+                                                       data-onstyle="success"
+                                                       data-offstyle="danger">
                                             </div>
                                         </td>
                                         <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checkAlmoco_1"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkAlmoco_1"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkAlmoco_1"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox"
+                                                       id="checkJantar_1"
+                                                       data-toggle="toggle"
+                                                       data-on="SIM" data-off="NAO"
+                                                       data-onstyle="success"
+                                                       data-offstyle="danger">
                                             </div>
                                         </td>
                                         <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checkJantar_1"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkJantar_1"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkJantar_1"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox" id="checkAll_1"
-                                                                                         name="checkAll_1"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkAll_1"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkAll_1"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" id="checkAll_1"
+                                                       name="checkAll_1"
+                                                       data-toggle="toggle"
+                                                       data-on="SIM" data-off="NAO"
+                                                       data-onstyle="success"
+                                                       data-offstyle="danger">
                                             </div>
                                         </td>
                                     </tr>
-
-                                    <tr class="publish">
-                                        <td class="title">
-                                            101
-                                        </td>
-                                        <td class="title">
-                                            <b>12/12/2020</b>
-                                        </td>
-                                        <td class="title">
-                                            3
-                                        </td>
-                                        <td>
-                                            <span class="mt-5 somatotal" data-toggle="tooltip" data-placement="top"
-                                                  data-html="true" title=""
-                                                  data-original-title=" <h5> Preço por Pessoa. </h5> ">  <div
-                                                    id="valordiaria02" name="valordiaria02"></div> </span>
-                                        </td>
-                                        <td>
-                                            <span class="mt-5 somatotal" data-toggle="tooltip" data-placement="top"
-                                                  data-html="true" title=""
-                                                  data-original-title=" <h5> Preço Calculado. </h5> ">  <div
-                                                    id="calculado02" name="calculado02"></div> </span>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checkCafe_2"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkCafe_2"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkCafe_2"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checlAlmoco_2"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checlAlmoco_2"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checlAlmoco_2"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checkJantar_2"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkJantar_2"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkJantar_2"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox" id="checkAll_2"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkAll_2"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkAll_2"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="publish">
-                                        <td class="title">
-                                            101
-                                        </td>
-                                        <td class="title">
-                                            <b>13/12/2020</b>
-                                        </td>
-                                        <td class="title">
-                                            3
-                                        </td>
-                                        <td>
-                                            <span class="mt-5 somatotal" data-toggle="tooltip" data-placement="top"
-                                                  data-html="true" title=""
-                                                  data-original-title=" <h5> Preço por Pessoa. </h5> ">  <div
-                                                    id="valordiaria03" name="valordiaria03"></div> </span>
-                                        </td>
-                                        <td>
-                                            <span class="mt-5 somatotal" data-toggle="tooltip" data-placement="top"
-                                                  data-html="true" title=""
-                                                  data-original-title=" <h5> Preço por Pessoa. </h5> ">  <div
-                                                    id="calculado03" name="calculado03"></div> </span>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checkCafe_3"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkCafe_3"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkCafe_3"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checlAlmoco_3"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checlAlmoco_3"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checlAlmoco_3"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checkJantar_3"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkJantar_3"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkJantar_3"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox" id="checkAll_3"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkAll_3"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkAll_3"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr class="publish">
-
-                                    </tr>
-
-                                    <tr class="publish">
-                                        <td class="title">
-                                            102
-                                        </td>
-                                        <td class="title">
-                                            <b>14/12/2020</b>
-                                        </td>
-                                        <td class="title">
-                                            3
-                                        </td>
-                                        <td>
-                                            <span class="mt-5 somatotal" data-toggle="tooltip" data-placement="top"
-                                                  data-html="true" title=""
-                                                  data-original-title=" <h5> Preço por Pessoa. </h5> ">  <div
-                                                    id="valordiaria04" name="valordiaria04"></div> </span>
-                                        </td>
-                                        <td>
-                                            <span class="mt-5 somatotal" data-toggle="tooltip" data-placement="top"
-                                                  data-html="true" title=""
-                                                  data-original-title=" <h5> Preço Calculado. </h5> ">  <div
-                                                    id="calculado04" name="calculado04"></div> </span>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checkCafe_2"
-                                                                                         name="checkCafe_2"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkCafe_2"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkCafe_2"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checlAlmoco_2"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checlAlmoco_2"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checlAlmoco_2"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checkJantar_1"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkJantar_1"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkJantar_1"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox" id="checkAll_4"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkAll_4"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkAll_4"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr class="publish">
-                                        <td class="title">
-                                            102
-                                        </td>
-                                        <td class="title">
-                                            <b>15/12/2020</b>
-                                        </td>
-                                        <td class="title">
-                                            3
-                                        </td>
-                                        <td>
-                                            <span class="mt-5 somatotal" data-toggle="tooltip" data-placement="top"
-                                                  data-html="true" title=""
-                                                  data-original-title=" <h5> Preço por Pessoa. </h5> ">  <div
-                                                    id="valordiaria05" name="valordiaria05"></div> </span>
-                                        </td>
-                                        <td>
-                                            <span class="mt-5 somatotal" data-toggle="tooltip" data-placement="top"
-                                                  data-html="true" title=""
-                                                  data-original-title=" <h5> Preço Calculado. </h5> ">  <div
-                                                    id="calculado05" name="calculado05"></div> </span>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checkCafe_2"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkCafe_2"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkCafe_2"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checlAlmoco_2"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checlAlmoco_2"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checlAlmoco_2"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checkJantar_2"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkJantar_2"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkJantar_2"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox" id="checkAll_5"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkAll_5"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkAll_5"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="publish">
-                                        <td class="title">
-                                            102
-                                        </td>
-                                        <td class="title">
-                                            <b>16/12/2020</b>
-                                        </td>
-                                        <td class="title">
-                                            3
-                                        </td>
-                                        <td>
-                                            <span class="mt-5 somatotal" data-toggle="tooltip" data-placement="top"
-                                                  data-html="true" title=""
-                                                  data-original-title=" <h5> Preço por Pessoa. </h5> ">  <div
-                                                    id="valordiaria06" name="valordiaria06"></div> </span>
-                                        </td>
-                                        <td>
-                                            <span class="mt-5 somatotal" data-toggle="tooltip" data-placement="top"
-                                                  data-html="true" title=""
-                                                  data-original-title=" <h5> Preço por Pessoa. </h5> ">  <div
-                                                    id="calculado06" name="calculado06"></div> </span>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checkCafe_3"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkCafe_3"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkCafe_3"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checlAlmoco_3"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checlAlmoco_3"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checlAlmoco_3"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox"
-                                                                                         id="checkJantar_3"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkJantar_3"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkJantar_3"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                        <td class="title">
-                                            <div class="toggle btn btn-danger off" data-toggle="toggle" role="button"
-                                                 style="width: 0px; height: 0px;"><input type="checkbox" id="checkAll_6"
-                                                                                         data-toggle="toggle"
-                                                                                         data-on="SIM" data-off="NAO"
-                                                                                         data-onstyle="success"
-                                                                                         data-offstyle="danger">
-                                                <div class="toggle-group"><label for="checkAll_6"
-                                                                                 class="btn btn-success toggle-on">SIM</label><label
-                                                        for="checkAll_6"
-                                                        class="btn btn-danger toggle-off">NAO</label><span
-                                                        class="toggle-handle btn btn-light"></span></div>
-                                            </div>
-                                        </td>
-                                    </tr>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -1648,18 +1145,18 @@
                         </div>
                     </div>
 
-                    <!--- TAB Bilhetagem --->
-                    <div id="booking-bilhetagem" class="tab-pane fade">
-                        <br>
-                        <div class="booking-review">
-                            <h4 class="booking-review-title">Informações pessoais</h4>
-                            <div class="booking-review-content">
-                                <div class="review-section">
-                                    Bilhetagem
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!--                    &lt;!&ndash;- TAB Bilhetagem -&ndash;&gt;
+                                        <div id="booking-bilhetagem" class="tab-pane fade">
+                                            <br>
+                                            <div class="booking-review">
+                                                <h4 class="booking-review-title">Informações pessoais</h4>
+                                                <div class="booking-review-content">
+                                                    <div class="review-section">
+                                                        Bilhetagem
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>-->
 
                     <!-- Modal footer -->
                     <div class="modal-footer">

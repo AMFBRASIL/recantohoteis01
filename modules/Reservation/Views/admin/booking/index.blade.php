@@ -671,7 +671,7 @@
                         <div class="row">
                             <div class="col-sm-4 col-md-4 ">
                                 <div class="dashboard-report-card card purple link-container">
-                                    <div class="card-content" dataid="111222" idstatus="1" style="cursor:pointer">
+                                    <div class="card-content" style="cursor:pointer">
                                         <span class="card-title">LIBERAÇÃO</span>
                                         <span class="card-amount">CONTRATO</span>
                                         <span class="card-desc">ENTREGUE AO CLIENTE?</span>
