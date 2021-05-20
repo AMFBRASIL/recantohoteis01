@@ -987,4 +987,9 @@ class Event extends Bookable
             ]
         ];
     }
+
+    public function getFreeEventInRange($from, $to)
+    {
+        return Event::all();
+    }
 }

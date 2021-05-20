@@ -1,6 +1,12 @@
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
+let hotels
+let farms
+let events
+let dayUser
 
+let start_booking
+let end_booking
+
+$(function () {
     $(".previous").click(function () {
         $(".nav-tabs > .nav-item > .active").parent().prev("li").find("a").trigger("click");
     });
@@ -103,17 +109,17 @@ $(function () {
 
     getSalesChannels();
 
-    let start = moment().startOf("hour");
-    let end = moment().startOf("hour").add(32, "hour");
+    this.start_booking = moment().startOf("hour");
+    this.end_booking = moment().startOf("hour").add(32, "hour");
 
-    cb(start, end);
+    cb(this.start_booking, this.end_booking);
 
     $("#reportrange")
         .daterangepicker(
             {
                 timePicker: true,
-                startDate: start,
-                endDate: end,
+                startDate: this.start_booking,
+                endDate: this.end_booking,
                 alwaysShowCalendars: true,
                 opens: "left",
                 showDropdowns: true,
@@ -121,29 +127,92 @@ $(function () {
                 ranges: {
                     Hoje: [moment(), moment()],
                 },
-            },
-            cb
-        )
-        .on("apply.daterangepicker", () => {
-            $("#reportData").html("LOADING PROCESS... ");
-
-            let property_type = $('input[name=property_type]:checked').val();
-
-            if ($("#adult_quantity").val() == "" || $("#adult_quantity").val() <= 0) {
-                $("#reportData").html("<button type='button' onClick='javascript:chamarCall(1)' type='button' class='btn btn-lg btn-primary'>Pesquisar Disponibilidade</button>");
-                $("#adult_quantity").focus();
-            } else if ($("#children_quantity_0_5").val() == "" || $("#children_quantity_0_5").val() <= 0) {
-                $("#reportData").html("<button type='button' onClick='javascript:chamarCall(2)' class='btn btn-lg btn-primary'>Pesquisar Disponibilidade</button>");
-                $("#children_quantity_0_5").focus();
-            } else if ($("#children_quantity_6_12").val() == "" || $("#children_quantity_6_12").val() <= 0) {
-                $("#reportData").html("<button type='button'  onClick='javascript:chamarCall(3)' class='btn btn-lg btn-primary'>Pesquisar Disponibilidade</button>");
-                $("#children_quantity_6_12").focus();
-            } else {
-                roomsFound(property_type);
+            }, function (start, end) {
+                start_booking = start;
+                end_booking = end;
+                cb(start_booking, end_booking);
+                chamarCall();
             }
-        });
+        );
 
-//
+    $('input[type=radio][name=pagamentoReserva]').on('change', function () {
+        switch ($(this).val()) {
+            case "1":
+                $("#formaDinheiro").show();
+                $("#formaDeposito").hide();
+                $("#formaCartao").hide();
+                $("#formaCartaoNSU").hide();
+
+                //Zerando os dados
+                $('#priceRecebido').val("");
+                $('#somaRecebido').html("");
+                $('#priceDeposito').val("");
+                $('#somaDeposito').html("");
+                $('#priceCartao').val("");
+                $('#somaCartao').html("");
+
+
+                break;
+            case "2":
+                $("#formaDinheiro").hide();
+                $("#formaDeposito").hide();
+                $("#formaCartao").hide();
+                $("#formaCartaoNSU").hide();
+
+                //Zerando os dados
+                $('#priceRecebido').val("");
+                $('#somaRecebido').html("");
+                $('#priceDeposito').val("");
+                $('#somaDeposito').html("");
+                $('#priceCartao').val("");
+                $('#somaCartao').html("");
+
+                break;
+            case "3":
+                $("#formaDinheiro").hide();
+                $("#formaDeposito").show();
+                $("#formaCartao").hide();
+                $("#formaCartaoNSU").hide();
+
+                //Zerando os dados
+                $('#priceRecebido').val("");
+                $('#somaRecebido').html("");
+                $('#priceDeposito').val("");
+                $('#somaDeposito').html("");
+                $('#priceCartao').val("");
+                $('#somaCartao').html("");
+
+                break;
+            case "4":
+                $("#formaCartao").show();
+                $("#formaDinheiro").hide();
+                $("#formaDeposito").hide();
+                $("#formaCartaoNSU").show();
+
+                //Zerando os dados
+                $('#priceRecebido').val("");
+                $('#somaRecebido').html("");
+                $('#priceDeposito').val("");
+                $('#somaDeposito').html("");
+                $('#priceCartao').val("");
+                $('#somaCartao').html("");
+
+                break;
+            default:
+                $("#formaCartao").hide();
+                $("#formaDinheiro").hide();
+                $("#formaDeposito").hide();
+                $("#formaCartaoNSU").hide();
+
+                //Zerando os dados
+                $('#priceRecebido').val("");
+                $('#somaRecebido').html("");
+                $('#priceDeposito').val("");
+                $('#somaDeposito').html("");
+                $('#priceCartao').val("");
+                $('#somaCartao').html("");
+        }
+    });
 
     $('#priceRecebido').on('keyup', function () {
         $("#somaDinheiroRecebido").show();
@@ -153,7 +222,6 @@ $(function () {
         priceRecebido = formatNumber(priceRecebido);
 
         $('#somaRecebido').html("R$ " + priceRecebido);
-
     })
 
     $('#priceDeposito').on('keyup', function () {
@@ -172,7 +240,6 @@ $(function () {
 
     })
 
-
     $('#priceCartao').on('keyup', function () {
 
         $("#divCartao").show();
@@ -189,6 +256,62 @@ $(function () {
 
     })
 
+
+    $('#aceitaDesconto').change(function () {
+        if ($(this).prop('checked')) {
+            if ($("#aceitaDesconto").prop('checked')) {
+                $('#TipoDesconto').show();
+                $('#valorDesconto').show();
+            }
+        } else {
+            $('#TipoDesconto').hide();
+            $('#valorDesconto').hide();
+        }
+    });
+
+
+    $('#liberarCartaoConsumo').change(function () {
+        if ($(this).prop('checked')) {
+            if ($("#liberarCartaoConsumo").prop('checked')) {
+                alert("Pedir senha para autorizar cartao... ");
+                $('#NumeroCartaoDiv').show();
+                $('#ValorCartaoDiv').show();
+            }
+        } else {
+            $('#NumeroCartaoDiv').hide();
+            $('#ValorCartaoDiv').hide();
+        }
+    });
+
+
+    $('#liberarAcesso').change(function () {
+        if ($(this).prop('checked')) {
+            if ($("#liberarAcesso").prop('checked')) {
+                $('#numeroChaveAcesso').show();
+            }
+        } else {
+            $('#numeroChaveAcesso').hide();
+        }
+    });
+
+
+    $('#AddCartaoConsumoValor').on('keyup', function () {
+
+        $("#somatoriaValor").show();
+
+        let getpriceAdd = $('#AddCartaoConsumoValor').val().replace(/[.]/g, '').replace(',', '.');
+
+        let priceAdd = parseFloat(getpriceAdd != '' ? getpriceAdd : 0);
+
+        // Somando valores
+        let totalValores = parseFloat(priceAdd).toFixed(2);
+        totalValores = Intl.NumberFormat('pt-BR').format(totalValores);
+
+        $('#somaTotal').html("R$ " + totalValores);
+
+    })
+
+//$('.moeda-real').mask('#.##0,00', {reverse: true});
 });
 
 function searchUserInformationByCpf(user_cpf) {
@@ -211,7 +334,6 @@ function searchUserInformationById(user_id) {
     };
     searchUserInformation(data);
 }
-
 
 function searchUserInformation(data) {
     let url = "/admin/module/user/getUser/";
@@ -246,7 +368,6 @@ function setUserInformation(data) {
     // $('#billing-company').val();
     $('#client-company').val(data.user.business_name);
 }
-
 
 function getSalesChannels() {
     let url = "/admin/module/reservation/reservation-type/all";
@@ -301,7 +422,7 @@ function chamarCall() {
     }
 
     // Se tiver Checado o CHACARA validar campos do hotel para quantidade de pessoas.
-   if (property_type != 1) {
+    if (property_type != 1) {
         if ($("#qtdeAdult").val() == "" || $("#qtdeAdult").val() <= 0) {
             alert("Favor informa a qauntidade de pessoas");
             $("#reportData").html("<button type='button' onClick='javascript:chamarCall()' type='button' class='btn btn-lg btn-primary'>Pesquisar Disponibilidade</button>");
@@ -310,17 +431,125 @@ function chamarCall() {
         }
     }
 
-   roomsFound(property_type);
+    switch (property_type) {
+        case "1":
+            foundHotel();
+            break;
+        case "2":
+            foundFarms()
+            break;
+        case "3":
+            foundEvents()
+            break;
+        case "4":
+            foundDayUsers()
+            break;
+    }
 }
 
-function roomsFound(property_type){
+function foundHotel() {
+    let data = {
+        start: start_booking.format("Y-M-D"),
+        end: end_booking.format("Y-M-D"),
+    };
+
     $.ajax({
-        url: "disponivelajax.php",
-        data: {id: property_type},
+        url: "/admin/module/booking/freeRoomInRange/",
+        data: data,
         dataType: "json",
-        type: "post",
+        type: "get",
         success: function (res) {
-            $("#reportData").html(res);
+            console.log(res)
+            hotels = res.rooms,
+                $("#reportData").html(`EXISTEM ${res.rooms.length} QUARTOS DISPONIVEIS PARA ESTA DATA`);
+            $('#booking-uhs-disponiveis').html(res.view);
+            $('[data-toggle="popover"]').popover(
+                {
+                    selector: '[data-toggle=popover]',
+                    trigger: 'hover',
+                    html: true,
+                    container: 'body',
+                    placement: 'auto'
+                }
+            );
+        },
+    });
+}
+
+function foundFarms() {
+    let data = {
+        start: start_booking.format("Y-M-D"),
+        end: end_booking.format("Y-M-D"),
+    };
+
+    $.ajax({
+        url: "/admin/module/booking/freeSpaceInRange/",
+        data: data,
+        dataType: "json",
+        type: "get",
+        success: function (res) {
+            console.log(res)
+            farms = res.spaces,
+                $("#reportData").html(`EXISTEM ${res.spaces.length} CHACARAS DISPONIVEIS PARA ESTA DATA`);
+            $('#booking-uhs-disponiveis').html(res.view);
+            $('[data-toggle="popover"]').popover(
+                {
+                    selector: '[data-toggle=popover]',
+                    trigger: 'hover',
+                    html: true,
+                    container: 'body',
+                    placement: 'auto'
+                }
+            );
+        },
+    });
+}
+
+function foundEvents() {
+    let data = {
+        start: start_booking.format("Y-M-D"),
+        end: end_booking.format("Y-M-D"),
+    };
+
+    $.ajax({
+        url: "/admin/module/booking/freeEventInRange/",
+        data: data,
+        dataType: "json",
+        type: "get",
+        success: function (res) {
+            console.log(res)
+            events = res.events
+            $("#reportData").html(`EXISTEM ${res.events.length} EVENTOS DISPONIVEIS PARA ESTA DATA`);
+            $('#booking-uhs-disponiveis').html('');
+        },
+    });
+}
+
+function foundDayUsers() {
+    let data = {
+        start: start_booking.format("Y-M-D"),
+        end: end_booking.format("Y-M-D"),
+    };
+
+    $.ajax({
+        url: "/admin/module/booking/freeDayUserInRange/",
+        data: data,
+        dataType: "json",
+        type: "get",
+        success: function (res) {
+            console.log(res)
+            dayUser = res.tours,
+            $("#reportData").html(`EXISTEM ${res.tours.length} VAGAS DISPONIVEIS PARA ESTA DATA DO DAY USE`);
+            $('#booking-uhs-disponiveis').html(res.view);
+            $('[data-toggle="popover"]').popover(
+                {
+                    selector: '[data-toggle=popover]',
+                    trigger: 'hover',
+                    html: true,
+                    container: 'body',
+                    placement: 'auto'
+                }
+            );
         },
     });
 }
@@ -332,28 +561,10 @@ function formatNumber(value) {
     }
 }
 
+
 /* Mokup*/
 
 /*
-
-
-jQuery('#AddCartaoConsumoValor').on('keyup', function () {
-
-    $("#somatoriaValor").show();
-
-    var getpriceAdd = jQuery('#AddCartaoConsumoValor').val().replace(/[.]/g, '').replace(',', '.');
-
-    var priceAdd = parseFloat(getpriceAdd != '' ? getpriceAdd : 0);
-
-    // Somando valores
-    var totalValores = parseFloat(priceAdd).toFixed(2);
-    totalValores = Intl.NumberFormat('pt-BR').format(totalValores);
-
-    jQuery('#somaTotal').html("R$ " + totalValores);
-
-})
-
-//$('.moeda-real').mask('#.##0,00', {reverse: true});
 
 function liberarbotao() {
     alert("Liberar botao quando tudo estiver preenchido e OK ... somente assim pode salvar a reserva.");
@@ -383,92 +594,7 @@ $('input:checkbox').change(function () {
     }
 });
 
-var popoverRemoteContents = function (element) {
-    if ($(element).data('loaded') !== true) {
-        var div_id = 'tmp-id-' + $.now();
-        $.ajax({
-            url: $(element).data('popover-remote'),
-            success: function (response) {
-                $('#' + div_id).html(response);
-                $(element).attr("data-content", response);
-                return $(element).popover('update');
-            }
-        });
 
-        return '<div id="' + div_id + '">Loading...</div>';
-
-    } else {
-        return $(element).data('content');
-    }
-};
-
-
-$('.CallButton').click(function (e) {
-    $('#bookingSave').show();
-});
-
-
-$('#aceitaDesconto').change(function () {
-    if ($(this).prop('checked')) {
-        if ($("#aceitaDesconto").prop('checked')) {
-            $('#TipoDesconto').show();
-            $('#valorDesconto').show();
-        }
-    } else {
-        $('#TipoDesconto').hide();
-        $('#valorDesconto').hide();
-    }
-});
-
-
-$('#liberarCartaoConsumo').change(function () {
-    if ($(this).prop('checked')) {
-        if ($("#liberarCartaoConsumo").prop('checked')) {
-            alert("Pedir senha para autorizar cartao... ");
-            $('#NumeroCartaoDiv').show();
-            $('#ValorCartaoDiv').show();
-        }
-    } else {
-        $('#NumeroCartaoDiv').hide();
-        $('#ValorCartaoDiv').hide();
-    }
-});
-
-
-$('#liberarAcesso').change(function () {
-    if ($(this).prop('checked')) {
-        if ($("#liberarAcesso").prop('checked')) {
-            $('#numeroChaveAcesso').show();
-        }
-    } else {
-        $('#numeroChaveAcesso').hide();
-    }
-});
-
-
-$('[data-popover-remote]').popover({
-    html: true,
-    trigger: 'hover',
-    content: function () {
-        return popoverRemoteContents(this);
-    }
-});
-
-
-$(function () {
-    $('[data-toggle="popover"]').popover({
-        html: true,
-        content: function () {
-            return $('#popover_content_wrapper').html();
-        }
-    });
-});
-
-
-
-function tabClick() {
-    alert("foi");
-}
 
 $(function () {
     $('input[name="datetimeDeposito"]').daterangepicker({
@@ -506,85 +632,4 @@ $(function () {
     });
 });
 
-$('input[type=radio][name=pagamentoReserva]').on('change', function () {
-
-    switch ($(this).val()) {
-        case "1":
-            $("#formaDinheiro").show();
-            $("#formaDeposito").hide();
-            $("#formaCartao").hide();
-            $("#formaCartaoNSU").hide();
-
-            //Zerando os dados
-            $('#priceRecebido').val("");
-            $('#somaRecebido').html("");
-            $('#priceDeposito').val("");
-            $('#somaDeposito').html("");
-            $('#priceCartao').val("");
-            $('#somaCartao').html("");
-
-
-            break;
-        case "2":
-            $("#formaDinheiro").hide();
-            $("#formaDeposito").hide();
-            $("#formaCartao").hide();
-            $("#formaCartaoNSU").hide();
-
-            //Zerando os dados
-            $('#priceRecebido').val("");
-            $('#somaRecebido').html("");
-            $('#priceDeposito').val("");
-            $('#somaDeposito').html("");
-            $('#priceCartao').val("");
-            $('#somaCartao').html("");
-
-            break;
-        case "3":
-            $("#formaDinheiro").hide();
-            $("#formaDeposito").show();
-            $("#formaCartao").hide();
-            $("#formaCartaoNSU").hide();
-
-            //Zerando os dados
-            $('#priceRecebido').val("");
-            $('#somaRecebido').html("");
-            $('#priceDeposito').val("");
-            $('#somaDeposito').html("");
-            $('#priceCartao').val("");
-            $('#somaCartao').html("");
-
-            break;
-        case "4":
-            $("#formaCartao").show();
-            $("#formaDinheiro").hide();
-            $("#formaDeposito").hide();
-            $("#formaCartaoNSU").show();
-
-            //Zerando os dados
-            $('#priceRecebido').val("");
-            $('#somaRecebido').html("");
-            $('#priceDeposito').val("");
-            $('#somaDeposito').html("");
-            $('#priceCartao').val("");
-            $('#somaCartao').html("");
-
-            break;
-        default:
-            $("#formaCartao").hide();
-            $("#formaDinheiro").hide();
-            $("#formaDeposito").hide();
-            $("#formaCartaoNSU").hide();
-
-            //Zerando os dados
-            $('#priceRecebido').val("");
-            $('#somaRecebido').html("");
-            $('#priceDeposito').val("");
-            $('#somaDeposito').html("");
-            $('#priceCartao').val("");
-            $('#somaCartao').html("");
-
-    }
-
-});
 */
