@@ -293,7 +293,6 @@ $(function () {
         }
     });
 
-
     $('#AddCartaoConsumoValor').on('keyup', function () {
 
         $("#somatoriaValor").show();
