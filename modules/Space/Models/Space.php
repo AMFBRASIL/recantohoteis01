@@ -1092,4 +1092,21 @@ class Space extends Bookable
         }
         return $value;
     }
+
+    public function getFreeSpaceInRange($from, $to)
+    {
+        $spacesReservations = $this->getBookingsInRange($from,$to);
+
+        $ids = [];
+
+        if (empty($spacesReservations)){
+            foreach($spacesReservations as $sr){
+                array_push($ids,$sr->id);
+            }
+        }
+
+        return Space::query()
+            ->whereNotIn('id',$ids)
+            ->get();
+    }
 }

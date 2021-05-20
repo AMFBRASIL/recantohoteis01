@@ -14,14 +14,14 @@
                 <ul class="nav nav-tabs" id="tabsRecanto" style="background-color: #ecf0f5;">
                     <li class="nav-item">
                         <a class="nav-link tab active" data-toggle="tab" href="#booking-detalhes">
-                            <i class="fa fa-list fa-4x" data-toggle="tooltip" data-placement="top" data-html="true"
+                            <i class="fa fa-list fa-4x" data-toggle="tooltip" data-placement="auto" data-html="true"
                                title="" data-original-title=" <h4> Solicitante </h4> "></i>
                         </a>
                     </li>
 
                     <li class="nav-item tab">
-                        <a class="nav-link" data-toggle="tab"href="#booking-consumo">
-                            <i class="fa fa-calendar fa-4x" data-toggle="tooltip" data-placement="top" data-html="true"
+                        <a class="nav-link" data-toggle="tab" href="#booking-consumo">
+                            <i class="fa fa-calendar fa-4x" data-toggle="tooltip" data-placement="auto" data-html="true"
                                title="" data-original-title="<h4> CheckIN </h4>"></i>
                         </a>
                     </li>
@@ -29,49 +29,49 @@
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#booking-uhs-disponiveis"
                            data-target="#booking-uhs-disponiveis" data-toggle="tabajax">
-                            <i class="fa fa-bed fa-4x" data-toggle="tooltip" data-placement="top" data-html="true"
+                            <i class="fa fa-bed fa-4x" data-toggle="tooltip" data-placement="auto" data-html="true"
                                title="" data-original-title="<h4> UHs Disponíveis </h4>"></i>
                         </a>
                     </li>
 
                     <li class="nav-item tab">
                         <a class="nav-link" data-toggle="tab" href="#booking-acompanhantes">
-                            <i class="fa fa-users fa-4x" data-toggle="tooltip" data-placement="top" data-html="true"
+                            <i class="fa fa-users fa-4x" data-toggle="tooltip" data-placement="auto" data-html="true"
                                title="" data-original-title="<h4> Hóspedes </h4>"></i>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#booking-pagamentos">
-                            <i class="fa fa-dollar fa-4x" data-toggle="tooltip" data-placement="top" data-html="true"
+                            <i class="fa fa-dollar fa-4x" data-toggle="tooltip" data-placement="auto" data-html="true"
                                title="" data-original-title="<h4> Pagamentos </h4>"></i>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#booking-cartaoconsumo">
-                            <i class="fa fa-credit-card fa-4x" data-toggle="tooltip" data-placement="top"
+                            <i class="fa fa-credit-card fa-4x" data-toggle="tooltip" data-placement="auto"
                                data-html="true" title="" data-original-title="<h4> Cartão de Consumo Resort </h4>"></i>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#booking-cartaoacesso">
-                            <i class="fa fa-key fa-4x" data-toggle="tooltip" data-placement="top" data-html="true"
+                            <i class="fa fa-key fa-4x" data-toggle="tooltip" data-placement="auto" data-html="true"
                                title="" data-original-title="<h4> Cartão de Acesso </h4>"></i>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#booking-veiculos">
-                            <i class="fa fa-car fa-4x" data-toggle="tooltip" data-placement="top" data-html="true"
+                            <i class="fa fa-car fa-4x" data-toggle="tooltip" data-placement="auto" data-html="true"
                                title="" data-original-title="<h4> Veiculos </h4>"></i>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#booking-pensao">
-                            <i class="fa fa-cutlery fa-4x" data-toggle="tooltip" data-placement="top" data-html="true"
+                            <i class="fa fa-cutlery fa-4x" data-toggle="tooltip" data-placement="auto" data-html="true"
                                title="" data-original-title="<h4> Pensao </h4>"></i>
                         </a>
                     </li>
@@ -79,7 +79,7 @@
                     <li class="nav-item">
                         <a href="tabreservafinal.php" class="nav-link CallButton" data-target="#booking-final"
                            data-toggle="tabajax">
-                            <i class="fa fa-info-circle fa-4x" data-toggle="tooltip" data-placement="top"
+                            <i class="fa fa-info-circle fa-4x" data-toggle="tooltip" data-placement="auto"
                                data-html="true" title="" data-original-title="<h4> Detalhes Final </h4>"></i>
                         </a>
                     </li>
@@ -227,7 +227,7 @@
                         </div>
                     </div>
 
-                    <!--- TAB Consumo --->
+                    <!--- TAB Reservation --->
                     <div id="booking-consumo" class="tab-pane fade">
                         <br>
                         <label><h4> Reserva :: Check-In </h4></label>
@@ -322,7 +322,8 @@
                                             <div class="col-lg-3">
                                                 <div class="form-group-lg">
                                                     <label for="reserva_situacao">Qtde de Pessoas</label><br>
-                                                    <input type="number" value="0" name="adult_quantity" id="adult_quantity"
+                                                    <input type="number" value="0" name="adult_quantity"
+                                                           id="adult_quantity"
                                                            placeholder="" class="form-control input-style">
                                                 </div>
                                             </div>
@@ -391,8 +392,8 @@
                                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                         <label class="btn btn-primary btn-lg active">
                                                             <input value="ABERTO"
-                                                                type="radio" name="revenues" id="option1"
-                                                                autocomplete="off" checked=""> ABERTO </label>
+                                                                   type="radio" name="revenues" id="option1"
+                                                                   autocomplete="off" checked=""> ABERTO </label>
                                                         <label class="btn btn-primary btn-lg">
                                                             <input type="radio" value="FATURADO"
                                                                    name="revenues"
@@ -413,6 +414,11 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <!--- TAB uhs Disponiveis --->
+                    <div id="booking-uhs-disponiveis" class="tab-pane fade">
+
                     </div>
 
                     <!--- TAB Acompanhamentes --->
@@ -547,10 +553,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!--- Ajax uhs Disponiveis --->
-                    <div id="booking-uhs-disponiveis" class="tab-pane fade">
                     </div>
 
                     <!--- TAB acompanhantes --->
@@ -850,7 +852,6 @@
                             </div>
                         </div>
                     </div>
-
 
                     <!--- TAB de cartao do acesso --->
                     <div id="booking-cartaoacesso" class="tab-pane fade">

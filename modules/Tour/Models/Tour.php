@@ -1161,4 +1161,19 @@ class Tour extends Bookable
             ]
         ];
     }
+
+    public function getFreeDayUserInRange($from, $to)
+    {
+        $tours = $this->getBookingsInRange($from,$to);
+
+        $ids = [];
+
+        if (empty($tours)){
+            foreach($tours as $t){
+                array_push($ids,$t->id);
+            }
+        }
+
+        return Tour::all();
+    }
 }
