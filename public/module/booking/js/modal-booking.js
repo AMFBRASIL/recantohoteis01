@@ -283,7 +283,6 @@ $(function () {
         }
     });
 
-
     $('#liberarAcesso').change(function () {
         if ($(this).prop('checked')) {
             if ($("#liberarAcesso").prop('checked')) {
