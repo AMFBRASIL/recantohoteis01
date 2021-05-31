@@ -8,10 +8,14 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Booking\Models\Booking;
 use Modules\Company\Models\Company;
+use Modules\Event\Models\Event;
+use Modules\Hotel\Models\HotelRoom;
 use Modules\Hotel\Models\HotelRoomBooking;
 use Modules\Pos\Models\ConsumptionCard;
 use Modules\Pos\Models\Sale;
 use Modules\Situation\Models\Situation;
+use Modules\Space\Models\Space;
+use Modules\Tour\Models\Tour;
 
 class BookingController extends Controller
 {
@@ -198,6 +202,67 @@ class BookingController extends Controller
         return response()->json([
             'error' => true,
             'message' => "Falha ao localizar usuario",
+        ]);
+    }
+
+    public function getFreeRoomInRange(Request $request){
+
+        $rooms = (new HotelRoom())->getFreeRoomInRange($request->start, $request->end);
+
+        $data = [
+            'rooms' => $rooms
+        ];
+
+        $uh = view('Booking::admin.modal.uh.hotel', $data)->render();
+
+        return response()->json([
+            'error' => false,
+            'rooms' => $rooms,
+            'view'  => $uh
+        ]);
+    }
+
+    public function getFreeSpaceInRange(Request $request){
+
+        $spaces = (new Space())->getFreeSpaceInRange($request->start, $request->end);
+
+        $data = [
+            'spaces' => $spaces
+        ];
+
+        $uh = view('Booking::admin.modal.uh.space', $data)->render();
+
+        return response()->json([
+            'error' => false,
+            'spaces' => $spaces,
+            'view'  => $uh
+        ]);
+    }
+
+    public function getFreeDayUserInRange(Request $request){
+
+        $tours = (new Tour())->getFreeDayUserInRange($request->start, $request->end);
+
+        $data = [
+            'tours' => $tours
+        ];
+
+        $uh = view('Booking::admin.modal.uh.tour', $data)->render();
+
+        return response()->json([
+            'error' => false,
+            'tours' => $tours,
+            'view'  => $uh
+        ]);
+    }
+
+    public function getFreeEventInRange(Request $request){
+
+        $events = (new Event())->getFreeEventInRange($request->start, $request->end);
+
+        return response()->json([
+            'error' => false,
+            'events' => $events,
         ]);
     }
 }

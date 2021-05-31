@@ -12,6 +12,7 @@ Route::post('/changepass/{id}','UserController@changepass')->name('user.admin.ch
 Route::get('/verify-email/{id}','UserController@verifyEmail')->name('user.admin.verifyEmail');
 Route::get('/userRegister', 'UserController@userRegister')->name('user.admin.register');
 Route::get('/autocomplete', 'UserController@getForSelectName2')->name('user.admin.autocomplete');
+Route::get('/autocompleteBusinessName', 'UserController@getForSelect2BusinessName')->name('user.admin.autocompleteBusinessName');
 
 Route::get('/userUpgradeRequest', 'UserController@userUpgradeRequest')->name('user.admin.upgrade');
 Route::get('/upgrade/{id}','UserController@userUpgradeRequestApprovedId')->name('user.admin.upgradeId');

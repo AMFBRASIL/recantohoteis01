@@ -4,7 +4,7 @@
         <div class="d-flex justify-content-between mb20">
             <h1 class="title-bar">{{__('Todas Reservas')}}</h1>
             <div class="title-actions">
-                <a href="#" class="btn btn-primary NewReserva">Add new Reserva</a>
+                <a href="#" class="btn btn-primary new-booking">Add new Reserva</a>
             </div>
         </div>
         @include('admin.message')
@@ -671,7 +671,7 @@
                         <div class="row">
                             <div class="col-sm-4 col-md-4 ">
                                 <div class="dashboard-report-card card purple link-container">
-                                    <div class="card-content" dataid="111222" idstatus="1" style="cursor:pointer">
+                                    <div class="card-content" style="cursor:pointer">
                                         <span class="card-title">LIBERAÇÃO</span>
                                         <span class="card-amount">CONTRATO</span>
                                         <span class="card-desc">ENTREGUE AO CLIENTE?</span>
@@ -1129,23 +1129,47 @@
                         }
                     </script>
                 </div>
+                @endsection
             </div>
         </div>
     </div>
 
-@endsection
+    @include('Booking::admin/modal/modalBooking')
+
 @section('script.head')
     <link rel="stylesheet" href="{{asset('libs/fancybox/css/jquery.fancybox.css')}}"/>
+
+    {{--Booking--}}
     <link rel="stylesheet" href="{{asset('libs/bootstrap4-toggle-3.6.1/css/bootstrap4-toggle.css')}}"/>
+    <link rel="stylesheet" href="{{asset('libs/daterange/daterangepicker.css')}}">
+    <link rel="stylesheet" href="{{asset('libs/bootbox/bootbox.min.js')}}">
+    <link rel="stylesheet" href="{{asset('libs/jquery-ui-1.12.1/jquery-ui.css')}}"/>
+
+    {{--Booking--}}
 @endsection
 @section('script.body')
     <script src="{{asset('js/printthis.js')}}"></script>
-    <script src="{{asset('libs/bootstrap4-toggle-3.6.1/js/bootstrap4-toggle.js')}}"></script>
     <script src="{{asset('libs/fancybox/js/jquery.fancybox.js')}}"></script>
     <script src="{{asset('module/reservation/booking/js/reservation.js')}}"></script>
+
+
+    {{--Booking--}}
+    <script src="{{asset('libs/bootstrap/js/bootstrap.bundle.js')}}"></script>
+    <script src="{{asset('libs/bootstrap4-toggle-3.6.1/js/bootstrap4-toggle.js')}}"></script>
+    <script src="{{asset('libs/jquery-ui-1.12.1/jquery-ui.js')}}"></script>
     <script src="{{asset('libs/daterange/moment.min.js')}}"></script>
+    <script src="{{asset('libs/daterange/daterangepicker.min.js?_ver='.config('app.version'))}}"></script>
+    <script src="{{asset('module/booking/js/modal-booking.js')}}"></script>
+    {{--Booking--}}
+
+
     <script>
         $(function () {
+            $('.new-booking').on('click',() => {
+                $("#modal-new-booking").modal('show');
+                $('[data-toggle="tooltip"]').tooltip()
+            });
+
             $('.moeda-real').mask('#.##0,00', {reverse: true});
 
             $('[data-toggle="tooltip"]').tooltip()

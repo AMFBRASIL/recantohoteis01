@@ -494,9 +494,32 @@ class UserController extends AdminController
         ]);
     }
 
+    public function getForSelect2BusinessName(Request $request)
+    {
+        $q = $request->query('q');
+        $query = User::getForSelect2BusinessName($q);
+        $res = $query->orderBy('id', 'desc')->limit(20)->get();
+
+        return response()->json([
+            'results' => $res
+        ]);
+    }
+
     public function getUser(Request $request)
     {
-        $user = User::query()->find($request->id);
+        $user = [];
+
+        if ($request->input('id')){
+            $user = User::query()->find($request->id);
+        }
+
+        else if ($request->input('rg')){
+            $user = User::query()->where('rg',$request->rg)->first();
+        }
+
+        else if ($request->input('cpf')){
+            $user = User::query()->where('cpf_cnpj',$request->cpf)->first();
+        }
 
         return response()->json([
             'user' => $user

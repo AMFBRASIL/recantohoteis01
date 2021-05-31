@@ -142,4 +142,13 @@ class BankAccountController extends AdminController
 
         return redirect()->back()->with('success', __('Update success!'));
     }
+
+    public function banks(){
+        $banks = Bank::query()->orderBy('numero_codigo', 'asc')->get();
+
+        return response()->json([
+            'error' => false,
+            'banks' => $banks,
+        ]);
+    }
 }

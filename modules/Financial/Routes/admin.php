@@ -28,11 +28,15 @@ Route::get('/bankAccount/edit/{id}', 'BankAccountController@edit')->name('financ
 
 Route::post('/bankAccount/store/{id}', 'BankAccountController@store')->name('financial.admin.bank.account.store');
 
+Route::post('/bankAccount/banks', 'BankAccountController@banks')->name('financial.admin.bank.account.banks');
+
 Route::get('/carMachineAccount', 'CardMachineAccountController@index')->name('financial.admin.card.machine.account.index');
 
 Route::get('/carMachineAccount/edit/{id}', 'CardMachineAccountController@edit')->name('financial.admin.card.machine.account.edit');
 
 Route::post('/carMachineAccount/store/{id}', 'CardMachineAccountController@store')->name('financial.admin.card.machine.account.store');
+
+Route::get('/carMachineAccount/cardMachines', 'CardMachineAccountController@cardMachines')->name('financial.admin.card.machine.cardMachines');
 
 
 Route::group(['prefix' => 'costCenter'], function () {

@@ -6,6 +6,12 @@ Route::get('getBooking/', 'BookingController@getBooking')->name('booking.admin.g
 Route::get('getHotelRoomByUserID/', 'BookingController@getHotelRoomByUserID')->name('booking.admin.getHotelRoomByUserID');
 Route::get('getAllSituationBooking/', 'BookingController@getAllSituationBooking')->name('booking.admin.getAllSituationBooking');
 Route::get('getUserBooking/', 'BookingController@getUserBooking')->name('booking.admin.getUserBooking');
+Route::get('freeRoomInRange/', 'BookingController@getFreeRoomInRange')->name('booking.admin.freeRoomInRange');
+Route::get('freeSpaceInRange/', 'BookingController@getFreeSpaceInRange')->name('booking.admin.freeSpaceInRange');
+Route::get('freeDayUserInRange/', 'BookingController@getFreeDayUserInRange')->name('booking.admin.freeDayUserInRange');
+Route::get('freeEventInRange/', 'BookingController@getFreeEventInRange')->name('booking.admin.freeEventInRange');
+
+
 Route::get('getBookingHistory/', 'BookingPaymentHistoryController@getBookingHistory')->name('booking.admin.getBookingHistory');
 
 

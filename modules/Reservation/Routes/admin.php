@@ -20,6 +20,7 @@ Route::group(['prefix' => 'reservation-type'],function () {
     Route::post('/store/{id}', 'ReservationTypeController@store')->name('reservation_type.admin.store');
     Route::post('/bulkEdit', 'ReservationTypeController@bulkEdit')->name('reservation_type.admin.bulkEdit');
     Route::get('/recovery', 'ReservationTypeController@recovery')->name('reservation_type.admin.recovery');
+    Route::get('/all', 'ReservationTypeController@reservationType')->name('reservation_type.admin.reservationType');
 });
 
 Route::group(['prefix' => 'check-availability'],function () {

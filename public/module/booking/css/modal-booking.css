@@ -1,0 +1,39 @@
+#modal-new-booking th {
+    font-size: 14px;
+    color: #D50000
+}
+
+#modal-new-booking tr {
+    font-size: 13px
+}
+
+#modal-new-booking .balance {
+    font-size: 45px;
+    color: green
+}
+
+#modal-new-booking .account {
+    font-size: 16px;
+    color: #1A237E
+}
+
+#modal-new-booking .somatotal {
+    font-size: 15px;
+    color: green
+}
+
+
+.ui-front {
+    z-index: 1500 !important;
+}
+
+.input-style {
+    background: #fff;
+    cursor: pointer;
+    padding: 10px 10px !important;
+    border: 2px solid #ccc !important;
+}
+
+.custom-switch {
+    padding-left: 0.25rem !important;
+}
