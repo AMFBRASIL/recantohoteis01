@@ -299,8 +299,7 @@ class Booking extends BaseModel
     {
         $P_Dia = date("Y-m-01");
         $U_Dia = date("Y-m-t");
-        $canceled = Booking::situationCanceled()->id;
-
+        $canceled = !empty(Booking::situationCanceled())? Booking::situationCanceled()->id:null;
         $res = [];
 
         $total_data = parent::selectRaw('sum(`total`) as total_price , sum( `total` - `total_before_fees` + `commission` - `vendor_service_fee_amount` ) AS total_earning ')
@@ -475,7 +474,7 @@ class Booking extends BaseModel
         ];
 
         $buildings = Building::query()->orderby('name', 'asc')->get();
-        $canceled = Booking::situationCanceled()->id;
+        $canceled = !empty(Booking::situationCanceled())? Booking::situationCanceled()->id: null;
 
         $hotel_room_clear = Situation::query()
             ->whereHas('section', function ($query) {
@@ -559,7 +558,7 @@ class Booking extends BaseModel
         ];
 
         $buildings = Building::query()->orderby('name', 'asc')->get();
-        $canceled = Booking::situationCanceled()->id;
+        $canceled = !empty(Booking::situationCanceled())? Booking::situationCanceled()->id: null;
 
 
         foreach ($buildings as $b) {

@@ -260,10 +260,9 @@ class MenuController extends AdminController
 
         $items = json_decode($request->input('items'),true);
         $newItems = clean_by_key($items, 'name');
-        $menu->items = $newItems;
+        $menu->items = json_encode($newItems);
         $menu->name = $request->input('name');
         $menu->saveOriginOrTranslation($request->input('lang'));
-
 
         $setting = json_decode(setting_item('menu_locations'), true);
         $hasChange = false;
@@ -287,5 +286,34 @@ class MenuController extends AdminController
         return $this->sendSuccess([
             'url' => $request->input('id') ? '' : url('admin/module/core/menu/edit/' . $menu->id)
         ], __('Your menu has been saved'));
+    }
+
+    public function bulkEdit(Request $request)
+    {
+        $ids = $request->input('ids');
+        $action = $request->input('action');
+        if (empty($ids) or !is_array($ids)) {
+            return redirect()->back()->with('error', __('No items selected!'));
+        }
+        if (empty($action)) {
+            return redirect()->back()->with('error', __('Please select an action!'));
+        }
+
+        switch ($action) {
+            case "delete":
+                foreach ($ids as $id) {
+                    $query = Menu::where("id", $id);
+                    if (!$this->hasPermission('menu_update')) {
+                        $query->where("create_user", Auth::id());
+                        $this->checkPermission('menu_delete');
+                    }
+                    $row = $query->first();
+                    if (!empty($row)) {
+                        $row->delete();
+                    }
+                }
+                return redirect()->back()->with('success', __('Deleted success!'));
+            break;
+        }
     }
 }

@@ -30,4 +30,6 @@ Route::group(['prefix' => 'menu'], function () {
     Route::get('/edit/{id}', 'MenuController@edit')->name('core.admin.menu.edit');
     Route::post('/store', 'MenuController@store')->name('core.admin.menu.store');
     Route::post('/getTypes', 'MenuController@getTypes')->name('core.admin.menu.getTypes');
+
+    Route::post('/bulkEdit','MenuController@bulkEdit')->name('core.admin.menu.bulkEdit');
 });
