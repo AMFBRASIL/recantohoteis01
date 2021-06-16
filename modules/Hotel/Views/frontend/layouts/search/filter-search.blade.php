@@ -88,33 +88,35 @@
             $selected = (array) Request::query('terms');
         @endphp
         @foreach ($attributes as $item)
-            @php
-                $translate = $item->translateOrOrigin(app()->getLocale());
-            @endphp
-            <div class="g-filter-item">
-                <div class="item-title">
-                    <h3> {{$translate->name}} </h3>
-                    <i class="fa fa-angle-up" aria-hidden="true"></i>
+            @if(empty($item['hide_in_filter_search']))
+                @php
+                    $translate = $item->translateOrOrigin(app()->getLocale());
+                @endphp
+                <div class="g-filter-item">
+                    <div class="item-title">
+                        <h3> {{$translate->name}} </h3>
+                        <i class="fa fa-angle-up" aria-hidden="true"></i>
+                    </div>
+                    <div class="item-content">
+                        <ul>
+                            @foreach($item->terms as $key => $term)
+                                @php $translate = $term->translateOrOrigin(app()->getLocale()); @endphp
+                                <li @if($key > 2 and empty($selected)) class="hide" @endif>
+                                    <div class="bravo-checkbox">
+                                        <label>
+                                            <input @if(in_array($term->id,$selected)) checked @endif type="checkbox" name="terms[]" value="{{$term->id}}"> {!! $translate->name !!}
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                        @if(count($item->terms) > 3 and empty($selected))
+                            <button type="button" class="btn btn-link btn-more-item">{{__("More")}} <i class="fa fa-caret-down"></i></button>
+                        @endif
+                    </div>
                 </div>
-                <div class="item-content">
-                    <ul>
-                        @foreach($item->terms as $key => $term)
-                            @php $translate = $term->translateOrOrigin(app()->getLocale()); @endphp
-                            <li @if($key > 2 and empty($selected)) class="hide" @endif>
-                                <div class="bravo-checkbox">
-                                    <label>
-                                        <input @if(in_array($term->id,$selected)) checked @endif type="checkbox" name="terms[]" value="{{$term->id}}"> {!! $translate->name !!}
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
-                    @if(count($item->terms) > 3 and empty($selected))
-                        <button type="button" class="btn btn-link btn-more-item">{{__("More")}} <i class="fa fa-caret-down"></i></button>
-                    @endif
-                </div>
-            </div>
+            @endif
         @endforeach
     </form>
 </div>
