@@ -114,6 +114,28 @@ class AdminForm{
                         </div>
                         <?php
                         break;
+                    case "textarea":
+                        ?>
+                        <div class="form-group" <?php if(!empty($option['condition'])) echo 'data-condition="'.e($option['condition']).'"'; ?>  >
+                            <label class="" ><?php echo e($option['label']) ?></label>
+                            <div class="form-controls">
+                                <?php if(!empty($option['multi_lang']) && !empty($languages) && setting_item('site_enable_multi_lang') && setting_item('site_locale')) {?>
+                                    <div class="form-group-multi-lang">
+                                        <?php foreach($languages as $language){ ?>
+                                            <?php $key_lang = setting_item('site_locale') != $language->locale ? "_".$language->locale : ""   ?>
+                                            <div class="g-lang">
+                                                <div class="title-lang"> <?php echo $language->name ?> </div>
+                                                <textarea name="<?php echo e($option['id'].$key_lang ) ?>" class="form-control"  rows="5"><?php echo clean($option['value'.$key_lang]) ?></textarea>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                <?php }else{ ?>
+                                    <textarea name="<?php echo e($option['id']) ?>" class="form-control"  rows="5"><?php echo clean($option['value']) ?></textarea>
+                                <?php } ?>
+                            </div>
+                        </div>
+                        <?php
+                        break;
 
                     case "upload":
                         ?>

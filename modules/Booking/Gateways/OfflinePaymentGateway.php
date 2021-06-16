@@ -67,6 +67,12 @@ class OfflinePaymentGateway extends BaseGateway
                 'label' => __('Custom Logo'),
             ],
             [
+                'type'  => 'textarea',
+                'id'    => 'payment_note',
+                'label' => __('Payment Note'),
+                'multi_lang' => "1"
+            ],
+            [
                 'type'  => 'editor',
                 'id'    => 'html',
                 'label' => __('Custom HTML Description'),
