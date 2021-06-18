@@ -50,6 +50,7 @@
                                 <tr>
                                     <th width="60px"><input type="checkbox" class="check-all"></th>
                                     <th>{{__("Name")}}</th>
+                                    <th>{{__("Position Order")}}</th>
                                     <th class="">{{__("Actions")}}</th>
                                 </tr>
                                 </thead>
@@ -61,6 +62,9 @@
                                             </td>
                                             <td class="title">
                                                 <a href="{{route('hotel.admin.attribute.edit',['id'=>$row->id])}}">{{$row->name}}</a>
+                                            </td>
+                                            <td>
+                                                {{$row->position ?? 0}}
                                             </td>
                                             <td>
                                                 <a href="{{route('hotel.admin.attribute.edit',['id'=>$row->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> {{__('Edit')}}
