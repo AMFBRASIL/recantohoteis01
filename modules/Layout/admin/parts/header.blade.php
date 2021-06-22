@@ -9,7 +9,7 @@ $checkNotify = \Modules\Core\Models\NotificationPush::query()
 $notifications = $checkNotify->orderBy('created_at', 'desc')->limit(5)->get();
 $countUnread = $checkNotify->where('read_at', null)->count();
 
-//$languages = \Modules\Language\Models\Language::getActive();
+$languages = \Modules\Language\Models\Language::getActive();
 $locale = App::getLocale();
 ?>
 
@@ -28,37 +28,36 @@ $locale = App::getLocale();
         </div>
     </div>
     <div class="widgets-right flex-shrink-0 d-flex">
-        {{--@if(!empty($languages) && setting_item('site_enable_multi_lang'))--}}
-        {{--<div class="dropdown header-widget widget-user widget-language">--}}
-            {{--<div data-toggle="dropdown" class="user-dropdown d-flex align-items-center" aria-haspopup="true" aria-expanded="false">--}}
-                {{--@foreach($languages as $language)--}}
-                    {{--@if($locale == $language->locale)--}}
-                        {{--<div class="user-info flex-grow-1">--}}
-                            {{--@if($language->flag)--}}
-                                {{--<span class="flag-icon flag-icon-{{$language->flag}}"></span>--}}
-                            {{--@endif--}}
-                            {{--{{$language->name}}--}}
-                        {{--</div>--}}
-                    {{--@endif--}}
-                {{--@endforeach--}}
-                {{--<i class="fa fa-angle-down"></i>--}}
-            {{--</div>--}}
-            {{--<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">--}}
-                {{--@foreach($languages as $language)--}}
-                    {{--@php if($language->locale == $locale) continue; @endphp--}}
+        @if(!empty($languages) && setting_item('site_enable_multi_lang'))
+          <div class="dropdown header-widget widget-user widget-language">
+             <div data-toggle="dropdown" class="user-dropdown d-flex align-items-center" aria-haspopup="true" aria-expanded="false">
+                @foreach($languages as $language)
+                    @if($locale == $language->locale)
+                        <div class="user-info flex-grow-1">
+                            @if($language->flag)
+                                <span class="flag-icon flag-icon-{{$language->flag}}"></span>
+                            @endif
+                            {{$language->name}}
+                        </div>
+                    @endif
+                @endforeach
+                <i class="fa fa-angle-down"></i>
+             </div>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                @foreach($languages as $language)
+                    @php if($language->locale == $locale) continue; @endphp
 
-                    {{--<a class="dropdown-item" href="{{add_query_arg(['lang'=>$language->locale])}}">--}}
-                        {{--@if($language->flag)--}}
-                            {{--<span class="flag-icon flag-icon-{{$language->flag}}"></span>--}}
-                        {{--@endif--}}
-                        {{--{{$language->name}}--}}
-                    {{--</a>--}}
-                {{--@endforeach--}}
-
-            {{--</div>--}}
-        {{--</div>--}}
-        {{--@endif--}}
-        <div class="dropdown header-widget widget-user w-25 pt-2 dropdown-notifications" style="min-width: 0">
+                    <a class="dropdown-item" href="{{add_query_arg(['lang'=>$language->locale])}}">
+                        @if($language->flag)
+                            <span class="flag-icon flag-icon-{{$language->flag}}"></span>
+                        @endif
+                        {{$language->name}}
+                    </a>
+                @endforeach
+            </div>
+          </div>
+        @endif
+        <div class="dropdown header-widget widget-user pt-2 dropdown-notifications" style="min-width: 0">
             <div data-toggle="dropdown" class="user-dropdown d-flex align-items-center" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-lg fa-bell m-1 p-1"></i>
                 <span class="badge badge-danger notification-icon">{{$countUnread}}</span>

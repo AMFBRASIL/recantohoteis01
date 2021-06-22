@@ -297,146 +297,55 @@ class Booking extends BaseModel
 
     public static function getTopCardsReport()
     {
-        $P_Dia = date("Y-m-01");
-        $U_Dia = date("Y-m-t");
-        $canceled = !empty(Booking::situationCanceled())? Booking::situationCanceled()->id:null;
+
         $res = [];
-
-        $total_data = parent::selectRaw('sum(`total`) as total_price , sum( `total` - `total_before_fees` + `commission` - `vendor_service_fee_amount` ) AS total_earning ')
-            ->whereNotIn('status', static::$notAcceptedStatus)
-            ->whereBetween('created_at', [$P_Dia, $U_Dia])
-            ->where('situation_id', '!=', $canceled)->first();
-
-        $total_revenues = floatval($total_data->total_price);
-        $total_spending = floatval($total_data->total_earning);
-        $total_profit = $total_revenues - $total_spending;
-
-        $hotel_room = HotelRoom::all();
-        $total_hotel_room = count($hotel_room);
-        $total_hotel_room_booking = 0;
-
-        foreach ($hotel_room as $hr){
-            if (!empty($hr->situation) && strtoupper($hr->situation->name) == 'LIBERADO'){
-                $hotel_room_booking = $hr->getBookingsInRange($P_Dia,$U_Dia);
-                if(!empty($hotel_room_booking)){
-                    foreach($hotel_room_booking as  $hrb){
-                        if(strtoupper($hrb->booking->situation->name) == "CHECK-IN"){
-                            ++$total_hotel_room_booking;
-                            break;
-                        }
-                    }
-                }
+        $total_data = parent::selectRaw('sum(`total`) as total_price , sum( `total` - `total_before_fees` + `commission` - `vendor_service_fee_amount` ) AS total_earning ')->whereNotIn('status',static::$notAcceptedStatus)->first();
+        $total_booking = parent::whereNotIn('status',static::$notAcceptedStatus)->count('id');
+        $total_service = 0;
+        $services = get_bookable_services();
+        if(!empty($services))
+        {
+            foreach ($services as $service){
+                $total_service += $service::where('status', 'publish')->count('id');
             }
         }
-
-        $total_hotel_room_booking_percent = ($total_hotel_room_booking * 100) / $total_hotel_room;
-
-
-        $spaces = Space::all();
-        $total_spaces = count($spaces);
-        $total_space_booking = 0;
-
-        foreach ($spaces as $s){
-            $s_booking = $s->getBookingsInRange($P_Dia,$U_Dia);
-            if(!empty($s_booking)){
-                foreach($s_booking as  $sb){
-                    if(!empty($hr->situation) && strtoupper($sb->situation->name) == "CHECK-IN"){
-                        ++$total_space_booking;
-                        break;
-                    }
-                }
-            }
-        }
-
-        $total_space_booking_percent = ($total_space_booking * 100) / $total_spaces;
-
-        $total_hotel_clientes = User::query()->where('active_status' ,'1')->count('id');
-        $total_noStock = Product::query()->where('available_stock', 0)->count('id');
-
         $res[] = [
-            'size' => 6,
-            'size_md' => 3,
-            'title' => __("FATURAMENTO"),
-            'amount' => format_money_main($total_revenues),
-            'desc' => __("Total faturado Bruto do Mês"),
-            'class' => 'purple',
-            'icon' => 'fa fa-dollar fa-2x'
+            'size'   => 6,
+            'size_md'=>3,
+            'title'  => __("Revenue"),
+            'amount' => format_money_main($total_data->total_price),
+            'desc'   => __("Total revenue"),
+            'class'  => 'purple',
+            'icon'   => 'icon ion-ios-cart'
         ];
-
         $res[] = [
-
-            'size' => 6,
-            'size_md' => 3,
-            'title' => __("GASTOS MENSAL"),
-            'amount' => format_money_main($total_spending),
-            'desc' => __("Total de Gastos do Mes Bruto"),
-            'class' => 'pink',
-            'icon' => 'icon ion-ios-flash'
-        ];
-
-        $res[] = [
-
-            'size' => 6,
-            'size_md' => 3,
-            'title' => __("RESERVAS HOTEIS"),
-            'amount' => number_format($total_hotel_room_booking_percent) . '%',
-            'desc' => __("Total de Reservas Previsto ( " . (now()->format('d/m/y')) . " )"),
-            'class' => 'success',
-            'icon' => 'icon ion-ios-flash'
-        ];
-
-        $res[] = [
-
-            'size' => 6,
-            'size_md' => 3,
-            'title' => __("QUARTOS HOTEIS"),
-            'amount' => $total_hotel_room,
-            'desc' => __("Total de Quartos do Hotel"),
-            'class' => 'pink',
-            'icon' => 'fa fa-bed fa-2x'
-        ];
-
-        $res[] = [
-
-            'size' => 6,
-            'size_md' => 3,
-            'title' => __("LUCRO LIQUIDO"),
-            'amount' => format_money_main($total_profit),
-            'desc' => __("Total Lucro Liquido"),
-            'class' => 'success',
-            'icon' => 'fa fa-dollar fa-2x'
+            'size'   => 6,
+            'size_md'=>3,
+            'title'  => __("Earning"),
+            'amount' => format_money_main($total_data->total_earning),
+            'desc'   => __("Total Earning"),
+            'class'  => 'pink',
+            'icon'   => 'icon ion-ios-gift'
         ];
         $res[] = [
 
-            'size' => 6,
-            'size_md' => 3,
-            'title' => __("ESTOQUE"),
-            'amount' => $total_noStock,
-            'desc' => __("Total de Produtos Fora do Estoque"),
-            'class' => 'pink',
-            'icon' => 'fa fa-cubes fa-2x'
+            'size'   => 6,
+            'size_md'=>3,
+            'title'  => __("Bookings"),
+            'amount' => $total_booking,
+            'desc'   => __("Total bookings"),
+            'class'  => 'info',
+            'icon'   => 'icon ion-ios-pricetags'
         ];
-
         $res[] = [
 
-            'size' => 6,
-            'size_md' => 3,
-            'title' => __("RESERVAS CHACARAS"),
-            'amount' => number_format($total_space_booking_percent) . '%',
-            'desc' => __("Total de Reservas ( " . (now()->format('d/m/y')) . " )"),
-            'class' => 'success',
-            'icon' => 'fa fa-sign-in fa-2x'
-        ];
-
-        $res[] = [
-
-            'size' => 6,
-            'size_md' => 3,
-            'title' => __("CLIENTES"),
-            'amount' => $total_hotel_clientes,
-            'desc' => __("Total de Clientes Cadastrados"),
-            'class' => 'purple',
-            'icon' => 'fa fa-users fa-2x'
+            'size'   => 6,
+            'size_md'=>3,
+            'title'  => __("Services"),
+            'amount' => $total_service,
+            'desc'   => __("Total bookable services"),
+            'class'  => 'success',
+            'icon'   => 'icon ion-ios-flash'
         ];
         return $res;
     }
@@ -447,99 +356,80 @@ class Booking extends BaseModel
             'labels'   => [],
             'datasets' => [
                 [
-                    'label'           => __("Total Locações"),
+                    'label'           => __("Total Revenue"),
                     'data'            => [],
                     'backgroundColor' => '#8892d6',
                     'stack'           => 'group-total',
                 ],
                 [
-                    'label'           => __("Apartamento em Limpeza"),
+                    'label'           => __("Total Earning"),
                     'data'            => [],
-                    'backgroundColor' => '#FFA500',
+                    'backgroundColor' => '#F06292',
                     'stack'           => 'group-extra',
-                ],
-                [
-                    'label'           => __("Apartamento Livres"),
-                    'data'            => [],
-                    'backgroundColor' => '#228B22',
-                    'stack'           => 'group-extra',
-                ],
-                [
-                    'label'           => __("Previsão de Saidas"),
-                    'data'            => [],
-                    'backgroundColor' => '#FA5858',
-                    'stack'           => 'group-extra',
-                ],
+                ]
             ]
         ];
-
-        $buildings = Building::query()->orderby('name', 'asc')->get();
-        $canceled = !empty(Booking::situationCanceled())? Booking::situationCanceled()->id: null;
-
-        $hotel_room_clear = Situation::query()
-            ->whereHas('section', function ($query) {
-                $query->where('name', 'like', '%Quarto%');
-            })
-            ->where('name', 'like', '%EM LIMPEZA%')->get('id')->first();
-
-        $hotel_room_free = Situation::query()
-            ->whereHas('section', function ($query) {
-                $query->where('name', 'like', '%Quarto%');
-            })
-            ->where('name', 'like', '%LIBERADO%')->get('id')->first();
-
-        $situation_checkout = Situation::query()
-            ->whereHas('section', function ($query) {
-                $query->where('name', 'like', '%RESERVAS%');
-            })
-            ->where('name', 'like', '%CHECK-OUT%')->get('id')->first();
-
-        foreach ($buildings as $b) {
-            $bookings = DB::select('select * from bravo_bookings b
-	                    inner join bravo_hotel_room_bookings bhrb on b.id = bhrb.booking_id
-	                    inner join bravo_hotel_rooms bhr on bhrb.room_id = bhr.room_id
-	                    inner join bravo_room br on bhr.room_id = br.id
-	                    inner join bravo_building bb on br.building_id = bb.id
-	                    where b.created_at between ? and ?
-		                    and b.deleted_at is null
-		                    and b.situation_id != ?
-		                    and b.status not in (?)
-		                    and bb.id  = ?', [$from,$to,$canceled,json_encode(static::$notAcceptedStatus),$b->id]);
-
-            $total_free  = HotelRoom::query()
-                ->whereHas('room', function ($query) use ($b) {
-                    $query->whereHas('building', function ($query) use ($b) {
-                        $query->where('id', $b->id);
-                    });
-                })
-                ->where('situation_id', $hotel_room_free->id);
-
-            $total_clean = HotelRoom::query()
-                ->whereHas('room', function ($query) use ($b) {
-                    $query->whereHas('building', function ($query) use ($b) {
-                        $query->where('id', $b->id);
-                    });
-                })
-                ->where('situation_id', $hotel_room_clear->id);
-
-            $totalFaturamento = 0;
-            $total_checkout = 0;
-
-            if(!empty($bookings)){
-                foreach ($bookings as $booking){
-                    if($booking->situation_id == $situation_checkout->id){
-                        ++$total_checkout;
-                    }
+        $sql_raw[] = 'sum(`total`) as total_price';
+        $sql_raw[] = 'sum( `total` - `total_before_fees` + `commission` - `vendor_service_fee_amount` ) AS total_earning';
+        if (($to - $from) / DAY_IN_SECONDS > 90) {
+            $year = date("Y", $from);
+            // Report By Month
+            for ($month = 1; $month <= 12; $month++) {
+                $day_last_month = date("t", strtotime($year . "-" . $month . "-01"));
+                $dataBooking = parent::selectRaw(implode(",", $sql_raw))->whereBetween('created_at', [
+                    $year . '-' . $month . '-01 00:00:00',
+                    $year . '-' . $month . '-' . $day_last_month . ' 23:59:59'
+                ])->whereNotIn('status',static::$notAcceptedStatus);
+                if (!empty($customer_id)) {
+                    $dataBooking = $dataBooking->where('customer_id', $customer_id);
                 }
+                if (!empty($vendor_id)) {
+                    $dataBooking = $dataBooking->where('vendor_id', $vendor_id);
+                }
+                $dataBooking = $dataBooking->first();
+                $data['labels'][] = date("F", strtotime($year . "-" . $month . "-01"));
+                $data['datasets'][0]['data'][] = $dataBooking->total_price ?? 0;
+                $data['datasets'][1]['data'][] = $dataBooking->total_earning ?? 0;
             }
+        } elseif (($to - $from) <= DAY_IN_SECONDS) {
+            // Report By Hours
 
-            $data['labels'][] = $b->name;
-            $data['datasets'][0]['data'][] = count($bookings);
-            $data['datasets'][1]['data'][] = $total_clean;
-            $data['datasets'][2]['data'][] = $total_free;
-            $data['datasets'][3]['data'][] = $total_checkout;
+            for ($i = strtotime(date('Y-m-d', $from)); $i <= strtotime(date('Y-m-d 23:59:59', $to)); $i += HOUR_IN_SECONDS) {
+                $dataBooking = parent::selectRaw(implode(",", $sql_raw))->whereBetween('created_at', [
+                    date('Y-m-d H:i:s', $i),
+                    date('Y-m-d H:i:s', $i + HOUR_IN_SECONDS - 1),
+                ])->whereNotIn('status',static::$notAcceptedStatus);
+                if (!empty($customer_id)) {
+                    $dataBooking = $dataBooking->where('customer_id', $customer_id);
+                }
+                if (!empty($vendor_id)) {
+                    $dataBooking = $dataBooking->where('vendor_id', $vendor_id);
+                }
+                $dataBooking = $dataBooking->first();
+                $data['labels'][] = date('H:i', $i);
+                $data['datasets'][0]['data'][] = $dataBooking->total_price ?? 0;
+                $data['datasets'][1]['data'][] = $dataBooking->total_earning ?? 0;
+            }
+        } else {
+            // Report By Day
+            $period = periodDate(date('Y-m-d', $from),date('Y-m-d 23:59:59', $to));
+            foreach ($period as $dt){
+                $dataBooking = parent::selectRaw(implode(",", $sql_raw))->whereBetween('created_at', [
+                    $dt->format('Y-m-d 00:00:00'),
+                    $dt->format('Y-m-d 23:59:59'),
+                ])->whereNotIn('status',static::$notAcceptedStatus);
+                if (!empty($customer_id)) {
+                    $dataBooking = $dataBooking->where('customer_id', $customer_id);
+                }
+                if (!empty($vendor_id)) {
+                    $dataBooking = $dataBooking->where('vendor_id', $vendor_id);
+                }
+                $dataBooking = $dataBooking->first();
+                $data['labels'][] = display_date($dt->getTimestamp());
+                $data['datasets'][0]['data'][] = $dataBooking->total_price ?? 0;
+                $data['datasets'][1]['data'][] = $dataBooking->total_earning ?? 0;
+            }
         }
-
         return $data;
     }
 
