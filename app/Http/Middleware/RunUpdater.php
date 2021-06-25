@@ -56,9 +56,24 @@
                 $this->updateTo170();
                 $this->updateTo180();
                 $this->updateTo190();
-
+                $this->updateTo200();
             }
             return $next($request);
+        }
+
+        public function updateTo192()
+        {
+            if (setting_item('update_to_192')) {
+                return false;
+            }
+
+            Artisan::call('migrate', [
+                '--force' => true,
+            ]);
+
+
+
+            Artisan::call('cache:clear');
         }
 
         public function updateTo110()
@@ -850,6 +865,84 @@
             }
             $this->__seedLocationCategory();
             Settings::store('update_to_190', true);
+            Artisan::call('cache:clear');
+        }
+
+        public function updateTo200()
+        {
+            $version = '2.0.9';
+            if (version_compare(setting_item('update_to_200'), $version, '>=')) return;
+
+            Artisan::call('migrate', [
+                '--force' => true,
+            ]);
+
+            Schema::table('bravo_attrs', function (Blueprint $table) {
+                if (!Schema::hasColumn('bravo_attrs', 'hide_in_filter_search')) {
+                    $table->tinyInteger('hide_in_filter_search')->nullable();
+                }
+            });
+            Schema::table('core_pages', function (Blueprint $table) {
+                if (!Schema::hasColumn('core_pages', 'header_style')) {
+                    $table->string('header_style',255)->nullable();
+                }
+                if (!Schema::hasColumn('core_pages', 'custom_logo')) {
+                    $table->integer('custom_logo')->nullable();
+                }
+            });
+
+            Schema::table('bravo_events', function (Blueprint $table) {
+                if (!Schema::hasColumn('bravo_events', 'end_time')) {
+                    $table->string('end_time',255)->nullable();
+                }
+                if (!Schema::hasColumn('bravo_events', 'duration_unit')) {
+                    $table->string('duration_unit',255)->nullable();
+                }
+            });
+
+            if (!Schema::hasTable("bravo_booking_time_slots")) {
+                Schema::create("bravo_booking_time_slots", function (Blueprint $table) {
+                    $table->bigIncrements('id');
+
+                    $table->integer('booking_id')->nullable();
+                    $table->bigInteger('object_id')->nullable();
+                    $table->string('object_model', 40)->nullable();
+                    $table->time('start_time')->nullable();
+                    $table->time('end_time')->nullable();
+                    $table->float('duration',255)->nullable();
+                    $table->string('duration_unit',255)->nullable();
+
+                    $table->integer('create_user')->nullable();
+                    $table->integer('update_user')->nullable();
+                    $table->timestamps();
+                });
+            }
+
+            Schema::table('bravo_event_dates', function (Blueprint $table) {
+                if (!Schema::hasColumn('bravo_event_dates', 'price')) {
+                    $table->decimal('price')->nullable();
+                }
+            });
+
+            Schema::table('bravo_tours', function (Blueprint $table) {
+                if (!Schema::hasColumn('bravo_tours', 'min_day_before_booking')) {
+                    $table->integer('min_day_before_booking')->nullable();
+                }
+            });
+
+            Schema::table('bravo_hotel_rooms', function (Blueprint $table) {
+                if (!Schema::hasColumn('bravo_hotel_rooms', 'min_day_stays')) {
+                    $table->integer('min_day_stays')->nullable();
+                }
+            });
+
+            Schema::table('bravo_attrs', function (Blueprint $table) {
+                if (!Schema::hasColumn('bravo_attrs', 'position')) {
+                    $table->smallInteger('position')->nullable();
+                }
+            });
+
+            setting_update_item('update_to_200',$version);
             Artisan::call('cache:clear');
         }
 

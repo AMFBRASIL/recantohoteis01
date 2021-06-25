@@ -239,9 +239,8 @@ class BookingController extends \App\Http\Controllers\Controller
         $booking->wallet_credit_used = floatval($credit);
         $booking->wallet_total_used = floatval($wallet_total_used);
         $booking->pay_now = floatval($booking->deposit == null ? $booking->total : $booking->deposit);
-
         $settings = Settings::query()->where('name', 'situation_' . $booking->object_model . '_id')->first();
-        $booking->situation_id = $settings->val;
+        $booking->situation_id = !empty($settings->val)? $settings->val : null;
 
         // If using credit
         if ($booking->wallet_total_used > 0) {
@@ -406,7 +405,6 @@ class BookingController extends \App\Http\Controllers\Controller
         if (Auth::id() == $service->create_user) {
             return $this->sendError(__('You cannot book your own service'));
         }
-
         return $service->addToCart($request);
     }
 
@@ -454,7 +452,7 @@ class BookingController extends \App\Http\Controllers\Controller
         return view('Booking::frontend/detail', $data);
     }
 
-    public function exportIcal($service_type = 'tour', $id)
+    public function exportIcal($service_type = 'tour', $id= null)
     {
         \Debugbar::disable();
         $allServices = get_bookable_services();
