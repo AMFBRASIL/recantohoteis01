@@ -56,6 +56,12 @@
                         </select>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="" >{{__("Icon Marker in Map")}}</label>
+                    <div class="form-controls form-group-image">
+                        {!! \Modules\Media\Helpers\FileHelper::fieldUpload('event_icon_marker_map',$settings['event_icon_marker_map'] ?? "") !!}
+                    </div>
+                </div>
                 @endif
             </div>
         </div>
@@ -249,14 +255,29 @@
     <hr>
     <div class="row">
         <div class="col-sm-4">
-            <h3 class="form-group-title">{{__("Booking Buyer Fees Options")}}</h3>
-            <p class="form-group-desc">{{__('Config buyer fees for event')}}</p>
+            <h3 class="form-group-title">{{__("Booking Options")}}</h3>
+            <p class="form-group-desc">{{__('Config Booking for event')}}</p>
         </div>
         <div class="col-sm-8">
             <div class="panel">
+                <div class="panel-title"><strong>{{__("Booking Type")}}</strong></div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <select name="event_booking_type" class="form-control">
+                                    <option value="ticket" {{($settings['event_booking_type'] ?? '') == 'ticket' ? 'selected' : ''  }}> {{__("Ticket")}}</option>
+                                    <option value="time_slot" {{($settings['event_booking_type'] ?? '') == 'time_slot' ? 'selected' : ''  }}> {{__("Time slot")}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel">
                 <div class="panel-body">
                     <div class="form-group-item">
-                        <label class="control-label">{{__('Buyer Fees')}}</label>
+                        <label class="control-label">{{__('Booking Buyer Fees')}}</label>
                         <div class="g-items-header">
                             <div class="row">
                                 <div class="col-md-5">{{__("Name")}}</div>
@@ -396,6 +417,14 @@
                             <small class="form-text text-muted">{{__("ON: Vendor can change their booking paid amount")}}</small>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="" >{{__("Allow vendor can add service fee")}}</label>
+                        <div class="form-controls">
+                            <label><input type="checkbox" name="event_allow_vendor_can_add_service_fee" value="1" @if(!empty($settings['event_allow_vendor_can_add_service_fee'])) checked @endif /> {{__("Yes please")}} </label>
+                            <br>
+                            <small class="form-text text-muted">{{__("ON: Vendor can add service fee")}}</small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -472,4 +501,3 @@
 </div>
 
 @endif
-

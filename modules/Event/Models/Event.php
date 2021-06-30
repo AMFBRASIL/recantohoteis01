@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Modules\Booking\Models\Bookable;
 use Modules\Booking\Models\Booking;
+use Modules\Booking\Models\BookingTimeSlots;
 use Modules\Core\Models\Attributes;
 use Modules\Core\Models\SEO;
 use Modules\Core\Models\Terms;
@@ -53,6 +54,7 @@ class Event extends Bookable
 
     ];
     protected $bookingClass;
+    protected $bookingTimeSlotsClass;
     protected $reviewClass;
     protected $eventDateClass;
     protected $eventTermClass;
@@ -67,6 +69,7 @@ class Event extends Bookable
     {
         parent::__construct($attributes);
         $this->bookingClass = Booking::class;
+        $this->bookingTimeSlotsClass = BookingTimeSlots::class;
         $this->reviewClass = Review::class;
         $this->eventDateClass = EventDate::class;
         $this->eventTermClass = EventTerm::class;
@@ -212,17 +215,23 @@ class Event extends Bookable
         $extra_price_input = $request->input('extra_price');
         $ticket_types = [];
         $ticket_types_input = $request->input('ticket_types');
-
-        $ticketsAvailableBook = $this->getDataAvailableBooking($request->input("start_date"));
-        if (!empty($ticketsAvailableBook)) {
-            foreach ($ticketsAvailableBook as $k => $type) {
-                if (isset($ticket_types_input[$k]) and $ticket_types_input[$k]['number']) {
-                    $type['number'] = $ticket_types_input[$k]['number'];
-                    $ticket_types[] = $type;
-                    $total += $type['price'] * $type['number'];
-                    $total_tickets += $type['number'];
+        $base_price = ($this->sale_price and $this->sale_price > 0 and $this->sale_price < $this->price) ? $this->sale_price : $this->price;
+        if ($this->getBookingType() == "ticket") {
+            $ticketsAvailableBook = $this->getDataAvailableBooking($request->input("start_date"));
+            if (!empty($ticketsAvailableBook)) {
+                foreach ($ticketsAvailableBook as $k => $type) {
+                    if (isset($ticket_types_input[$k]) and $ticket_types_input[$k]['number']) {
+                        $type['number'] = $ticket_types_input[$k]['number'];
+                        $ticket_types[] = $type;
+                        $total += $type['price'] * $type['number'];
+                        $total_tickets += $type['number'];
+                    }
                 }
             }
+        }
+        if($this->getBookingType() == "time_slot"){
+            $total_tickets = count($request->input('select_start_time'));
+            $total += $base_price * $total_tickets;
         }
 
         if ($this->enable_extra_price and !empty($this->extra_price)) {
@@ -306,7 +315,6 @@ class Event extends Bookable
         $booking->total = $total;
         $booking->total_guests = $total_tickets;
         $booking->start_date = $start_date->format('Y-m-d H:i:s');
-        $start_date->modify('+ ' . max(1, $this->duration) . ' hours');
         $booking->end_date = $start_date->format('Y-m-d H:i:s');
 
         $booking->vendor_service_fee_amount = $total_service_fee ?? '';
@@ -340,13 +348,33 @@ class Event extends Bookable
         if ($check) {
 
             $this->bookingClass::clearDraftBookings();
-
             $booking->addMeta('duration', $this->duration);
             $booking->addMeta('start_time', $this->start_time);
-
             $booking->addMeta('total_tickets', $total_tickets);
             $booking->addMeta('extra_price', $extra_price);
-            $booking->addMeta('ticket_types', $ticket_types);
+            $booking->addMeta('base_price', $base_price);
+            $booking->addMeta('booking_type', $this->getBookingType());
+            if($this->getBookingType() == "ticket"){
+                $booking->addMeta('ticket_types', $ticket_types);
+            }
+            if($this->getBookingType() == "time_slot"){
+                $booking->addMeta('duration_unit', $this->duration_unit);
+                if(!empty($timeSlots = $request->input('select_start_time'))){
+                    foreach ($timeSlots as $item){
+                        $bookingTimeSlot = new $this->bookingTimeSlotsClass();
+                        $bookingTimeSlot->booking_id = $booking->id;
+                        $bookingTimeSlot->object_id = $request->input('service_id');
+                        $bookingTimeSlot->object_model = $request->input('service_type');
+                        $bookingTimeSlot->duration = $this->duration;
+                        $bookingTimeSlot->duration_unit = $this->duration_unit;
+                        $bookingTimeSlot->start_time = $item;
+                        $type_time =  $this->duration_unit == "hour" ? HOUR_IN_SECONDS : MINUTE_IN_SECONDS;
+                        $end_time = strtotime($item) + $type_time * $this->duration;
+                        $bookingTimeSlot->end_time = date("H:i",$end_time);
+                        $bookingTimeSlot->save();
+                    }
+                }
+            }
 
             if($this->isDepositEnable())
             {
@@ -367,7 +395,10 @@ class Event extends Bookable
     public function getDataAvailableBooking($start_date)
     {
         $ticket_types = $this->ticket_types;
-        $eventDate = $this->eventDateClass::where('target_id', $this->id)->where('start_date', $start_date)->where('active', 1)->first();
+        $eventDate = $this->eventDateClass::where('target_id', $this->id)->where('start_date', $start_date)->first();
+        if(!empty($eventDate) and $eventDate->active == 0){
+            return [];
+        }
         if(!empty($eventDate->ticket_types)){
             $ticket_types = $eventDate->ticket_types;
         }
@@ -388,6 +419,25 @@ class Event extends Bookable
         }
         return array_values($ticket_types);
     }
+    public function getDataTimeSlotsAvailableBooking($start_date)
+    {
+        $time_slots = $this->getBookingTimeSlot();
+        $eventDate = $this->eventDateClass::where('target_id', $this->id)->where('start_date', $start_date)->first();
+        if(!empty($eventDate) and $eventDate->active == 0){
+            return [];
+        }
+        $dataBooking = $this->bookingClass::select("id")->where('object_id', $this->id)->where('start_date', $start_date)->whereNotIn('status', $this->bookingClass::$notAcceptedStatus)->get();
+        foreach ($dataBooking as $booking){
+            $timeSlots = $booking->time_slots;
+            foreach ($timeSlots as $item){
+                $value = date("H:i",strtotime($item->start_time));
+                if( in_array($value,$time_slots)){
+                    $time_slots = array_diff( $time_slots , [$value]);
+                }
+            }
+        }
+        return $time_slots;
+    }
 
     public function addToCartValidate(Request $request)
     {
@@ -404,17 +454,32 @@ class Event extends Bookable
         {
             return $this->sendError(__("Your selected dates are not valid"));
         }
-        $ticket_types_input = $request->input('ticket_types');
-        $ticketsAvailableBook = $this->getDataAvailableBooking($request->input("start_date"));
-        if (!empty($ticketsAvailableBook)) {
-            foreach ($ticketsAvailableBook as $k => $ticketBook) {
-                if (isset($ticket_types_input[$k]) and $ticket_types_input[$k]['number']) {
-                    $currentNumberUserBook = $ticket_types_input[$k]['number'];
-                    if($ticketBook["number"] < $currentNumberUserBook){
-                        $lang_local = app()->getLocale();
-                        $title = $ticketBook['name_'.$lang_local] ?? $ticketBook["name"];
-                        return $this->sendError(__("There are :numberTicket :titleTicket available for your selected date",["numberTicket"=>$ticketBook["number"],"titleTicket"=>$title]));
+
+        if($this->getBookingType() == "ticket"){
+            $ticket_types_input = $request->input('ticket_types');
+            $ticketsAvailableBook = $this->getDataAvailableBooking($request->input("start_date"));
+            if (!empty($ticketsAvailableBook)) {
+                foreach ($ticketsAvailableBook as $k => $ticketBook) {
+                    if (isset($ticket_types_input[$k]) and $ticket_types_input[$k]['number']) {
+                        $currentNumberUserBook = $ticket_types_input[$k]['number'];
+                        if($ticketBook["number"] < $currentNumberUserBook){
+                            $lang_local = app()->getLocale();
+                            $title = $ticketBook['name_'.$lang_local] ?? $ticketBook["name"];
+                            return $this->sendError(__("There are :numberTicket :titleTicket available for your selected date",["numberTicket"=>$ticketBook["number"],"titleTicket"=>$title]));
+                        }
                     }
+                }
+            }
+        }
+        if($this->getBookingType() == "time_slot"){
+            $time_slot_select = $request->input("select_start_time");
+            if(empty( $time_slot_select )){
+                return $this->sendError(__("Please select start time!"));
+            }
+            $time_slots_availableBook = $this->getDataTimeSlotsAvailableBooking($request->input("start_date"));
+            foreach ($time_slot_select as $itemSelect){
+                if(!in_array($itemSelect,$time_slots_availableBook)){
+                    return $this->sendError(__(":slot not available for your selected ",["slot"=>$itemSelect]));
                 }
             }
         }
@@ -442,10 +507,11 @@ class Event extends Bookable
 
             'is_form_enquiry_and_book'=> $this->isFormEnquiryAndBook(),
             'enquiry_type'=> $this->getBookingEnquiryType(),
+            'booking_type'=> $this->getBookingType(),
         ];
         $lang = app()->getLocale();
 
-        if ($this->ticket_types) {
+        if ($this->ticket_types and $this->getBookingType() == "ticket") {
             $ticket_types = $this->ticket_types;
             foreach ($ticket_types as $k => &$type) {
                 if (!empty($lang) and !empty($type['name_' . $lang])) {
@@ -457,6 +523,9 @@ class Event extends Bookable
                 $type['display_price'] = format_money($type['price']);
             }
             $booking_data['ticket_types'] = $ticket_types;
+        }
+        if ($time_slots = $this->getBookingTimeSlot() and $this->getBookingType() == "time_slot") {
+            $booking_data['booking_time_slots'] = $time_slots;
         }
 
         if ($this->enable_extra_price) {
@@ -930,7 +999,8 @@ class Event extends Bookable
         return $this->hasOne($this->userWishListClass, 'object_id','id')->where('object_model' , $this->type)->count();
     }
 
-    public function dataForApi($forSingle = false){
+    public function dataForApi($forSingle = false)
+    {
         $data = parent::dataForApi($forSingle);
         $data['duration'] = duration_format($this->duration,true);
         $data['start_time'] = $this->start_time;
@@ -988,6 +1058,26 @@ class Event extends Bookable
         ];
     }
 
+    public static function getBookingType(){
+        return setting_item('event_booking_type','ticket');
+    }
+
+    public function getBookingTimeSlot()
+    {
+        $this->start_time = $this->start_time ?? "00:00";
+        $this->end_time = $this->end_time ?? "23:00";
+        $this->duration = $this->duration ?? "1";
+        $this->duration_unit = $this->duration_unit ?? "hour";
+        $type_time = MINUTE_IN_SECONDS;
+        if ($this->duration_unit == "hour") {
+            $type_time = HOUR_IN_SECONDS;
+        }
+        $time_slots = [];
+        for ($i = strtotime($this->start_time); $i < strtotime($this->end_time); $i += ($type_time * $this->duration)) {
+            $time_slots[] = date('H:i', $i);
+        }
+        return $time_slots;
+    }
     public function getFreeEventInRange($from, $to)
     {
         return Event::all();
