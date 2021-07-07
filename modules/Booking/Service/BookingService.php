@@ -11,9 +11,8 @@ class BookingService
 {
     function replaceFile($file, $booking)
     {
-        $user = User::query()->find($booking->customer_id)->first();
+        $user = User::query()->find($booking->customer_id);
         $service = $booking->service;
-
         $file = str_replace("[name_client]", $user->first_name . ' ' . $user->last_name, $file);
         $file = str_replace("[address_client]", $user->address, $file);
         $file = str_replace("[complement_address_client]", $user->address2 ? $user->address2 : '', $file);
