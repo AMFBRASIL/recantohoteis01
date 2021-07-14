@@ -3,6 +3,12 @@
         <div class="content">
             <div class="header-left">
                 <a href="{{url(app_get_locale(false,'/'))}}" class="bravo-logo">
+                    @php
+                        $logo_id = setting_item("logo_id");
+                        if(!empty($row->custom_logo)){
+                            $logo_id = $row->custom_logo;
+                        }
+                    @endphp
                     @if($logo_id = setting_item("logo_id"))
                         <?php $logo = get_file_url($logo_id,'full') ?>
                         <img src="{{$logo}}" alt="{{setting_item("site_title")}}">
