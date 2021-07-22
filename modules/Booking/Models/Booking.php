@@ -1015,4 +1015,9 @@ class Booking extends BaseModel
             })
             ->where('name', 'like', '%Cancelada%')->get()->first();
     }
+
+    public function customer()
+    {
+        return $this->belongsTo(User::class, 'customer_id');
+    }
 }
