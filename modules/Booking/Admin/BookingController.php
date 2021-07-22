@@ -43,7 +43,7 @@ class BookingController extends Controller
 
                     $room_information = [
                         'room' => $room_description,
-                        'persons' => ($booking->getMeta('adults') + $booking->getMeta('children')),
+                        'persons' => (intval($booking->getMeta('adults')) + intval($booking->getMeta('children'))),
                         'adults' => $booking->getMeta('adults'),
                         'total' => $booking->total,
                     ];

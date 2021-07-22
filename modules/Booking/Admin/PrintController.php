@@ -34,7 +34,6 @@ class PrintController extends Controller
     {
         $booking = Booking::query()->find($id);
         $settings = Settings::query()->where("name", "space_contract")->first();
-
         $contract = $this->bookingService->replaceFile($settings->val, $booking);
 
         $data = [

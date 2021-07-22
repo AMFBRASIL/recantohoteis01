@@ -38,6 +38,7 @@ class SettingClass extends BaseSettingsClass
                     'event_vendor_create_service_must_approved_by_admin',
                     'event_allow_vendor_can_change_their_booking_status',
                     'event_allow_vendor_can_change_paid_amount',
+                    'event_allow_vendor_can_add_service_fee',
                     'event_search_fields',
                     'event_map_search_fields',
 
@@ -48,6 +49,9 @@ class SettingClass extends BaseSettingsClass
                     'event_deposit_fomular',
 
                     'event_layout_map_option',
+
+                    'event_booking_type',
+                    'event_icon_marker_map',
                 ],
                 'html_keys'=>[
 

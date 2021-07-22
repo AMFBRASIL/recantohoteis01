@@ -68,7 +68,7 @@ class Tour extends Bookable
         'exclude',
         'itinerary',
         'surrounding',
-
+        'min_day_before_booking',
     ];
     protected $slugField                          = 'slug';
     protected $slugFromField                      = 'title';
@@ -538,10 +538,15 @@ class Tour extends Bookable
         if (strtotime($start_date) < strtotime(date('Y-m-d 00:00:00'))) {
             return $this->sendError(__("Your selected dates are not valid"));
         }
+
+        // Validate Date and Booking
+        if(!$this->isAvailableInRanges($start_date)){
+            return $this->sendError(__("This tour is not available at selected dates"));
+        }
+
         if ($meta) {
             // Open Hours
             if ($meta->enable_open_hours) {
-
                 $open_hours = $meta->open_hours;
                 $nDate = date('N', strtotime($start_date));
                 if (!isset($open_hours[$nDate]) or empty($open_hours[$nDate]['enable'])) {
@@ -549,6 +554,14 @@ class Tour extends Bookable
                 }
             }
         }
+
+        if(!empty($this->min_day_before_booking)){
+            $minday_before = strtotime("today +".$this->min_day_before_booking." days");
+            if(  strtotime($start_date) < $minday_before){
+                return $this->sendError(__("You must book the service for :number days in advance",["number"=>$this->min_day_before_booking]));
+            }
+        }
+
         if (!empty($request->person_types)) {
             $totalGuests = array_sum(Arr::pluck($request->person_types, 'number')) ?? 0;
         } else {
@@ -561,6 +574,29 @@ class Tour extends Bookable
         return true;
     }
 
+    public function isAvailableInRanges($start_date){
+
+        if($this->default_state)
+        {
+            $notAvailableDates = $this->tourDateClass::query()->where([
+                ['start_date','>=',$start_date],
+                ['end_date','<=',$start_date],
+                ['active','0'],
+                ['target_id','=',$this->id],
+            ])->count('id');
+            if($notAvailableDates) return false;
+        }else{
+            $availableDates = $this->tourDateClass::query()->where([
+                ['start_date','>=',$start_date],
+                ['end_date','<=',$start_date],
+                ['active','=',1],
+                ['target_id','=',$this->id],
+            ])->count('id');
+            if($availableDates < 1) return false;
+        }
+        return true;
+    }
+    
     public function getBookingData()
     {
         $booking_data = [
