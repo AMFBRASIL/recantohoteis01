@@ -100,7 +100,7 @@
                                     </td>
                                     <td class="modal-client">
                                         <a href="#" class="review-count-approved" data-value="{{$row->id}}">
-                                            {{$row->first_name}} {{$row->last_name}}
+                                            {{$row->customer->first_name}} {{$row->customer->last_name}}
                                         </a>
                                     </td>
                                     <td class="modal-guest">

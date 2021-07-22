@@ -48,15 +48,18 @@ class BookingController extends Controller
                         'total' => $booking->total,
                     ];
 
-                    $user = User::query()->where([
-                        ['first_name', '=', $booking->first_name],
-                        ['last_name', '=', $booking->last_name],
-                        ['email', '=', $booking->email],
-                    ])->first();
+                    // $user = User::query()->where([
+                    //     ['first_name', '=', $booking->first_name],
+                    //     ['last_name', '=', $booking->last_name],
+                    //     ['email', '=', $booking->email],
+                    // ])->first();
+
+                    $booking->load('customer');
+                    $user = $booking->customer;
 
                     $company_name = '';
 
-                    if ($user->company_id) {
+                    if (isset($user->company_id)) {
                         $company_name = Company::query()->find($user->company_id)->titile;
                     }
 
