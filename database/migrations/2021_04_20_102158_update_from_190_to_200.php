@@ -18,6 +18,7 @@ class UpdateFrom190To200 extends Migration
                 $table->tinyInteger('hide_in_filter_search')->nullable();
             }
         });
+        //referente a branch  feature/add-style-header-transparent-page
         Schema::table('core_pages', function (Blueprint $table) {
             if (!Schema::hasColumn('core_pages', 'header_style')) {
                 $table->string('header_style',255)->nullable();

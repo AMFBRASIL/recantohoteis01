@@ -7,6 +7,7 @@ class  AlterBookingPendingTable extends Migration
 {
     /**
      * Run the migrations.
+     * rodei na branch feature/add-style-header-transparent-page
      *
      * @return void
      */

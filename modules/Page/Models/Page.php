@@ -19,7 +19,9 @@ class Page extends BaseModel
         'status',
         'short_desc',
         'image_id',
-        'template_id'
+        'template_id',
+        'header_style',
+        'custom_logo'
     ];
     protected $slugField     = 'slug';
     protected $slugFromField = 'title';

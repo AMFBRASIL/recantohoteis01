@@ -8,6 +8,7 @@ class AlterCepUserTable extends Migration
 {
     /**
      * Run the migrations.
+     * Rodei na branch feature/add-style-header-tranparent-page
      *
      * @return void
      */

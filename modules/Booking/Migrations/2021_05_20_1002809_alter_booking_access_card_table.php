@@ -7,6 +7,7 @@ class  AlterBookingAccessCardTable extends Migration
 {
     /**
      * Run the migrations.
+     * Rodei na Branch feature/add-style-header-transparent-page
      *
      * @return void
      */

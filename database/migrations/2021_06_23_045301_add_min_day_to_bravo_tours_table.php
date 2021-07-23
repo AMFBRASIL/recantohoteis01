@@ -8,6 +8,7 @@ class AddMinDayToBravoToursTable extends Migration
 {
     /**
      * Run the migrations.
+     * Rodei na branch feature/add-style-header-transparent-page
      *
      * @return void
      */
