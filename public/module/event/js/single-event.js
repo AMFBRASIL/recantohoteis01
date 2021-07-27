@@ -29,6 +29,10 @@
             enquiry_email:"",
             enquiry_phone:"",
             enquiry_note:"",
+
+            booking_type:"",
+            booking_time_slots:"",
+            select_start_time:[],
         },
         watch:{
             extra_price:{
@@ -46,6 +50,28 @@
                 },
                 deep:true
             },
+            start_date(){
+                this.step = 1;
+                var me = this;
+                var startDate = new Date(me.start_date).getTime();
+                for (var ix in me.allEvents) {
+                    var item = me.allEvents[ix];
+                    var cur_date = new Date(item.start).getTime();
+                    if (cur_date === startDate) {
+                        if (item.ticket_types != null) {
+                            me.ticket_types = Object.assign([], item.ticket_types);
+                        } else {
+                            me.ticket_types = null
+                        }
+                        if (item.booking_time_slots != null) {
+                            me.booking_time_slots = Object.assign([], item.booking_time_slots);
+                        } else {
+                            me.booking_time_slots = null
+                        }
+                    }
+                }
+                me.select_start_time = [];
+            },
         },
         computed:{
             total_price:function(){
@@ -54,27 +80,33 @@
                     var total = 0;
                     var total_tickets = 0;
                     var startDate = new Date(me.start_date).getTime();
-                    for (var ix in me.allEvents) {
-                        var item = me.allEvents[ix];
-                        var cur_date = new Date(item.start).getTime();
-                        if (cur_date === startDate) {
-                            if (item.ticket_types != null) {
-                                me.ticket_types = Object.assign([], item.ticket_types);
-                            } else {
-                                me.ticket_types = null
+
+                    if(me.booking_type === "ticket")
+                    {
+                        // for ticket types
+                        if (me.ticket_types != null) {
+                            for (var ix in me.ticket_types) {
+                                var person_type = me.ticket_types[ix];
+                                total += parseFloat(person_type.price) * parseInt(person_type.number);
+                                total_tickets += parseInt(person_type.number);
                             }
                         }
+                        if(total_tickets <= 0) return 0;
                     }
-                    // for ticket types
-                    if (me.ticket_types != null) {
-                        for (var ix in me.ticket_types) {
-                            var person_type = me.ticket_types[ix];
-                            total += parseFloat(person_type.price) * parseInt(person_type.number);
-                            total_tickets += parseInt(person_type.number);
+                    if(me.booking_type === "time_slot")
+                    {
+                        if(me.select_start_time.length < 1){
+                            return 0
                         }
+                        for (var ix in me.allEvents) {
+                            var item = me.allEvents[ix];
+                            var cur_date = new Date(item.start).getTime();
+                            if (cur_date === startDate) {
+                                total += parseFloat(item.price) * me.select_start_time.length;
+                            }
+                        }
+                        total_tickets = me.select_start_time.length;
                     }
-
-                    if(total_tickets <= 0) return 0;
 
                     for (var ix in me.extra_price) {
                         var item = me.extra_price[ix];
@@ -181,6 +213,7 @@
             for(var k in bravo_booking_data){
                 this[k] = bravo_booking_data[k];
             }
+
         },
         mounted(){
             var me = this;
@@ -275,6 +308,24 @@
                 }
                 return true;
             },
+            selectStartTime(time){
+                var me = this;
+                if(me.select_start_time.indexOf(time) === -1){
+                    me.select_start_time.push(time)
+                }else{
+                    const index = me.select_start_time.indexOf(time);
+                    if (index > -1) {
+                        me.select_start_time.splice(index, 1);
+                    }
+                }
+            },
+            isInArray(time){
+                var me = this;
+                if(me.select_start_time.indexOf(time) === -1){
+                    return false;
+                }
+                return true;
+            },
             addPersonType(type){
                 type.number = parseInt(type.number);
                 if(type.number < parseInt(type.max)) type.number +=1;
@@ -316,6 +367,7 @@
                         ticket_types:this.ticket_types,
                         extra_price:this.extra_price,
                         step:this.step,
+                        select_start_time:this.select_start_time,
                     },
                     dataType:'json',
                     type:'post',

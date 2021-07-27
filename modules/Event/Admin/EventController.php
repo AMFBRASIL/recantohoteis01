@@ -234,6 +234,9 @@ class EventController extends AdminController
             'enable_service_fee',
             'service_fee',
             'surrounding',
+
+            'end_time',
+            'duration_unit',
         ];
         if($this->hasPermission('event_manage_others')){
             $dataKeys[] = 'create_user';

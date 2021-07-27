@@ -55,6 +55,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-section-group form-group" v-if="booking_time_slots">
+                        <h4 class="form-section-title">{{__('Start Time:')}}</h4>
+                        <div class="slots-wrapper d-flex justify-content-start flex-wrap">
+                            <div @click="selectStartTime(time)" :class="{'btn-success':isInArray(time) == true}" v-for="(time,index) in booking_time_slots" class="btn btn-sm mr-2 mb-2 w-25">@{{time}}</div>
+                        </div>
+                    </div>
                     <div class="form-section-group form-group" v-if="extra_price.length">
                         <h4 class="form-section-title">{{__('Extra prices:')}}</h4>
                         <div class="form-group" v-for="(type,index) in extra_price">
@@ -97,7 +103,7 @@
                     </li>
                 </ul>
                 <div v-html="html"></div>
-                <div class="submit-group" v-if="ticket_types">
+                <div class="submit-group">
                     <a class="btn btn-large" @click="doSubmit($event)" :class="{'disabled':onSubmit,'btn-success':(step == 2),'btn-primary':step == 1}" name="submit">
                         <span>{{__("BOOK NOW")}}</span>
                         <i v-show="onSubmit" class="fa fa-spinner fa-spin"></i>
