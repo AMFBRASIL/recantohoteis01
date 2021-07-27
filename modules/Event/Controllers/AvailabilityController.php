@@ -113,7 +113,8 @@ class AvailabilityController extends FrontendController{
             $date = [
                 'id'=>rand(0,999),
                 'active'=>0,
-                'textColor'=>'#2791fe'
+                'textColor'=>'#2791fe',
+                'price'=>(!empty($event->sale_price) and $event->sale_price > 0 and $event->sale_price < $event->price) ? $event->sale_price : $event->price,
             ];
             $date['start'] = $date['end'] = $dt->format('Y-m-d');
             if($event->default_state){
@@ -125,7 +126,7 @@ class AvailabilityController extends FrontendController{
                 $date['classNames'] = ['blocked-event'];
                 $date['textColor'] = '#fe2727';
             }
-            if ($event->ticket_types) {
+            if ($event->ticket_types and $event->getBookingType() == "ticket") {
                 $date['ticket_types'] = $event->ticket_types;
                 $c_title = "";
                 foreach (  $date['ticket_types']  as &$ticket){
@@ -147,6 +148,17 @@ class AvailabilityController extends FrontendController{
                 $date['ticket_types'] = array_values($date['ticket_types']);
                 $date['title'] = $date['event']  = $c_title;
             }
+            if ($event->getBookingType() == "time_slot") {
+                if (!$is_single) {
+                    $date['title'] = $date['event'] = format_money_main($date['price']);
+                } else {
+                    $date['title'] = $date['event'] = format_money($date['price']);
+                }
+                if ($time_slots = $event->getBookingTimeSlot()) {
+                    $date['booking_time_slots'] = $time_slots;
+                }
+            }
+
             $allDates[$dt->format('Y-m-d')] = $date;
         }
 
@@ -180,6 +192,15 @@ class AvailabilityController extends FrontendController{
                     $ticketData['title'] = $ticketData['event']  = $c_title;
                 }
                 $ticketData['ticket_types'] = $list_ticket_types;
+
+                if ($event->getBookingType() == "time_slot") {
+                    if (!$is_single) {
+                        $ticketData['title'] = $ticketData['event'] = format_money_main($row['price']);
+                    } else {
+                        $ticketData['title'] = $ticketData['event'] = format_money($row['price']);
+                    }
+                    $ticketData['price'] = $row['price'];
+                }
                 if(!$row->active)
                 {
                     $ticketData['title'] = $row->event = __('Blocked');
@@ -204,23 +225,42 @@ class AvailabilityController extends FrontendController{
                     $date = $dt->format('Y-m-d');
                     if(isset($allDates[$date])){
                         $isBook = false;
-                        $list_ticket_types = $allDates[$dt->format('Y-m-d')]['ticket_types'];
-                        $bookingTicketTypes = $booking->getJsonMeta('ticket_types') ?? [];
-                        foreach ($bookingTicketTypes as $bookingTicket){
-                            $numberBoook = $bookingTicket['number'];
-                            foreach ($list_ticket_types as &$ticket){
-                                if( $ticket['code'] == $bookingTicket['code']){
-                                    $ticket['max'] =  $ticket['max'] - $numberBoook;
-                                    if($ticket['max'] <= 0){
-                                        $ticket['max'] = 0;
+
+                        if($event->getBookingType() == "ticket")
+                        {
+                            $list_ticket_types = $allDates[$dt->format('Y-m-d')]['ticket_types'];
+                            $bookingTicketTypes = $booking->getJsonMeta('ticket_types') ?? [];
+                            foreach ($bookingTicketTypes as $bookingTicket){
+                                $numberBoook = $bookingTicket['number'];
+                                foreach ($list_ticket_types as &$ticket){
+                                    if( $ticket['code'] == $bookingTicket['code']){
+                                        $ticket['max'] =  $ticket['max'] - $numberBoook;
+                                        if($ticket['max'] <= 0){
+                                            $ticket['max'] = 0;
+                                        }
+                                    }
+                                    if($ticket['max'] > 0){
+                                        $isBook = true;
                                     }
                                 }
-                                if($ticket['max'] > 0){
-                                    $isBook = true;
+                            }
+                            $allDates[$dt->format('Y-m-d')]['ticket_types'] = $list_ticket_types;
+                        }
+                        if($event->getBookingType() == "time_slot")
+                        {
+                            $timeSlots = $booking->time_slots;
+                            foreach ($timeSlots as $item){
+                                $value = date("H:i",strtotime($item->start_time));
+                                if( in_array($value,$allDates[$date]['booking_time_slots'])){
+                                    $allDates[$date]['booking_time_slots'] = array_diff( $allDates[$date]['booking_time_slots'] , [$value]);
                                 }
                             }
+                            if(count($allDates[$date]['booking_time_slots']) > 0){
+                                $isBook = true;
+                            }
+                            $allDates[$date]['booking_time_slots'] = array_values($allDates[$date]['booking_time_slots']);
                         }
-                        $allDates[$dt->format('Y-m-d')]['ticket_types'] = $list_ticket_types;
+
                         if($isBook == false){
                             $allDates[$date]['active'] = 0;
                             $allDates[$date]['event'] = __('Full Book');

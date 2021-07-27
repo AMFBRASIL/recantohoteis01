@@ -13,20 +13,47 @@
         </div>
         @if(is_default_lang())
             <div class="form-group">
-                <label class="control-label">{{__("Youtube Video")}}</label>
+                <label class="control-label">{{__("Youtube Video")}}</label> 
                 <input type="text" name="video" class="form-control" value="{{$row->video}}" placeholder="{{__("Youtube link video")}}">
             </div>
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label">{{__("Duration (hour)")}}</label>
-                        <input type="text" name="duration" class="form-control" value="{{$row->duration}}" placeholder="{{__("Ex: 3")}}">
+                        <label class="control-label">{{__("Start Time")}}</label>
+                        <input type="text" name="start_time" class="form-control" value="{{$row->start_time}}" placeholder="{{__("Ex: 15:00")}}">
+                        <small>
+                            {{ __("Input time format, ex: 15:00") }}
+                        </small>
+                    </div>
+                </div>
+                <div class="col-lg-6 @if( $row->getBookingType()== "ticket") d-none @endif">
+                    <div class="form-group">
+                        <label class="control-label">{{__("End Time")}}</label>
+                        <input type="text" name="end_time" class="form-control" value="{{$row->end_time}}" placeholder="{{__("Ex: 21:00")}}">
+                        <small>
+                            {{ __("Input time format, ex: 21:00") }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @if( $row->getBookingType()== "ticket")
+                            <label class="control-label">{{__("Duration (hour)")}}</label>
+                        @else
+                            <label class="control-label">{{__("Duration")}}</label>
+                        @endif
+                        <input type="number" name="duration" class="form-control" value="{{$row->duration}}" placeholder="{{__("Ex: 3")}}">
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="control-label">{{__("Start Time")}}</label>
-                        <input type="text" name="start_time" class="form-control" value="{{$row->start_time}}" placeholder="{{__("Ex: 19:00")}}">
+                    <div class="form-group @if( $row->getBookingType()== "ticket") d-none @endif">
+                        <label class="control-label">{{__("Duration Unit")}}</label>
+                        <select name="duration_unit" class="form-control">
+                            <option value="hour" @if($row->duration_unit == "hour") selected @endif > {{__("Hour")}}</option>
+                            <option value="minute" @if($row->duration_unit == "minute") selected @endif > {{__("Minute")}}</option>
+                        </select>
                     </div>
                 </div>
             </div>
